@@ -11,6 +11,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="black-or-white" target="1.5" />
+      <module name="bow" target="1.5" />
       <module name="bow-core" target="1.5" />
       <module name="bow-engine" target="1.5" />
       <module name="bow5" target="1.5" />
