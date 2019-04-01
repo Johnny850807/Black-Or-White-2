@@ -1,6 +1,7 @@
 # Black-Or-White-2
 ![Phase](https://img.shields.io/badge/Phase-Designing-yellowgreen.svg) <br/>
-The advanced black or white 2D Game, implemented in Java. Inspired and motivated by the famous Game Little Fighter 2 which exploits Scripts to activate world player's mods. This project aims to the best demo of OOP design of 2D game.
+The advanced black or white 2D Game, implemented in Java, as a demonstration to OOP practices.
+Thiere is two phases in this project, first create a simple 2D game engine, second use the game engine to create our game.
 
 # Table of contents
 
