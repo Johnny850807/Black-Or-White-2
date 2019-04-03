@@ -9,8 +9,16 @@ public class FramesStateMachineComponent extends FiniteStateMachine<Frame>
 		implements Component, PropertiesComponent.StateListener {
 	private PropertiesComponent propertiesComponent;
 
+	public FramesStateMachineComponent() {
+	}
+
+	public FramesStateMachineComponent(PropertiesComponent propertiesComponent) {
+		this.propertiesComponent = propertiesComponent;
+	}
+
 	/**
-	 * This boolean indicates if the
+	 * This boolean indicates if the state is triggered after modified, if it's not triggered, we expect it will be triggered
+	 * at the next tick.
 	 */
 	private boolean stateTriggered = false;
 
