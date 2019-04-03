@@ -1,14 +1,20 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.sprites.Sprite;
+
 public class CollidableComponent implements Component {
 
 
 	/**
-	 * @see com.pokewords.framework.sprites.components.Component #onWake()
+	 * @see com.pokewords.framework.sprites.components.Component #onInit()
 	 * 
 	 *  
 	 */
-	public void onWake() {
+	public void onInit() {
+
+	}
+
+	public void onBoundToSprite(Sprite sprite) {
 
 	}
 
