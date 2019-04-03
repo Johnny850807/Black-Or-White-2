@@ -38,7 +38,25 @@ public class Sprite implements Cloneable {
 		this.propertiesComponent = propertiesComponent;
 	}
 
-	public void setComponents(Map<String, Component> components) {
-		this.components = components;
+	public void addCompnent(String name, Component component) {
+
+		if (component instanceof FramesStateMachineComponent) {
+			viewComponent = (FramesStateMachineComponent) component;
+		}
+
+		if (component instanceof PropertiesComponent) {
+			propertiesComponent = (PropertiesComponent) component;
+		}
+
+		components.put(name, component);
+
 	}
+
+	public void removeComponent(String name, Component component) {
+
+		if (components.get(name) == component) {
+			components.remove(name);
+		}
+	}
+
 }
