@@ -8,9 +8,11 @@ public abstract class AppState {
 
 	private AppStateWorld appStateWorld;
 
+	public abstract void onEnter();
+
 	public abstract void onUpdate();
 
-	public abstract void onAppEnd();
+	public abstract void onExit();
 
 	public AppStateWorld getStateWorld() {
 		return null;
