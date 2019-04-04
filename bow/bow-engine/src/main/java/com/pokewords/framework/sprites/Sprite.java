@@ -4,59 +4,70 @@ import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FramesStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+/**
+ *  Current definition:
+ *  1. Both FSM and Properties component are mandatory and unique
+ *  2. Every components has a name, and it's unique.
+ *  3. The setting of mandatory components
+ *
+ */
 public class Sprite implements Cloneable {
 
-	private FramesStateMachineComponent viewComponent;
+	private Map<String, Component> components;
 
-	private PropertiesComponent propertiesComponent;
-
-	private Map<String,Component> components;
-
-	public void onUpdate() {
-
+	public Sprite(final String customFSMComponentName, final FramesStateMachineComponent FSMComponent,
+				  final String customPropertiesComponentName, final PropertiesComponent propertiesComponent) {
+		components = new HashMap<String, Component>() {{
+			put(customFSMComponentName, FSMComponent);
+			put(customPropertiesComponentName, propertiesComponent);
+		}};
 	}
 
-	public FramesStateMachineComponent getViewComponent() {
-		return viewComponent;
-	}
-
-	public PropertiesComponent getPropertiesComponent() {
-		return propertiesComponent;
-	}
-
+	/**
+	 * Return the entire component map.
+	 * @return the component map.
+	 */
 	public Map<String, Component> getComponents() {
 		return components;
 	}
 
-	public void setViewComponent(FramesStateMachineComponent viewComponent) {
-		this.viewComponent = viewComponent;
-	}
+	/**
+	 * Get the component by name.
+	 * @param name the name of the component to get.
+	 * @return the component to get if the name exist, null-object otherwise.
+	 */
+	public Optional<Component> getComponentByName(String name) {
 
-	public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
-		this.propertiesComponent = propertiesComponent;
-	}
-
-	public void addCompnent(String name, Component component) {
-
-		if (component instanceof FramesStateMachineComponent) {
-			viewComponent = (FramesStateMachineComponent) component;
+		if (!components.containsKey(name)) {
+			return new Optional<>(null);
 		}
 
-		if (component instanceof PropertiesComponent) {
-			propertiesComponent = (PropertiesComponent) component;
-		}
+		return new Optional<>(components.get(name));
+	}
 
+	/**
+	 * Put new component with name.
+	 * @param name the name of the component to be added.
+	 * @param component the component to be added.
+	 */
+	public void putCompnent(String name, Component component) {
 		components.put(name, component);
-
 	}
 
-	public void removeComponent(String name, Component component) {
-
-		if (components.get(name) == component) {
-			components.remove(name);
-		}
+	/**
+	 * Remove the component by name.
+	 * @param name the name of the component to be removed.
+	 * @return the removed component if the name exist, null-object otherwise.
+	 */
+	public Optional<Component> removeComponentByName(String name) {
+		return new Optional<>(components.remove(name));
 	}
 
+	public void onUpdate() {
+
+	}
 }
