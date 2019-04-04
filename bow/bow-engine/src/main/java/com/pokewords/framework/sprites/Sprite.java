@@ -41,11 +41,6 @@ public class Sprite implements Cloneable {
 	 * @return the component to get if the name exist, null-object otherwise.
 	 */
 	public Optional<Component> getComponentByName(String name) {
-
-		if (!components.containsKey(name)) {
-			return new Optional<>(null);
-		}
-
 		return new Optional<>(components.get(name));
 	}
 
