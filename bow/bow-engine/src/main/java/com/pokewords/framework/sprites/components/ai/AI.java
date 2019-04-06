@@ -7,11 +7,11 @@ public class AI implements Component {
 	private BehaviorTree behaviorTree;
 
 	/**
-	 * @see com.pokewords.framework.sprites.components #onWake()
+	 * @see com.pokewords.framework.sprites.components #onInit()
 	 * 
 	 *  
 	 */
-	public void onWake() {
+	public void onInit() {
 
 	}
 

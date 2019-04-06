@@ -13,7 +13,7 @@
     <bytecodeTargetLevel>
       <module name="bow" target="1.5" />
       <module name="bow-core" target="1.5" />
-      <module name="bow-engine" target="1.5" />
+      <module name="bow-engine" target="8" />
       <module name="bow5" target="1.5" />
     </bytecodeTargetLevel>
   </component>

@@ -1,39 +1,50 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.FiniteStateMachine;
+import com.pokewords.framework.sprites.Sprite;
+
 import java.util.Collection;
 
-public class FramesStateMachineComponent extends FiniteStateMachine implements Component {
+/**
+ * @author johnny850807
+ */
+public class FramesStateMachineComponent extends FiniteStateMachine<Frame>
+		implements Component, PropertiesComponent.StateListener {
+	private PropertiesComponent propertiesComponent;
 
-	private Collection<Frame> frame;
 
+	public FramesStateMachineComponent() {
+	}
+
+	public FramesStateMachineComponent(PropertiesComponent propertiesComponent) {
+		this.propertiesComponent = propertiesComponent;
+	}
 
 	/**
-	 * @see com.pokewords.framework.sprites.components.Component #onWake()
-	 * 
-	 *  
+	 * This boolean indicates if the state is triggered after modified, if it's not triggered, we expect it will be triggered
+	 * at the next tick.
 	 */
-	public void onWake() {
+	private boolean stateTriggered = false;
+
+	public void onInit() {
+
+	}
+
+	public void onBoundToSprite(Sprite sprite) {
 
 	}
 
 
-	/**
-	 * @see com.pokewords.framework.sprites.components.Component #onStart()
-	 * 
-	 *  
-	 */
 	public void onStart() {
 
 	}
 
 
-	/**
-	 * @see com.pokewords.framework.sprites.components.Component #onUpdate()
-	 * 
-	 *  
-	 */
 	public void onUpdate() {
+
+	}
+
+	public void onStateUpdated(String state) {
 
 	}
 

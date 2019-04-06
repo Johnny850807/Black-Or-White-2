@@ -6,13 +6,17 @@ public class LoadingState extends AppState {
 
 	}
 
+	public void onEnter() {
+
+	}
+
 	@Override
 	public void onUpdate() {
 
 	}
 
-	@Override
-	public void onAppEnd() {
+	public void onExit() {
 
 	}
+
 }
