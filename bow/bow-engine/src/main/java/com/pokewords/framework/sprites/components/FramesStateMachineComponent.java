@@ -9,11 +9,12 @@ import java.util.Collection;
  * @author johnny850807
  */
 public class FramesStateMachineComponent extends FiniteStateMachine<Frame>
-		implements Component, PropertiesComponent.StateListener {
+		implements Component {
 	private PropertiesComponent propertiesComponent;
 
 
 	public FramesStateMachineComponent() {
+		
 	}
 
 	public FramesStateMachineComponent(PropertiesComponent propertiesComponent) {
@@ -26,26 +27,28 @@ public class FramesStateMachineComponent extends FiniteStateMachine<Frame>
 	 */
 	private boolean stateTriggered = false;
 
-	public void onInit() {
-
-	}
-
+	@Override
 	public void onBoundToSprite(Sprite sprite) {
-
+		propertiesComponent.addStateListener( this.new StateListener());
 	}
 
-
+	@Override
 	public void onStart() {
 
 	}
 
-
+	@Override
 	public void onUpdate() {
-
+		if (!stateTriggered)
+			trigger(propertiesComponent.getState());
 	}
 
-	public void onStateUpdated(String state) {
+	private class StateListener implements PropertiesComponent.StateListener{
 
+		@Override
+		public void onStateUpdated(String state) {
+
+		}
 	}
 
 }
