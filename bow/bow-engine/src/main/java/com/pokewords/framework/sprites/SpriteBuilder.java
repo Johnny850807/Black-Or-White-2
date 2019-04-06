@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites;
 
+import com.pokewords.framework.engine.Script;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
@@ -7,35 +8,42 @@ import com.pokewords.framework.sprites.components.PropertiesComponent;
 
 /**
  *
- * How should the API looks like:
+ * For testability one parameter per method.
  *
- *    SpriteBuilder.createNewSprite(FSMname, FSMComp, propName, propComp)
+ * What will the API look like:
+ *
+ *    SpriteBuilder.setScript(script)
+ *                 .setFSMComponent(fsmComp)
  *                 .addComponent(compName, comp)
  *                 .build();
+ *
+ *
+ *
+ * New mission:
+ *
+ *    Finite State Machine:
+ *      animation pictures
+ *      transitions
+ *      definition is from the client script
+ *    Some interfaces for user to construct the FSMComponent with ease.
+ *
+ * component Inject method last line within build()
  *
  * @author nyngwang
  */
 public class SpriteBuilder {
 
-    private static Sprite sprite;
-    private static boolean enableReplace = true;
+    // frameFactory here
+//    private static Sprite sprite;
+//    private static boolean script
+//    private static boolean FSMComponentIsSet;
+//    private static boolean propertiesComponentIsSet;
+//
+//
 
-    /**
-     * Allocate memory for a new sprite.
-     * @return the current class for fluent API
-     */
-    public static Class<SpriteBuilder> createNewSprite(
-            final String customFSMComponentName, final FrameStateMachineComponent FSMComponent,
-            final String customPropertiesComponentName, final PropertiesComponent propertiesComponent
-    ) {
+    public static Class<SpriteBuilder> setScript(Script script) {
 
-        if (customFSMComponentName.equals(customPropertiesComponentName)) {
-            throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
-        }
 
-        sprite = new Sprite(customFSMComponentName, FSMComponent,
-                customPropertiesComponentName, propertiesComponent);
-        enableReplace = true;
 
         return SpriteBuilder.class;
     }
