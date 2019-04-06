@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.components.ai;
 
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 
 public class AI implements Component {
@@ -12,6 +13,11 @@ public class AI implements Component {
 	 *  
 	 */
 	public void onInit() {
+
+	}
+
+	@Override
+	public void onBoundToSprite(Sprite sprite) {
 
 	}
 

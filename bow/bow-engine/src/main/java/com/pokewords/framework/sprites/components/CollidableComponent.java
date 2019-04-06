@@ -4,36 +4,17 @@ import com.pokewords.framework.sprites.Sprite;
 
 public class CollidableComponent implements Component {
 
-
-	/**
-	 * @see com.pokewords.framework.sprites.components.Component #onInit()
-	 * 
-	 *  
-	 */
-	public void onInit() {
-
-	}
-
+	@Override
 	public void onBoundToSprite(Sprite sprite) {
 
 	}
 
-
-	/**
-	 * @see com.pokewords.framework.sprites.components.Component #onStart()
-	 * 
-	 *  
-	 */
+	@Override
 	public void onStart() {
 
 	}
 
-
-	/**
-	 * @see com.pokewords.framework.sprites.components.Component #onUpdate()
-	 * 
-	 *  
-	 */
+	@Override
 	public void onUpdate() {
 
 	}
