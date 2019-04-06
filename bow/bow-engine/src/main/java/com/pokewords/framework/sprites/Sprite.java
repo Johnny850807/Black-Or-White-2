@@ -1,14 +1,14 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.FramesStateMachineComponent;
+import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 
 import java.util.Map;
 
 public class Sprite implements Cloneable {
 
-	private FramesStateMachineComponent viewComponent;
+	private FrameStateMachineComponent viewComponent;
 
 	private PropertiesComponent propertiesComponent;
 
@@ -18,7 +18,7 @@ public class Sprite implements Cloneable {
 
 	}
 
-	public FramesStateMachineComponent getViewComponent() {
+	public FrameStateMachineComponent getViewComponent() {
 		return viewComponent;
 	}
 
@@ -30,7 +30,7 @@ public class Sprite implements Cloneable {
 		return components;
 	}
 
-	public void setViewComponent(FramesStateMachineComponent viewComponent) {
+	public void setViewComponent(FrameStateMachineComponent viewComponent) {
 		this.viewComponent = viewComponent;
 	}
 

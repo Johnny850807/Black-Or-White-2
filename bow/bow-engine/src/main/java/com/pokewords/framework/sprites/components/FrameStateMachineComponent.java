@@ -8,16 +8,16 @@ import java.util.Collection;
 /**
  * @author johnny850807
  */
-public class FramesStateMachineComponent extends FiniteStateMachine<Frame>
+public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 		implements Component {
 	private PropertiesComponent propertiesComponent;
 
 
-	public FramesStateMachineComponent() {
+	public FrameStateMachineComponent() {
 		
 	}
 
-	public FramesStateMachineComponent(PropertiesComponent propertiesComponent) {
+	public FrameStateMachineComponent(PropertiesComponent propertiesComponent) {
 		this.propertiesComponent = propertiesComponent;
 	}
 
