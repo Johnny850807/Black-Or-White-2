@@ -5,9 +5,13 @@ import com.pokewords.framework.sprites.Sprite;
 
 import java.util.Collection;
 
+/**
+ * @author johnny850807
+ */
 public class FramesStateMachineComponent extends FiniteStateMachine<Frame>
 		implements Component, PropertiesComponent.StateListener {
 	private PropertiesComponent propertiesComponent;
+
 
 	public FramesStateMachineComponent() {
 	}
@@ -43,4 +47,5 @@ public class FramesStateMachineComponent extends FiniteStateMachine<Frame>
 	public void onStateUpdated(String state) {
 
 	}
+
 }
