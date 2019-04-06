@@ -33,19 +33,26 @@ import com.pokewords.framework.sprites.components.PropertiesComponent;
  */
 public class SpriteBuilder {
 
-    // frameFactory here
-//    private static Sprite sprite;
-//    private static boolean script
-//    private static boolean FSMComponentIsSet;
-//    private static boolean propertiesComponentIsSet;
-//
-//
+    private static Sprite sprite;
+        private static boolean enableReplace = true;
 
-    public static Class<SpriteBuilder> setScript(Script script) {
+        /**
+         * Allocate memory for a new sprite.
+         * @return the current class for fluent API
+         */
+        public static Class<SpriteBuilder> createNewSprite(
+        final String customFSMComponentName, final FrameStateMachineComponent FSMComponent,
+        final String customPropertiesComponentName, final PropertiesComponent propertiesComponent
+    ) {
 
+            if (customFSMComponentName.equals(customPropertiesComponentName)) {
+                throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
+            }
 
+            sprite = new Sprite(FSMComponent, propertiesComponent);
+            enableReplace = true;
 
-        return SpriteBuilder.class;
+            return SpriteBuilder.class;
     }
 
     /**
