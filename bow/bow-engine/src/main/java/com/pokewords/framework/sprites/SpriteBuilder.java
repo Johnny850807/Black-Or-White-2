@@ -18,26 +18,26 @@ import com.pokewords.framework.sprites.components.PropertiesComponent;
 public class SpriteBuilder {
 
     private static Sprite sprite;
-    private static boolean enableReplace = true;
+        private static boolean enableReplace = true;
 
-    /**
-     * Allocate memory for a new sprite.
-     * @return the current class for fluent API
-     */
-    public static Class<SpriteBuilder> createNewSprite(
-            final String customFSMComponentName, final FrameStateMachineComponent FSMComponent,
-            final String customPropertiesComponentName, final PropertiesComponent propertiesComponent
+        /**
+         * Allocate memory for a new sprite.
+         * @return the current class for fluent API
+         */
+        public static Class<SpriteBuilder> createNewSprite(
+        final String customFSMComponentName, final FrameStateMachineComponent FSMComponent,
+        final String customPropertiesComponentName, final PropertiesComponent propertiesComponent
     ) {
 
-        if (customFSMComponentName.equals(customPropertiesComponentName)) {
-            throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
-        }
+            if (customFSMComponentName.equals(customPropertiesComponentName)) {
+                throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
+            }
 
-        sprite = new Sprite(customFSMComponentName, FSMComponent,
-                customPropertiesComponentName, propertiesComponent);
-        enableReplace = true;
+            sprite = new Sprite(customFSMComponentName, FSMComponent,
+                    customPropertiesComponentName, propertiesComponent);
+            enableReplace = true;
 
-        return SpriteBuilder.class;
+            return SpriteBuilder.class;
     }
 
     /**
