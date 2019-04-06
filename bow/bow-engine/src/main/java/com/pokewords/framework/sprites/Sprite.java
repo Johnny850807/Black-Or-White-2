@@ -4,7 +4,9 @@ import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Sprite implements Cloneable {
 
@@ -12,7 +14,7 @@ public class Sprite implements Cloneable {
 
 	private PropertiesComponent propertiesComponent;
 
-	private Map<String,Component> components;
+	private Map<String,Component> components = new HashMap<>();
 
 	public void onUpdate() {
 
@@ -40,5 +42,20 @@ public class Sprite implements Cloneable {
 
 	public void setComponents(Map<String, Component> components) {
 		this.components = components;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Sprite sprite = (Sprite) o;
+		return viewComponent.equals(sprite.viewComponent) &&
+				propertiesComponent.equals(sprite.propertiesComponent) &&
+				components.equals(sprite.components);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(viewComponent, propertiesComponent, components);
 	}
 }

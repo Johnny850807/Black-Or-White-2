@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.FiniteStateMachine;
 import com.pokewords.framework.sprites.Sprite;
 
@@ -13,42 +14,35 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 	private PropertiesComponent propertiesComponent;
 
 
-	public FrameStateMachineComponent() {
-		
-	}
+	public FrameStateMachineComponent() { }
 
 	public FrameStateMachineComponent(PropertiesComponent propertiesComponent) {
 		this.propertiesComponent = propertiesComponent;
 	}
 
 	/**
-	 * This boolean indicates if the state is triggered after modified, if it's not triggered, we expect it will be triggered
-	 * at the next tick.
+	 * This boolean indicates if the state is triggered after the state is modified,
+	 * if it's not triggered, we expect it will be triggered at the next onUpdate().
 	 */
 	private boolean stateTriggered = false;
 
 	@Override
 	public void onBoundToSprite(Sprite sprite) {
-		propertiesComponent.addStateListener( this.new StateListener());
+		propertiesComponent.addStateListener(state -> stateTriggered = false);
 	}
 
 	@Override
-	public void onStart() {
-
-	}
+	public void onStart() { }
 
 	@Override
 	public void onUpdate() {
 		if (!stateTriggered)
+		{
+			stateTriggered = true;
 			trigger(propertiesComponent.getState());
-	}
-
-	private class StateListener implements PropertiesComponent.StateListener{
-
-		@Override
-		public void onStateUpdated(String state) {
-
 		}
+		else
+			trigger(Events.UPDATE);
 	}
 
 }
