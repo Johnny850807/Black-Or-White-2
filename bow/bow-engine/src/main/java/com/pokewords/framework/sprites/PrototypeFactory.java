@@ -7,5 +7,4 @@ public interface PrototypeFactory {
 	void addPrototype(String type, Sprite prototype);
 
 	void removePrototype(String type);
-
 }

@@ -14,7 +14,8 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 	private PropertiesComponent propertiesComponent;
 
 
-	public FrameStateMachineComponent() { }
+	public FrameStateMachineComponent() {
+	}
 
 	public FrameStateMachineComponent(PropertiesComponent propertiesComponent) {
 		this.propertiesComponent = propertiesComponent;
