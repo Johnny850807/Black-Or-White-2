@@ -1,10 +1,10 @@
 package com.pokewords.framework.ioc;
 
-import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.engine.TextureFrameFactory;
 import com.pokewords.framework.engine.UserConfig;
-import com.pokewords.framework.engine.asm.loader.scriptparser.PrototypeParser;
 import com.pokewords.framework.sprites.PrototypeFactory;
+import com.pokewords.framework.sprites.components.FrameFactory;
+import com.pokewords.framework.sprites.components.parsing.FrameStateMachineScriptParser;
 import com.pokewords.framework.views.SoundPlayer;
 
 public class ReleaseIocFactory implements IocFactory{
@@ -15,7 +15,7 @@ public class ReleaseIocFactory implements IocFactory{
     }
 
     @Override
-    public PrototypeParser prototypeParser() {
+    public FrameStateMachineScriptParser frameStateMachineScriptParser() {
         return null;
     }
 

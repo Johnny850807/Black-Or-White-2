@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites;
 
+import com.pokewords.framework.engine.Components;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
@@ -15,15 +16,24 @@ import java.util.Optional;
  *  2. Every components has a name, and it's unique.
  *  3. The setting of mandatory components
  *
+ *  New requirement @ 4/6:
+ *  1. Now the two mandatory components have predetermined names by us,
+ *     so the user doesn't have to name it.
  */
 public class Sprite implements Cloneable {
+
 	private Map<String, Component> components;
 
-	public Sprite(final String customFSMComponentName, final FrameStateMachineComponent FSMComponent,
-				  final String customPropertiesComponentName, final PropertiesComponent propertiesComponent) {
+	/**
+	 * The constructor of Sprite.
+	 * @param FSMComponent The mandatory component to define the view of the Sprite.
+	 * @param propertiesComponent The mandatory component to define the properties of the Sprite.
+	 */
+	public Sprite(final FrameStateMachineComponent FSMComponent,
+				  final PropertiesComponent propertiesComponent) {
 		components = new HashMap<String, Component>() {{
-			put(customFSMComponentName, FSMComponent);
-			put(customPropertiesComponentName, propertiesComponent);
+			put(Components.FSMComponentName, FSMComponent);
+			put(Components.propertiesComponentName, propertiesComponent);
 		}};
 	}
 
@@ -33,6 +43,22 @@ public class Sprite implements Cloneable {
 	 */
 	public Map<String, Component> getComponents() {
 		return components;
+	}
+
+	/**
+	 * The getter of FrameStateMachineComponent.
+	 * @return The concrete FrameStateMachineComponent.
+	 */
+	public FrameStateMachineComponent getFrameStateMachineComponent() {
+		return (FrameStateMachineComponent) components.get(Components.FSMComponentName);
+	}
+
+	/**
+	 * The getter of PropertiesComponent.
+	 * @return The concrete PropertiesComponent.
+	 */
+	public PropertiesComponent getPropertiesComponent() {
+		return (PropertiesComponent) components.get(Components.propertiesComponentName);
 	}
 
 	/**
