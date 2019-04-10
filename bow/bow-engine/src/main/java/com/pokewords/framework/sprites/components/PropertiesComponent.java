@@ -2,8 +2,6 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.sprites.Sprite;
 
-import javax.swing.plaf.nimbus.State;
-import javax.swing.text.Position;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,36 +13,14 @@ public class PropertiesComponent implements Component {
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
 	private List<StateListener> stateListeners = new ArrayList<StateListener>();
 
-	public void addStateListener(StateListener stateListener){
-		this.stateListeners.add(stateListener);
-	}
-
-	public void removeStateListener(StateListener stateListener){
-		this.stateListeners.remove(stateListener);
-	}
-
-	public void addPositionListener(PositionListener positionListener){
-		this.positionListeners.add(positionListener);
-	}
-
-	public void removePositionListener(PositionListener positionListener){
-		this.positionListeners.remove(positionListener);
-	}
+	@Override
+	public void onBoundToSprite(Sprite sprite) { }
 
 	@Override
-	public void onBoundToSprite(Sprite sprite) {
-
-	}
+	public void onStart() { }
 
 	@Override
-	public void onStart() {
-
-	}
-
-	@Override
-	public void onUpdate() {
-
-	}
+	public void onUpdate() { }
 
 	public Point2D getPoint() {
 		return point;
@@ -52,6 +28,7 @@ public class PropertiesComponent implements Component {
 
 	public void setPoint(Point2D point) {
 		this.point = point;
+		notifyPositionListeners();
 	}
 
 	public String getType() {
@@ -68,12 +45,44 @@ public class PropertiesComponent implements Component {
 
 	public void setState(String state) {
 		this.state = state;
+		notifyStateListeners();
 	}
 
 	public interface PositionListener{
 		void onPositionUpdated(Point2D point);
 	}
+
 	public interface StateListener{
 		void onStateUpdated(String state);
+	}
+
+	public void addStateListener(StateListener stateListener){
+		stateListeners.add(stateListener);
+	}
+
+	public void removeStateListener(StateListener stateListener){
+		stateListeners.remove(stateListener);
+	}
+
+	/**
+	 * Trigger all stateListener's onStateUpdated() method
+	 */
+	protected void notifyStateListeners(){
+		stateListeners.forEach(listener -> listener.onStateUpdated(state));
+	}
+
+	public void addPositionListener(PositionListener positionListener){
+		positionListeners.add(positionListener);
+	}
+
+	public void removePositionListener(PositionListener positionListener){
+		positionListeners.remove(positionListener);
+	}
+
+	/**
+	 * Trigger all positionListener's onPositionUpdated() method
+	 */
+	protected void notifyPositionListeners(){
+		positionListeners.forEach(listener -> listener.onPositionUpdated(point));
 	}
 }
