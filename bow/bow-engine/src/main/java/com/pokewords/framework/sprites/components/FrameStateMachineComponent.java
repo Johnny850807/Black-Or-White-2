@@ -23,9 +23,15 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
         this.propertiesComponent = propertiesComponent;
     }
 
+    public FrameStateMachineComponent(AppStateWorld appStateWorld, PropertiesComponent propertiesComponent) {
+        this.appStateWorld = appStateWorld;
+        this.propertiesComponent = propertiesComponent;
+    }
+
     /**
-     * This boolean indicates if the state is triggered after the state is modified,
-     * if it's not triggered, we expect it will be triggered at the next onUpdate().
+     * This boolean indicates if the Sprite's state is triggered after the Sprite's state has been modified,
+     * (i.e. if the Sprite's state has been modified, we must trigger it in the State Machine.)
+     * If it's not triggered (false), the state's suppose to be triggered at the next onUpdate().
      */
     private boolean stateTriggered = false;
 
@@ -40,11 +46,11 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 
     @Override
     public void onUpdate() {
-        trigger();
+        triggerTheCurrentState();
         applyTheFrameEffect();
     }
 
-    private void trigger() {
+    private void triggerTheCurrentState() {
         if (!stateTriggered) {
             stateTriggered = true;
             trigger(propertiesComponent.getState());
@@ -57,4 +63,12 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
         frame.apply(appStateWorld);
     }
 
+
+    public void setAppStateWorld(AppStateWorld appStateWorld) {
+        this.appStateWorld = appStateWorld;
+    }
+
+    public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
+        this.propertiesComponent = propertiesComponent;
+    }
 }
