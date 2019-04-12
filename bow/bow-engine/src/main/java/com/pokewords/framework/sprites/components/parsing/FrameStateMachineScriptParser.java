@@ -1,9 +1,12 @@
 package com.pokewords.framework.sprites.components.parsing;
 
 import com.pokewords.framework.engine.exceptions.ParsingException;
+import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public interface FrameStateMachineScriptParser {
@@ -17,7 +20,7 @@ public interface FrameStateMachineScriptParser {
         return this.parse(script,
                 // do nothing to the app state world by default
                 (segment) ->
-                        (world) -> {
+                        (world, sprite) -> {
                         });
     }
 
@@ -36,6 +39,8 @@ public interface FrameStateMachineScriptParser {
          * @param segment the being parsed segment
          * @return the action that this frame'd like to apply in the given AppStateWorld.
          */
-        Consumer<AppStateWorld> onParsing(FrameSegment segment);
+        BiConsumer<AppStateWorld, Sprite> onParsing(FrameSegment segment);
     }
+
+
 }
