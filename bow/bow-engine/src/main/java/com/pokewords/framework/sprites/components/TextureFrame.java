@@ -5,6 +5,7 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
 import java.awt.Image;
+import java.util.function.Consumer;
 
 
 public class TextureFrame implements Frame {
@@ -21,6 +22,11 @@ public class TextureFrame implements Frame {
 	 *  
 	 */
 	public void apply(AppStateWorld gameWorld) {
+
+	}
+
+	@Override
+	public void addEffect(Consumer<AppStateWorld> effectToWorld) {
 
 	}
 
