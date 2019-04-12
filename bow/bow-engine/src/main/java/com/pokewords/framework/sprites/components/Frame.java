@@ -25,4 +25,5 @@ public interface Frame {
 	 * @param canvas The canvas which can be rendered some images.
 	 */
 	void renderItself(Canvas canvas);
+
 }
