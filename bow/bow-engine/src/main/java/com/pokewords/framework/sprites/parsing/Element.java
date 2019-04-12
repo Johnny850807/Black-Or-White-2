@@ -1,4 +1,4 @@
-package com.pokewords.framework.sprites.components.parsing;
+package com.pokewords.framework.sprites.parsing;
 
 public class Element {
     public String getString(String name){
