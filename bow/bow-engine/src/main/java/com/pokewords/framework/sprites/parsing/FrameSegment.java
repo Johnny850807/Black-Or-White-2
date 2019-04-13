@@ -34,4 +34,9 @@ public class FrameSegment implements Node {
     public void setScript(Script script) {
         this.script = script;
     }
+
+    @Override
+    public void interpret(Script script) {
+
+    }
 }
