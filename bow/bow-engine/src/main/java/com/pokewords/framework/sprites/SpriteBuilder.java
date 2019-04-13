@@ -16,9 +16,9 @@ import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
  *
  *    SpriteBuilder builder = new SpriteBuilder(iocFactory);
  *    builder.init()
- *           .addScript(script)
- *           .addListener(listener)
- *           .addPropertiesComponent(propComp)
+ *           .setScript(script)
+ *           .setListener(listener)
+ *           .setPropertiesComponent(propComp)
  *           .addComponent(compName, comp)
  *           .build();
  *
@@ -38,25 +38,26 @@ public class SpriteBuilder {
     private PropertiesComponent propertiesComponent;
 
     // FSM Related
-    private Script script;
+    private String script;
     FrameStateMachineScriptParser parser;
+    FrameStateMachineScriptParser.OnParsingFrameListener listener;
         // this guy has to create Frame node
         // ParsingException if script GG
             // Need comprehensive error message: line # in script
 
-    
     /**
      * The constructor of SpriteBuilder.
      * @param iocFactory To do dependency injection.
      */
     public SpriteBuilder(IocFactory iocFactory) {
 
+        parser = iocFactory.frameStateMachineScriptParser();
+
         sprite = null;
         fsmComponent = null;
         propertiesComponent = null;
-
         script = null;
-        parser = iocFactory.frameStateMachineScriptParser();
+        listener = null;
     }
 
     /**
@@ -68,26 +69,39 @@ public class SpriteBuilder {
         fsmComponent = null;
         propertiesComponent = null;
         script = null;
+        listener = null;
 
         return this;
     }
 
     /**
-     * Add a script for the current sprite.
+     * Set a script for the FSM parser of current sprite.
      * @param script The script file required to define FSM.
      * @return The current builder.
      */
-    public SpriteBuilder addScript(Script script) {
+    public SpriteBuilder setScript(String script) {
         this.script = script;
         return this;
     }
+
+    /**
+     * Set a listener for the FSM parser of current sprite.
+     * @param listener The client-defined parser
+     * @return The current builder.
+     */
+    public SpriteBuilder setListener(FrameStateMachineScriptParser.OnParsingFrameListener
+                                     listener) {
+        this.listener = listener;
+        return this;
+    }
+
 
     /**
      * Add Properties Component to the current sprite.
      * @param propertiesComponent The Properties Component required to define FSM.
      * @return The current builder.
      */
-    public SpriteBuilder addPropertiesComponent(PropertiesComponent propertiesComponent) {
+    public SpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
         this.propertiesComponent = propertiesComponent;
         prepareSprite();
         return this;
@@ -101,7 +115,7 @@ public class SpriteBuilder {
             throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
         }
 
-        sprite.putCompnent(name, component);
+        sprite.putComponent(name, component);
         component.onBoundToSprite(sprite);
 
         return this;
@@ -140,6 +154,10 @@ public class SpriteBuilder {
             throw new PropertiesComponentIsRequiredException(
                     "PropertiesComponent is required.");
         }
+    }
+
+    private void prepareParser() {
+        parser.parse(script, listener);
     }
 
 }

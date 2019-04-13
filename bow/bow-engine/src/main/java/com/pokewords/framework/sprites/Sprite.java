@@ -75,7 +75,7 @@ public class Sprite implements Cloneable {
 	 * @param name the name of the component to be added.
 	 * @param component the component to be added.
 	 */
-	public void putCompnent(String name, Component component) {
+	public void putComponent(String name, Component component) {
 		components.put(name, component);
 	}
 
