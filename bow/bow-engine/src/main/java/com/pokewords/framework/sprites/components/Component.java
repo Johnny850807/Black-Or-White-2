@@ -3,6 +3,9 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.sprites.Sprite;
 
 public interface Component extends Cloneable{
+	String PROPERTIES = "properties";
+	String FRAME_STATE_MACHINE = "Frame State Machine";
+	String COLLIDABLE = "collidable";
 
 	/**
 	 * Triggered when the component is bound to a Sprite,

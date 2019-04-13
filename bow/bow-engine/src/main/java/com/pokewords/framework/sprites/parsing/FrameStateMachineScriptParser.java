@@ -37,7 +37,7 @@ public interface FrameStateMachineScriptParser {
          * @param segment the being parsed segment
          * @return the action that this frame'd like to apply in the given AppStateWorld.
          */
-        BiConsumer<AppStateWorld, Sprite> onParsing(FrameSegment segment);
+        BiConsumer<AppStateWorld, Sprite> onParsing(FrameSegment frameSegment);
     }
 
 

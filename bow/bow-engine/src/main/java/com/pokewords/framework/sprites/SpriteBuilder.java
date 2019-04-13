@@ -2,8 +2,6 @@ package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.CollidableComponent;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-import com.pokewords.framework.sprites.parsing.FrameSegment;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.engine.exceptions.FrameStateMachineComponentIsRequiredException;
@@ -13,9 +11,7 @@ import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
-import com.pokewords.framework.sprites.parsing.Script1;
-
-import java.util.function.BiConsumer;
+import com.pokewords.framework.sprites.parsing.LinScript;
 
 /**
  *
@@ -46,16 +42,16 @@ public class SpriteBuilder {
 
         Sprite mySprite = builder.init()
                                  .init(new ReleaseIocFactory())
-                                 .setupParser(new Script1(),
-                                         new FrameStateMachineScriptParser.OnParsingFrameListener() {
-                                             @Override
-                                             public BiConsumer<AppStateWorld, Sprite> onParsing(FrameSegment segment) {
-                                                 return null;
-                                             }
+                                 .setupParser(new LinScript(),
+                                         frameSegment -> {
+                                            // parse client's own elements
+                                            return (world, sprite) -> {
+                                                // return some customized action during the frame is applied to the world
+                                            };
                                          })
-                                 .setupParser(new Script1())
+                                 .setupParser(new LinScript())
                                  .setPropertiesComponent(new PropertiesComponent())
-                                 .addComponent("collidable", new CollidableComponent())
+                                 .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .build();
 
     }
