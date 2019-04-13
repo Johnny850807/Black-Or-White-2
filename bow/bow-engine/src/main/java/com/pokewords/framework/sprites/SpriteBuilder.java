@@ -16,8 +16,9 @@ import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
  *
  *    SpriteBuilder builder = new SpriteBuilder(iocFactory);
  *    builder.init()
+ *             .init(iocFactory) // Now changing parser is possible after builder initialized.
  *           .setupParser(script, listener)
- *               .setupParser(script)
+ *             .setupParser(script) // provide no listener, use default.
  *           .setPropertiesComponent(propComp)
  *           .addComponent(compName, comp)
  *           .build();
@@ -149,13 +150,13 @@ public class SpriteBuilder {
     private void checkSpriteIsReady() {
         if (fsmComponent == null) {
             throw new FrameStateMachineComponentIsRequiredException(
-                    "FrameStateMachineComponent is required.");
+                    "FrameStateMachineComponent is required, " +
+                            "use setupParser() to create it.");
         }
         if (propertiesComponent == null) {
             throw new PropertiesComponentIsRequiredException(
                     "PropertiesComponent is required.");
         }
     }
-
 
 }
