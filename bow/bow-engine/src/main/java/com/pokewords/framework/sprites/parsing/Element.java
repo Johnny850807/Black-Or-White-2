@@ -7,4 +7,10 @@ public class Element {
     public int getInt(String name){
         return 0; //TODO
     }
+
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
