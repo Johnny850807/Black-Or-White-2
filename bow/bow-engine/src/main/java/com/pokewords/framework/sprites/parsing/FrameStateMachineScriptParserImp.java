@@ -13,6 +13,26 @@ public class FrameStateMachineScriptParserImp implements FrameStateMachineScript
 
     @Override
     public FrameStateMachineComponent parse(Script script, OnParsingFrameListener listener) {
+
+
+
+        // When parsing new Element if appropriate.
+
+        //
+
+        for (FrameSegment fs : fss) {
+            listener.onParsing(eachFrameSegment);
+        }
+
+
+
+
+
+
+
+
+
+
         return null;
     }
 

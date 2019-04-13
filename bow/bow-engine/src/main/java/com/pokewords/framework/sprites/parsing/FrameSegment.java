@@ -1,6 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
-public class FrameSegment {
+public class FrameSegment implements Node {
     public final static String PIC = "pic";
     public final static String DURATION = "duration";
     public final static String NEXT = "next";
