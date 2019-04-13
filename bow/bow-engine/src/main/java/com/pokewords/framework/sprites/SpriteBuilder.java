@@ -17,7 +17,7 @@ import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
  *    SpriteBuilder builder = new SpriteBuilder(iocFactory);
  *    builder.init()
  *           .addScript(script)
- *           .addFrameStateMachineComponent(fsmComp)
+ *           .addListener(listener)
  *           .addPropertiesComponent(propComp)
  *           .addComponent(compName, comp)
  *           .build();
@@ -32,51 +32,31 @@ import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
  */
 public class SpriteBuilder {
 
+    // Sprite Related
     private Sprite sprite;
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
+
+    // FSM Related
     private Script script;
-    //
     FrameStateMachineScriptParser parser;
+        // this guy has to create Frame node
+        // ParsingException if script GG
+            // Need comprehensive error message: line # in script
 
-
+    
     /**
      * The constructor of SpriteBuilder.
      * @param iocFactory To do dependency injection.
      */
     public SpriteBuilder(IocFactory iocFactory) {
+
         sprite = null;
         fsmComponent = null;
         propertiesComponent = null;
+
         script = null;
-
-        //
         parser = iocFactory.frameStateMachineScriptParser();
-
-    }
-
-    /**
-     * Try to create a sprite when mandatory components are ready.
-     */
-    private void prepareSprite() {
-        if (fsmComponent == null || propertiesComponent == null) {
-            return;
-        }
-        sprite = new Sprite(fsmComponent, propertiesComponent);
-    }
-
-    /**
-     * Check the sprite is ready before access.
-     */
-    private void checkSpriteReady() {
-        if (fsmComponent == null) {
-            throw new FrameStateMachineComponentIsRequiredException(
-                    "FrameStateMachineComponent is required.");
-        }
-        if (propertiesComponent == null) {
-            throw new PropertiesComponentIsRequiredException(
-                    "PropertiesComponent is required.");
-        }
     }
 
     /**
@@ -103,17 +83,6 @@ public class SpriteBuilder {
     }
 
     /**
-     * Add FSM component to the current sprite.
-     * @param fsmComponent The FSM required to define FSM.
-     * @return The current builder.
-     */
-    public SpriteBuilder addFrameStateMachineComponent(FrameStateMachineComponent fsmComponent) {
-        this.fsmComponent = fsmComponent;
-        prepareSprite();
-        return this;
-    }
-
-    /**
      * Add Properties Component to the current sprite.
      * @param propertiesComponent The Properties Component required to define FSM.
      * @return The current builder.
@@ -126,7 +95,7 @@ public class SpriteBuilder {
 
     public SpriteBuilder addComponent(String name, Component component) {
 
-        checkSpriteReady();
+        checkSpriteIsReady();
 
         if (sprite.getComponentByName(name).isPresent()) {
             throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
@@ -143,9 +112,34 @@ public class SpriteBuilder {
      * @return The sprite.
      */
     public Sprite build() {
-        checkSpriteReady();
+        checkSpriteIsReady();
         ComponentInjector.inject(sprite);
         return sprite;
+    }
+
+    // Utility Functions
+    /**
+     * Try to create a sprite when mandatory components are ready.
+     */
+    private void prepareSprite() {
+        if (fsmComponent == null || propertiesComponent == null) {
+            return;
+        }
+        sprite = new Sprite(fsmComponent, propertiesComponent);
+    }
+
+    /**
+     * Check the sprite is ready before access.
+     */
+    private void checkSpriteIsReady() {
+        if (fsmComponent == null) {
+            throw new FrameStateMachineComponentIsRequiredException(
+                    "FrameStateMachineComponent is required.");
+        }
+        if (propertiesComponent == null) {
+            throw new PropertiesComponentIsRequiredException(
+                    "PropertiesComponent is required.");
+        }
     }
 
 }
