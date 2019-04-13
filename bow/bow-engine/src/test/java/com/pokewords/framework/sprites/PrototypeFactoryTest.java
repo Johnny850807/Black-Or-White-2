@@ -15,11 +15,11 @@ public class PrototypeFactoryTest {
 
     @Before
     public void setup(){
-        sprite = new Sprite();
+        /*sprite = new Sprite();
         PropertiesComponent propertiesComponent = new PropertiesComponent();
         FrameStateMachineComponent frameStateMachineComponent = new FrameStateMachineComponent();
         frameStateMachineComponent.addState(new TextureFrame());
-        sprite.setPropertiesComponent(propertiesComponent);
+        sprite.setPropertiesComponent(propertiesComponent);*/
     }
 
 

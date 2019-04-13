@@ -67,7 +67,7 @@ public class Sprite implements Cloneable {
 	 * @return the component to get if the name exist, null-object otherwise.
 	 */
 	public Optional<Component> getComponentByName(String name) {
-		return new Optional<>(components.get(name));
+		return Optional.of(components.get(name));
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class Sprite implements Cloneable {
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
 	public Optional<Component> removeComponentByName(String name) {
-		return new Optional<>(components.remove(name));
+		return Optional.of(components.remove(name));
 	}
 
 	public void onUpdate() {
