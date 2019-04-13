@@ -1,13 +1,11 @@
-package com.pokewords.framework.sprites.components.parsing;
+package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ParsingException;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public interface FrameStateMachineScriptParser {
 

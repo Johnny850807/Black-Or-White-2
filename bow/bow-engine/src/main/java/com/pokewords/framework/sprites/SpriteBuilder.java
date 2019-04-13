@@ -8,6 +8,7 @@ import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
+import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
 
 /**
  *
@@ -30,12 +31,29 @@ import com.pokewords.framework.sprites.components.PropertiesComponent;
  * @author nyngwang
  */
 public class SpriteBuilder {
-    private IocFactory iocFactory;
 
     private Sprite sprite;
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
     private Script script;
+    //
+    FrameStateMachineScriptParser parser;
+
+
+    /**
+     * The constructor of SpriteBuilder.
+     * @param iocFactory To do dependency injection.
+     */
+    public SpriteBuilder(IocFactory iocFactory) {
+        sprite = null;
+        fsmComponent = null;
+        propertiesComponent = null;
+        script = null;
+
+        //
+        parser = iocFactory.frameStateMachineScriptParser();
+
+    }
 
     /**
      * Try to create a sprite when mandatory components are ready.
@@ -59,18 +77,6 @@ public class SpriteBuilder {
             throw new PropertiesComponentIsRequiredException(
                     "PropertiesComponent is required.");
         }
-    }
-
-    /**
-     * The constructor of SpriteBuilder.
-     * @param iocFactory To do dependency injection.
-     */
-    public SpriteBuilder(IocFactory iocFactory) {
-        this.iocFactory = iocFactory;
-        sprite = null;
-        fsmComponent = null;
-        propertiesComponent = null;
-        script = null;
     }
 
     /**

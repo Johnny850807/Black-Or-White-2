@@ -47,7 +47,7 @@ public interface Inputs {
      * Add an event moving the mouse (updating the mouse's position)
      * @param point the point where the mouse move to
      */
-    void oMouseMoved(Point2D point);
+    void onMouseMoved(Point2D point);
 
     /**
      * @return true Iff the mouse is hit down.
@@ -57,7 +57,7 @@ public interface Inputs {
     /**
      * Add an event hitting the mouse down
      */
-    void oMouseHitDown();
+    void onMouseHitDown();
 
     /**
      * @return true Iff the mouse is released up from being held.
@@ -67,7 +67,7 @@ public interface Inputs {
     /**
      * Add an event releasing the mouse up
      */
-    void oMouseReleasedUp();
+    void onMouseReleasedUp();
 
     /**
      * @return true Iff the mouse is being held.
@@ -77,5 +77,5 @@ public interface Inputs {
     /**
      * Add an event the mouse being held
      */
-    void oMouseBeingHeld();
+    void onMouseBeingHeld();
 }

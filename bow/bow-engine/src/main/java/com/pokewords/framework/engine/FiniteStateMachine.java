@@ -53,7 +53,7 @@ public class FiniteStateMachine<T> {
 	/**
 	 * Create a trigger transition with two different states
 	 * @param from AppState that will be changed
-	 * @param event that triggered the change
+	 * @param event the triggering event's name
 	 * @param to is triggered state
 	 */
 	public void addTransition(AppState from, String event, AppState to) {
@@ -61,6 +61,15 @@ public class FiniteStateMachine<T> {
 		StateNode toState = stateNodesMap.get(to.hashCode());
 		fromState.addTransition(event, toState.getState());
 		triggerMap.put(event,fromState);
+	}
+
+	/**
+	 * Create a transition given an event name from each state (except targetState) to targetState.
+	 * @param event the triggering event's name
+	 * @param targetState the target state to transit to
+	 */
+	public void addTransitionFromAllStates(String event, AppState targetState){
+		//TODO
 	}
 
 	/**
