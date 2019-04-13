@@ -34,7 +34,7 @@ public interface FrameStateMachineScriptParser {
          * Callback method triggered while the parser parsing each frame segment in a sequence.
          * This is the api allowing the game designer affecting the game logic scripted in the frame segments to the AppStateWorld .
          *
-         * @param segment the being parsed segment
+         * @param frameSegment the being parsed segment
          * @return the action that this frame'd like to apply in the given AppStateWorld.
          */
         BiConsumer<AppStateWorld, Sprite> onParsing(FrameSegment frameSegment);

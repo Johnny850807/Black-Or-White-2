@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites;
 
+import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
@@ -9,8 +10,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PrototypeFactoryTest {
-    private PrototypeFactory prototypeFactory = new ReleaseIocFactory().prototypeFactory();
+public class PrototypeFactoryTest extends AbstractTest {
+    private PrototypeFactory prototypeFactory = release.prototypeFactory();
     private Sprite sprite;
 
     @Before

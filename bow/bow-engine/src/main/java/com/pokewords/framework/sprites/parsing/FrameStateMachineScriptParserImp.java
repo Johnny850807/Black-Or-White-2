@@ -1,13 +1,20 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 
 public class FrameStateMachineScriptParserImp implements FrameStateMachineScriptParser {
-    @Override
-    public FrameStateMachineComponent parse(String script, OnParsingFrameListener listener) {
-        return null;
+    private FrameFactory frameFactory;
+
+    public FrameStateMachineScriptParserImp(IocFactory iocFactory) {
+        this.frameFactory = iocFactory.frameFactory();
     }
 
+    @Override
+    public FrameStateMachineComponent parse(Script script, OnParsingFrameListener listener) {
+        return null;
+    }
 
 
     // 用FrameFactory建立FrameNode
