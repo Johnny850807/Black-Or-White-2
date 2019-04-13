@@ -16,9 +16,10 @@ import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
  *
  *    SpriteBuilder builder = new SpriteBuilder(iocFactory);
  *    builder.init()
- *             .init(iocFactory) // Now changing parser is possible after builder initialized.
+ *             .init(iocFactory)            // Now changing parser is possible after builder initialized.
  *           .setupParser(script, listener)
- *             .setupParser(script) // provide no listener, use default.
+ *             .setupParser(script)         // provide no listener, use default.
+ *           .setFSMComponent(fsmComp)      // Support adding fsmComp directly.
  *           .setPropertiesComponent(propComp)
  *           .addComponent(compName, comp)
  *           .build();
@@ -97,7 +98,17 @@ public class SpriteBuilder {
         return this;
     }
 
-
+    /**
+     * Let the client provide FSM component directly.
+     * @param fsmComponent the FSM for the sprite.
+     * @return The current builder.
+     */
+    public SpriteBuilder setFSMComponent(FrameStateMachineComponent fsmComponent) {
+        this.fsmComponent = fsmComponent;
+        prepareSprite();
+        return this;
+    }
+    
     /**
      * Add Properties Component to the current sprite.
      * @param propertiesComponent The Properties Component required to define FSM.
