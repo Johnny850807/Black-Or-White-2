@@ -1,6 +1,5 @@
 package com.pokewords.framework.ioc;
 
-import com.pokewords.framework.engine.TextureFrameFactory;
 import com.pokewords.framework.engine.UserConfig;
 import com.pokewords.framework.sprites.PrototypeFactory;
 import com.pokewords.framework.sprites.components.FrameFactory;

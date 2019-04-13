@@ -10,7 +10,9 @@ public class FrameStateMachineScriptParserImp implements FrameStateMachineScript
 
 
 
+    // 用FrameFactory建立FrameNode
     // 改回Script
     // 改傳FrameSegment給Facotry
     // FrameSegment
+    // 清楚的ParsingException
 }

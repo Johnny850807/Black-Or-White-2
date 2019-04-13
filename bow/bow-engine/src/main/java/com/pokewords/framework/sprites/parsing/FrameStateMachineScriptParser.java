@@ -12,9 +12,9 @@ public interface FrameStateMachineScriptParser {
     /**
      * {@code listener} defaults to an empty listener
      *
-     * @see FrameStateMachineScriptParser#parse(String, OnParsingFrameListener)
+     * @see FrameStateMachineScriptParser#parse(Script, OnParsingFrameListener)
      */
-    default FrameStateMachineComponent parse(String script) {
+    default FrameStateMachineComponent parse(Script script) {
         return this.parse(script,
                 // do nothing to the app state world by default
                 (segment) ->
@@ -27,7 +27,7 @@ public interface FrameStateMachineScriptParser {
      * @return the FrameStateMachine defined by the script
      * @throws ParsingException If the script's grammar is incorrect
      */
-    FrameStateMachineComponent parse(String script, OnParsingFrameListener listener);
+    FrameStateMachineComponent parse(Script script, OnParsingFrameListener listener);
 
     interface OnParsingFrameListener {
         /**

@@ -16,8 +16,8 @@ import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
  *
  *    SpriteBuilder builder = new SpriteBuilder(iocFactory);
  *    builder.init()
- *           .setScript(script)
- *           .setListener(listener)
+ *           .setupParser(script, listener)
+ *               .setupParser(script)
  *           .setPropertiesComponent(propComp)
  *           .addComponent(compName, comp)
  *           .build();
@@ -31,33 +31,20 @@ import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
  * @author nyngwang
  */
 public class SpriteBuilder {
-
-    // Sprite Related
     private Sprite sprite;
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
-
-    // FSM Related
-    private String script;
     FrameStateMachineScriptParser parser;
-    FrameStateMachineScriptParser.OnParsingFrameListener listener;
-        // this guy has to create Frame node
-        // ParsingException if script GG
-            // Need comprehensive error message: line # in script
 
     /**
      * The constructor of SpriteBuilder.
      * @param iocFactory To do dependency injection.
      */
     public SpriteBuilder(IocFactory iocFactory) {
-
-        parser = iocFactory.frameStateMachineScriptParser();
-
         sprite = null;
         fsmComponent = null;
         propertiesComponent = null;
-        script = null;
-        listener = null;
+        parser = iocFactory.frameStateMachineScriptParser();
     }
 
     /**
@@ -68,30 +55,44 @@ public class SpriteBuilder {
         sprite = null;
         fsmComponent = null;
         propertiesComponent = null;
-        script = null;
-        listener = null;
-
         return this;
     }
 
     /**
-     * Set a script for the FSM parser of current sprite.
-     * @param script The script file required to define FSM.
+     * Initialize before creating a new sprite, with a new parser.
+     * @param iocFactory The provider of new parser.
      * @return The current builder.
      */
-    public SpriteBuilder setScript(String script) {
-        this.script = script;
+    public SpriteBuilder init(IocFactory iocFactory) {
+        sprite = null;
+        fsmComponent = null;
+        propertiesComponent = null;
+        parser = iocFactory.frameStateMachineScriptParser();
+        return this;
+    }
+
+
+    /**
+     * Setup the parser to generate FSM component, with listener provided.
+     * @param script The script to generate FSM.
+     * @param listener Client-defined parsing rules.
+     * @return The current builder.
+     */
+    public SpriteBuilder setupParser(Script script,
+                                     FrameStateMachineScriptParser.OnParsingFrameListener listener) {
+        fsmComponent = parser.parse(script, listener);
+        prepareSprite();
         return this;
     }
 
     /**
-     * Set a listener for the FSM parser of current sprite.
-     * @param listener The client-defined parser
+     * Setup the parser to generate FSM component, with default listener.
+     * @param script The script ot generate FSM.
      * @return The current builder.
      */
-    public SpriteBuilder setListener(FrameStateMachineScriptParser.OnParsingFrameListener
-                                     listener) {
-        this.listener = listener;
+    public SpriteBuilder setupParser(Script script) {
+        fsmComponent = parser.parse(script);
+        prepareSprite();
         return this;
     }
 
@@ -156,8 +157,5 @@ public class SpriteBuilder {
         }
     }
 
-    private void prepareParser() {
-        parser.parse(script, listener);
-    }
 
 }
