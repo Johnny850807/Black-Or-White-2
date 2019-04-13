@@ -1,6 +1,11 @@
 package com.pokewords.framework.sprites.parsing;
 
 public class FrameSegment {
+    public final static String PIC = "pic";
+    public final static String DURATION = "duration";
+    public final static String NEXT = "next";
+
+    private Script script;
 
     public String getFrameName(){
         return null; //TODO
@@ -20,5 +25,13 @@ public class FrameSegment {
 
     public int getInt(String name){
         return 0; //TODO
+    }
+
+    public Script getScript() {
+        return script;
+    }
+
+    public void setScript(Script script) {
+        this.script = script;
     }
 }

@@ -12,6 +12,7 @@ public class TextureFrame implements Frame {
 
 	private Image image;
 
+
 	public TextureFrame(Image image) {
 		this.image = image;
 	}

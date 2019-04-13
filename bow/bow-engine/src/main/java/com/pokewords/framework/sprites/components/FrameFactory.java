@@ -1,6 +1,8 @@
 package com.pokewords.framework.sprites.components;
 
 
+import com.pokewords.framework.sprites.parsing.FrameSegment;
+
 public interface FrameFactory {
-    Frame createFrame(String name);
+    Frame createFrame(FrameSegment frameSegment);
 }

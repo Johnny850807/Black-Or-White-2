@@ -1,6 +1,6 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.Script;
+import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.engine.exceptions.FrameStateMachineComponentIsRequiredException;
 import com.pokewords.framework.engine.exceptions.PropertiesComponentIsRequiredException;

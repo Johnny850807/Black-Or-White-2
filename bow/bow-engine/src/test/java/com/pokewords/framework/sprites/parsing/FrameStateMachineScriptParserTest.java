@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.AbstractTest;
+import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,8 @@ import static org.junit.Assert.assertEquals;
 
 public class FrameStateMachineScriptParserTest extends AbstractTest {
     FrameStateMachineScriptParser parser = release.frameStateMachineScriptParser();
+    FrameFactory frameFactory = mock.frameFactory();
+
     final String SCRIPT =
             "<profile>\n" +
             "    gallery(0-59): sprite\\sys\\henry_f.bmp w: 50  h: 50  row: 10  col: 10\n" +
@@ -67,6 +70,7 @@ public class FrameStateMachineScriptParserTest extends AbstractTest {
 
     @Before
     public void initExpectedFsmComponent(){
+        expectedFsmComponent.addState(frameFactory.createFrame(""));
     }
 
     @Test
