@@ -2,7 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.views.Gallery;
 
-public class GallerySegment implements Node {
+public class GallerySegment {
     private String path;
     private int frameWidth;
     private int frameHeight;
@@ -61,8 +61,4 @@ public class GallerySegment implements Node {
         this.column = column;
     }
 
-    @Override
-    public void interpret(Script script) {
-        
-    }
 }
