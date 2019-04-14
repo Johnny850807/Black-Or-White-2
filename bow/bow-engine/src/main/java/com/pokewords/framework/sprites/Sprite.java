@@ -1,6 +1,6 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.Components;
+import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
@@ -32,8 +32,8 @@ public class Sprite implements Cloneable {
 	public Sprite(final FrameStateMachineComponent FSMComponent,
 				  final PropertiesComponent propertiesComponent) {
 		components = new HashMap<String, Component>() {{
-			put(Components.FSMComponentName, FSMComponent);
-			put(Components.propertiesComponentName, propertiesComponent);
+			put(Component.FRAME_STATE_MACHINE, FSMComponent);
+			put(Component.PROPERTIES, propertiesComponent);
 		}};
 	}
 
@@ -50,7 +50,7 @@ public class Sprite implements Cloneable {
 	 * @return The concrete FrameStateMachineComponent.
 	 */
 	public FrameStateMachineComponent getFrameStateMachineComponent() {
-		return (FrameStateMachineComponent) components.get(Components.FSMComponentName);
+		return (FrameStateMachineComponent) components.get(Component.FRAME_STATE_MACHINE);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class Sprite implements Cloneable {
 	 * @return The concrete PropertiesComponent.
 	 */
 	public PropertiesComponent getPropertiesComponent() {
-		return (PropertiesComponent) components.get(Components.propertiesComponentName);
+		return (PropertiesComponent) components.get(Component.PROPERTIES);
 	}
 
 	/**
@@ -85,6 +85,11 @@ public class Sprite implements Cloneable {
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
 	public Optional<Component> removeComponentByName(String name) {
+		if (name.equals(Component.FRAME_STATE_MACHINE))
+			throw new MandatoryComponentIsRequiredException("Frame State Machine Component cannot be removed.");
+		else if (name.equals(Component.PROPERTIES))
+			throw new MandatoryComponentIsRequiredException("Properties Component cannot be removed.");
+
 		return Optional.of(components.remove(name));
 	}
 
@@ -104,4 +109,6 @@ public class Sprite implements Cloneable {
 	public int hashCode() {
 		return Objects.hash(components);
 	}
+
+
 }

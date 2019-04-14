@@ -1,9 +1,17 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.AbstractTest;
+import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
+import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
+import com.pokewords.framework.sprites.components.MockComponent;
+import com.pokewords.framework.sprites.components.PropertiesComponent;
 import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertSame;
 
 public class SpriteBuilderTest extends AbstractTest {
+    final String MOCK = "mock";
     SpriteBuilder spriteBuilder;
 
     @Before
@@ -11,7 +19,15 @@ public class SpriteBuilderTest extends AbstractTest {
         spriteBuilder = new SpriteBuilder(mock);
     }
 
-    public void testSpriteBuilder(){
+    @Test
+    public void testAddComponent() {
+        MockComponent mockComponent = new MockComponent();
 
+        Sprite sprite = spriteBuilder.init()
+                    .addComponent(MOCK, new MockComponent())
+                    .build();
+
+        assertSame(mockComponent, sprite.getComponentByName(MOCK));
     }
+
 }

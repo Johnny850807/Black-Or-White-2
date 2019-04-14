@@ -70,7 +70,7 @@ public class FrameStateMachineScriptParserTest extends AbstractTest {
 
     @Before
     public void initExpectedFsmComponent(){
-        expectedFsmComponent.addState(frameFactory.createFrame(""));
+        expectedFsmComponent.addState(frameFactory.createFrame());
     }
 
     @Test
