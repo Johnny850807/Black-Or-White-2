@@ -37,6 +37,7 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 
     @Override
     public void onBoundToSprite(Sprite sprite) {
+        //we have to trigger the state whenever the Sprite's state changed
         propertiesComponent.addStateListener(state -> stateTriggered = false);
     }
 
@@ -52,8 +53,8 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 
     private void triggerTheCurrentState() {
         if (!stateTriggered) {
-            stateTriggered = true;
             trigger(propertiesComponent.getState());
+            stateTriggered = true;
         } else
             trigger(Events.UPDATE);
     }
@@ -63,6 +64,17 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
         frame.apply(appStateWorld);
     }
 
+    public AppStateWorld getAppStateWorld() {
+        return appStateWorld;
+    }
+
+    public PropertiesComponent getPropertiesComponent() {
+        return propertiesComponent;
+    }
+
+    public boolean isStateTriggered() {
+        return stateTriggered;
+    }
 
     public void setAppStateWorld(AppStateWorld appStateWorld) {
         this.appStateWorld = appStateWorld;
@@ -70,5 +82,17 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 
     public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
         this.propertiesComponent = propertiesComponent;
+    }
+
+    @Override
+    public FrameStateMachineComponent clone() {
+        try {
+            FrameStateMachineComponent clone = (FrameStateMachineComponent) super.clone();
+            clone.appStateWorld = this.appStateWorld;
+            clone.propertiesComponent = this.propertiesComponent.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

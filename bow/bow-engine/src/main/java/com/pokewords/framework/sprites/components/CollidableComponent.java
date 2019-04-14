@@ -17,9 +17,9 @@ public class CollidableComponent implements Component {
 	public void onUpdate() {}
 
 	@Override
-	public Component clone() {
+	public CollidableComponent clone() {
 		try {
-			return (Component) super.clone();
+			return (CollidableComponent) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}

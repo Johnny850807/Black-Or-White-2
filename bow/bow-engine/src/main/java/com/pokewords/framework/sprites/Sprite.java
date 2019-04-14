@@ -2,9 +2,11 @@ package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
 import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.Frame;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -14,20 +16,24 @@ import java.util.Optional;
  * @author johnny850807, nyngwang
  */
 public class Sprite implements Cloneable {
+	private FrameStateMachineComponent frameStateMachineComponent;
+	private PropertiesComponent propertiesComponent;
+	private Map<String, Component> components = new HashMap<>();
 
-	private Map<String, Component> components;
+	public Sprite() {
+	}
 
 	/**
 	 * The constructor of Sprite.
-	 * @param FSMComponent The mandatory component to define the view of the Sprite.
+	 * @param frameStateMachineComponent The mandatory component to define the view of the Sprite.
 	 * @param propertiesComponent The mandatory component to define the properties of the Sprite.
 	 */
-	public Sprite(final FrameStateMachineComponent FSMComponent,
+	public Sprite(final FrameStateMachineComponent frameStateMachineComponent,
 				  final PropertiesComponent propertiesComponent) {
-		components = new HashMap<String, Component>() {{
-			put(Component.FRAME_STATE_MACHINE, FSMComponent);
-			put(Component.PROPERTIES, propertiesComponent);
-		}};
+		this.frameStateMachineComponent = frameStateMachineComponent;
+		this.propertiesComponent = propertiesComponent;
+		components.put(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
+		components.put(Component.PROPERTIES, propertiesComponent);
 	}
 
 	/**
@@ -43,7 +49,7 @@ public class Sprite implements Cloneable {
 	 * @return The concrete FrameStateMachineComponent.
 	 */
 	public FrameStateMachineComponent getFrameStateMachineComponent() {
-		return (FrameStateMachineComponent) components.get(Component.FRAME_STATE_MACHINE);
+		return frameStateMachineComponent;
 	}
 
 	/**
@@ -51,7 +57,15 @@ public class Sprite implements Cloneable {
 	 * @return The concrete PropertiesComponent.
 	 */
 	public PropertiesComponent getPropertiesComponent() {
-		return (PropertiesComponent) components.get(Component.PROPERTIES);
+		return propertiesComponent;
+	}
+
+	public void setFrameStateMachineComponent(FrameStateMachineComponent frameStateMachineComponent) {
+		this.frameStateMachineComponent = frameStateMachineComponent;
+	}
+
+	public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
+		this.propertiesComponent = propertiesComponent;
 	}
 
 	/**
@@ -69,6 +83,10 @@ public class Sprite implements Cloneable {
 	 * @param component the component to be added.
 	 */
 	public void putComponent(String name, Component component) {
+		if (component instanceof PropertiesComponent)
+			this.propertiesComponent = (PropertiesComponent) component;
+		else if (component instanceof FrameStateMachineComponent)
+			this.frameStateMachineComponent = (FrameStateMachineComponent) component;
 		components.put(name, component);
 	}
 
@@ -104,6 +122,30 @@ public class Sprite implements Cloneable {
 		return Objects.hash(components);
 	}
 
+	public void setPosition(Point2D position){
+		getPropertiesComponent().setPoint(position);
+	}
+
+	public Point2D getPosition(){
+		return getPropertiesComponent().getPoint();
+	}
+
+	public void setType(String type){
+		getPropertiesComponent().setType(type);
+	}
+
+	public String getType(){
+		return getPropertiesComponent().getType();
+	}
+
+	public void setState(String state){
+		getPropertiesComponent().setState(state);
+	}
+
+	public String getState(){
+		return getPropertiesComponent().getState();
+
+	}
 
 	public Sprite clone(){
 		try {
