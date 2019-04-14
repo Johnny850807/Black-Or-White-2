@@ -30,8 +30,11 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		return appStateMachine;
 	}
 
-	public AppStateWorld getStateWorld() {
+	public AppStateWorld getAppStateWorld() {
 		return appStateWorld;
 	}
 
+	public IocFactory getIocFactory() {
+		return iocFactory;
+	}
 }

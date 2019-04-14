@@ -8,7 +8,7 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 /**
  * @author johnny850807
  */
-public abstract class AppStateMachine extends FiniteStateMachine<AppState> implements GameLifecycleListener {
+public class AppStateMachine extends FiniteStateMachine<AppState> implements GameLifecycleListener {
 	protected IocFactory iocFactory;
 	protected AppState currentState;
 	protected AppState loadingState;
@@ -27,13 +27,25 @@ public abstract class AppStateMachine extends FiniteStateMachine<AppState> imple
 
 	@Override
 	public AppState trigger(String event) {
-		AppState enteringAppState = super.trigger(event);
-		if (currentState != enteringAppState)
+		AppState enteredAppState = super.trigger(event);
+		if (currentState != enteredAppState)
 		{
 			currentState.onAppStateExit();
-			enteringAppState.onAppStateEnter();
+			if (!enteredAppState.isStarted())
+				enteredAppState.onAppStateStart(onInitAppStateWorld());
+			enteredAppState.onAppStateEnter();
 		}
-		return enteringAppState;
+		return enteredAppState;
+	}
+
+	/**
+	 * the hook method invoked whenever any AppState is started
+	 * , this then requires initializing a new AppStateWorld for that AppState.
+	 * For customizing your default init world, overwrite this method.
+	 * @return the init app state world
+	 */
+	public AppStateWorld onInitAppStateWorld(){
+		return new AppStateWorld();
 	}
 
 	@Override
@@ -50,7 +62,7 @@ public abstract class AppStateMachine extends FiniteStateMachine<AppState> imple
 	}
 
 	public AppStateWorld getCurrentStateWorld(){
-		return currentState.getStateWorld();
+		return currentState.getAppStateWorld();
 	}
 
 	public IocFactory getIocFactory() {

@@ -2,7 +2,7 @@ package com.pokewords.framework.engine;
 
 import java.util.*;
 
-public class FiniteStateMachine<T extends Cloneable> implements Cloneable{
+public class FiniteStateMachine<T> implements Cloneable{
 
 	/**
 	 * Increase according to the amount of Nodes
