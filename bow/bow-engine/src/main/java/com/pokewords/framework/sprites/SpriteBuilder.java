@@ -42,14 +42,13 @@ public class SpriteBuilder {
 
         Sprite mySprite = builder.init()
                                  .init(new ReleaseIocFactory())
-                                 .setupParser(new LinScript(),
+                                 .setupParser("path/to/script",
                                          frameSegment -> {
                                             // parse client's own elements
                                             return (world, sprite) -> {
                                                 // return some customized action during the frame is applied to the world
                                             };
                                          })
-                                 .setupParser(new LinScript())
                                  .setPropertiesComponent(new PropertiesComponent())
                                  .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .build();
@@ -167,14 +166,13 @@ public class SpriteBuilder {
 
     public SpriteBuilder addComponent(String name, Component component) {
 
-        checkSpriteIsReady();
+        validateSpriteMandatoryComponents();
 
         if (sprite.getComponentByName(name).isPresent()) {
             throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
         }
 
         sprite.putComponent(name, component);
-        component.onBoundToSprite(sprite);
 
         return this;
     }
@@ -184,12 +182,10 @@ public class SpriteBuilder {
      * @return The sprite.
      */
     public Sprite build() {
-        checkSpriteIsReady();
-        ComponentInjector.inject(sprite);
+        validateSpriteMandatoryComponents();
         return sprite;
     }
 
-    // Utility Functions
     /**
      * Try to create a sprite when mandatory components are ready.
      */
@@ -202,8 +198,9 @@ public class SpriteBuilder {
 
     /**
      * Check the sprite is ready before access.
+     * @throws MandatoryComponentIsRequiredException if the mandatory components are not initiated
      */
-    private void checkSpriteIsReady() {
+    private void validateSpriteMandatoryComponents() {
         if (fsmComponent == null) {
             throw new MandatoryComponentIsRequiredException(
                     "FrameStateMachineComponent is required, use setupParser() to create it");

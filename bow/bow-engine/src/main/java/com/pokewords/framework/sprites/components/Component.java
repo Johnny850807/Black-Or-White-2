@@ -7,15 +7,10 @@ public interface Component extends Cloneable{
 	String FRAME_STATE_MACHINE = "Frame State Machine";
 	String COLLIDABLE = "collidable";
 
-	/**
-	 * Triggered when the component is bound to a Sprite,
-	 * and all component fields have been injected.
-	 * @param sprite Bound Sprite
-	 */
-	void onBoundToSprite(Sprite sprite);
 
 	/**
-	 * Triggered when the game is started
+	 * Triggered when the game is started.
+	 * In this state, the component will be injected.
 	 */
 	void onStart();
 

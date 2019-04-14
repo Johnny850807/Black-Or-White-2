@@ -14,9 +14,6 @@ public class PropertiesComponent implements Component {
 	private List<StateListener> stateListeners = new ArrayList<StateListener>();
 
 	@Override
-	public void onBoundToSprite(Sprite sprite) { }
-
-	@Override
 	public void onStart() { }
 
 	@Override

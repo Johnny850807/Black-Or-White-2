@@ -35,13 +35,10 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
      */
     private boolean stateTriggered = false;
 
-    @Override
-    public void onBoundToSprite(Sprite sprite) {
-        propertiesComponent.addStateListener(state -> stateTriggered = false);
-    }
 
     @Override
     public void onStart() {
+        propertiesComponent.addStateListener(state -> stateTriggered = false);
     }
 
     @Override

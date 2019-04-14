@@ -4,6 +4,7 @@ import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredExc
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
+import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -91,6 +92,10 @@ public class Sprite implements Cloneable {
 			throw new MandatoryComponentIsRequiredException("Properties Component cannot be removed.");
 
 		return Optional.of(components.remove(name));
+	}
+
+	public void onStart(AppStateWorld world){
+		ComponentInjector.inject(this, world);
 	}
 
 	public void onUpdate() {
