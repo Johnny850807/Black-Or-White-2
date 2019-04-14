@@ -11,14 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- *  Current definition:
- *  1. Both FSM and Properties component are mandatory and unique
- *  2. Every components has a name, and it's unique.
- *  3. The setting of mandatory components
- *
- *  New requirement @ 4/6:
- *  1. Now the two mandatory components have predetermined names by us,
- *     so the user doesn't have to name it.
+ * @author johnny850807, nyngwang
  */
 public class Sprite implements Cloneable {
 
@@ -94,7 +87,8 @@ public class Sprite implements Cloneable {
 	}
 
 	public void onUpdate() {
-
+		for (Component component : components.values())
+			component.onUpdate();
 	}
 
 	@Override
@@ -110,7 +104,21 @@ public class Sprite implements Cloneable {
 		return Objects.hash(components);
 	}
 
-	public Sprite clone(){
 
+	public Sprite clone(){
+		try {
+			Sprite sprite = (Sprite) super.clone();
+			sprite.components = deepCopyComponents();
+			return sprite;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Map<String, Component> deepCopyComponents(){
+		HashMap<String, Component> cloneComponents = new HashMap<>();
+		for (String type : this.components.keySet())
+			cloneComponents.put(type, components.get(type).clone());
+		return cloneComponents;
 	}
 }

@@ -21,4 +21,6 @@ public interface Component extends Cloneable{
 
 	void onUpdate();
 
+	Component clone();
+
 }
