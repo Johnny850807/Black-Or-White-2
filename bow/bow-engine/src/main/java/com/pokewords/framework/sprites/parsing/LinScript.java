@@ -21,8 +21,9 @@ public class LinScript implements Script {
         return null;
     }
 
+
     @Override
-    public void addText(String text) {
+    public void setText(String text) {
         this.text = text;
     }
 

@@ -15,7 +15,11 @@ public interface Script {
      */
     GallerySegment getGallerySegment(int pictureNumber);
 
-    void addText(String text);
+    /**
+     * Set the script
+     * @param text
+     */
+    void setText(String text);
 
     /**
      * @return the script's text-based String
