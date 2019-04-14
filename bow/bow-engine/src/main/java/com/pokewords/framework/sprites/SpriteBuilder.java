@@ -1,11 +1,11 @@
 package com.pokewords.framework.sprites;
 
+import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
+import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
-import com.pokewords.framework.engine.exceptions.FrameStateMachineComponentIsRequiredException;
-import com.pokewords.framework.engine.exceptions.PropertiesComponentIsRequiredException;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
@@ -122,6 +122,28 @@ public class SpriteBuilder {
     }
 
     /**
+     * Setup the parser to generate FSM component, with listener provided.
+     * @param path The file path of the script file.
+     * @param listener Client-defined parsing rules.
+     * @return The current builder.
+     */
+    public SpriteBuilder setupParser(String path,
+                                     FrameStateMachineScriptParser.OnParsingFrameListener listener) {
+        LinScript script = new LinScript(FileUtility.read(path));
+        return setupParser(script, listener);
+    }
+
+    /**
+     * Setup the parser to generate FSM component, with listener provided.
+     * @param path The file path of the script file.
+     * @return The current builder.
+     */
+    public SpriteBuilder setupParser(String path) {
+        LinScript script = new LinScript(FileUtility.read(path));
+        return setupParser(script);
+    }
+
+    /**
      * Let the client provide FSM component directly.
      * @param fsmComponent the FSM for the sprite.
      * @return The current builder.
@@ -183,13 +205,12 @@ public class SpriteBuilder {
      */
     private void checkSpriteIsReady() {
         if (fsmComponent == null) {
-            throw new FrameStateMachineComponentIsRequiredException(
-                    "FrameStateMachineComponent is required, " +
-                            "use setupParser() to create it.");
+            throw new MandatoryComponentIsRequiredException(
+                    "FrameStateMachineComponent is required, use setupParser() to create it");
         }
         if (propertiesComponent == null) {
-            throw new PropertiesComponentIsRequiredException(
-                    "PropertiesComponent is required.");
+            throw new MandatoryComponentIsRequiredException(
+                    "PropertiesComponent is required, use setPropertiesComponent() to create it");
         }
     }
 

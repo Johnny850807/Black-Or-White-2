@@ -8,13 +8,18 @@ import java.util.List;
 import java.util.Map;
 
 public class FrameSegment {
+
     public final static String PIC = "pic";
     public final static String DURATION = "duration";
     public final static String NEXT = "next";
 
     private Script script;
+
+    // Segment Info
     private int frameNumber;
     private String frameName;
+
+    // Attributes
     private Map<String, Element> elementMap;
     private Map<String, Integer> intMap;
     private Map<String, String> stringMap;
@@ -27,7 +32,6 @@ public class FrameSegment {
         intMap = new HashMap<>();
         stringMap = new HashMap<>();
     }
-
 
 
     // Fluent Setters
@@ -46,14 +50,7 @@ public class FrameSegment {
         return this;
     }
 
-    // Getters
-    public String getFrameName() {
-        return frameName;
-    }
-
-    public int getFrameNumber(){
-        return frameNumber;
-    }
+    // Get attributes
 
     public Element getElement(String name){
         if (!elementMap.containsKey(name)) {
@@ -80,6 +77,16 @@ public class FrameSegment {
             );
         }
         return intMap.get(name);
+    }
+
+    // Getters
+
+    public int getFrameNumber(){
+        return frameNumber;
+    }
+
+    public String getFrameName() {
+        return frameName;
     }
 
     public Script getScript() {

@@ -20,6 +20,9 @@ public class Element {
     // [!] The two getter's behavior of throwing exception is not consistent.
 
     public String getString(String name){
+        if (!) {
+
+        }
         return stringMap.getOrDefault(name, "");
     }
 

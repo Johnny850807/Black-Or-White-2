@@ -5,6 +5,12 @@ package com.pokewords.framework.sprites.parsing;
  */
 public class LinScript implements Script {
 
+    private String text;
+
+    public LinScript(String text) {
+        this.text = text;
+    }
+
     @Override
     public void addGallerySegment(int startPic, int endPic, GallerySegment gallerySegment) {
 
@@ -13,6 +19,11 @@ public class LinScript implements Script {
     @Override
     public GallerySegment getGallerySegment(int pictureNumber) {
         return null;
+    }
+
+    @Override
+    public void addText(String text) {
+        this.text = text;
     }
 
     @Override
