@@ -1,18 +1,36 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.engine.utils.StringUtility;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PropertiesComponent implements Component {
-	private Point2D point;
+	private Point2D point = new Point(0, 0);
 	private String type;
 	private String state;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
 	private List<StateListener> stateListeners = new ArrayList<StateListener>();
+
+	public PropertiesComponent() {
+	}
+
+	@Override
+	public PropertiesComponent clone() {
+		try {
+			PropertiesComponent clone = (PropertiesComponent) super.clone();
+			clone.point = (Point2D) this.point.clone();
+			clone.positionListeners = new ArrayList<>();
+			clone.stateListeners = new ArrayList<>();
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	public Point2D getPoint() {
 		return point;
@@ -42,7 +60,8 @@ public class PropertiesComponent implements Component {
 
 	@Override
 	public void onAppStateInit(AppStateWorld world) {
-
+        if (StringUtility.anyNullOrEmpty(type, state))
+            throw new RuntimeException("The type and state of a Sprite should be set before the app started..");
 	}
 
 	@Override

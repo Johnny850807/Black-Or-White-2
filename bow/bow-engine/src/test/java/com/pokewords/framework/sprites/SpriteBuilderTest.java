@@ -1,10 +1,7 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.AbstractTest;
-import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.MockComponent;
-import com.pokewords.framework.sprites.components.PropertiesComponent;
 import org.junit.Before;
 import org.junit.Test;
 

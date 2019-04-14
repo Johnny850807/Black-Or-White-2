@@ -1,36 +1,42 @@
 package com.pokewords.framework.engine;
 
-import com.pokewords.framework.engine.asm.AppState;
-
 import java.util.*;
 
-public class FiniteStateMachine<T> {
+public class FiniteStateMachine<T extends Cloneable> implements Cloneable{
 
 	/**
-	 * Current state
+	 * Increase according to the amount of Nodes
 	 */
+	private int nodeIndex = 0;
+
+	/**
+	 * Array save T
+	 */
+	private T[][] martix;
+
 	private T currentState;
 
 	/**
 	 * stateNodesMap is to save new nodes
 	 */
-	private Map<Integer,StateNode> stateNodesMap = new HashMap<Integer, StateNode>();
+	private Map<Integer, StateNode> stateNodesMap = new HashMap<>();
 
 	/**
 	 * triggerMap saves each corresponding node of event by event
 	 */
-	private Map<String,StateNode> triggerMap = new HashMap<String,StateNode>();
-
+	private Map<String, Integer> triggerMap = new HashMap<>();
 
 	/**
 	 * The trigger function is able to switch different state
-	 * @param event: Trigger of event
-	 * @return Return previous state, returning void is also Okay,
+	 * @param event Trigger of event
+	 * @return Return current state
 	 */
 	public T trigger(String event) {
-		StateNode from = triggerMap.get(event);
-		currentState = from.getTransitionState(event);
-		return from.getState();
+		StateNode currentNode = stateNodesMap.get(currentState.hashCode());
+		int startIndex = currentNode.getStateIndex();
+		int targetIndex = triggerMap.get(event);
+		currentState = martix[startIndex][targetIndex];
+		return currentState;
 	}
 
 	/**
@@ -46,21 +52,29 @@ public class FiniteStateMachine<T> {
 	 * @param t element to be added to this Map
 	 */
 	public void addState(T t) {
-		StateNode newNode = new StateNode(t);
-		stateNodesMap.put(newNode.hashCode(),newNode);
+		int stateNumber = nodeIndex++;
+		StateNode newNode = new StateNode(t,stateNumber);
+		stateNodesMap.put(t.hashCode(),newNode);
 	}
+
 
 	/**
 	 * Create a trigger transition with two different states
-	 * @param from AppState that will be changed
+	 * @param from T that will be changed
 	 * @param event the triggering event's name
 	 * @param to is triggered state
 	 */
-	public void addTransition(AppState from, String event, AppState to) {
-		StateNode fromState = stateNodesMap.get(from.hashCode());
-		StateNode toState = stateNodesMap.get(to.hashCode());
-		fromState.addTransition(event, toState.getState());
-		triggerMap.put(event,fromState);
+	public void addTransition(T from, String event, T to) {
+		if(martix == null) {
+			martix = (T[][]) new Object[nodeIndex][nodeIndex];
+		}
+		StateNode fromNode = stateNodesMap.get(from.hashCode());
+		StateNode toNode = stateNodesMap.get(to.hashCode());
+
+		int fromIndex = fromNode.getStateIndex();
+		int toIndex = toNode.getStateIndex();
+		martix[fromIndex][toIndex] = to;
+		triggerMap.put(event, toIndex);
 	}
 
 	/**
@@ -68,45 +82,41 @@ public class FiniteStateMachine<T> {
 	 * @param event the triggering event's name
 	 * @param targetState the target state to transit to
 	 */
-	public void addTransitionFromAllStates(String event, AppState targetState){
-		//TODO
+	public void addTransitionFromAllStates(String event, T targetState){
+		StateNode targetNode = stateNodesMap.get(targetState.hashCode());
+		for(int i=0; i<nodeIndex; i++){
+			if(i == targetNode.getStateIndex())
+				continue;
+			martix[i][targetNode.getStateIndex()] = targetState;
+		}
+		triggerMap.put(event, targetNode.getStateIndex());
 	}
 
 	/**
-	 * Transition graph node
+	 * @return the shallow copied FSM
 	 */
-	private class StateNode {
+	public FiniteStateMachine clone(){
+		try {
+			return (FiniteStateMachine) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 
-		/**
-		 * transitionMap is to save each trigger event of this node
-		 */
-		private Map<String,T> transitionMap = new HashMap<String, T>();
+	}
 
-		/**
-		 * state of this node
-		 */
+	class StateNode implements Cloneable{
+
+		private int stateIndex;
+
 		private T state;
 
-		private StateNode(T state) {
+		private StateNode(T state,int stateIndex) {
 			this.state = state;
+			this.stateIndex = stateIndex;
 		}
 
-		/**
-		 * Create a trigger transition with this object and param t
-		 * @param event Trigger of event
-		 * @param t element to be added to this Map
-		 */
-		private void addTransition(String event,T t){
-			transitionMap.put(event,t);
-		}
-
-		/**
-		 *
-		 * @param event Trigger of event
-		 * @return the triggered state
-		 */
-		private T getTransitionState(String event){
-			return transitionMap.get(event);
+		public int getStateIndex() {
+			return stateIndex;
 		}
 
 		private T getState() {

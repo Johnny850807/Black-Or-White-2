@@ -7,8 +7,7 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
-        implements Component {
+public class FrameStateMachineComponent extends FiniteStateMachine<Frame> implements Component {
     private AppStateWorld world;
     private PropertiesComponent propertiesComponent;
 
@@ -46,8 +45,8 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 
     private void triggerTheCurrentState() {
         if (!stateTriggered) {
-            stateTriggered = true;
             trigger(propertiesComponent.getState());
+            stateTriggered = true;
         } else
             trigger(Events.UPDATE);
     }
@@ -72,12 +71,36 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 
     }
 
+    public AppStateWorld getAppStateWorld() {
+        return world;
+    }
+
+    public PropertiesComponent getPropertiesComponent() {
+        return propertiesComponent;
+    }
+
+    public boolean isStateTriggered() {
+        return stateTriggered;
+    }
+
     public void setAppStateWorld(AppStateWorld appStateWorld) {
         this.world = appStateWorld;
     }
 
     public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
         this.propertiesComponent = propertiesComponent;
+    }
+
+    @Override
+    public FrameStateMachineComponent clone() {
+        try {
+            FrameStateMachineComponent clone = (FrameStateMachineComponent) super.clone();
+            clone.world = this.world;
+            clone.propertiesComponent = this.propertiesComponent.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

@@ -5,7 +5,7 @@ import com.pokewords.framework.views.Canvas;
 
 import java.util.function.Consumer;
 
-public interface Frame {
+public interface Frame extends Cloneable{
 
 	/**
 	 * Actually effect the AppStateWorld from all of the effects added by addEffect(Consumer<AppStateWorld>) method.
