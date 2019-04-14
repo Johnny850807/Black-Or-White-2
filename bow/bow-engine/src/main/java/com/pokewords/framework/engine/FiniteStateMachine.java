@@ -104,7 +104,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 
 	}
 
-	class StateNode implements Cloneable{
+	class StateNode {
 
 		private int stateIndex;
 
