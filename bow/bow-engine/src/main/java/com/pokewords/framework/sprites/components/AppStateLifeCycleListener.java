@@ -7,7 +7,7 @@ public interface AppStateLifeCycleListener extends GameLifecycleListener{
      * triggered when the AppState is started. (this will be triggered only once for each alive app state)
      * @param world the setup world
      */
-    void onAppStateInit(AppStateWorld world);
+    void onAppStateStart(AppStateWorld world);
 
     /**
      * triggered whenever enters into the app state

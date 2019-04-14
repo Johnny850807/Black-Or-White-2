@@ -8,7 +8,7 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 public class CollidableComponent implements Component {
 
 	@Override
-	public void onAppStateInit(AppStateWorld world) { }
+	public void onAppStateStart(AppStateWorld world) { }
 
 	@Override
 	public void onUpdate(double tpf) { }

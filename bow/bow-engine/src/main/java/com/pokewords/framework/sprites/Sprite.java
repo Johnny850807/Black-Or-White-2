@@ -107,7 +107,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onAppStateInit(AppStateWorld world){
+	public void onAppStateStart(AppStateWorld world){
 		ComponentInjector.inject(this, world);
 	}
 

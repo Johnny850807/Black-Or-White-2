@@ -42,9 +42,9 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     @Override
-    public void onAppStateInit(AppStateWorld world) {
+    public void onAppStateStart(AppStateWorld world) {
         if (world != this)
-            throw new GameEngineException("The world is not consistent from triggering the onAppStateInit() method from the AppState");
+            throw new GameEngineException("The world is not consistent from triggering the onAppStateStart() method from the AppState");
         //TODO
     }
 

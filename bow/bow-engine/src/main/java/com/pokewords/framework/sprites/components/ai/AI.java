@@ -9,7 +9,7 @@ public class AI implements Component {
 
 
 	@Override
-	public void onAppStateInit(AppStateWorld world) {
+	public void onAppStateStart(AppStateWorld world) {
 
 	}
 

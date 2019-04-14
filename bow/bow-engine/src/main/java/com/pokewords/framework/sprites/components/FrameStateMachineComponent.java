@@ -32,9 +32,14 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame> implem
     private boolean stateTriggered = false;
 
     @Override
-    public void onAppStateInit(AppStateWorld world) {
+    public void onAppStateStart(AppStateWorld world) {
         this.world = world;
         propertiesComponent.addStateListener(state -> stateTriggered = false);
+    }
+
+    @Override
+    public void onAppStateEnter() {
+
     }
 
     @Override
@@ -56,10 +61,6 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame> implem
         frame.apply(world);
     }
 
-    @Override
-    public void onAppStateEnter() {
-
-    }
 
     @Override
     public void onAppStateExit() {
@@ -93,14 +94,7 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame> implem
 
     @Override
     public FrameStateMachineComponent clone() {
-        try {
-            FrameStateMachineComponent clone = (FrameStateMachineComponent) super.clone();
-            clone.world = this.world;
-            clone.propertiesComponent = this.propertiesComponent.clone();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+        return (FrameStateMachineComponent) super.clone();
     }
 }
 

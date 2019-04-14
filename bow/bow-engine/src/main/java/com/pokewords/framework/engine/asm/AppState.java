@@ -8,14 +8,22 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	protected AppStateMachine appStateMachine;
 	protected IocFactory iocFactory;
 	protected AppStateWorld appStateWorld;
+	protected boolean started = false;
 
 	public AppState(AppStateMachine appStateMachine) {
 		this.appStateMachine = appStateMachine;
 		this.iocFactory = this.appStateMachine.getIocFactory();
-		this.appStateWorld = new AppStateWorld();
+	}
 
-		this.onAppStateInit(appStateWorld);
-		appStateWorld.onAppStateInit(appStateWorld);
+	@Override
+	public void onAppStateStart(AppStateWorld world) {
+		this.started = true;
+		this.appStateWorld = world;
+		this.appStateWorld.onAppStateStart(world);
+	}
+
+	public boolean isStarted() {
+		return started;
 	}
 
 	public AppStateMachine getAppStateMachine() {

@@ -59,7 +59,7 @@ public class PropertiesComponent implements Component {
 	}
 
 	@Override
-	public void onAppStateInit(AppStateWorld world) {
+	public void onAppStateStart(AppStateWorld world) {
         if (StringUtility.anyNullOrEmpty(type, state))
             throw new RuntimeException("The type and state of a Sprite should be set before the app started..");
 	}
