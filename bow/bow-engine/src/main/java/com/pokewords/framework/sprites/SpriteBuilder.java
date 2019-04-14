@@ -33,6 +33,8 @@ import com.pokewords.framework.sprites.parsing.LinScript;
  *    - IoC Factory::Create Frame -> FSMComponent
  *    - Is Interpret appropriate?
  *
+ *
+ *
  * @author nyngwang
  */
 public class SpriteBuilder {
@@ -42,18 +44,17 @@ public class SpriteBuilder {
 
         Sprite mySprite = builder.init()
                                  .init(new ReleaseIocFactory())
-                                 .setupParser(new LinScript(),
+                                 .setupParser(new LinScript(FileUtility.read("your_home")),
                                          frameSegment -> {
                                             // parse client's own elements
                                             return (world, sprite) -> {
                                                 // return some customized action during the frame is applied to the world
                                             };
                                          })
-                                 .setupParser(new LinScript())
+                                 .setupParser(new LinScript(FileUtility.read("my_home")))
                                  .setPropertiesComponent(new PropertiesComponent())
                                  .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .build();
-
     }
 
     private Sprite sprite;
@@ -68,7 +69,7 @@ public class SpriteBuilder {
     public SpriteBuilder(IocFactory iocFactory) {
         sprite = null;
         fsmComponent = null;
-        propertiesComponent = null;
+        propertiesComponent = new PropertiesComponent();
         parser = iocFactory.frameStateMachineScriptParser();
     }
 
@@ -79,7 +80,7 @@ public class SpriteBuilder {
     public SpriteBuilder init() {
         sprite = null;
         fsmComponent = null;
-        propertiesComponent = null;
+        propertiesComponent = new PropertiesComponent();
         return this;
     }
 
@@ -91,7 +92,7 @@ public class SpriteBuilder {
     public SpriteBuilder init(IocFactory iocFactory) {
         sprite = null;
         fsmComponent = null;
-        propertiesComponent = null;
+        propertiesComponent = new PropertiesComponent();
         parser = iocFactory.frameStateMachineScriptParser();
         return this;
     }
