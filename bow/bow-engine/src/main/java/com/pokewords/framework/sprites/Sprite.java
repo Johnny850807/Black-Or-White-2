@@ -110,5 +110,7 @@ public class Sprite implements Cloneable {
 		return Objects.hash(components);
 	}
 
+	public Sprite clone(){
 
+	}
 }
