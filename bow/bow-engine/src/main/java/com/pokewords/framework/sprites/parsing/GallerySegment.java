@@ -60,4 +60,5 @@ public class GallerySegment {
     public void setColumn(int column) {
         this.column = column;
     }
+
 }
