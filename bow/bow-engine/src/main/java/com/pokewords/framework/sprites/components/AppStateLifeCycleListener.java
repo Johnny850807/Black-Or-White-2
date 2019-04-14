@@ -2,27 +2,26 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-public interface AppStateLifeCycleListener {
+public interface AppStateLifeCycleListener extends GameLifecycleListener{
     /**
-     * triggered when the AppState is started.
+     * triggered when the AppState is started. (this will be triggered only once for each alive app state)
      * @param world the setup world
      */
-    void onStart(AppStateWorld world);
+    void onAppStateInit(AppStateWorld world);
 
     /**
-     * triggered in every game-loop
-     * @param tpf time per frame
+     * triggered whenever enters into the app state
      */
-    void onUpdate(double tpf);
+    void onAppStateEnter();
 
     /**
-     * triggered every time the AppState is resumed from other states.
+     * triggered whenever exits the app state
      */
-    void onResume();
+    void onAppStateExit();
 
     /**
      * triggered when the AppState is destroyed
      */
-    void onDestroy();
+    void onAppStateDestroy();
 
 }

@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
+import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
@@ -21,7 +22,7 @@ import java.util.Optional;
  *  1. Now the two mandatory components have predetermined names by us,
  *     so the user doesn't have to name it.
  */
-public class Sprite implements Cloneable {
+public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	private Map<String, Component> components;
 
@@ -94,11 +95,23 @@ public class Sprite implements Cloneable {
 		return Optional.of(components.remove(name));
 	}
 
-	public void onStart(AppStateWorld world){
+	@Override
+	public void onAppStateInit(AppStateWorld world){
 		ComponentInjector.inject(this, world);
 	}
 
-	public void onUpdate() {
+	@Override
+	public void onUpdate(double tpf) {
+
+	}
+
+	@Override
+	public void onAppStateEnter() {
+
+	}
+
+	@Override
+	public void onAppStateDestroy() {
 
 	}
 

@@ -1,21 +1,29 @@
 package com.pokewords.framework.engine.asm;
 
+import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-public abstract class AppState {
-
+public abstract class AppState implements AppStateLifeCycleListener {
 	protected AppStateMachine appStateMachine;
+	protected IocFactory iocFactory;
+	protected AppStateWorld appStateWorld;
 
-	private AppStateWorld appStateWorld;
+	public AppState(AppStateMachine appStateMachine) {
+		this.appStateMachine = appStateMachine;
+		this.iocFactory = this.appStateMachine.getIocFactory();
+		this.appStateWorld = new AppStateWorld();
 
-	public abstract void onEnter();
+		this.onAppStateInit(appStateWorld);
+		appStateWorld.onAppStateInit(appStateWorld);
+	}
 
-	public abstract void onUpdate();
-
-	public abstract void onExit();
+	public AppStateMachine getAppStateMachine() {
+		return appStateMachine;
+	}
 
 	public AppStateWorld getStateWorld() {
-		return null;
+		return appStateWorld;
 	}
 
 }

@@ -19,7 +19,7 @@ public class FiniteStateMachine<T> {
 	/**
 	 * triggerMap saves each corresponding node of event by event
 	 */
-	private Map<String,StateNode> triggerMap= new HashMap<String,StateNode>();
+	private Map<String,StateNode> triggerMap = new HashMap<String,StateNode>();
 
 
 	/**

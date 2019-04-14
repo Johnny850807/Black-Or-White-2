@@ -1,44 +1,70 @@
 package com.pokewords.framework.sprites.components.gameworlds;
 
+import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
 import com.pokewords.framework.views.RenderedLayers;
+
 import java.util.List;
 
-public class AppStateWorld {
+public class AppStateWorld implements AppStateLifeCycleListener {
 
-	private List<Sprite> sprites;
+    private List<Sprite> sprites;
+    private List<CollisionHandler> collisionHandlers;
 
-	private List<CollisionHandler> collisionHandlers;
+    public void spawn(Sprite sprite) {
+        //TODO
+    }
 
-	public void spawn(Sprite sprite) {
+    public RenderedLayers getRenderedLayers() {
+        return null;//TODO
+    }
 
-	}
 
-	public RenderedLayers getRenderedLayers() {
-		return null;
-	}
+    public void addCollisionHandler(CollisionHandler collisionHandler) {
+        //TODO
+    }
 
-	public void onUpdate() {
+    public void removeCollisionHandler(CollisionHandler collisionHandler) {
+        //TODO
+    }
 
-	}
+    public List<Sprite> getSprites() {
+        return sprites;
+    }
 
-	public void addCollisionHandler(CollisionHandler ch) {
+    public List<CollisionHandler> getCollisionHandlers() {
+        return collisionHandlers;
+    }
 
-	}
+    public void setSprites(List<Sprite> sprites) {
+        this.sprites = sprites;
+    }
 
-	public List<Sprite> getSprites() {
-		return sprites;
-	}
+    @Override
+    public void onAppStateInit(AppStateWorld world) {
+        if (world != this)
+            throw new GameEngineException("The world is not consistent from triggering the onAppStateInit() method from the AppState");
+        //TODO
+    }
 
-	public List<CollisionHandler> getCollisionHandlers() {
-		return collisionHandlers;
-	}
+    @Override
+    public void onAppStateEnter() {
+        //TODO
+    }
 
-	public void setSprites(List<Sprite> sprites) {
-		this.sprites = sprites;
-	}
+    @Override
+    public void onAppStateExit() {
+        //TODO
+    }
 
-	public void setCollisionHandlers(List<CollisionHandler> collisionHandlers) {
-		this.collisionHandlers = collisionHandlers;
-	}
+    @Override
+    public void onAppStateDestroy() {
+        //TODO
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        //TODO
+    }
 }

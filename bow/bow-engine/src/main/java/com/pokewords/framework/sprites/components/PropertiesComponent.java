@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -12,12 +13,6 @@ public class PropertiesComponent implements Component {
 	private String state;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
 	private List<StateListener> stateListeners = new ArrayList<StateListener>();
-
-	@Override
-	public void onStart() { }
-
-	@Override
-	public void onUpdate() { }
 
 	public Point2D getPoint() {
 		return point;
@@ -43,6 +38,31 @@ public class PropertiesComponent implements Component {
 	public void setState(String state) {
 		this.state = state;
 		notifyStateListeners();
+	}
+
+	@Override
+	public void onAppStateInit(AppStateWorld world) {
+
+	}
+
+	@Override
+	public void onUpdate(double tpf) {
+
+	}
+
+	@Override
+	public void onAppStateEnter() {
+
+	}
+
+	@Override
+	public void onAppStateExit() {
+
+	}
+
+	@Override
+	public void onAppStateDestroy() {
+
 	}
 
 	public interface PositionListener{

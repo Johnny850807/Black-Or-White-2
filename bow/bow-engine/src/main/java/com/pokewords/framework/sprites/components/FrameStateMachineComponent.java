@@ -2,17 +2,14 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.FiniteStateMachine;
-import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-
-import java.util.Collection;
 
 /**
  * @author johnny850807
  */
 public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
         implements Component {
-    private AppStateWorld appStateWorld;
+    private AppStateWorld world;
     private PropertiesComponent propertiesComponent;
 
 
@@ -23,8 +20,8 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
         this.propertiesComponent = propertiesComponent;
     }
 
-    public FrameStateMachineComponent(AppStateWorld appStateWorld, PropertiesComponent propertiesComponent) {
-        this.appStateWorld = appStateWorld;
+    public FrameStateMachineComponent(AppStateWorld world, PropertiesComponent propertiesComponent) {
+        this.world = world;
         this.propertiesComponent = propertiesComponent;
     }
 
@@ -35,14 +32,14 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
      */
     private boolean stateTriggered = false;
 
-
     @Override
-    public void onStart() {
+    public void onAppStateInit(AppStateWorld world) {
+        this.world = world;
         propertiesComponent.addStateListener(state -> stateTriggered = false);
     }
 
     @Override
-    public void onUpdate() {
+    public void onUpdate(double tpf) {
         triggerTheCurrentState();
         applyTheFrameEffect();
     }
@@ -57,15 +54,30 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
 
     private void applyTheFrameEffect() {
         Frame frame = getCurrentState();
-        frame.apply(appStateWorld);
+        frame.apply(world);
     }
 
+    @Override
+    public void onAppStateEnter() {
+
+    }
+
+    @Override
+    public void onAppStateExit() {
+
+    }
+
+    @Override
+    public void onAppStateDestroy() {
+
+    }
 
     public void setAppStateWorld(AppStateWorld appStateWorld) {
-        this.appStateWorld = appStateWorld;
+        this.world = appStateWorld;
     }
 
     public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
         this.propertiesComponent = propertiesComponent;
     }
 }
+
