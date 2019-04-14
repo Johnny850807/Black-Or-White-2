@@ -2,15 +2,22 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.views.Gallery;
 
+/**
+ * @author johnny850807
+ */
 public class GallerySegment {
     private String path;
+    private int startPic;
+    private int endPic;
     private int frameWidth;
     private int frameHeight;
     private int row;
     private int column;
 
-    public GallerySegment(String path, int frameWidth, int frameHeight, int row, int column) {
+    public GallerySegment(String path, int startPic, int endPic, int frameWidth, int frameHeight, int row, int column) {
         this.path = path;
+        this.startPic = startPic;
+        this.endPic = endPic;
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.row = row;
@@ -61,4 +68,19 @@ public class GallerySegment {
         this.column = column;
     }
 
+    public int getStartPic() {
+        return startPic;
+    }
+
+    public void setStartPic(int startPic) {
+        this.startPic = startPic;
+    }
+
+    public int getEndPic() {
+        return endPic;
+    }
+
+    public void setEndPic(int endPic) {
+        this.endPic = endPic;
+    }
 }
