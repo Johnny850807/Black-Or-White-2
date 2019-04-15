@@ -67,10 +67,7 @@ public class SpriteBuilder {
      * @param iocFactory To do dependency injection.
      */
     public SpriteBuilder(IocFactory iocFactory) {
-        sprite = null;
-        fsmComponent = null;
-        propertiesComponent = new PropertiesComponent();
-        parser = iocFactory.frameStateMachineScriptParser();
+        init(iocFactory);
     }
 
     /**
