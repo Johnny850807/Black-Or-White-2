@@ -58,9 +58,10 @@ public abstract class GameApplication implements AppView {
 	 * @param x Window's x coordinate
 	 * @param y Window's y coordinate
 	 */
-	public void setFrameLocation(int x, int y){
+	public GameApplication setFrameLocation(int x, int y){
 		this.x = x;
 		this.y = y;
+		return this;
 	}
 
 	/**
