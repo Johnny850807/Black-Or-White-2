@@ -7,6 +7,10 @@ import com.pokewords.framework.views.RenderedLayers;
 
 import java.util.List;
 
+/**
+ * @author Joanna
+ */
+
 public class AppStateWorld implements AppStateLifeCycleListener {
 
     private List<Sprite> sprites;

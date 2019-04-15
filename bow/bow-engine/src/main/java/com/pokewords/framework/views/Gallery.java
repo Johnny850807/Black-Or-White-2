@@ -2,6 +2,10 @@ package com.pokewords.framework.views;
 
 import java.awt.*;
 
+/**
+ * @author Joanna
+ */
+
 public class Gallery {
     public Gallery(int frameWidth, int frameHeight, int row, int col){
 

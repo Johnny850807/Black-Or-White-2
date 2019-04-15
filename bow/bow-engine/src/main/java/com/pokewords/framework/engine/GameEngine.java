@@ -6,6 +6,10 @@ import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
+/**
+ * @author Joanna
+ */
+
 public class GameEngine {
 
 	private AppView gameView;
