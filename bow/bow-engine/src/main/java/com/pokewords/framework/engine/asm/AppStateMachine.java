@@ -21,9 +21,9 @@ public class AppStateMachine extends FiniteStateMachine<AppState> implements Gam
 		this.currentState = loadingState;
 	}
 
-	public AppStateMachine(IocFactory iocFactory) {
-		this(iocFactory, new LoadingState());
-	}
+//	public AppStateMachine(IocFactory iocFactory) {
+//		this(iocFactory, new LoadingState(this));
+//	}
 
 	@Override
 	public AppState trigger(String event) {

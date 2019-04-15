@@ -41,7 +41,7 @@ public abstract class GameApplication implements AppView {
 	private final void gameInitialSetting(){
 		setFrameHeightAndWidth(height, width);
 		setFramebackground(Color.BLACK);
-		setFrameLocation(x,y);
+		setFrameLocation(x, y);
 	}
 
 	/**
@@ -58,10 +58,9 @@ public abstract class GameApplication implements AppView {
 	 * @param x Window's x coordinate
 	 * @param y Window's y coordinate
 	 */
-	public GameApplication setFrameLocation(int x, int y){
+	public void setFrameLocation(int x, int y){
 		this.x = x;
 		this.y = y;
-		return this;
 	}
 
 	/**

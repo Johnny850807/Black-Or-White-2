@@ -3,7 +3,7 @@ package com.pokewords.framework.sprites.components.ai;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-public class AI implements Component {
+public class AI extends Component {
 
 	private BehaviorTree behaviorTree;
 
@@ -20,6 +20,11 @@ public class AI implements Component {
 
 	@Override
 	public void onAppStateEnter() {
+
+	}
+
+	@Override
+	public void onAppStateExit() {
 
 	}
 

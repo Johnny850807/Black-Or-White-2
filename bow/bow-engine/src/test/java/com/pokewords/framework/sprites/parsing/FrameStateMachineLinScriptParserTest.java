@@ -11,7 +11,7 @@ import java.util.Comparator;
 import static org.junit.Assert.assertEquals;
 
 public class FrameStateMachineLinScriptParserTest extends AbstractTest {
-    FrameStateMachineScriptParser parser = new FrameStateMachineScriptParserImp(release);
+    FrameStateMachineScriptParser parser = new FrameStateMachineLinScriptParser(release);
 
     final String SCRIPT =
             "<gallery>\n" +

@@ -7,6 +7,8 @@ public class MainTest extends GameApplication {
         MainTest mainTest = new MainTest();
 
         mainTest.setFrameLocation(500,600);
+        mainTest.setFrameHeightAndWidth(500,1000);
+
         mainTest.launch();
     }
 }

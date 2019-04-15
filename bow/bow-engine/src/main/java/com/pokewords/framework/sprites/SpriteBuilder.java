@@ -51,6 +51,7 @@ public class SpriteBuilder {
                                                 // return some customized action during the frame is applied to the world
                                             };
                                          })
+                                 .setupParser(new LinScript(FileUtility.read("my_home")))
                                  .setPropertiesComponent(new PropertiesComponent())
                                  .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .build();
@@ -66,10 +67,7 @@ public class SpriteBuilder {
      * @param iocFactory To do dependency injection.
      */
     public SpriteBuilder(IocFactory iocFactory) {
-        sprite = null;
-        fsmComponent = null;
-        propertiesComponent = new PropertiesComponent();
-        parser = iocFactory.frameStateMachineScriptParser();
+        init(iocFactory);
     }
 
     /**

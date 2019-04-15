@@ -2,6 +2,10 @@ package com.pokewords.framework.engine.asm;
 
 public class LoadingState extends AppState {
 
+	public LoadingState(AppStateMachine appStateMachine) {
+		super(appStateMachine);
+	}
+
 	public void startLoading() {
 
 	}
@@ -10,13 +14,27 @@ public class LoadingState extends AppState {
 
 	}
 
-	@Override
-	public void onUpdate() {
-
-	}
-
 	public void onExit() {
 
 	}
 
+	@Override
+	public void onAppStateEnter() {
+
+	}
+
+	@Override
+	public void onAppStateExit() {
+
+	}
+
+	@Override
+	public void onAppStateDestroy() {
+
+	}
+
+	@Override
+	public void onUpdate(double tpf) {
+
+	}
 }
