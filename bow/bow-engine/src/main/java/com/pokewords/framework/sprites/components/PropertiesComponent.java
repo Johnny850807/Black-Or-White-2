@@ -125,6 +125,6 @@ public class PropertiesComponent implements Component {
 	 * Trigger all positionListener's onPositionUpdated() method
 	 */
 	protected void notifyPositionListeners(){
-		positionListeners.forEach(listener -> listener.onPositionUpdated(point));
+		positionListeners.forEach(listener -> listener.onPositionUpdated(body.getLocation()));
 	}
 }
