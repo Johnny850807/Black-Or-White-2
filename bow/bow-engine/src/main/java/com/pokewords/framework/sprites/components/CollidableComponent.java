@@ -5,7 +5,7 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 /**
  * @author johnny850807
  */
-public class CollidableComponent implements Component {
+public class CollidableComponent extends Component {
 
 	@Override
 	public void onAppStateStart(AppStateWorld world) { }
@@ -22,13 +22,5 @@ public class CollidableComponent implements Component {
     @Override
     public void onAppStateDestroy() { }
 
-	@Override
-	public CollidableComponent clone() {
-		try {
-			return (CollidableComponent) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 }

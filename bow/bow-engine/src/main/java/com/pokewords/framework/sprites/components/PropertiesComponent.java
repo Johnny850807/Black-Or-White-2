@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertiesComponent implements Component {
+public class PropertiesComponent extends Component {
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private String type;
 	private String state;
@@ -22,15 +22,11 @@ public class PropertiesComponent implements Component {
 
 	@Override
 	public PropertiesComponent clone() {
-		try {
-			PropertiesComponent clone = (PropertiesComponent) super.clone();
-			clone.body = (Rectangle) this.body.clone();
-			clone.positionListeners = new ArrayList<>();
-			clone.stateListeners = new ArrayList<>();
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+		PropertiesComponent clone = (PropertiesComponent) super.clone();
+		clone.body = (Rectangle) this.body.clone();
+		clone.positionListeners = new ArrayList<>();
+		clone.stateListeners = new ArrayList<>();
+		return clone;
 	}
 
 	public Rectangle2D getBody() {

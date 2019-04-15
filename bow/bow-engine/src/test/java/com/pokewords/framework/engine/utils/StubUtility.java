@@ -35,11 +35,11 @@ public class StubUtility {
 
         public static FrameStateMachineComponent createFrameStateMachineComponentStub(){
             FrameStateMachineComponent frameStateMachineComponent = new FrameStateMachineComponent();
-            frameStateMachineComponent.addState(FRAME_A);
-            frameStateMachineComponent.addState(FRAME_B);
-            frameStateMachineComponent.addState(FRAME_C);
+            frameStateMachineComponent.addFrame(FRAME_A);
+            frameStateMachineComponent.addFrame(FRAME_B);
+            frameStateMachineComponent.addFrame(FRAME_C);
             frameStateMachineComponent.addTransition(FRAME_A, "1", FRAME_B);
-            frameStateMachineComponent.addTransition(FRAME_B, "2", FRAME_C;
+            frameStateMachineComponent.addTransition(FRAME_B, "2", FRAME_C);
             frameStateMachineComponent.addTransition(FRAME_C, "3", FRAME_A);
             return frameStateMachineComponent;
         }

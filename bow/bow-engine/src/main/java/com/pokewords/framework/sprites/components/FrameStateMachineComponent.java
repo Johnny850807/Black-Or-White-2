@@ -2,12 +2,14 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.FiniteStateMachine;
+import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends FiniteStateMachine<Frame> implements Component {
+public class FrameStateMachineComponent extends Component {
+    private FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
     private AppStateWorld world;
     private PropertiesComponent propertiesComponent;
 
@@ -48,6 +50,8 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame> implem
         applyTheFrameEffect();
     }
 
+
+
     private void triggerTheCurrentState() {
         if (!stateTriggered) {
             trigger(propertiesComponent.getState());
@@ -57,10 +61,29 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame> implem
     }
 
     private void applyTheFrameEffect() {
-        Frame frame = getCurrentState();
+        Frame frame = getCurrentFrame();
         frame.apply(world);
     }
 
+    public void addFrame(Frame frame){
+        fsm.addState(frame);
+    }
+
+    public void addTransition(Frame from, String event, Frame to){
+        fsm.addTransition(from, event, to);
+    }
+
+    public void addTransitionFromAllFrames(String event, Frame targetFrame){
+        fsm.addTransitionFromAllStates(event, targetFrame);
+    }
+
+    public Frame trigger(String event){
+        return fsm.trigger(event);
+    }
+
+    public Frame getCurrentFrame(){
+        return fsm.getCurrentState();
+    }
 
     @Override
     public void onAppStateExit() {
