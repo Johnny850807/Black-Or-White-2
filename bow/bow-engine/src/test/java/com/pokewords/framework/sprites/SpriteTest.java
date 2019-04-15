@@ -7,6 +7,7 @@ import com.pokewords.framework.sprites.components.Shareable;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -43,15 +44,29 @@ public class SpriteTest extends AbstractTest {
     }
 
     private void testSpriteFieldsCloned(Sprite spriteStub, Sprite clone) {
-        assertNotSame(spriteStub, clone);
-        assertNotSame(spriteStub.getComponents(), clone.getComponents());
-        assertNotSame(spriteStub.getPropertiesComponent(), clone.getPropertiesComponent());
+        assertNotSameButEquals(spriteStub, clone);
+        assertNotSameButEquals(spriteStub.getComponents(), clone.getComponents());
+        assertNotSameButEquals(spriteStub.getPropertiesComponent(), clone.getPropertiesComponent());
 
-        // all sprites of the same type should share the FSMC !
+        // all sprites of the same type must share the FSMC !
         assertSame(spriteStub.getFrameStateMachineComponent(), clone.getFrameStateMachineComponent());
+
+        testComponentsShareability(spriteStub.getComponents(), clone.getComponents());
+    }
+
+    private void testComponentsShareability(Map<String, Component> stubComponents, Map<String, Component> clonedComponents) {
+        for (String name : stubComponents.keySet()) {
+            Component stubComponent = stubComponents.get(name);
+            Component cloneComponent = clonedComponents.get(name);
+            if (stubComponent instanceof Shareable)
+                assertSame(stubComponent, cloneComponent);
+            else
+                assertNotSameButEquals(stubComponent, cloneComponent);
+        }
     }
 
     private void testSpriteComponentsInjectedCorrected(Sprite clone) {
-
+        //TODO How to test?
     }
+
 }
