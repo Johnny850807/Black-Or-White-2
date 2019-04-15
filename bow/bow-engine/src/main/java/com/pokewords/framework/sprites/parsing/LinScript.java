@@ -32,7 +32,6 @@ public class LinScript implements Script {
         return null;
     }
 
-
     @Override
     public void setText(String text) {
         this.text = text;
@@ -42,5 +41,4 @@ public class LinScript implements Script {
     public String getText() {
         return null;
     }
-
 }

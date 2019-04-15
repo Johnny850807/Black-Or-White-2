@@ -64,7 +64,7 @@ public class SpriteBuilder {
     private Sprite sprite;
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
-    FrameStateMachineScriptParser parser;
+    private FrameStateMachineScriptParser parser;
 
     /**
      * The constructor of SpriteBuilder.

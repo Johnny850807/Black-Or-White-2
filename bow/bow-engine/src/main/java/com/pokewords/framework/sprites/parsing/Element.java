@@ -27,7 +27,7 @@ public class Element {
 
     public String getString(String name){
         if (!stringMap.containsKey(name)) {
-
+            throw new ElementAttributeNameDoesNotExistException("Invalid attribute name for element!");
         }
         return stringMap.getOrDefault(name, "");
     }
