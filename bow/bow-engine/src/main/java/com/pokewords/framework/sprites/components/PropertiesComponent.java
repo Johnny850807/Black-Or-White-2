@@ -29,12 +29,40 @@ public class PropertiesComponent extends Component {
 		return clone;
 	}
 
-	public Rectangle2D getBody() {
+	public Rectangle getBody() {
 		return body;
+	}
+
+	public void setBody(int x, int y, int w, int h){
+		this.body.setBounds(x, y, w, h);
+		notifyPositionListeners();
 	}
 
 	public void setBody(Rectangle body) {
 		this.body = body;
+		notifyPositionListeners();
+	}
+
+	public int getX(){
+		return (int) getPosition().getX();
+	}
+
+	public int getY(){
+		return (int) getPosition().getY();
+	}
+	public int getW(){
+		return (int) getBody().getWidth();
+	}
+	public int getH(){
+		return (int) getBody().getHeight();
+	}
+
+	public Point2D getPosition(){
+		return body.getLocation();
+	}
+
+	public void setPosition(Point position) {
+		this.body.setLocation(position);
 		notifyPositionListeners();
 	}
 
@@ -115,6 +143,14 @@ public class PropertiesComponent extends Component {
 
 	public void removePositionListener(PositionListener positionListener){
 		positionListeners.remove(positionListener);
+	}
+
+	public List<PositionListener> getPositionListeners() {
+		return positionListeners;
+	}
+
+	public List<StateListener> getStateListeners() {
+		return stateListeners;
 	}
 
 	/**

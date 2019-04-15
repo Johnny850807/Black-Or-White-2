@@ -1,18 +1,15 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
-import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
+import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.Frame;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.awt.geom.Rectangle2D;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author johnny850807, nyngwang
@@ -145,13 +142,43 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return Objects.hash(components);
 	}
 
-	public void setPosition(Point2D position){
-		getPropertiesComponent().setPoint(position);
+	public void setBody(int x, int y, int w, int h){
+		getPropertiesComponent().setBody(x, y, w, h);
+	}
+	public void setBody(Rectangle body){
+		getPropertiesComponent().setBody(body);
+	}
+
+	public Rectangle getBody(){
+		return getPropertiesComponent().getBody();
+	}
+
+	public void setPosition(Point position){
+		getPropertiesComponent().setPosition(position);
+	}
+
+	public void setPosition(int x, int y){
+		getPropertiesComponent().setPosition(x, y);
 	}
 
 	public Point2D getPosition(){
-		return getPropertiesComponent().getPoint();
+		return getPropertiesComponent().getPosition();
 	}
+
+	public int getX(){
+		return (int) getPosition().getX();
+	}
+
+	public int getY(){
+		return (int) getPosition().getY();
+	}
+	public int getW(){
+		return (int) getBody().getWidth();
+	}
+	public int getH(){
+		return (int) getBody().getHeight();
+	}
+
 
 	public void setType(String type){
 		getPropertiesComponent().setType(type);
@@ -173,17 +200,43 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public Sprite clone(){
 		try {
 			Sprite sprite = (Sprite) super.clone();
-			sprite.components = deepCopyComponents();
+			sprite.components = copyComponents();
 			return sprite;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private Map<String, Component> deepCopyComponents(){
+	private Map<String, Component> copyComponents(){
 		HashMap<String, Component> cloneComponents = new HashMap<>();
 		for (String type : this.components.keySet())
-			cloneComponents.put(type, components.get(type).clone());
+		{
+			Component component = this.components.get(type);
+			if (component instanceof Shareable)
+				cloneComponents.put(type, component);
+			else
+				cloneComponents.put(type, component.clone());
+		}
 		return cloneComponents;
+	}
+
+	/**
+	 * @return all components not marked by Shareable interface
+	 * @see Shareable
+	 */
+	public Set<Component> getNonshareableComponents(){
+		return components.values().stream()
+				.filter(c -> ! (c instanceof Shareable) )
+				.collect(Collectors.toSet());
+	}
+
+	/**
+	 * @return all components marked by Shareable interface
+	 * @see Shareable
+	 */
+	public Set<Component> getShareableComponents(){
+		return components.values().stream()
+					.filter(c ->c instanceof Shareable)
+					.collect(Collectors.toSet());
 	}
 }

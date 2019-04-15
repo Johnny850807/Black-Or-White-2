@@ -5,7 +5,7 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 /**
  * @author johnny850807
  */
-public class CollidableComponent extends Component {
+public class CollidableComponent extends Component implements Shareable {
 
 	@Override
 	public void onAppStateStart(AppStateWorld world) { }

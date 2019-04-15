@@ -115,6 +115,13 @@ public class FrameStateMachineComponent extends Component {
         this.propertiesComponent = propertiesComponent;
     }
 
+    /**
+     * @return the actual inner finite state machine which contains the frames and transitions
+     */
+    public FiniteStateMachine<Frame> getFiniteStateMachine(){
+        return fsm;
+    }
+
     @Override
     public FrameStateMachineComponent clone() {
         return (FrameStateMachineComponent) super.clone();
