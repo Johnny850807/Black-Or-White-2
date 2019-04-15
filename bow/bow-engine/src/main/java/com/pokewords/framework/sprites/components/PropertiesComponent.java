@@ -6,11 +6,12 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PropertiesComponent implements Component {
-	private Point2D point = new Point(0, 0);
+	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private String type;
 	private String state;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
@@ -23,7 +24,7 @@ public class PropertiesComponent implements Component {
 	public PropertiesComponent clone() {
 		try {
 			PropertiesComponent clone = (PropertiesComponent) super.clone();
-			clone.point = (Point2D) this.point.clone();
+			clone.body = (Rectangle) this.body.clone();
 			clone.positionListeners = new ArrayList<>();
 			clone.stateListeners = new ArrayList<>();
 			return clone;
@@ -32,12 +33,17 @@ public class PropertiesComponent implements Component {
 		}
 	}
 
-	public Point2D getPoint() {
-		return point;
+	public Rectangle2D getBody() {
+		return body;
 	}
 
-	public void setPoint(Point2D point) {
-		this.point = point;
+	public void setBody(Rectangle body) {
+		this.body = body;
+		notifyPositionListeners();
+	}
+
+	public void setPosition(int x, int y) {
+		this.body.setLocation(x, y);
 		notifyPositionListeners();
 	}
 
