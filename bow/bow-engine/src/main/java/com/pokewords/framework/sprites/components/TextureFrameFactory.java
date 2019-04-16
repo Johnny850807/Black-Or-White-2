@@ -9,7 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
+/**
+ *
+ * @author Johnny850807
+ */
 public class TextureFrameFactory implements FrameFactory {
     private Map<String, Gallery> galleryMap = new HashMap<>();
 
@@ -18,7 +21,7 @@ public class TextureFrameFactory implements FrameFactory {
         Script script = frameSegment.getScript();
         int pic = frameSegment.getInt(FrameSegment.PIC);
         GallerySegment gallerySegment = script.getGallerySegment(pic);
-        String path = gallerySegment.getPath();
+        String path = gallerySegment.getString("path");
         if (!galleryMap.containsKey(path))
             galleryMap.put(path, gallerySegment.toGallery());
         Gallery gallery = galleryMap.get(path);

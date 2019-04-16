@@ -10,9 +10,8 @@ import java.util.Comparator;
 
 import static org.junit.Assert.assertEquals;
 
-public class FrameStateMachineScriptParserTest extends AbstractTest {
-    FrameStateMachineScriptParser parser = release.frameStateMachineScriptParser();
-    FrameFactory frameFactory = mock.frameFactory();
+public class FrameStateMachineLinScriptParserTest extends AbstractTest {
+    FrameStateMachineScriptParser parser = new FrameStateMachineLinScriptParser(release);
 
     final String SCRIPT =
             "<gallery>\n" +
@@ -75,12 +74,12 @@ public class FrameStateMachineScriptParserTest extends AbstractTest {
 
     @Before
     public void initExpectedFsmComponent(){
-        expectedFsmComponent.addState(frameFactory.createFrame());
+        //expectedFsmComponent.addFrame(frameFactory.createFrame());
     }
 
     @Test
     public void testParser(){
-        FrameStateMachineComponent fsmComponent = parser.parse(SCRIPT, frame -> {
+        FrameStateMachineComponent fsmComponent = parser.parse(new LinScript(SCRIPT), frame -> {
             /* Client custom Parsing */
             assertEquals(frameNumber++, frame.getFrameNumber());
             assertEquals((frameNumber + 1) % 4, frame.getInt("next"));

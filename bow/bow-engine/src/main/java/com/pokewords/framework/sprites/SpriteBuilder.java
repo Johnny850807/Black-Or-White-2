@@ -4,6 +4,7 @@ import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredExc
 import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.CollidableComponent;
+import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.ioc.IocFactory;
@@ -47,10 +48,14 @@ public class SpriteBuilder {
                                  .setupParser("path/to/script",
                                          frameSegment -> {
                                             // parse client's own elements
+                                             Element bow = frameSegment.getElement("bow");
+
                                             return (world, sprite) -> {
                                                 // return some customized action during the frame is applied to the world
+
                                             };
                                          })
+                                 .setupParser(new LinScript(FileUtility.read("my_home")))
                                  .setPropertiesComponent(new PropertiesComponent())
                                  .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .build();
@@ -66,10 +71,7 @@ public class SpriteBuilder {
      * @param iocFactory To do dependency injection.
      */
     public SpriteBuilder(IocFactory iocFactory) {
-        sprite = null;
-        fsmComponent = null;
-        propertiesComponent = new PropertiesComponent();
-        parser = iocFactory.frameStateMachineScriptParser();
+        init(iocFactory);
     }
 
     /**

@@ -2,6 +2,9 @@ package com.pokewords.framework.engine;
 
 import java.util.*;
 
+/**
+ * @author Shawn
+ */
 public class FiniteStateMachine<T> implements Cloneable{
 
 	/**
@@ -12,19 +15,19 @@ public class FiniteStateMachine<T> implements Cloneable{
 	/**
 	 * Array save T
 	 */
-	private T[][] martix;
+	private T[][] matrix;
 
 	private T currentState;
 
 	/**
 	 * stateNodesMap is to save new nodes
 	 */
-	private Map<Integer, StateNode> stateNodesMap = new HashMap<>();
+	private Map<Integer, StateNode> stateNodesMap = new HashMap<Integer, StateNode>();
 
 	/**
 	 * triggerMap saves each corresponding node of event by event
 	 */
-	private Map<String, Integer> triggerMap = new HashMap<>();
+	private Map<String, Integer> triggerMap = new HashMap<String, Integer>();
 
 	/**
 	 * The trigger function is able to switch different state
@@ -35,7 +38,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 		StateNode currentNode = stateNodesMap.get(currentState.hashCode());
 		int startIndex = currentNode.getStateIndex();
 		int targetIndex = triggerMap.get(event);
-		currentState = martix[startIndex][targetIndex];
+		currentState = matrix[startIndex][targetIndex];
 		return currentState;
 	}
 
@@ -65,15 +68,16 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param to is triggered state
 	 */
 	public void addTransition(T from, String event, T to) {
-		if(martix == null) {
-			martix = (T[][]) new Object[nodeIndex][nodeIndex];
+		//TODO to ArrayList
+		if(matrix == null) {
+			matrix = (T[][]) new Object[nodeIndex][nodeIndex];
 		}
 		StateNode fromNode = stateNodesMap.get(from.hashCode());
 		StateNode toNode = stateNodesMap.get(to.hashCode());
 
 		int fromIndex = fromNode.getStateIndex();
 		int toIndex = toNode.getStateIndex();
-		martix[fromIndex][toIndex] = to;
+		matrix[fromIndex][toIndex] = to;
 		triggerMap.put(event, toIndex);
 	}
 
@@ -84,10 +88,10 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 */
 	public void addTransitionFromAllStates(String event, T targetState){
 		StateNode targetNode = stateNodesMap.get(targetState.hashCode());
-		for(int i=0; i<nodeIndex; i++){
+		for(int i = 0; i < nodeIndex; i++){
 			if(i == targetNode.getStateIndex())
 				continue;
-			martix[i][targetNode.getStateIndex()] = targetState;
+			matrix[i][targetNode.getStateIndex()] = targetState;
 		}
 		triggerMap.put(event, targetNode.getStateIndex());
 	}

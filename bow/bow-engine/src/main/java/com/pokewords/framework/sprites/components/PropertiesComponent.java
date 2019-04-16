@@ -1,43 +1,76 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.engine.Logger;
 import com.pokewords.framework.engine.utils.StringUtility;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertiesComponent implements Component {
-	private Point2D point = new Point(0, 0);
+public class PropertiesComponent extends Component {
+	Logger logger = Logger.of(PropertiesComponent.class);
+	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private String type;
 	private String state;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
 	private List<StateListener> stateListeners = new ArrayList<StateListener>();
 
 	public PropertiesComponent() {
+
 	}
 
 	@Override
 	public PropertiesComponent clone() {
-		try {
-			PropertiesComponent clone = (PropertiesComponent) super.clone();
-			clone.point = (Point2D) this.point.clone();
-			clone.positionListeners = new ArrayList<>();
-			clone.stateListeners = new ArrayList<>();
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+		PropertiesComponent clone = (PropertiesComponent) super.clone();
+		clone.body = (Rectangle) this.body.clone();
+		clone.positionListeners = new ArrayList<>();
+		clone.stateListeners = new ArrayList<>();
+		return clone;
 	}
 
-	public Point2D getPoint() {
-		return point;
+	public Rectangle getBody() {
+		return body;
 	}
 
-	public void setPoint(Point2D point) {
-		this.point = point;
+	public void setBody(int x, int y, int w, int h){
+		this.body.setBounds(x, y, w, h);
+		notifyPositionListeners();
+	}
+
+	public void setBody(Rectangle body) {
+		this.body = body;
+		notifyPositionListeners();
+	}
+
+	public int getX(){
+		return (int) getPosition().getX();
+	}
+
+	public int getY(){
+		return (int) getPosition().getY();
+	}
+	public int getW(){
+		return (int) getBody().getWidth();
+	}
+	public int getH(){
+		return (int) getBody().getHeight();
+	}
+
+	public Point2D getPosition(){
+		return body.getLocation();
+	}
+
+	public void setPosition(Point position) {
+		this.body.setLocation(position);
+		notifyPositionListeners();
+	}
+
+	public void setPosition(int x, int y) {
+		this.body.setLocation(x, y);
 		notifyPositionListeners();
 	}
 
@@ -115,10 +148,18 @@ public class PropertiesComponent implements Component {
 		positionListeners.remove(positionListener);
 	}
 
+	public List<PositionListener> getPositionListeners() {
+		return positionListeners;
+	}
+
+	public List<StateListener> getStateListeners() {
+		return stateListeners;
+	}
+
 	/**
 	 * Trigger all positionListener's onPositionUpdated() method
 	 */
 	protected void notifyPositionListeners(){
-		positionListeners.forEach(listener -> listener.onPositionUpdated(point));
+		positionListeners.forEach(listener -> listener.onPositionUpdated(body.getLocation()));
 	}
 }

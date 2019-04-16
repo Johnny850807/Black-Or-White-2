@@ -41,7 +41,7 @@ public abstract class GameApplication implements AppView {
 	private final void gameInitialSetting(){
 		setFrameHeightAndWidth(height, width);
 		setFramebackground(Color.BLACK);
-		setFrameLocation(x,y);
+		setFrameLocation(x, y);
 	}
 
 	/**
