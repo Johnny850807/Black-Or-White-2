@@ -5,6 +5,9 @@ import com.pokewords.framework.engine.FiniteStateMachine;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
+import java.lang.reflect.Field;
+import java.text.Format;
+
 /**
  * @author johnny850807
  */
@@ -15,15 +18,6 @@ public class FrameStateMachineComponent extends Component {
 
 
     public FrameStateMachineComponent() {
-    }
-
-    public FrameStateMachineComponent(PropertiesComponent propertiesComponent) {
-        this.propertiesComponent = propertiesComponent;
-    }
-
-    public FrameStateMachineComponent(AppStateWorld world, PropertiesComponent propertiesComponent) {
-        this.world = world;
-        this.propertiesComponent = propertiesComponent;
     }
 
     /**

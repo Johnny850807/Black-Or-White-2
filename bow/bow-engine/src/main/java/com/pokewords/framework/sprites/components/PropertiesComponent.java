@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.engine.Logger;
 import com.pokewords.framework.engine.utils.StringUtility;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PropertiesComponent extends Component {
+	Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private String type;
 	private String state;
@@ -18,6 +20,7 @@ public class PropertiesComponent extends Component {
 	private List<StateListener> stateListeners = new ArrayList<StateListener>();
 
 	public PropertiesComponent() {
+
 	}
 
 	@Override
