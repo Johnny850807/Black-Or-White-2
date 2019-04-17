@@ -1,22 +1,26 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-public class CollidableComponent implements Component {
-
-	@Override
-	public void onBoundToSprite(Sprite sprite) {
-
-	}
+/**
+ * @author johnny850807
+ */
+public class CollidableComponent extends Component implements Shareable {
 
 	@Override
-	public void onStart() {
-
-	}
+	public void onAppStateStart(AppStateWorld world) { }
 
 	@Override
-	public void onUpdate() {
+	public void onUpdate(double tpf) { }
 
-	}
+	@Override
+	public void onAppStateEnter() { }
+
+	@Override
+	public void onAppStateExit() { }
+
+    @Override
+    public void onAppStateDestroy() { }
+
 
 }

@@ -1,44 +1,35 @@
 package com.pokewords.framework.sprites.components.ai;
 
-import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-public class AI implements Component {
+public class AI extends Component {
 
 	private BehaviorTree behaviorTree;
 
-	/**
-	 * @see com.pokewords.framework.sprites.components #onInit()
-	 * 
-	 *  
-	 */
-	public void onInit() {
+
+	@Override
+	public void onAppStateStart(AppStateWorld world) {
 
 	}
 
 	@Override
-	public void onBoundToSprite(Sprite sprite) {
+	public void onUpdate(double tpf) {
 
 	}
 
-
-	/**
-	 * @see com.pokewords.framework.sprites.components #onStart()
-	 * 
-	 *  
-	 */
-	public void onStart() {
+	@Override
+	public void onAppStateEnter() {
 
 	}
 
-
-	/**
-	 * @see com.pokewords.framework.sprites.components #onUpdate()
-	 * 
-	 *  
-	 */
-	public void onUpdate() {
+	@Override
+	public void onAppStateExit() {
 
 	}
 
+	@Override
+	public void onAppStateDestroy() {
+
+	}
 }

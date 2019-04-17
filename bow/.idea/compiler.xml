@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bow-core" />
         <module name="bow-engine" />
+        <module name="bow-engine-demo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="bow" target="1.5" />
       <module name="bow-core" target="1.5" />
       <module name="bow-engine" target="8" />
+      <module name="bow-engine-demo" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

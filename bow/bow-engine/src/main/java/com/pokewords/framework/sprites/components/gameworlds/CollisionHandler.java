@@ -2,14 +2,12 @@ package com.pokewords.framework.sprites.components.gameworlds;
 
 import com.pokewords.framework.sprites.Sprite;
 
-public class CollisionHandler {
+public abstract class CollisionHandler {
 
-	private String type1;
+	private Sprite type1;
 
-	private String type2;
+	private Sprite type2;
 
-	public void onCollision(Sprite s1, Sprite s2){
-
-	}
+	public abstract void onCollision(Sprite s1, Sprite s2);
 
 }

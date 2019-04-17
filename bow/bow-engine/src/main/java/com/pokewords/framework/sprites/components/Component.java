@@ -1,21 +1,16 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.sprites.Sprite;
 
-public interface Component extends Cloneable{
+public abstract class Component implements AppStateLifeCycleListener, Cloneable{
+	public static final String PROPERTIES = "properties";
+	public static final String FRAME_STATE_MACHINE = "Frame State Machine";
+	public static final String COLLIDABLE = "collidable";
 
-	/**
-	 * Triggered when the component is bound to a Sprite,
-	 * and all component fields have been injected.
-	 * @param sprite Bound Sprite
-	 */
-	void onBoundToSprite(Sprite sprite);
-
-	/**
-	 * Triggered when the game is started
-	 */
-	void onStart();
-
-	void onUpdate();
-
+	public Component clone(){
+		try {
+			return (Component) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

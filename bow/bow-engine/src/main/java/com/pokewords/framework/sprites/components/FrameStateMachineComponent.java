@@ -2,30 +2,22 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.FiniteStateMachine;
-import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-import java.util.Collection;
+import java.lang.reflect.Field;
+import java.text.Format;
 
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
-        implements Component {
-    private AppStateWorld appStateWorld;
+public class FrameStateMachineComponent extends Component {
+    private FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
+    private AppStateWorld world;
     private PropertiesComponent propertiesComponent;
 
 
     public FrameStateMachineComponent() {
-    }
-
-    public FrameStateMachineComponent(PropertiesComponent propertiesComponent) {
-        this.propertiesComponent = propertiesComponent;
-    }
-
-    public FrameStateMachineComponent(AppStateWorld appStateWorld, PropertiesComponent propertiesComponent) {
-        this.appStateWorld = appStateWorld;
-        this.propertiesComponent = propertiesComponent;
     }
 
     /**
@@ -36,39 +28,97 @@ public class FrameStateMachineComponent extends FiniteStateMachine<Frame>
     private boolean stateTriggered = false;
 
     @Override
-    public void onBoundToSprite(Sprite sprite) {
+    public void onAppStateStart(AppStateWorld world) {
+        this.world = world;
         propertiesComponent.addStateListener(state -> stateTriggered = false);
     }
 
     @Override
-    public void onStart() {
+    public void onAppStateEnter() {
+
     }
 
     @Override
-    public void onUpdate() {
+    public void onUpdate(double tpf) {
         triggerTheCurrentState();
         applyTheFrameEffect();
     }
 
+
+
     private void triggerTheCurrentState() {
         if (!stateTriggered) {
-            stateTriggered = true;
             trigger(propertiesComponent.getState());
+            stateTriggered = true;
         } else
             trigger(Events.UPDATE);
     }
 
     private void applyTheFrameEffect() {
-        Frame frame = getCurrentState();
-        frame.apply(appStateWorld);
+        Frame frame = getCurrentFrame();
+        frame.apply(world);
     }
 
+    public void addFrame(Frame frame){
+        fsm.addState(frame);
+    }
+
+    public void addTransition(Frame from, String event, Frame to){
+        fsm.addTransition(from, event, to);
+    }
+
+    public void addTransitionFromAllFrames(String event, Frame targetFrame){
+        fsm.addTransitionFromAllStates(event, targetFrame);
+    }
+
+    public Frame trigger(String event){
+        return fsm.trigger(event);
+    }
+
+    public Frame getCurrentFrame(){
+        return fsm.getCurrentState();
+    }
+
+    @Override
+    public void onAppStateExit() {
+
+    }
+
+    @Override
+    public void onAppStateDestroy() {
+
+    }
+
+    public AppStateWorld getAppStateWorld() {
+        return world;
+    }
+
+    public PropertiesComponent getPropertiesComponent() {
+        return propertiesComponent;
+    }
+
+    public boolean isStateTriggered() {
+        return stateTriggered;
+    }
 
     public void setAppStateWorld(AppStateWorld appStateWorld) {
-        this.appStateWorld = appStateWorld;
+        this.world = appStateWorld;
     }
 
     public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
         this.propertiesComponent = propertiesComponent;
     }
+
+    /**
+     * @return the actual inner finite state machine which contains the frames and transitions
+     */
+    public FiniteStateMachine<Frame> getFiniteStateMachine(){
+        return fsm;
+    }
+
+    @Override
+    public FrameStateMachineComponent clone() {
+        return (FrameStateMachineComponent) super.clone();
+    }
 }
+

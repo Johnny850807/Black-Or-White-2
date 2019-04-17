@@ -1,17 +1,21 @@
 package com.pokewords.framework.ioc;
 
-import com.pokewords.framework.engine.TextureFrameFactory;
 import com.pokewords.framework.engine.UserConfig;
 import com.pokewords.framework.sprites.PrototypeFactory;
+import com.pokewords.framework.sprites.PrototypeFactoryImp;
 import com.pokewords.framework.sprites.components.FrameFactory;
+import com.pokewords.framework.sprites.components.TextureFrameFactory;
 import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
 import com.pokewords.framework.views.SoundPlayer;
 
 public class ReleaseIocFactory implements IocFactory{
+    private TextureFrameFactory textureFrameFactory;
+    private PrototypeFactory prototypeFactory;
 
     @Override
     public FrameFactory frameFactory() {
-        return new TextureFrameFactory();
+        return textureFrameFactory == null ?
+                textureFrameFactory = new TextureFrameFactory() : textureFrameFactory;
     }
 
     @Override
@@ -24,7 +28,8 @@ public class ReleaseIocFactory implements IocFactory{
 
     @Override
     public PrototypeFactory prototypeFactory() {
-        return null;
+        return prototypeFactory == null ?
+                prototypeFactory = new PrototypeFactoryImp() : prototypeFactory;
     }
 
     @Override

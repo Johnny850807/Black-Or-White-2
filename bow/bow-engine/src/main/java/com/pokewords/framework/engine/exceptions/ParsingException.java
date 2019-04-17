@@ -16,4 +16,5 @@ public class ParsingException extends GameEngineException {
     public ParsingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
 }
