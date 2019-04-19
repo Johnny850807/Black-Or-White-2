@@ -1,24 +1,26 @@
 package com.pokewords.framework.views;
 
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author shawn
+ *
+ */
 public abstract class GameApplication implements AppView {
 
-	private JPanel gamePanel = new JPanel();
-	private JFrame gameFrame = new JFrame();
-
-	private int height = 0, width = 0;
+	/**
+	 * Initial parameter
+	 */
+	private int height = 200, width = 200;
 	private int x = 0,y = 0;
 	private Color backgroundColor = Color.BLACK;
+	private String windowName = "Game engine";
+	private JPanel gamePanel;
+	private JFrame gameFrame;
 
-	/**
-	 * Launch the game
-	 */
+
 	public void launch() {
-		gameInitialSetting();
 		gameCustomizedSetting();
 	}
 
@@ -27,30 +29,30 @@ public abstract class GameApplication implements AppView {
 	 * According to the parameter setting gameView
 	 */
 	private void gameCustomizedSetting() {
+		gamePanel = new JPanel();
+		gameFrame = new JFrame(windowName);
 		gamePanel.setBackground(backgroundColor);
-		gameFrame.setLocation(x, y);
-		gameFrame.setSize(width, height);
+		gameFrame.setLocation(x,y);
+		gameFrame.setSize(width,height);
 		gameFrame.add(gamePanel);
+		gameFrame.setName(windowName);
 		gameFrame.setVisible(true);
 	}
 
 	/**
-	 * Template method
-	 * Customized setting gameView parameters
+	 * @param windowName window name
 	 */
-	private final void gameInitialSetting(){
-		setFrameHeightAndWidth(height, width);
-		setFramebackground(Color.BLACK);
-		setFrameLocation(x, y);
+	public void setWindowName(String windowName){
+		this.gameFrame.setName(windowName);
 	}
 
 	/**
-	 * @param height Window height
 	 * @param width Window width
+	 * @param height Window height
 	 */
-	public void setFrameHeightAndWidth(int height, int width){
-		this.height = height;
+	public void setWindowSize(int width, int height){
 		this.width = width;
+		this.height = height;
 	}
 
 	/**
@@ -58,7 +60,7 @@ public abstract class GameApplication implements AppView {
 	 * @param x Window's x coordinate
 	 * @param y Window's y coordinate
 	 */
-	public void setFrameLocation(int x, int y){
+	public void setWindowLocation(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
@@ -66,55 +68,15 @@ public abstract class GameApplication implements AppView {
 	/**
 	 * @param color GameView background color
 	 */
-	public void setFramebackground(Color color){
+	public void setWindowbackgroundColor(Color color){
 		this.backgroundColor = color;
 	}
 
-	/**
-	 * @see com.pokewords.framework.views.AppView#onAppInit()
-	 *
-	 *
-	 */
-	public void onAppInit() {
-
-	}
 
 
-	/**
-	 * @see com.pokewords.framework.views.AppView#onAppLoading()
-	 *
-	 *
-	 */
-	public void onAppLoading() {
-
-	}
-
-
-	/**
-	 * @see com.pokewords.framework.views.AppView#onAppStarted()
-	 *
-	 *
-	 */
-	public void onAppStarted() {
-
-	}
-
-
-	/**
-	 * @see com.pokewords.framework.views.AppView #onRender(framework.views.RenderedLayers)
-	 *
-	 *
-	 */
+	@Override
 	public void onRender(RenderedLayers renderedLayers) {
 
-	}
-
-
-	/**
-	 * @see com.pokewords.framework.views.AppView #getWorld()
-	 */
-	public AppStateWorld getWorld() {
-		return null;
 	}
 
 }
