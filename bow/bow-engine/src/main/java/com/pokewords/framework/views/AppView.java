@@ -1,7 +1,5 @@
 package com.pokewords.framework.views;
 
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-
 public interface AppView {
 
 	void onAppInit();
@@ -11,7 +9,5 @@ public interface AppView {
 	void onAppStarted();
 
 	void onRender(RenderedLayers renderedLayers);
-
-	AppStateWorld getWorld();
 
 }

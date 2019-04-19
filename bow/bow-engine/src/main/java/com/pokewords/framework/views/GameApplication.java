@@ -1,7 +1,5 @@
 package com.pokewords.framework.views;
 
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -49,12 +47,12 @@ public abstract class GameApplication implements AppView {
 	}
 
 	/**
-	 * @param height Window height
 	 * @param width Window width
+	 * @param height Window height
 	 */
-	public void setWindowHeightAndWidth(int height, int width){
-		this.height = height;
+	public void setWindowSize(int width, int height){
 		this.width = width;
+		this.height = height;
 	}
 
 	/**
@@ -74,51 +72,31 @@ public abstract class GameApplication implements AppView {
 		this.backgroundColor = color;
 	}
 
-	/**
-	 * @see com.pokewords.framework.views.AppView#onAppInit()
-	 *
-	 *
-	 */
-	public void onAppInit() {
-
-	}
 
 
-	/**
-	 * @see com.pokewords.framework.views.AppView#onAppLoading()
-	 *
-	 *
-	 */
-	public void onAppLoading() {
-
-	}
-
-
-	/**
-	 * @see com.pokewords.framework.views.AppView#onAppStarted()
-	 *
-	 *
-	 */
-	public void onAppStarted() {
-
-	}
-
-
-	/**
-	 * @see com.pokewords.framework.views.AppView #onRender(framework.views.RenderedLayers)
-	 *
-	 *
-	 */
+	@Override
 	public void onRender(RenderedLayers renderedLayers) {
 
 	}
 
+	public static void main(String[] args) {
+		new GameApplication(){
 
-	/**
-	 * @see com.pokewords.framework.views.AppView #getWorld()
-	 */
-	public AppStateWorld getWorld() {
-		return null;
+			{
+				setWindowLocation(200, 200);
+				setWindowName("My Game");
+				setWindowSize(200, 200);
+			}
+
+			@Override
+			public void onAppInit() { }
+
+			@Override
+			public void onAppLoading() { }
+
+			@Override
+			public void onAppStarted() { }
+		}.launch();
 	}
 
 }
