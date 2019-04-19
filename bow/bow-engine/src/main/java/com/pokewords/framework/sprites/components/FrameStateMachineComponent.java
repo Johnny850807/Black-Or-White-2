@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.FiniteStateMachine;
 import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.lang.reflect.Field;
@@ -14,6 +15,7 @@ import java.util.Objects;
  */
 public class FrameStateMachineComponent extends Component {
     private FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
+    private Sprite sprite;
     private AppStateWorld world;
     private PropertiesComponent propertiesComponent;
 
@@ -57,7 +59,7 @@ public class FrameStateMachineComponent extends Component {
 
     private void applyTheFrameEffect() {
         Frame frame = getCurrentFrame();
-        frame.apply(world);
+        frame.apply(world, sprite);
     }
 
     public void addFrame(Frame frame){
@@ -128,14 +130,12 @@ public class FrameStateMachineComponent extends Component {
         if (o == null || getClass() != o.getClass()) return false;
         FrameStateMachineComponent that = (FrameStateMachineComponent) o;
         return stateTriggered == that.stateTriggered &&
-                fsm.equals(that.fsm) &&
-                Objects.equals(world, that.world) &&
-                Objects.equals(propertiesComponent, that.propertiesComponent);
+                fsm.equals(that.fsm);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fsm, world, propertiesComponent, stateTriggered);
+        return Objects.hash(fsm, stateTriggered);
     }
 }
 

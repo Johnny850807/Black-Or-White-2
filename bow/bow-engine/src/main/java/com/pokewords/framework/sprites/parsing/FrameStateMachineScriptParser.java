@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.ParsingException;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
+import com.pokewords.framework.sprites.components.GameEffect;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.util.function.BiConsumer;
@@ -37,7 +38,7 @@ public interface FrameStateMachineScriptParser {
          * @param frameSegment the being parsed segment
          * @return the action that this frame'd like to apply in the given AppStateWorld.
          */
-        BiConsumer<AppStateWorld, Sprite> onParsing(FrameSegment frameSegment);
+        GameEffect onParsing(FrameSegment frameSegment);
     }
 
 
