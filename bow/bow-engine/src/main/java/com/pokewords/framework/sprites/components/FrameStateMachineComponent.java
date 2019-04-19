@@ -7,6 +7,7 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.lang.reflect.Field;
 import java.text.Format;
+import java.util.Objects;
 
 /**
  * @author johnny850807
@@ -119,6 +120,22 @@ public class FrameStateMachineComponent extends Component {
     @Override
     public FrameStateMachineComponent clone() {
         return (FrameStateMachineComponent) super.clone();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FrameStateMachineComponent that = (FrameStateMachineComponent) o;
+        return stateTriggered == that.stateTriggered &&
+                fsm.equals(that.fsm) &&
+                Objects.equals(world, that.world) &&
+                Objects.equals(propertiesComponent, that.propertiesComponent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fsm, world, propertiesComponent, stateTriggered);
     }
 }
 
