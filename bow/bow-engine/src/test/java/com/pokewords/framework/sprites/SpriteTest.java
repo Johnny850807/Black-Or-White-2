@@ -30,7 +30,7 @@ public class SpriteTest extends AbstractTest {
 
     @Test
     public void testGetAllNonshareableComponents(){
-        Set<Component> components = spriteStub.getShareableComponents();
+        Set<Component> components = spriteStub.getNonshareableComponents();
         for (Component component : components) {
             assertFalse(component instanceof Shareable);
         }

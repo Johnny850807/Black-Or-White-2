@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends Component {
+public class FrameStateMachineComponent extends Component implements Shareable{
     private FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
     private Sprite sprite;
     private AppStateWorld world;

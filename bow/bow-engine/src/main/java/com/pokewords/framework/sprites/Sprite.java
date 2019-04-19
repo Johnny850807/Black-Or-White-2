@@ -202,6 +202,12 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		try {
 			Sprite clone = (Sprite) super.clone();
 			clone.components = copyComponents();
+			for (Component component : clone.components.values()) {
+				if (component instanceof PropertiesComponent)
+					clone.propertiesComponent = (PropertiesComponent) component;
+				else if (component instanceof FrameStateMachineComponent)
+					clone.frameStateMachineComponent = (FrameStateMachineComponent) component;
+			}
 			clone.injectComponents();
 			return clone;
 		} catch (CloneNotSupportedException e) {
