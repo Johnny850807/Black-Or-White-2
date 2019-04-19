@@ -79,24 +79,4 @@ public abstract class GameApplication implements AppView {
 
 	}
 
-	public static void main(String[] args) {
-		new GameApplication(){
-
-			{
-				setWindowLocation(200, 200);
-				setWindowName("My Game");
-				setWindowSize(200, 200);
-			}
-
-			@Override
-			public void onAppInit() { }
-
-			@Override
-			public void onAppLoading() { }
-
-			@Override
-			public void onAppStarted() { }
-		}.launch();
-	}
-
 }
