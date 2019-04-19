@@ -40,7 +40,6 @@ public class SpriteTest extends AbstractTest {
     public void testSpriteClone(){
         Sprite clone = spriteStub.clone();
         testSpriteFieldsCloned(spriteStub, clone);
-        testSpriteComponentsInjectedCorrected(clone);
     }
 
     private void testSpriteFieldsCloned(Sprite spriteStub, Sprite clone) {
@@ -65,8 +64,5 @@ public class SpriteTest extends AbstractTest {
         }
     }
 
-    private void testSpriteComponentsInjectedCorrected(Sprite clone) {
-        //TODO How to test?
-    }
 
 }
