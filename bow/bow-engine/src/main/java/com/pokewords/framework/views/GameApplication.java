@@ -16,8 +16,8 @@ public abstract class GameApplication implements AppView {
 	private int x = 0,y = 0;
 	private Color backgroundColor = Color.BLACK;
 	private String windowName = "Game engine";
-	private JPanel gamePanel;
-	private JFrame gameFrame;
+	private JPanel gamePanel = new JPanel();
+	private JFrame gameFrame = new JFrame(windowName);
 
 
 	public void launch() {
@@ -29,13 +29,11 @@ public abstract class GameApplication implements AppView {
 	 * According to the parameter setting gameView
 	 */
 	private void gameCustomizedSetting() {
-		gamePanel = new JPanel();
-		gameFrame = new JFrame(windowName);
 		gamePanel.setBackground(backgroundColor);
 		gameFrame.setLocation(x,y);
 		gameFrame.setSize(width,height);
 		gameFrame.add(gamePanel);
-		gameFrame.setName(windowName);
+		gameFrame.setTitle(windowName);
 		gameFrame.setVisible(true);
 	}
 
@@ -43,7 +41,7 @@ public abstract class GameApplication implements AppView {
 	 * @param windowName window name
 	 */
 	public void setWindowName(String windowName){
-		this.gameFrame.setName(windowName);
+		this.windowName = windowName;
 	}
 
 	/**
