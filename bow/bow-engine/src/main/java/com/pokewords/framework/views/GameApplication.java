@@ -2,6 +2,7 @@ package com.pokewords.framework.views;
 
 import javax.swing.*;
 import java.awt.*;
+import com.pokewords.framework.sprites.components.Frame;
 
 /**
  * @author shawn

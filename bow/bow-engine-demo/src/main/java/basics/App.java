@@ -22,7 +22,6 @@ public class App extends GameApplication {
     }
 
     public static void main(String[] args) {
-        System.out.println("123");
         new App().launch();
     }
 }

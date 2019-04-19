@@ -1,38 +1,36 @@
 package com.pokewords.framework.views;
 
-import com.pokewords.framework.views.InputManager;
-
 import java.awt.geom.Point2D;
 
 public class DefaultInputManager implements InputManager {
 
     @Override
-    public boolean getButtonPressedDown(String key) {
+    public boolean getButtonPressedDown(int key) {
         return false;
     }
 
     @Override
-    public void onButtonPressedDown(String key) {
+    public void onButtonPressedDown(int key) {
 
     }
 
     @Override
-    public boolean getButtonBeingHeld(String key) {
+    public boolean getButtonBeingHeld(int key) {
         return false;
     }
 
     @Override
-    public void onButtonBeingHeld(String key) {
+    public void onButtonBeingHeld(int key) {
 
     }
 
     @Override
-    public boolean getButtonReleasedUp(String key) {
+    public boolean getButtonReleasedUp(int key) {
         return false;
     }
 
     @Override
-    public void onButtonReleasedUp(String key) {
+    public void onButtonReleasedUp(int key) {
 
     }
 

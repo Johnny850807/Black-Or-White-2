@@ -8,35 +8,35 @@ public interface InputManager {
     /**
      * @return true Iff the button is pressed down
      */
-    boolean getButtonPressedDown(String key);
+    boolean getButtonPressedDown(int key);
 
     /**
      * Add an event releasing the held button up
      * @param key the button's key
      */
-    void onButtonPressedDown(String key);
+    void onButtonPressedDown(int key);
 
     /**
      * @return true Iff the button is being held.
      */
-    boolean getButtonBeingHeld(String key);
+    boolean getButtonBeingHeld(int key);
 
     /**
      * Add an event holding the button
      * @param key the button's key
      */
-    void onButtonBeingHeld(String key);
+    void onButtonBeingHeld(int key);
 
     /**
      * @return true Iff the button is released up from being held.
      */
-    boolean getButtonReleasedUp(String key);
+    boolean getButtonReleasedUp(int key);
 
     /**
      * Add an event releasing the held button up
      * @param key the button's key
      */
-    void onButtonReleasedUp(String key);
+    void onButtonReleasedUp(int key);
 
     /**
      * @return The position of the mouse currently.

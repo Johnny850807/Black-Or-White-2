@@ -5,6 +5,9 @@ import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.InputManager;
+import javafx.scene.input.KeyCode;
+
+import java.awt.event.KeyEvent;
 
 public class MainState extends AppState {
     private InputManager inputManager;
@@ -31,13 +34,13 @@ public class MainState extends AppState {
     }
 
     public void onUpdate(double tpf) {
-        if (inputManager.getButtonBeingHeld("W"))
+        if (inputManager.getButtonBeingHeld(KeyEvent.VK_W))
             moveUp();
-        if (inputManager.getButtonBeingHeld("S"))
+        if (inputManager.getButtonBeingHeld(KeyEvent.VK_S))
             moveDown();
-        if (inputManager.getButtonBeingHeld("A"))
+        if (inputManager.getButtonBeingHeld(KeyEvent.VK_A))
             moveLeft();
-        if (inputManager.getButtonBeingHeld("D"))
+        if (inputManager.getButtonBeingHeld(KeyEvent.VK_D))
             moveRight();
     }
 
