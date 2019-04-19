@@ -200,13 +200,21 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public Sprite clone(){
 		try {
-			Sprite sprite = (Sprite) super.clone();
-			sprite.components = copyComponents();
-			ComponentInjector.inject(sprite);
-			return sprite;
+			Sprite clone = (Sprite) super.clone();
+			clone.components = copyComponents();
+			clone.injectComponents();
+			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Make the components injected
+	 * @see ComponentInjector#inject(Sprite)
+	 */
+	public void injectComponents(){
+		ComponentInjector.inject(this);
 	}
 
 	private Map<String, Component> copyComponents(){
