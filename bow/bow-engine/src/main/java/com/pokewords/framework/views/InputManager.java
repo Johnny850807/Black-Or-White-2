@@ -3,12 +3,12 @@ package com.pokewords.framework.views;
 import java.awt.geom.Point2D;
 
 //TODO Define sufficient methods
-public interface Inputs {
+public interface InputManager {
 
     /**
      * @return true Iff the button is pressed down
      */
-    boolean getButtonPressedDown();
+    boolean getButtonPressedDown(String key);
 
     /**
      * Add an event releasing the held button up
@@ -19,7 +19,7 @@ public interface Inputs {
     /**
      * @return true Iff the button is being held.
      */
-    boolean getButtonBeingHeld();
+    boolean getButtonBeingHeld(String key);
 
     /**
      * Add an event holding the button
@@ -30,7 +30,7 @@ public interface Inputs {
     /**
      * @return true Iff the button is released up from being held.
      */
-    boolean getButtonReleasedUp();
+    boolean getButtonReleasedUp(String key);
 
     /**
      * Add an event releasing the held button up
