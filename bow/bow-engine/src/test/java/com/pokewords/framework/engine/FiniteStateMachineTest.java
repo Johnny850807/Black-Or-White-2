@@ -35,7 +35,7 @@ public class FiniteStateMachineTest {
     }
 
     @Test
-    void testShouldThrowExceptionIfSetCurrentStateButNotExists(){
+    public void testShouldThrowExceptionIfSetCurrentStateButNotExists(){
         FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
 
         try{
@@ -70,7 +70,7 @@ public class FiniteStateMachineTest {
     }
 
     @Test
-    void testShouldThrowExceptionIfAddTransitionFromNonexistentState(){
+    public void testShouldThrowExceptionIfAddTransitionFromNonexistentState(){
         FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
         fsm.addState(B);
 
@@ -83,7 +83,7 @@ public class FiniteStateMachineTest {
     }
 
     @Test
-    void testShouldThrowExceptionIfAddTransitionToNonexistentState(){
+    public void testShouldThrowExceptionIfAddTransitionToNonexistentState(){
         FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
         fsm.addState(A);
 
@@ -152,7 +152,7 @@ public class FiniteStateMachineTest {
     }
 
     @Test
-    void testShouldThrowExceptionIfAddTransitionFromAllStatesButTargetStateNotExists(){
+    public void testShouldThrowExceptionIfAddTransitionFromAllStatesButTargetStateNotExists(){
         FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
         fsm.addState(A);
         fsm.addState(B);
@@ -167,7 +167,7 @@ public class FiniteStateMachineTest {
     }
 
     @Test
-    void testShouldThrowExceptionIfAddTransitionFromAllStatesExceptButTargetStateNotExists(){
+    public void testShouldThrowExceptionIfAddTransitionFromAllStatesExceptButTargetStateNotExists(){
         FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
         fsm.addState(A);
         fsm.addState(B);
