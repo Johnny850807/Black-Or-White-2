@@ -14,12 +14,11 @@ public abstract class GameApplication implements AppView {
 	 * Initial parameter
 	 */
 	private int height = 200, width = 200;
-	private int x = 0,y = 0;
+	private int x = 0, y = 0;
 	private Color backgroundColor = Color.BLACK;
 	private String windowName = "Game engine";
 	private JPanel gamePanel = new JPanel();
 	private JFrame gameFrame = new JFrame(windowName);
-
 
 	public void launch() {
 		gameCustomizedSetting();
@@ -31,8 +30,8 @@ public abstract class GameApplication implements AppView {
 	 */
 	private void gameCustomizedSetting() {
 		gamePanel.setBackground(backgroundColor);
-		gameFrame.setLocation(x,y);
-		gameFrame.setSize(width,height);
+		gameFrame.setLocation(x, y);
+		gameFrame.setSize(width, height);
 		gameFrame.add(gamePanel);
 		gameFrame.setTitle(windowName);
 		gameFrame.setVisible(true);
@@ -71,11 +70,28 @@ public abstract class GameApplication implements AppView {
 		this.backgroundColor = color;
 	}
 
-
-
 	@Override
 	public void onRender(RenderedLayers renderedLayers) {
+		gamePanel = new GamePanel(renderedLayers);
+	}
 
+	private class GamePanel extends JPanel {
+		private RenderedLayers renderedLayers;
+
+		public GamePanel(RenderedLayers renderedLayers){
+			this.renderedLayers = renderedLayers;
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+			for(int i = 0; i < renderedLayers.layers.size(); i++) {
+				for(int j = 0; j < renderedLayers.layers.size(); j++) {
+					Frame frames = renderedLayers.layers.get(i).get(j);
+					frames.renderItself(GraphicsCanvas.of(g));
+				}
+			}
+		}
 	}
 
 }
