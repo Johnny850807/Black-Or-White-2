@@ -57,6 +57,10 @@ public class FiniteStateMachine<T> implements Cloneable{
 		return currentState;
 	}
 
+	public void setCurrentState(T currentState) {
+		this.currentState = currentState;
+	}
+
 	/**
 	 * Return current state
 	 * @return current state
@@ -78,6 +82,13 @@ public class FiniteStateMachine<T> implements Cloneable{
 		matrix.add(newArrayInList);
 	}
 
+	/**
+	 * //TODO
+	 * @return all states
+	 */
+	public T[] getStates(){
+		return null;
+	}
 
 	/**
 	 * Create a trigger transition with two different states
@@ -148,14 +159,4 @@ public class FiniteStateMachine<T> implements Cloneable{
 	}
 
 
-	public static void main(String[] args) {
-		FiniteStateMachine<String> finiteStateMachine = new FiniteStateMachine<>();
-		finiteStateMachine.addState("A");
-		finiteStateMachine.addState("B");
-		finiteStateMachine.addState("C");
-		finiteStateMachine.addTransition("A", "1", "B");
-		finiteStateMachine.addTransition("B", "2", "C");
-		finiteStateMachine.addTransition("C", "3", "A");
-		System.out.println(finiteStateMachine.toString());
-	}
 }

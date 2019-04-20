@@ -82,6 +82,9 @@ public class FrameStateMachineComponent extends Component implements Shareable{
         return fsm.getCurrentState();
     }
 
+    public void setCurrentFrame(Frame frame){
+        this.fsm.setCurrentState(frame);
+    }
     @Override
     public void onAppStateExit() {
 
@@ -110,6 +113,14 @@ public class FrameStateMachineComponent extends Component implements Shareable{
 
     public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
         this.propertiesComponent = propertiesComponent;
+    }
+
+    public FiniteStateMachine<Frame> getFsm() {
+        return fsm;
+    }
+
+    public void setFsm(FiniteStateMachine<Frame> fsm) {
+        this.fsm = fsm;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.pokewords.framework.engine.utils;
 
+import com.pokewords.framework.engine.FiniteStateMachine;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.*;
 
@@ -53,7 +54,7 @@ public class StubUtility {
         public static final MockFrame FRAME_C = new MockFrame("C");
 
         /**
-         * @return see visualized outcome at "/engine/utils/FSM-Stub.jpg"
+         * @return see visualization at "/specs/FSM-Stub.jpg"
          */
         public static FrameStateMachineComponent createFrameStateMachineComponentStub(){
             FrameStateMachineComponent frameStateMachineComponent = new FrameStateMachineComponent();
@@ -63,6 +64,7 @@ public class StubUtility {
             frameStateMachineComponent.addTransition(FRAME_A, "1", FRAME_B);
             frameStateMachineComponent.addTransition(FRAME_B, "2", FRAME_C);
             frameStateMachineComponent.addTransition(FRAME_C, "3", FRAME_A);
+            frameStateMachineComponent.setCurrentFrame(FRAME_A);
             return frameStateMachineComponent;
         }
     }
