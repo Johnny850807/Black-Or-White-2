@@ -1,6 +1,5 @@
 package com.pokewords.framework.engine;
 
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StateNode;
 
 import java.util.*;
 
@@ -35,6 +34,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	public String toString() {
 		return matrix.toString();
 	}
+
 
 	/**
 	 * The trigger function is able to switch different state
@@ -125,7 +125,6 @@ public class FiniteStateMachine<T> implements Cloneable{
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	class StateNode {
