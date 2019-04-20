@@ -148,4 +148,15 @@ public class FiniteStateMachine<T> implements Cloneable{
 		}
 	}
 
+
+	public static void main(String[] args) {
+		FiniteStateMachine<String> finiteStateMachine = new FiniteStateMachine<>();
+		finiteStateMachine.addState("A");
+		finiteStateMachine.addState("B");
+		finiteStateMachine.addState("C");
+		finiteStateMachine.addTransition("A", "1", "B");
+		finiteStateMachine.addTransition("B", "2", "C");
+		finiteStateMachine.addTransition("C", "3", "A");
+		System.out.println(finiteStateMachine.toString());
+	}
 }
