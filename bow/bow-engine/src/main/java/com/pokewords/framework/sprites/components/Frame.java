@@ -10,6 +10,11 @@ import java.util.function.Consumer;
 public interface Frame extends Cloneable{
 
 	/**
+	 * @return get the layer index  (z-index)
+	 */
+	int getLayerIndex();
+
+	/**
 	 * Actually effect the AppStateWorld from all of the effects added by addEffect(Consumer<AppStateWorld>) method.
 	 * @param gameWorld the effected AppStateWorld
 	 */
