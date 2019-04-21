@@ -4,10 +4,13 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
 import com.pokewords.framework.views.RenderedLayers;
+import com.sun.istack.internal.Nullable;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class AppStateWorld implements AppStateLifeCycleListener {
 
@@ -19,6 +22,17 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the Sprite's unique id
      */
     public int spawn(Sprite sprite) {
+        //TODO
+        return 0;
+    }
+
+    /**
+     * @param sprite the spawned sprite to be added into the world
+     * @param time the time-delay to spawn
+     * @param timeUnit the time unit of
+     * @param callback the callback receives the spawned sprite's id when the sprite is actually spawned
+     */
+    public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, @Nullable Consumer<Integer> callback) {
         //TODO
     }
 
@@ -129,5 +143,12 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      */
     public Set<Sprite> getSpritesWithinArea(Sprite sprite, Rectangle area) {
         return this.getSpritesWithinArea(sprite, area.x, area.y, area.width, area.height);
+    }
+
+    /**
+     * @return the sprites collided with the given sprite
+     */
+    public Set<Sprite> getSpritesCollidedWith(Sprite sprite) {
+        return null;
     }
 }
