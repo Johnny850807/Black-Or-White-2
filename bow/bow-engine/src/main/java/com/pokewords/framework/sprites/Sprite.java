@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites;
 import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.*;
+import com.pokewords.framework.sprites.components.Frame;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.awt.*;
@@ -196,6 +197,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public String getState(){
 		return getPropertiesComponent().getState();
 
+	}
+
+	public Frame getCurrentFrame(){
+		return getFrameStateMachineComponent().getCurrentFrame();
 	}
 
 	public Sprite clone(){
