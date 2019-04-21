@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.engine.Logger;
 import com.pokewords.framework.engine.utils.StringUtility;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
@@ -9,8 +10,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PropertiesComponent extends Component {
+	Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private String type;
 	private String state;
@@ -18,6 +21,7 @@ public class PropertiesComponent extends Component {
 	private List<StateListener> stateListeners = new ArrayList<StateListener>();
 
 	public PropertiesComponent() {
+
 	}
 
 	@Override
@@ -158,5 +162,20 @@ public class PropertiesComponent extends Component {
 	 */
 	protected void notifyPositionListeners(){
 		positionListeners.forEach(listener -> listener.onPositionUpdated(body.getLocation()));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PropertiesComponent that = (PropertiesComponent) o;
+		return body.equals(that.body) &&
+				type.equals(that.type) &&
+				state.equals(that.state);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(body, type, state);
 	}
 }

@@ -1,15 +1,15 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class MockFrame implements Frame {
     public final String name;
-    public List<Consumer<AppStateWorld>> effects = new ArrayList<>();
-    public Map<Consumer<AppStateWorld>, Integer> effectAppliedCount = new HashMap<>();
+    public List<GameEffect> effects = new ArrayList<>();
+    public Map<GameEffect, Integer> effectAppliedCount = new HashMap<>();
     public int applyCount = 0;
     public int renderCount = 0;
 
@@ -18,18 +18,18 @@ public class MockFrame implements Frame {
     }
 
     @Override
-    public void apply(AppStateWorld gameWorld) {
+    public void apply(AppStateWorld gameWorld, Sprite sprite) {
         applyCount ++;
-        for (Consumer<AppStateWorld> effect : effects) {
+        for (GameEffect effect : effects) {
             effectAppliedCount.put(effect, effectAppliedCount.get(effect) + 1);
-            effect.accept(gameWorld);
+            effect.apply(gameWorld, sprite);
         }
     }
 
     @Override
-    public void addEffect(Consumer<AppStateWorld> effectToWorld) {
-        effectAppliedCount.put(effectToWorld, 0);
-        effects.add(effectToWorld);
+    public void addEffect(GameEffect effect) {
+        effectAppliedCount.put(effect, 0);
+        effects.add(effect);
     }
 
     @Override

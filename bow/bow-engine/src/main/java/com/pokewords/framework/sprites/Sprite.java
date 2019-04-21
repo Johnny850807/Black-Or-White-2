@@ -1,13 +1,12 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
-import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,10 +60,12 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public void setFrameStateMachineComponent(FrameStateMachineComponent frameStateMachineComponent) {
 		this.frameStateMachineComponent = frameStateMachineComponent;
+		putComponent(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
 	}
 
 	public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
 		this.propertiesComponent = propertiesComponent;
+		putComponent(Component.PROPERTIES, propertiesComponent);
 	}
 
 	/**
@@ -77,7 +78,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	/**
-	 * Put new component with name.
+	 * Put new component with name. If the component you put is
+	 * PropertiesComponent or FrameStateMachineComponent then this method will detect it.
 	 * @param name the name of the component to be added.
 	 * @param component the component to be added.
 	 */
@@ -95,11 +97,11 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
 	public Optional<Component> removeComponentByName(String name) {
-		if (name.equals(Component.FRAME_STATE_MACHINE))
-			throw new MandatoryComponentIsRequiredException("Frame State Machine Component cannot be removed.");
-		else if (name.equals(Component.PROPERTIES))
+		Component component = components.get(name);
+		if (component instanceof FrameStateMachineComponent)
+			throw new MandatoryComponentIsRequiredException("FrameStateMachineComponent cannot be removed.");
+		else if (component instanceof PropertiesComponent)
 			throw new MandatoryComponentIsRequiredException("Properties Component cannot be removed.");
-
 		return Optional.of(components.remove(name));
 	}
 
@@ -198,13 +200,27 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public Sprite clone(){
 		try {
-			Sprite sprite = (Sprite) super.clone();
-			sprite.components = copyComponents();
-			ComponentInjector.inject(sprite);
-			return sprite;
+			Sprite clone = (Sprite) super.clone();
+			clone.components = copyComponents();
+			for (Component component : clone.components.values()) {
+				if (component instanceof PropertiesComponent)
+					clone.propertiesComponent = (PropertiesComponent) component;
+				else if (component instanceof FrameStateMachineComponent)
+					clone.frameStateMachineComponent = (FrameStateMachineComponent) component;
+			}
+			clone.injectComponents();
+			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Make the components injected
+	 * @see ComponentInjector#inject(Sprite)
+	 */
+	public void injectComponents(){
+		ComponentInjector.inject(this);
 	}
 
 	private Map<String, Component> copyComponents(){
