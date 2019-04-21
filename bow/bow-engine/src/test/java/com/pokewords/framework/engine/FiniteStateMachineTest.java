@@ -2,11 +2,13 @@ package com.pokewords.framework.engine;
 
 import com.pokewords.framework.engine.exceptions.FiniteStateMachineException;
 import com.pokewords.framework.engine.utils.StringUtility;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class FiniteStateMachineTest {
     //States
     final String A = "A";
@@ -185,7 +187,7 @@ public class FiniteStateMachineTest {
     public void testAddTransitionFromAllStates(){
         FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
 
-        // Add states '0', '1', ..., '100'
+        // Add states '0', '1', ..., '99'
         for (int i = 0; i < 100; i++) {
             fsm.addState(String.valueOf(i));
         }
@@ -193,7 +195,7 @@ public class FiniteStateMachineTest {
         fsm.addState(TARGET);
         fsm.addTransitionFromAllStates(EVENT, TARGET);
 
-        //Assert '0' ~ '100' should all be triggered to TARGET
+        //Assert '0' ~ '99' should all be triggered to TARGET
         for (int i = 0; i < 100; i++)
             assertTriggered(fsm, String.valueOf(i), EVENT, TARGET);
     }
@@ -202,7 +204,7 @@ public class FiniteStateMachineTest {
     public void testAddTransitionFromAllStatesExcept(){
         FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
 
-        // Add states '0', '1', ..., '100'
+        // Add states '0', '1', ..., '99'
         for (int i = 0; i < 100; i++) {
             fsm.addState(String.valueOf(i));
         }
@@ -216,7 +218,7 @@ public class FiniteStateMachineTest {
         fsm.addState(TARGET);
         fsm.addTransitionFromAllStates(EVENT, TARGET, lowerCaseCharacters);
 
-        //Assert '0' ~ '100' should all be triggered to TARGET
+        //Assert '0' ~ '99' should all be triggered to TARGET
         for (int i = 0; i < 100; i++) {
             assertTriggered(fsm, String.valueOf(i), EVENT, TARGET);
         }
