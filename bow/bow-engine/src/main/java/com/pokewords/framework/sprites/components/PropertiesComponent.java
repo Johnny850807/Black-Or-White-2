@@ -13,8 +13,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class PropertiesComponent extends Component {
-	Logger logger = Logger.of(PropertiesComponent.class);
+	private Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
+	private Point center = new Point();
 	private String type;
 	private String state;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
@@ -90,6 +91,10 @@ public class PropertiesComponent extends Component {
 	public void setState(String state) {
 		this.state = state;
 		notifyStateListeners();
+	}
+
+	public Point2D getCenter() {
+		return center;
 	}
 
 	@Override

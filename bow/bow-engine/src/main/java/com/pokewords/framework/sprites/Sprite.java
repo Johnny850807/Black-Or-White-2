@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  * @author johnny850807, nyngwang
  */
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
+	private AppStateWorld world;
 	private FrameStateMachineComponent frameStateMachineComponent;
 	private PropertiesComponent propertiesComponent;
 	private Map<String, Component> components = new HashMap<>();
@@ -108,6 +109,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	@Override
 	public void onAppStateStart(AppStateWorld world){
+		this.world = world;
+		for (Component component : components.values())
+			component.onAppStateStart(world);
 	}
 
 	@Override
@@ -118,17 +122,20 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	@Override
 	public void onAppStateEnter() {
-
+		for (Component component : components.values())
+			component.onAppStateEnter();
 	}
 
     @Override
     public void onAppStateExit() {
-
+		for (Component component : components.values())
+			component.onAppStateExit();
     }
 
     @Override
 	public void onAppStateDestroy() {
-
+		for (Component component : components.values())
+			component.onAppStateDestroy();
 	}
 
 	@Override
@@ -201,6 +208,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public Frame getCurrentFrame(){
 		return getFrameStateMachineComponent().getCurrentFrame();
+	}
+
+	public Point2D getCenter(){
+		return getPropertiesComponent().getCenter();
 	}
 
 	public Sprite clone(){
