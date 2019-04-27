@@ -16,31 +16,12 @@ import com.pokewords.framework.sprites.parsing.LinScript;
 
 /**
  *
- * API Usage:
- *
- *    SpriteBuilder builder = new SpriteBuilder(iocFactory);
- *    builder.init()
- *             .init(iocFactory)            // Now changing parser is possible after builder initialized.
- *           .setupParser(script, listener)
- *             .setupParser(script)         // provide no listener, use default.
- *           .setFSMComponent(fsmComp)      // Support adding fsmComp directly.
- *           .setPropertiesComponent(propComp)
- *           .addComponent(compName, comp)
- *           .build();
- *
- * What to do next:
- *
- *    - Parse the Script (NEED DISCUSSION with @Lin)
- *    - IoC Factory::Create Frame -> FSMComponent
- *    - Is Interpret appropriate?
- *
- *
- *
  * @author nyngwang
  */
 public class SpriteBuilder {
 
     public static void main(String[] args) {
+
         SpriteBuilder builder = new SpriteBuilder(new ReleaseIocFactory());
 
         Sprite mySprite = builder.init()
@@ -91,11 +72,8 @@ public class SpriteBuilder {
      * @return The current builder.
      */
     public SpriteBuilder init(IocFactory iocFactory) {
-        sprite = null;
-        fsmComponent = null;
-        propertiesComponent = new PropertiesComponent();
         parser = iocFactory.frameStateMachineScriptParser();
-        return this;
+        return init();
     }
 
 
