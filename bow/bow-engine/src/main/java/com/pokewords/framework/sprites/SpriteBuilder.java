@@ -11,7 +11,7 @@ import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
+import com.pokewords.framework.sprites.parsing.ScriptParser;
 import com.pokewords.framework.sprites.parsing.LinScript;
 
 /**
@@ -26,17 +26,11 @@ public class SpriteBuilder {
 
         Sprite mySprite = builder.init()
                                  .init(new ReleaseIocFactory())
-                                 .setupParser("path/to/script",
-                                         frameSegment -> {
-                                            // parse client's own elements
-                                             Element bow = frameSegment.getElement("bow");
-
-                                            return (world, sprite) -> {
-                                                // return some customized action during the frame is applied to the world
-
-                                            };
-                                         })
-                                 .setupParser(new LinScript(FileUtility.read("my_home")))
+                                 .setupScriptFromPath("path/to/script")
+                                 .addWeaverNode((script, sprite) -> {
+                                                    Element bow = script.getFrameSegment()
+                                                                        .getElement("bow");
+                                                })
                                  .setPropertiesComponent(new PropertiesComponent())
                                  .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .build();
@@ -45,7 +39,7 @@ public class SpriteBuilder {
     private Sprite sprite;
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
-    private FrameStateMachineScriptParser parser;
+    private ScriptParser parser;
 
     /**
      * The constructor of SpriteBuilder.
@@ -84,7 +78,7 @@ public class SpriteBuilder {
      * @return The current builder.
      */
     public SpriteBuilder setupParser(Script script,
-                                     FrameStateMachineScriptParser.OnParsingFrameListener listener) {
+                                     ScriptParser.OnParsingFrameListener listener) {
         fsmComponent = parser.parse(script, listener);
         prepareSprite();
         return this;
@@ -108,7 +102,7 @@ public class SpriteBuilder {
      * @return The current builder.
      */
     public SpriteBuilder setupParser(String path,
-                                     FrameStateMachineScriptParser.OnParsingFrameListener listener) {
+                                     ScriptParser.OnParsingFrameListener listener) {
         LinScript script = new LinScript(FileUtility.read(path));
         return setupParser(script, listener);
     }

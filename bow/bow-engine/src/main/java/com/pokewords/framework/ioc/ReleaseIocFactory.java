@@ -5,7 +5,7 @@ import com.pokewords.framework.sprites.PrototypeFactory;
 import com.pokewords.framework.sprites.PrototypeFactoryImp;
 import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.sprites.components.TextureFrameFactory;
-import com.pokewords.framework.sprites.parsing.FrameStateMachineScriptParser;
+import com.pokewords.framework.sprites.parsing.ScriptParser;
 import com.pokewords.framework.views.DefaultInputManager;
 import com.pokewords.framework.views.InputManager;
 import com.pokewords.framework.views.SoundPlayer;
@@ -21,7 +21,7 @@ public class ReleaseIocFactory implements IocFactory{
     }
 
     @Override
-    public FrameStateMachineScriptParser frameStateMachineScriptParser() {
+    public ScriptParser frameStateMachineScriptParser() {
 
         // Return the sprites.components.
 

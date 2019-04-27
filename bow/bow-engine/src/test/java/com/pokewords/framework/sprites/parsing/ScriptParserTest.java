@@ -6,12 +6,10 @@ import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Comparator;
-
 import static org.junit.Assert.assertEquals;
 
-public class FrameStateMachineScriptParserTest extends AbstractTest {
-    FrameStateMachineScriptParser parser = release.frameStateMachineScriptParser();
+public class ScriptParserTest extends AbstractTest {
+    ScriptParser parser = release.frameStateMachineScriptParser();
     FrameFactory frameFactory = mock.frameFactory();
 
     final String SCRIPT =
