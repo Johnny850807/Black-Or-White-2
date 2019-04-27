@@ -4,6 +4,7 @@ import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredExc
 import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.CollidableComponent;
+import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.ioc.IocFactory;
@@ -44,11 +45,14 @@ public class SpriteBuilder {
 
         Sprite mySprite = builder.init()
                                  .init(new ReleaseIocFactory())
-                                 .setupParser(new LinScript(FileUtility.read("your_home")),
+                                 .setupParser("path/to/script",
                                          frameSegment -> {
                                             // parse client's own elements
+                                             Element bow = frameSegment.getElement("bow");
+
                                             return (world, sprite) -> {
                                                 // return some customized action during the frame is applied to the world
+
                                             };
                                          })
                                  .setupParser(new LinScript(FileUtility.read("my_home")))
@@ -60,17 +64,14 @@ public class SpriteBuilder {
     private Sprite sprite;
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
-    FrameStateMachineScriptParser parser;
+    private FrameStateMachineScriptParser parser;
 
     /**
      * The constructor of SpriteBuilder.
      * @param iocFactory To do dependency injection.
      */
     public SpriteBuilder(IocFactory iocFactory) {
-        sprite = null;
-        fsmComponent = null;
-        propertiesComponent = new PropertiesComponent();
-        parser = iocFactory.frameStateMachineScriptParser();
+        init(iocFactory);
     }
 
     /**
@@ -168,14 +169,13 @@ public class SpriteBuilder {
 
     public SpriteBuilder addComponent(String name, Component component) {
 
-        checkSpriteIsReady();
+        validateSpriteMandatoryComponents();
 
         if (sprite.getComponentByName(name).isPresent()) {
             throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
         }
 
         sprite.putComponent(name, component);
-        component.onBoundToSprite(sprite);
 
         return this;
     }
@@ -185,12 +185,10 @@ public class SpriteBuilder {
      * @return The sprite.
      */
     public Sprite build() {
-        checkSpriteIsReady();
-        ComponentInjector.inject(sprite);
+        validateSpriteMandatoryComponents();
         return sprite;
     }
 
-    // Utility Functions
     /**
      * Try to create a sprite when mandatory components are ready.
      */
@@ -203,8 +201,9 @@ public class SpriteBuilder {
 
     /**
      * Check the sprite is ready before access.
+     * @throws MandatoryComponentIsRequiredException if the mandatory components are not initiated
      */
-    private void checkSpriteIsReady() {
+    private void validateSpriteMandatoryComponents() {
         if (fsmComponent == null) {
             throw new MandatoryComponentIsRequiredException(
                     "FrameStateMachineComponent is required, use setupParser() to create it");

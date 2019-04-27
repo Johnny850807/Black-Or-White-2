@@ -1,44 +1,154 @@
 package com.pokewords.framework.sprites.components.gameworlds;
 
+import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
 import com.pokewords.framework.views.RenderedLayers;
+import com.sun.istack.internal.Nullable;
+
+import java.awt.*;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
-public class AppStateWorld {
+public class AppStateWorld implements AppStateLifeCycleListener {
 
-	private List<Sprite> sprites;
+    private List<Sprite> sprites;
+    private List<CollisionHandler> collisionHandlers;
 
-	private List<CollisionHandler> collisionHandlers;
+    /**
+     * @param sprite the spawned sprite to be added into the world
+     * @return the Sprite's unique id
+     */
+    public int spawn(Sprite sprite) {
+        //TODO
+        return 0;
+    }
 
-	public void spawn(Sprite sprite) {
+    /**
+     * @param sprite the spawned sprite to be added into the world
+     * @param time the time-delay to spawn
+     * @param timeUnit the time unit of
+     * @param callback the callback receives the spawned sprite's id when the sprite is actually spawned
+     */
+    public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, @Nullable Consumer<Integer> callback) {
+        //TODO
+    }
 
-	}
+    public RenderedLayers getRenderedLayers() {
+        return null;//TODO
+    }
 
-	public RenderedLayers getRenderedLayers() {
-		return null;
-	}
 
-	public void onUpdate() {
+    public void addCollisionHandler(CollisionHandler collisionHandler) {
+        //TODO
+    }
 
-	}
+    public void removeCollisionHandler(CollisionHandler collisionHandler) {
+        //TODO
+    }
 
-	public void addCollisionHandler(CollisionHandler ch) {
+    public List<Sprite> getSprites() {
+        return sprites;
+    }
 
-	}
+    public List<CollisionHandler> getCollisionHandlers() {
+        return collisionHandlers;
+    }
 
-	public List<Sprite> getSprites() {
-		return sprites;
-	}
+    public void setSprites(List<Sprite> sprites) {
+        this.sprites = sprites;
+    }
 
-	public List<CollisionHandler> getCollisionHandlers() {
-		return collisionHandlers;
-	}
+    @Override
+    public void onAppStateStart(AppStateWorld world) {
+        if (world != this)
+            throw new GameEngineException("The world is not consistent from triggering the onAppStateStart() method from the AppState");
+        //TODO
+    }
 
-	public void setSprites(List<Sprite> sprites) {
-		this.sprites = sprites;
-	}
+    @Override
+    public void onAppStateEnter() {
+        //TODO
+    }
 
-	public void setCollisionHandlers(List<CollisionHandler> collisionHandlers) {
-		this.collisionHandlers = collisionHandlers;
-	}
+    @Override
+    public void onAppStateExit() {
+        //TODO
+    }
+
+    @Override
+    public void onAppStateDestroy() {
+        //TODO
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        //TODO
+    }
+
+    /**
+     * @return if the sprite is in the world
+     */
+    public boolean contains(Sprite sprite) {
+        return true;
+    }
+
+    /**
+     * @return if the sprite who owns the id is in the world
+     */
+    public boolean contains(int spriteId) {
+        return true;
+    }
+
+    /**
+     * @return the sprite's id
+     */
+    public int getId(Sprite sprite) {
+        return 0;
+    }
+
+    /**
+     * @return the sprite who owns the id
+     */
+    public Sprite getSprite(int spriteId) {
+        return null;
+    }
+
+    /**
+     * @return the sprites within the area (x, y, w, h)
+     */
+    public Set<Sprite> getSpritesWithinArea(int x, int y, int w, int h) {
+        return null;
+    }
+
+    /**
+     * @return the sprites within the area (x, y, w, h)
+     */
+    public Set<Sprite> getSpritesWithinArea(Rectangle area) {
+        return this.getSpritesWithinArea(area.x, area.y, area.width, area.height);
+    }
+
+
+    /**
+     * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
+     */
+    public Set<Sprite> getSpritesWithinArea(Sprite sprite, int x, int y, int w, int h) {
+        return null;
+    }
+
+    /**
+     * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
+     */
+    public Set<Sprite> getSpritesWithinArea(Sprite sprite, Rectangle area) {
+        return this.getSpritesWithinArea(sprite, area.x, area.y, area.width, area.height);
+    }
+
+    /**
+     * @return the sprites collided with the given sprite
+     */
+    public Set<Sprite> getSpritesCollidedWith(Sprite sprite) {
+        return null;
+    }
 }

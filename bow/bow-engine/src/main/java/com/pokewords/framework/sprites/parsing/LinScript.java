@@ -11,8 +11,9 @@ public class LinScript implements Script {
         this.text = text;
     }
 
+
     @Override
-    public void addGallerySegment(int startPic, int endPic, GallerySegment gallerySegment) {
+    public void addGallerySegment(GallerySegment gallerySegment) {
 
     }
 
@@ -21,6 +22,15 @@ public class LinScript implements Script {
         return null;
     }
 
+    @Override
+    public void addFrameSegment(FrameSegment frameSegment) {
+
+    }
+
+    @Override
+    public FrameSegment getFrameSegment() {
+        return null;
+    }
 
     @Override
     public void setText(String text) {
