@@ -4,17 +4,17 @@ import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredExc
 import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.CollidableComponent;
-import com.pokewords.framework.sprites.parsing.Element;
+import com.pokewords.framework.sprites.parsing.*;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.parsing.ScriptTextParser;
-import com.pokewords.framework.sprites.parsing.LinScript;
+
+import java.util.function.BiConsumer;
 
 /**
- *
+ * Script 設定完後要做什麼？
  * @author nyngwang
  */
 public class SpriteBuilder {
@@ -24,9 +24,10 @@ public class SpriteBuilder {
         SpriteBuilder builder = new SpriteBuilder(new ReleaseIocFactory());
 
         Sprite mySprite = builder.init()
-                                 .init(new ReleaseIocFactory())
-                                 .loadScriptTextFromPath("path/to/script")
-                                 .setScript(new LinScript(FileUtility.read("path/to/script")))
+                                     .init(new ReleaseIocFactory())
+                                 .buildScriptFromScriptTextPath("path/to/scrip_text")
+                                     .buildScriptFromScriptText(FileUtility.read("path/to/scrip_text"))
+                                 .setScript(new LinScript(FileUtility.read("path/to/script_text")))
                                  .addWeaverNode((script, sprite) -> {
                                                     Element bow = script.getFrameSegment()
                                                                         .getElement("bow");
@@ -40,6 +41,8 @@ public class SpriteBuilder {
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
     private ScriptTextParser scriptTextParser;
+    private Script script;
+    private SpriteWeaver spriteWeaver;
 
     /**
      * The constructor of SpriteBuilder.
@@ -57,6 +60,7 @@ public class SpriteBuilder {
         sprite = null;
         fsmComponent = null;
         propertiesComponent = new PropertiesComponent();
+        spriteWeaver = new SpriteWeaver();
         return this;
     }
 
@@ -70,9 +74,42 @@ public class SpriteBuilder {
         return init();
     }
 
-    public SpriteBuilder loadScriptTextFromPath(String pathToScriptText) {
-        String scriptText = FileUtility.read(pathToScriptText);
-        scriptTextParser
+    /**
+     * Set the script directly
+     * @param script for the sprite
+     * @return The current builder.
+     */
+    public SpriteBuilder setScript(Script script) {
+        this.script = script;
+        return this;
+    }
+
+    /**
+     * Build script object by the script-text loaded from the path.
+     * @param pathToScriptText path to the script-text.
+     * @return The current builder.
+     */
+    public SpriteBuilder buildScriptFromScriptTextPath(String pathToScriptText) {
+        return buildScriptFromScriptText(FileUtility.read(pathToScriptText));
+    }
+
+    /**
+     * Build script object by the script-text.
+     * @param scriptText the script-text
+     * @return The current builder.
+     */
+    public SpriteBuilder buildScriptFromScriptText(String scriptText) {
+        script = scriptTextParser.parse(scriptText);
+        return this;
+    }
+
+    /**
+     * Add weaver-node for sprite weaver.
+     * @param node lambda to setup sprite by the script
+     * @return The current builder.
+     */
+    public SpriteBuilder addWeaverNode(BiConsumer<Script, Sprite> node) {
+        spriteWeaver.addNode(node);
         return this;
     }
 
