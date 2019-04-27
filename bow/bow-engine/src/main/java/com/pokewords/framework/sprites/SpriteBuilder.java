@@ -5,13 +5,12 @@ import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.parsing.Element;
-import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.parsing.ScriptParser;
+import com.pokewords.framework.sprites.parsing.ScriptTextParser;
 import com.pokewords.framework.sprites.parsing.LinScript;
 
 /**
@@ -26,7 +25,8 @@ public class SpriteBuilder {
 
         Sprite mySprite = builder.init()
                                  .init(new ReleaseIocFactory())
-                                 .setupScriptFromPath("path/to/script")
+                                 .loadScriptTextFromPath("path/to/script")
+                                 .setScript(new LinScript(FileUtility.read("path/to/script")))
                                  .addWeaverNode((script, sprite) -> {
                                                     Element bow = script.getFrameSegment()
                                                                         .getElement("bow");
@@ -39,7 +39,7 @@ public class SpriteBuilder {
     private Sprite sprite;
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
-    private ScriptParser parser;
+    private ScriptTextParser scriptTextParser;
 
     /**
      * The constructor of SpriteBuilder.
@@ -50,7 +50,7 @@ public class SpriteBuilder {
     }
 
     /**
-     * Initialize before creating a new sprite.
+     * Initialize sprite and mandatory components.
      * @return The current builder.
      */
     public SpriteBuilder init() {
@@ -61,60 +61,19 @@ public class SpriteBuilder {
     }
 
     /**
-     * Initialize before creating a new sprite, with a new parser.
-     * @param iocFactory The provider of new parser.
+     * Initialize sprite, mandatory components and script-parser.
+     * @param iocFactory The provider of new scriptTextParser.
      * @return The current builder.
      */
     public SpriteBuilder init(IocFactory iocFactory) {
-        parser = iocFactory.frameStateMachineScriptParser();
+        scriptTextParser = iocFactory.scriptTextParser();
         return init();
     }
 
-
-    /**
-     * Setup the parser to generate FSM component, with listener provided.
-     * @param script The script to generate FSM.
-     * @param listener Client-defined parsing rules.
-     * @return The current builder.
-     */
-    public SpriteBuilder setupParser(Script script,
-                                     ScriptParser.OnParsingFrameListener listener) {
-        fsmComponent = parser.parse(script, listener);
-        prepareSprite();
+    public SpriteBuilder loadScriptTextFromPath(String pathToScriptText) {
+        String scriptText = FileUtility.read(pathToScriptText);
+        scriptTextParser
         return this;
-    }
-
-    /**
-     * Setup the parser to generate FSM component, with default listener.
-     * @param script The script ot generate FSM.
-     * @return The current builder.
-     */
-    public SpriteBuilder setupParser(Script script) {
-        fsmComponent = parser.parse(script);
-        prepareSprite();
-        return this;
-    }
-
-    /**
-     * Setup the parser to generate FSM component, with listener provided.
-     * @param path The file path of the script file.
-     * @param listener Client-defined parsing rules.
-     * @return The current builder.
-     */
-    public SpriteBuilder setupParser(String path,
-                                     ScriptParser.OnParsingFrameListener listener) {
-        LinScript script = new LinScript(FileUtility.read(path));
-        return setupParser(script, listener);
-    }
-
-    /**
-     * Setup the parser to generate FSM component, with listener provided.
-     * @param path The file path of the script file.
-     * @return The current builder.
-     */
-    public SpriteBuilder setupParser(String path) {
-        LinScript script = new LinScript(FileUtility.read(path));
-        return setupParser(script);
     }
 
     /**

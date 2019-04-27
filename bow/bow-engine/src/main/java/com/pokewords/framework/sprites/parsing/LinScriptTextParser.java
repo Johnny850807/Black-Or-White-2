@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  *
  *  @author nyngwang
  */
-public class LinScriptParser implements ScriptParser {
+public class LinScriptTextParser implements ScriptTextParser {
 
     private FrameFactory frameFactory;
     private FrameStateMachineComponent fsmc;
@@ -31,7 +31,7 @@ public class LinScriptParser implements ScriptParser {
      * Constructor.
      * @param iocFactory abstract factory for dependency.
      */
-    public LinScriptParser(IocFactory iocFactory) {
+    public LinScriptTextParser(IocFactory iocFactory) {
         this.frameFactory = iocFactory.frameFactory();
         fsmc = null;
         frameSegment = null;

@@ -1,14 +1,16 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.AbstractTest;
+import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class FrameStateMachineLinScriptParserTest extends AbstractTest {
-    ScriptParser parser = new FrameStateMachineLinScriptParser(release);
+public class ScriptTextParserTest extends AbstractTest {
+    ScriptTextParser parser = release.scriptTextParser();
+    FrameFactory frameFactory = mock.frameFactory();
 
     final String SCRIPT =
             "<gallery>\n" +
@@ -71,12 +73,12 @@ public class FrameStateMachineLinScriptParserTest extends AbstractTest {
 
     @Before
     public void initExpectedFsmComponent(){
-        //expectedFsmComponent.addFrame(frameFactory.createFrame());
+        expectedFsmComponent.addState(frameFactory.createFrame());
     }
 
     @Test
     public void testParser(){
-        FrameStateMachineComponent fsmComponent = parser.parse(new LinScript(SCRIPT), frame -> {
+        FrameStateMachineComponent fsmComponent = parser.parse(SCRIPT, frame -> {
             /* Client custom Parsing */
             assertEquals(frameNumber++, frame.getFrameNumber());
             assertEquals((frameNumber + 1) % 4, frame.getInt("next"));
