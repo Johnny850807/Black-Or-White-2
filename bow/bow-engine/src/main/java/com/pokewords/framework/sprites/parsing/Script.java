@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ScriptParsingErrorException;
+import com.pokewords.framework.engine.exceptions.ScriptRulesParserException;
 import com.pokewords.framework.engine.exceptions.SegmentNameUnrecognizableException;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.components.Frame;
@@ -67,10 +68,10 @@ public class Script {
         return result.toString();
     }
 
+    /**
+     *
+     */
     public static class Rules {
-
-        // 檢查所有 k-v pair 是否符合 k-v rules
-
         public List<String> validSegmentNames;
         public Map<String, String> validSegmentKVRules;
         public List<String> validElementNames;
@@ -84,7 +85,8 @@ public class Script {
         }
 
         /**
-         *  The Script.Rules.Parser
+         *  The Script.Rules.Parser:
+         *  usage: Script.Rules.Parser.parse(scriptRulesText) -> Script.Rules
          */
         public static class Parser {
             private static Rules rules;
@@ -104,6 +106,8 @@ public class Script {
 
             private static void init() {
                 rules = new Rules();
+                segmentBlock = "";
+                elementBlock = "";
             }
 
             private static void setupBlocks(String scriptRulesText) {
