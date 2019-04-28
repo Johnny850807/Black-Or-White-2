@@ -1,15 +1,25 @@
 package com.pokewords.framework.sprites.parsing;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author nyngwang
+ */
 public class Segment {
+    public static final String ID = "segment-id";
+    public static final String DESCRIPTION = "segment-description";
 
-    // 不能改的就不需要setter
+    private Script parentScript;
+    private ArrayList<Element> elements;
 
-    String getSegmentId();
+    public Segment(Script parentScript) {
+        this.parentScript = parentScript;
+        parentScript.getRules().validSegmentKVRules.get("");
 
-    String getSegmentDescription();
+    }
 
+    Class<parentScript.getRules().>
 
     // Fluent key-value pair g/setter
 

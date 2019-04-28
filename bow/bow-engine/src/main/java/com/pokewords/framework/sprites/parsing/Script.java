@@ -37,22 +37,28 @@ public class Script {
 
     // Segments management
 
-    Script addSegment(Segment segment) {
+    public Script addSegment(Segment segment) {
         segments.add(segment);
         return this;
     }
 
-    List<Segment> getSegments() {
+    public List<Segment> getSegments() {
         return segments;
     }
 
-    Optional<Segment> getSegmentById(String segmentId) {
+    public Optional<Segment> getSegmentById(String segmentId) {
         for (Segment segment : segments) {
             if (segment.getSegmentId().equals(segmentId)) {
                 return Optional.of(segment);
             }
         }
         return Optional.empty();
+    }
+
+    // Rules management
+
+    public Rules getRules() {
+        return rules;
     }
 
 
@@ -137,7 +143,7 @@ public class Script {
                     List<String> validNames, Map<String, String> validKVRules, String block) {
 
                 Pattern pattern = Pattern.compile(
-                        " {4}(\\w+)\n(.*?)(?=(?=\\n {4}\\w)|\\Z)",
+                        " {4}(\\w+)\n(.*?)(?=(?:\\n {4}\\w)|\\Z)",
                         Pattern.DOTALL | Pattern.MULTILINE);
                 Matcher matcher = pattern.matcher(block);
 
