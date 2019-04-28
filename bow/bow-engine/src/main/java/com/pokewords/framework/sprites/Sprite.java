@@ -9,6 +9,7 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +20,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	private FrameStateMachineComponent frameStateMachineComponent;
 	private PropertiesComponent propertiesComponent;
 	private Map<String, Component> components = new HashMap<>();
+	private LinkedList<Renderable> renderableComponents = new LinkedList<>();
 
 	public Sprite() {
 	}
@@ -30,10 +32,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public Sprite(final FrameStateMachineComponent frameStateMachineComponent,
 				  final PropertiesComponent propertiesComponent) {
-		this.frameStateMachineComponent = frameStateMachineComponent;
-		this.propertiesComponent = propertiesComponent;
-		components.put(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
-		components.put(Component.PROPERTIES, propertiesComponent);
+		putComponent(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
+		putComponent(Component.PROPERTIES, propertiesComponent);
 	}
 
 	/**
@@ -86,6 +86,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @param component the component to be added.
 	 */
 	public void putComponent(String name, Component component) {
+		if (component instanceof Renderable)
+			this.renderableComponents.add((Renderable) component);
 		if (component instanceof PropertiesComponent)
 			this.propertiesComponent = (PropertiesComponent) component;
 		else if (component instanceof FrameStateMachineComponent)
@@ -206,10 +208,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	}
 
-	public Frame getCurrentFrame(){
-		return getFrameStateMachineComponent().getCurrentFrame();
-	}
-
 	public Point2D getCenter(){
 		return getPropertiesComponent().getCenter();
 	}
@@ -250,6 +248,20 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 				cloneComponents.put(type, component.clone());
 		}
 		return cloneComponents;
+	}
+
+	public Set<Frame> getCurrentFrames() {
+		Set<Frame> frames = new LinkedHashSet<>();
+		for (Renderable renderable : renderableComponents)
+			frames.addAll(renderable.getFrames());
+		return frames;
+	}
+
+	public Set<Renderable> getRenderedComponents() {
+		return components.values().stream()
+				.filter(c -> c instanceof Renderable)
+				.map(c -> (Renderable)c)
+				.collect(Collectors.toSet());
 	}
 
 	/**
