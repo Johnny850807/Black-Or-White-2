@@ -23,10 +23,10 @@ import java.util.regex.Pattern;
  * @author nyngwang
  */
 public class Script {
-    public static final String SEGMENT = "Segment";
-    public static final String ELEMENT = "Element";
-
-
+    public interface Def {
+        String SEGMENT = "Segment";
+        String ELEMENT = "Element";
+    }
     private ArrayList<Segment> segments;
     private Rules rules;
 
@@ -35,7 +35,7 @@ public class Script {
         this.rules = rules;
     }
 
-    // g/setter of Segment
+    // Segments management
 
     Script addSegment(Segment segment) {
         segments.add(segment);
@@ -69,7 +69,8 @@ public class Script {
     }
 
     /**
-     *
+     *  The Script.Rules
+     *  Usage: As a data-struct.
      */
     public static class Rules {
         public List<String> validSegmentNames;
@@ -86,7 +87,7 @@ public class Script {
 
         /**
          *  The Script.Rules.Parser:
-         *  usage: Script.Rules.Parser.parse(scriptRulesText) -> Script.Rules
+         *  Usage: Script.Rules.Parser.parse(scriptRulesText) -> Script.Rules
          */
         public static class Parser {
             private static Rules rules;
@@ -124,8 +125,8 @@ public class Script {
 
             private static void blockRouter(String blockName, String blockContent) {
                 switch (blockName) {
-                    case SEGMENT: segmentBlock = blockContent; break;
-                    case ELEMENT: elementBlock = blockContent; break;
+                    case Def.SEGMENT: segmentBlock = blockContent; break;
+                    case Def.ELEMENT: elementBlock = blockContent; break;
                     default: throw new ScriptRulesParserException(
                         "Script.Rules Parsing Error: Unrecognized Script Node Name."
                     );
