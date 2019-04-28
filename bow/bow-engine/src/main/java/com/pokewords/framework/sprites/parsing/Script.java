@@ -2,6 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 public interface Script {
 
+    void addSegment(Segment segment);
 
     // Gallery Segment
     void addGallerySegment(GallerySegment gallerySegment);

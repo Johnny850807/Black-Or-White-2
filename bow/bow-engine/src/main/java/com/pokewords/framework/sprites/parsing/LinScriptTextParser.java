@@ -207,7 +207,7 @@ public class LinScriptTextParser implements ScriptTextParser {
 
         // 5. Finally, create frame and add it to fsmc
         Frame frame = frameFactory.createFrame(frameSegment);
-//        fsmc.addState(frame);
+        fsmc.addState(frame);
     }
 
 }

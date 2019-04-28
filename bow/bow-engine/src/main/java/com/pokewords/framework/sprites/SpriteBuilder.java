@@ -1,20 +1,25 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
+import com.pokewords.framework.engine.exceptions.ScriptException;
 import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
-import com.pokewords.framework.sprites.components.CollidableComponent;
+import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.parsing.*;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.sprites.components.PropertiesComponent;
 
 import java.util.function.BiConsumer;
 
 /**
- * Script 設定完後要做什麼？
+ *
+ *   #2
+ *   先做出Sprite
+ *   再parse得出Script
+ *   用Script完成fsmc
+ *   SpriteWeaver用(Script, Sprite)完成Sprite
+ *
+ *
  * @author nyngwang
  */
 public class SpriteBuilder {
@@ -25,24 +30,24 @@ public class SpriteBuilder {
 
         Sprite mySprite = builder.init()
                                      .init(new ReleaseIocFactory())
+                                 .setFSMComponent(new FrameStateMachineComponent())
+                                 .setPropertiesComponent(new PropertiesComponent())
+                                 .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .buildScriptFromScriptTextPath("path/to/scrip_text")
                                      .buildScriptFromScriptText(FileUtility.read("path/to/scrip_text"))
-                                 .setScript(new LinScript(FileUtility.read("path/to/script_text")))
+                                     .setScript(new LinScript(FileUtility.read("path/to/script_text")))
                                  .addWeaverNode((script, sprite) -> {
                                                     Element bow = script.getFrameSegment()
                                                                         .getElement("bow");
                                                 })
-                                 .setPropertiesComponent(new PropertiesComponent())
-                                 .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .build();
     }
 
     private Sprite sprite;
-    private FrameStateMachineComponent fsmComponent;
-    private PropertiesComponent propertiesComponent;
     private ScriptTextParser scriptTextParser;
     private Script script;
     private SpriteWeaver spriteWeaver;
+    private FrameFactory frameFactory;
 
     /**
      * The constructor of SpriteBuilder.
@@ -57,9 +62,8 @@ public class SpriteBuilder {
      * @return The current builder.
      */
     public SpriteBuilder init() {
-        sprite = null;
-        fsmComponent = null;
-        propertiesComponent = new PropertiesComponent();
+        sprite = new Sprite(new FrameStateMachineComponent(), new PropertiesComponent());
+        script = null;
         spriteWeaver = new SpriteWeaver();
         return this;
     }
@@ -71,6 +75,7 @@ public class SpriteBuilder {
      */
     public SpriteBuilder init(IocFactory iocFactory) {
         scriptTextParser = iocFactory.scriptTextParser();
+        frameFactory = iocFactory.frameFactory();
         return init();
     }
 
@@ -135,6 +140,12 @@ public class SpriteBuilder {
         return this;
     }
 
+    /**
+     * Add component to sprite.
+     * @param name component name
+     * @param component component
+     * @return The current builder.
+     */
     public SpriteBuilder addComponent(String name, Component component) {
 
         validateSpriteMandatoryComponents();
@@ -148,24 +159,41 @@ public class SpriteBuilder {
         return this;
     }
 
+
+
     /**
      * Return the built sprite.
      * @return The sprite.
      */
     public Sprite build() {
-        validateSpriteMandatoryComponents();
+        validateScript();
+        completeFSMComponentByScript();
+        spriteWeaver.weave();
+        ComponentInjector.inject(sprite);
         return sprite;
     }
 
-    /**
-     * Try to create a sprite when mandatory components are ready.
-     */
-    private void prepareSprite() {
-        if (fsmComponent == null || propertiesComponent == null) {
-            return;
+    private void validateScript() {
+        if (script == null) {
+            throw new ScriptException(
+                    "Script is required, use setScript(), " +
+                    "buildScriptFromScriptText(), " +
+                    "buildScriptFromScriptTextPath() " +
+                    "to setup script."
+            );
         }
-        sprite = new Sprite(fsmComponent, propertiesComponent);
     }
+
+    private void completeFSMComponentByScript() {
+        FrameStateMachineComponent fsmComponent = sprite.getFrameStateMachineComponent();
+
+        frameFactory.createFrame(script.getFrameSegment());
+
+        fsmComponent.addFrame(script.getFrameSegment());
+
+    }
+
+
 
     /**
      * Check the sprite is ready before access.

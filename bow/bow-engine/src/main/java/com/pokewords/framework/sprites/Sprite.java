@@ -20,16 +20,15 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	private PropertiesComponent propertiesComponent;
 	private Map<String, Component> components = new HashMap<>();
 
-	public Sprite() {
-	}
+	// Please don't use default constructor Sprite() here
 
 	/**
 	 * The constructor of Sprite.
 	 * @param frameStateMachineComponent The mandatory component to define the view of the Sprite.
 	 * @param propertiesComponent The mandatory component to define the properties of the Sprite.
 	 */
-	public Sprite(final FrameStateMachineComponent frameStateMachineComponent,
-				  final PropertiesComponent propertiesComponent) {
+	public Sprite(FrameStateMachineComponent frameStateMachineComponent,
+				  PropertiesComponent propertiesComponent) {
 		this.frameStateMachineComponent = frameStateMachineComponent;
 		this.propertiesComponent = propertiesComponent;
 		components.put(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);

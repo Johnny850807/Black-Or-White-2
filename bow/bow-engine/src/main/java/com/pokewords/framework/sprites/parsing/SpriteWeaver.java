@@ -15,4 +15,8 @@ public class SpriteWeaver {
     public void addNode(BiConsumer<Script, Sprite> node) {
         weaverNodes.add(node);
     }
+
+    public void weave() {
+
+    }
 }
