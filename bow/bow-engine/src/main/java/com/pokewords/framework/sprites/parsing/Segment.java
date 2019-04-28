@@ -2,6 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author nyngwang
@@ -12,14 +13,27 @@ public class Segment {
 
     private Script parentScript;
     private ArrayList<Element> elements;
+    private Map<String, Class> test;
+    private Map<String, String> test2;
 
     public Segment(Script parentScript) {
         this.parentScript = parentScript;
-        parentScript.getRules().validSegmentKVRules.get("");
-
     }
 
-    Class<parentScript.getRules().>
+    public void test() {
+        Object o = new Object();
+        parentScript.getRules().validSegmentKVRules.get("");
+        try {
+            Class cls;
+            test.get("element").cast(test2.get("element"));
+        } catch(Exception e) {
+
+        }
+    }
+
+    public Class<Map> void func() {
+        return null;
+    }
 
     // Fluent key-value pair g/setter
 
