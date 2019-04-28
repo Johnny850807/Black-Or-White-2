@@ -23,7 +23,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	/**
 	 * stateNodesMap is to save new nodes
 	 */
-	private Map<Integer, StateNode> stateNodesMap = new HashMap<Integer, StateNode>();
+	private Map<Integer, StateNode> stateNodesMap = new HashMap<>();
 
 	/**
 	 * triggerMap saves each corresponding node of event by event

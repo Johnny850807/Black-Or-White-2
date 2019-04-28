@@ -11,24 +11,24 @@ import static org.junit.Assert.*;
  */
 public class FiniteStateMachineTest {
     //States
-    final String A = "A";
-    final String B = "B";
-    final String C = "C";
-    final String TARGET = "target";
-    final String START = "start";
-    final String END = "end";
+    private final String A = "A";
+    private final String B = "B";
+    private final String C = "C";
+    private final String TARGET = "target";
+    private final String START = "start";
+    private final String END = "end";
 
     //Events
-    final String N1 = "1";
-    final String N2 = "2";
-    final String N3 = "3";
-    final String EVENT = "event";
-    final String NEXT = "next";
-    final String ASCII = "ascii";
-    final String SHOOT = "shoot";
-    final String FINALIZE = "finalize";
+    private final String N1 = "1";
+    private final String N2 = "2";
+    private final String N3 = "3";
+    private final String EVENT = "event";
+    private final String NEXT = "next";
+    private final String ASCII = "ascii";
+    private final String SHOOT = "shoot";
+    private final String FINALIZE = "finalize";
 
-    final int TEST_LOOP = 30;
+    private final int TEST_LOOP = 30;
 
     @Test
     public void testShouldReturnNullIfGetCurrentStateIfNoCurrentStateSet(){
@@ -322,6 +322,7 @@ public class FiniteStateMachineTest {
         for (String lowerCaseCharacter : lowerCaseCharacters) {
             assertTriggered(fsm, lowerCaseCharacter, FINALIZE, END);
         }
+        System.out.println(fsm.toString());
     }
 
     private void assertTriggered(FiniteStateMachine<String> fsm, String fromState, String event, String toState){
