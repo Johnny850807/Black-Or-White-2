@@ -71,10 +71,10 @@ public class Script {
 
         // 檢查所有 k-v pair 是否符合 k-v rules
 
-        private List<String> validSegmentNames;
-        private Map<String, String> validSegmentKVRules;
-        private List<String> validElementNames;
-        private Map<String, String> validElementKVRules;
+        public List<String> validSegmentNames;
+        public Map<String, String> validSegmentKVRules;
+        public List<String> validElementNames;
+        public Map<String, String> validElementKVRules;
 
         public Rules() {
             validSegmentNames = new ArrayList<>();
@@ -83,68 +83,27 @@ public class Script {
             validElementKVRules = new HashMap<>();
         }
 
-        // Add single
-
-        public void addValidSegmentName(String name) {
-            validSegmentNames.add(name);
-        }
-
-        public void addValidSegmentKVRule(String key, String rule) {
-            validSegmentKVRules.put(key, rule);
-        }
-
-        public void addValidElementName(String name) {
-            validElementNames.add(name);
-        }
-
-        public void addValidElementKVRule(String key, String rule) {
-            validElementKVRules.put(key, rule);
-        }
-
-        // getter
-
-        public List<String> getValidSegmentNames() {
-            return validSegmentNames;
-        }
-
-        public Map<String, String> getValidSegmentKVRules() {
-            return validSegmentKVRules;
-        }
-
-        public List<String> getValidElementNames() {
-            return validElementNames;
-        }
-
-        public Map<String, String> getValidElementKVRules() {
-            return validElementKVRules;
-        }
-
         /**
          *  The Script.Rules.Parser
          */
         public static class Parser {
-            private static class Blocks {
-                public String segmentBlock;
-                public String elementBlock;
-            }
-            private static Script.Rules scriptRules;
-            private static Blocks blocks;
+            private static Rules rules;
+            private static String segmentBlock;
+            private static String elementBlock;
 
             private Parser() {
             }
 
-            public static Script.Rules parse(String scriptRulesText) {
-
+            public static Rules parse(String scriptRulesText) {
                 init();
                 setupBlocks(scriptRulesText);
-                completeRules();
-
-                return scriptRules;
+                addRulesFromBlock(rules.validSegmentNames, rules.validSegmentKVRules, segmentBlock);
+                addRulesFromBlock(rules.validElementNames, rules.validElementKVRules, elementBlock);
+                return rules;
             }
 
-            public static void init() {
-                scriptRules = new Script.Rules();
-                blocks = new Blocks();
+            private static void init() {
+                rules = new Rules();
             }
 
             private static void setupBlocks(String scriptRulesText) {
@@ -155,22 +114,50 @@ public class Script {
                 while (matcher.find()) {
                     String blockName = matcher.group(1);
                     String blockContent = matcher.group(2);
-                    router(blockName, blockContent);
+                    blockRouter(blockName, blockContent);
                 }
             }
 
-            private static void router(String blockName, String blockContent) {
+            private static void blockRouter(String blockName, String blockContent) {
                 switch (blockName) {
-                    case SEGMENT: blocks.segmentBlock = blockContent; break;
-                    case ELEMENT: blocks.elementBlock = blockContent; break;
+                    case SEGMENT: segmentBlock = blockContent; break;
+                    case ELEMENT: elementBlock = blockContent; break;
                     default: throw new ScriptRulesParserException(
                         "Script.Rules Parsing Error: Unrecognized Script Node Name."
                     );
                 }
             }
 
-            private static void completeRules() {
-                
+            private static void addRulesFromBlock(
+                    List<String> validNames, Map<String, String> validKVRules, String block) {
+
+                Pattern pattern = Pattern.compile(
+                        " {4}(\\w+)\n(.*?)(?=(?=\\n {4}\\w)|\\Z)",
+                        Pattern.DOTALL | Pattern.MULTILINE);
+                Matcher matcher = pattern.matcher(block);
+
+                while (matcher.find()) {
+                    String validName = matcher.group(1);
+                    String kvBlock = matcher.group(2);
+
+                    validNames.add(validName);
+                    addKVRulesFromBlock(validKVRules, kvBlock);
+                }
+            }
+
+            private static void addKVRulesFromBlock(Map<String, String> validKVRules, String kvBlock) {
+
+                Pattern pattern = Pattern.compile(
+                        " {8}(.+?) (.*?)(?=\\n|\\Z)",
+                        Pattern.DOTALL | Pattern.MULTILINE);
+                Matcher matcher = pattern.matcher(kvBlock);
+
+                while (matcher.find()) {
+                    String key = matcher.group(1);
+                    String value = matcher.group(2);
+
+                    validKVRules.put(key, value);
+                }
             }
         }
     }
