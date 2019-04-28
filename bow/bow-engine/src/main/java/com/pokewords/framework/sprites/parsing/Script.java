@@ -22,6 +22,9 @@ import java.util.regex.Pattern;
  * @author nyngwang
  */
 public class Script {
+    public static final String SEGMENT = "Segment";
+    public static final String ELEMENT = "Element";
+
 
     private ArrayList<Segment> segments;
     private Rules rules;
@@ -116,56 +119,65 @@ public class Script {
             return validElementKVRules;
         }
 
+        /**
+         *  The Script.Rules.Parser
+         */
         public static class Parser {
+            private static class Blocks {
+                public String segmentBlock;
+                public String elementBlock;
+            }
             private static Script.Rules scriptRules;
-            private static ScriptRulesParser.StringBlocks stringBlocks;
+            private static Blocks blocks;
 
-            private ScriptRulesParser() {
+            private Parser() {
             }
 
             public static Script.Rules parse(String scriptRulesText) {
 
                 init();
-                setupStringBlocks(scriptRulesText);
-
+                setupBlocks(scriptRulesText);
+                completeRules();
 
                 return scriptRules;
             }
 
             public static void init() {
                 scriptRules = new Script.Rules();
-                stringBlocks = new ScriptRulesParser.StringBlocks();
+                blocks = new Blocks();
             }
 
-            private static void setupStringBlocks(String scriptRulesText) {
+            private static void setupBlocks(String scriptRulesText) {
 
                 Pattern pattern = Pattern.compile("(\\w+)\\n(.*?)(?=\\n\\w|\\Z)");
                 Matcher matcher = pattern.matcher(scriptRulesText);
 
                 while (matcher.find()) {
-
-                    String segmentName = matcher.group(1);
-                    scriptRules.addValidSegmentName(segmentName);
-
+                    String blockName = matcher.group(1);
+                    String blockContent = matcher.group(2);
+                    router(blockName, blockContent);
                 }
-
-                result.elementStringBlock =
-                return ;
             }
 
             private static void router(String blockName, String blockContent) {
                 switch (blockName) {
-                    case ""
+                    case SEGMENT: blocks.segmentBlock = blockContent; break;
+                    case ELEMENT: blocks.elementBlock = blockContent; break;
+                    default: throw new ScriptRulesParserException(
+                        "Script.Rules Parsing Error: Unrecognized Script Node Name."
+                    );
                 }
             }
 
-            private static class StringBlocks {
-                public String segmentStringBlock;
-                public String elementStringBlock;
+            private static void completeRules() {
+                
             }
         }
     }
 
+    /**
+     *  The Script.Parser
+     */
     public static class Parser {
 
         private FrameFactory frameFactory;
