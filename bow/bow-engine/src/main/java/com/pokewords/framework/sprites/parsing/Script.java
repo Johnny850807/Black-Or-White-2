@@ -1,27 +1,61 @@
 package com.pokewords.framework.sprites.parsing;
 
-public interface Script {
+import com.pokewords.framework.engine.exceptions.SegmentException;
 
-    void addSegment(Segment segment);
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-    // Gallery Segment
-    void addGallerySegment(GallerySegment gallerySegment);
-    GallerySegment getGallerySegment(int pictureNumber);
+/**
+ *
+ *   從介面 Script 到 LinScript 的差別應該只有合法的 key-value pairs
+ *      Client 只要為具體的 Script 定義自己的 segment-name, element-name
+ *      Script 應該不需要是 Interface
+ *
+ *   檢查合法的 segment-name, element-name, key 另外開一個類別做
+ *   
+ * @author nyngwang
+ */
+public class Script {
+
+    private ArrayList<Segment> segments;
+
+    public Script() {
+        segments = new ArrayList<>();
+    }
 
 
-    // Frame Segment
-    void addFrameSegment(FrameSegment frameSegment);
+    // g/setter of Segment
 
-    FrameSegment getFrameSegment();
+    Script addSegment(Segment segment) {
+        segments.add(segment);
+        return this;
+    }
 
-    /**
-     * Set the script's text-based String.
-     * @param text text-based String.
-     */
-    void setText(String text);
+    List<Segment> getSegments() {
+        return segments;
+    }
 
-    /**
-     * @return the script's text-based String
-     */
-    String getText();
+    Optional<Segment> getSegmentById(String segmentId) {
+        for (Segment segment : segments) {
+            if (segment.getSegmentId().equals(segmentId)) {
+                return Optional.of(segment);
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    @Override
+    public String toString() {
+
+        // TODO: Print by order: gallery -> frame, with id ascending
+
+        StringBuilder result = new StringBuilder();
+        for (Segment segment : segments) {
+            result.append(segment);
+        }
+        return result.toString();
+    }
+
 }
