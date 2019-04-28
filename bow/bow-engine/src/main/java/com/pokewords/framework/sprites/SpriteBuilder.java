@@ -33,9 +33,14 @@ public class SpriteBuilder {
                                  .setFSMComponent(new FrameStateMachineComponent())
                                  .setPropertiesComponent(new PropertiesComponent())
                                  .addComponent(Component.COLLIDABLE, new CollidableComponent())
-                                 .buildScriptFromScriptTextPath("path/to/scrip_text")
-                                     .buildScriptFromScriptText(FileUtility.read("path/to/scrip_text"))
-                                     .setScript(new LinScript(FileUtility.read("path/to/script_text")))
+                                 .buildScriptFromScriptTextPath("path/to/script_text")
+                                     .buildScriptFromScriptText(FileUtility.read("path/to/script_text"))
+                                     .setScript(new ScriptTextParser(
+                                             new ReleaseIocFactory(),
+                                             new ScriptTextParser.Rules() {
+
+                                             })
+                                             .parse(FileUtility.read("path/to/script_text")))
                                  .addWeaverNode((script, sprite) -> {
                                                     Element bow = script.getFrameSegment()
                                                                         .getElement("bow");

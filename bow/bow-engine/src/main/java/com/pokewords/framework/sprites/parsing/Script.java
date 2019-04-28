@@ -2,9 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  *
@@ -56,6 +54,39 @@ public class Script {
             result.append(segment);
         }
         return result.toString();
+    }
+
+    public static class Rules {
+
+        // 檢查所有 k-v pair 是否符合 k-v rules
+
+        private List<String> validSegmentNames;
+        private Map<String, String> validSegmentKVRules;
+        private List<String> validElementNames;
+        private Map<String, String> validElementKVRules;
+
+        public Rules() {
+            validSegmentNames = new ArrayList<>();
+            validSegmentKVRules = new HashMap<>();
+            validElementNames = new ArrayList<>();
+            validElementKVRules = new HashMap<>();
+        }
+
+        public List<String> getValidSegmentNames() {
+            return validSegmentNames;
+        }
+
+        public Map<String, String> getValidSegmentKVRules() {
+            return validSegmentKVRules;
+        }
+
+        public List<String> getValidElementNames() {
+            return validElementNames;
+        }
+
+        public Map<String, String> getValidElementKVRules() {
+            return validElementKVRules;
+        }
     }
 
 }

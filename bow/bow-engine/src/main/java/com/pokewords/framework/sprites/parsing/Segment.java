@@ -2,7 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 import java.util.List;
 
-public interface Segment {
+public class Segment {
 
     // 不能改的就不需要setter
 
