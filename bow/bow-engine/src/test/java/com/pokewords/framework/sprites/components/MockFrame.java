@@ -18,6 +18,11 @@ public class MockFrame implements Frame {
     }
 
     @Override
+    public int getLayerIndex() {
+        return 0;
+    }
+
+    @Override
     public void apply(AppStateWorld gameWorld, Sprite sprite) {
         applyCount ++;
         for (GameEffect effect : effects) {

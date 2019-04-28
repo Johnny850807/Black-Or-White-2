@@ -257,6 +257,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return frames;
 	}
 
+	public List<Renderable> getRenderableComponents() {
+		return renderableComponents;
+	}
+
 	public Set<Renderable> getRenderedComponents() {
 		return components.values().stream()
 				.filter(c -> c instanceof Renderable)

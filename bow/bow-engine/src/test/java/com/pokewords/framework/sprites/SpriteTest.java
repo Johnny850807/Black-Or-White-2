@@ -3,6 +3,8 @@ package com.pokewords.framework.sprites;
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.utils.StubUtility;
 import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.MockFrame;
+import com.pokewords.framework.sprites.components.MockRenderableComponent;
 import com.pokewords.framework.sprites.components.Shareable;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +64,26 @@ public class SpriteTest extends AbstractTest {
             else
                 assertNotSameButEquals(stubComponent, cloneComponent);
         }
+    }
+
+    public void testGetRenderableComponents() {
+        Sprite sprite = StubUtility.Sprites.createSpriteStub();
+        MockRenderableComponent r1 = new MockRenderableComponent();
+        MockFrame rf1 = new MockFrame("rf1");
+        r1.addFrame(rf1);
+
+        MockRenderableComponent r2 = new MockRenderableComponent();
+        MockFrame rf2 = new MockFrame("rf2");
+        r1.addFrame(rf2);
+
+        MockRenderableComponent r3 = new MockRenderableComponent();
+        MockFrame rf3 = new MockFrame("rf3");
+        r1.addFrame(rf3);
+
+        sprite.putComponent("r1", r1);
+        sprite.putComponent("r2", r2);
+        sprite.putComponent("r3", r3);
+
     }
 
 
