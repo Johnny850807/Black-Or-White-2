@@ -30,7 +30,7 @@ public class SpriteTest extends AbstractTest {
 
     @Test
     public void testGetAllNonshareableComponents(){
-        Set<Component> components = spriteStub.getShareableComponents();
+        Set<Component> components = spriteStub.getNonshareableComponents();
         for (Component component : components) {
             assertFalse(component instanceof Shareable);
         }
@@ -40,7 +40,6 @@ public class SpriteTest extends AbstractTest {
     public void testSpriteClone(){
         Sprite clone = spriteStub.clone();
         testSpriteFieldsCloned(spriteStub, clone);
-        testSpriteComponentsInjectedCorrected(clone);
     }
 
     private void testSpriteFieldsCloned(Sprite spriteStub, Sprite clone) {
@@ -65,8 +64,5 @@ public class SpriteTest extends AbstractTest {
         }
     }
 
-    private void testSpriteComponentsInjectedCorrected(Sprite clone) {
-        //TODO How to test?
-    }
 
 }

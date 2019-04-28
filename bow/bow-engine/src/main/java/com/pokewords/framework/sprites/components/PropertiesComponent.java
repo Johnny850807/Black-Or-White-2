@@ -10,10 +10,12 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PropertiesComponent extends Component {
-	Logger logger = Logger.of(PropertiesComponent.class);
+	private Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
+	private Point center = new Point();
 	private String type;
 	private String state;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
@@ -91,6 +93,10 @@ public class PropertiesComponent extends Component {
 		notifyStateListeners();
 	}
 
+	public Point2D getCenter() {
+		return center;
+	}
+
 	@Override
 	public void onAppStateStart(AppStateWorld world) {
         if (StringUtility.anyNullOrEmpty(type, state))
@@ -161,5 +167,20 @@ public class PropertiesComponent extends Component {
 	 */
 	protected void notifyPositionListeners(){
 		positionListeners.forEach(listener -> listener.onPositionUpdated(body.getLocation()));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PropertiesComponent that = (PropertiesComponent) o;
+		return body.equals(that.body) &&
+				type.equals(that.type) &&
+				state.equals(that.state);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(body, type, state);
 	}
 }

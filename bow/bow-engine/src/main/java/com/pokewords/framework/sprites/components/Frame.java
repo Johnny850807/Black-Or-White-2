@@ -10,17 +10,22 @@ import java.util.function.Consumer;
 public interface Frame extends Cloneable{
 
 	/**
+	 * @return get the layer index  (z-index)
+	 */
+	int getLayerIndex();
+
+	/**
 	 * Actually effect the AppStateWorld from all of the effects added by addEffect(Consumer<AppStateWorld>) method.
 	 * @param gameWorld the effected AppStateWorld
 	 */
-	void apply(AppStateWorld gameWorld);
+	void apply(AppStateWorld gameWorld, Sprite sprite);
 
 	/**
 	 * Add an effect in a form of functional interface consuming the effected AppStateWorld.
 	 * All the effects added by this method will be applied during the invocation of apply(AppStateWorld) method.
 	 * @param effect functional interface describe how the effect should apply to the given world
 	 */
-	void addEffect(BiConsumer<AppStateWorld, Sprite> effect);
+	void addEffect(GameEffect effect);
 
 	/**
 	 * Render the frame itself on the canvas.

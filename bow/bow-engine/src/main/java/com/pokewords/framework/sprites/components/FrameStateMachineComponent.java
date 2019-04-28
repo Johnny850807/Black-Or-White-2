@@ -3,16 +3,21 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.FiniteStateMachine;
 import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.lang.reflect.Field;
 import java.text.Format;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends Component {
+public class FrameStateMachineComponent extends Component implements Shareable, Renderable{
     private FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
+    private Sprite sprite;
     private AppStateWorld world;
     private PropertiesComponent propertiesComponent;
 
@@ -56,7 +61,7 @@ public class FrameStateMachineComponent extends Component {
 
     private void applyTheFrameEffect() {
         Frame frame = getCurrentFrame();
-        frame.apply(world);
+        frame.apply(world, sprite);
     }
 
     public void addFrame(Frame frame){
@@ -79,6 +84,9 @@ public class FrameStateMachineComponent extends Component {
         return fsm.getCurrentState();
     }
 
+    public void setCurrentFrame(Frame frame){
+        this.fsm.setCurrentState(frame);
+    }
     @Override
     public void onAppStateExit() {
 
@@ -109,6 +117,14 @@ public class FrameStateMachineComponent extends Component {
         this.propertiesComponent = propertiesComponent;
     }
 
+    public FiniteStateMachine<Frame> getFsm() {
+        return fsm;
+    }
+
+    public void setFsm(FiniteStateMachine<Frame> fsm) {
+        this.fsm = fsm;
+    }
+
     /**
      * @return the actual inner finite state machine which contains the frames and transitions
      */
@@ -119,6 +135,27 @@ public class FrameStateMachineComponent extends Component {
     @Override
     public FrameStateMachineComponent clone() {
         return (FrameStateMachineComponent) super.clone();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FrameStateMachineComponent that = (FrameStateMachineComponent) o;
+        return stateTriggered == that.stateTriggered &&
+                fsm.equals(that.fsm);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fsm, stateTriggered);
+    }
+
+    @Override
+    public List<Frame> getFrames() {
+        LinkedList<Frame> frames = new LinkedList<>();
+        frames.add(getCurrentFrame());
+        return frames;
     }
 }
 

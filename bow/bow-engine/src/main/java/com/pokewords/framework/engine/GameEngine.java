@@ -7,13 +7,9 @@ import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 public class GameEngine {
-
 	private AppView gameView;
-
 	private UserConfig userConfig;
-
 	private PrototypeFactory prototypeFactory;
-
 	private AppStateMachine appStateMachine;
 
 	public void launchEngine() {
@@ -71,6 +67,5 @@ public class GameEngine {
 	public void setAppStateMachine(AppStateMachine asm) {
 		this.appStateMachine = asm;
 	}
-
 
 }
