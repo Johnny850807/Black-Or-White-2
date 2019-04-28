@@ -8,12 +8,14 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.lang.reflect.Field;
 import java.text.Format;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends Component implements Shareable{
+public class FrameStateMachineComponent extends Component implements Shareable, Renderable{
     private FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
     private Sprite sprite;
     private AppStateWorld world;
@@ -147,6 +149,13 @@ public class FrameStateMachineComponent extends Component implements Shareable{
     @Override
     public int hashCode() {
         return Objects.hash(fsm, stateTriggered);
+    }
+
+    @Override
+    public List<Frame> getFrames() {
+        LinkedList<Frame> frames = new LinkedList<>();
+        frames.add(getCurrentFrame());
+        return frames;
     }
 }
 
