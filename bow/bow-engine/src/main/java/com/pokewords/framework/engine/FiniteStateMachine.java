@@ -332,5 +332,38 @@ public class FiniteStateMachine<T> implements Cloneable{
 		private T getState() {
 			return state;
 		}
+
+		@Override
+		@SuppressWarnings("unchecked")
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			StateNode stateNode = (StateNode) o;
+			return stateNumber == stateNode.stateNumber &&
+					state.equals(stateNode.state);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(stateNumber, state);
+		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		FiniteStateMachine<?> that = (FiniteStateMachine<?>) o;
+		return eventIndex == that.eventIndex &&
+				currentState.equals(that.currentState) &&
+				eventMap.equals(that.eventMap) &&
+				stateList.equals(that.stateList) &&
+				matrix.equals(that.matrix) &&
+				stateNodesMap.equals(that.stateNodesMap);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(currentState, eventIndex, eventMap, stateList, matrix, stateNodesMap);
 	}
 }

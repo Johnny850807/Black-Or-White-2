@@ -336,4 +336,11 @@ public class FiniteStateMachineTest {
         assertEquals(state, fsm.trigger(event));
         assertEquals(state, fsm.getCurrentState());
     }
+
+    @Test
+    public void testFsmEquality() {
+        FiniteStateMachine<String> fsm1 = createBasicFsm();
+        FiniteStateMachine<String> fsm2 = createBasicFsm();
+        assertEquals(fsm1, fsm2);
+    }
 }

@@ -10,7 +10,6 @@ import java.util.Map;
 
 
 /**
- *
  * @author Johnny850807
  */
 public class TextureFrameFactory implements FrameFactory {
@@ -25,6 +24,7 @@ public class TextureFrameFactory implements FrameFactory {
         if (!galleryMap.containsKey(path))
             galleryMap.put(path, gallerySegment.toGallery());
         Gallery gallery = galleryMap.get(path);
-        return new TextureFrame(gallery.getImage(pic));
+        int layer = frameSegment.getInt("layer");
+        return new TextureFrame(gallery.getImage(pic), layer);
     }
 }

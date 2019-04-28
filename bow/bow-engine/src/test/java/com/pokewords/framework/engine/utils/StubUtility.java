@@ -1,12 +1,11 @@
 package com.pokewords.framework.engine.utils;
 
-import com.pokewords.framework.engine.FiniteStateMachine;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.*;
 
 import java.awt.*;
 
-import static com.pokewords.framework.engine.utils.StubUtility.FrameStateMachineComponents.createFrameStateMachineComponentStub;
+import static com.pokewords.framework.engine.utils.StubUtility.FSCM.createFrameStateMachineComponentStub;
 
 /**
  * This utility contains all the util methods for creating Stubs that can easily be tested.
@@ -16,10 +15,9 @@ public class StubUtility {
 
     public static class Sprites {
         public final static Rectangle STUB_BODY = new Rectangle(50, 50, 100, 100);
-        public final static String STUB_STATE = "Hello World";
         public final static String STUB_TYPE = "Stub";
         public final static String COLLIDABLE_COMP_NAME = "collidable component name";
-        public final static CollidableComponent COLLIDABLE_COMPONENT = new CollidableComponent();
+        public final static CollidableComponent COLLIDABLE_COMPONENT = CollidableComponent.getInstance();
 
         /**
          * @return Sprite spec:
@@ -32,7 +30,7 @@ public class StubUtility {
          *      - state: "Hello World"
          *
          * - FrameStateMachineComponent
-         *      @see FrameStateMachineComponents#createFrameStateMachineComponentStub()
+         *      @see FSCM#createFrameStateMachineComponentStub()
          *
          * - CollidableComponent
          */
@@ -41,14 +39,13 @@ public class StubUtility {
             FrameStateMachineComponent frameStateMachineComponent = createFrameStateMachineComponentStub();
             Sprite spriteStub = new Sprite(frameStateMachineComponent, propertiesComponent);
             spriteStub.setBody(STUB_BODY);
-            spriteStub.setState(STUB_STATE);
             spriteStub.setType(STUB_TYPE);
             spriteStub.putComponent(COLLIDABLE_COMP_NAME, COLLIDABLE_COMPONENT);
             return spriteStub;
         }
     }
 
-    public static class FrameStateMachineComponents {
+    public static class FSCM {
         public static final MockFrame FRAME_A = new MockFrame("A");
         public static final MockFrame FRAME_B = new MockFrame("B");
         public static final MockFrame FRAME_C = new MockFrame("C");

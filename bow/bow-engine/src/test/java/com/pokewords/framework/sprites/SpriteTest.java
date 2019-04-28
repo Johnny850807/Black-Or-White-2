@@ -2,10 +2,7 @@ package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.utils.StubUtility;
-import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.MockFrame;
-import com.pokewords.framework.sprites.components.MockRenderableComponent;
-import com.pokewords.framework.sprites.components.Shareable;
+import com.pokewords.framework.sprites.components.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,6 +63,7 @@ public class SpriteTest extends AbstractTest {
         }
     }
 
+    @Test
     public void testGetRenderableComponents() {
         Sprite sprite = StubUtility.Sprites.createSpriteStub();
         MockRenderableComponent r1 = new MockRenderableComponent();
@@ -84,7 +82,23 @@ public class SpriteTest extends AbstractTest {
         sprite.putComponent("r2", r2);
         sprite.putComponent("r3", r3);
 
+        Set<Frame> currentFrames = sprite.getCurrentFrames();
+        assertTrue(currentFrames.contains(StubUtility.FSCM.FRAME_A));  //the initial state of the stub should be contained
+        assertTrue(currentFrames.contains(rf1));
+        assertTrue(currentFrames.contains(rf2));
+        assertTrue(currentFrames.contains(rf3));
     }
 
+    @Test
+    public void testSpriteEqualsAndHashCode() {
+        Sprite sp1 = new Sprite();
+        Sprite sp2 = new Sprite();
+        sp1.setType("type");
+        sp1.setBody(50, 50, 50, 50);
+        sp2.setBody(50, 50, 50, 50);
+        sp2.setType("type");
+        assertEquals(sp1.getPropertiesComponent(), sp2.getPropertiesComponent());
+        assertEquals(sp1.hashCode(), sp2.hashCode());
+    }
 
 }

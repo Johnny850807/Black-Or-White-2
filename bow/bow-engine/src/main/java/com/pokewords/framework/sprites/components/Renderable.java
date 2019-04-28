@@ -7,5 +7,5 @@ import java.util.List;
  * @author johnny850807 (waterball)
  */
 public interface Renderable {
-    List<Frame> getFrames();
+    List<Frame> getCurrentFrames();
 }

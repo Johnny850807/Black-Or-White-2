@@ -4,7 +4,7 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
 import com.pokewords.framework.views.RenderedLayers;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;

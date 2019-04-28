@@ -5,6 +5,7 @@ import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.Frame;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -22,7 +23,15 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	private Map<String, Component> components = new HashMap<>();
 	private LinkedList<Renderable> renderableComponents = new LinkedList<>();
 
-	public Sprite() {
+	/**
+	 * default constructor, empty FrameStateMachineComponent and default PropertiesComponent
+	 */
+	protected Sprite() {
+		this(new FrameStateMachineComponent(), new PropertiesComponent());
+	}
+
+	public Sprite(final FrameStateMachineComponent frameStateMachineComponent) {
+		this(frameStateMachineComponent, new PropertiesComponent());
 	}
 
 	/**
@@ -60,12 +69,12 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return propertiesComponent;
 	}
 
-	public void setFrameStateMachineComponent(FrameStateMachineComponent frameStateMachineComponent) {
+	public void setFrameStateMachineComponent(@NotNull FrameStateMachineComponent frameStateMachineComponent) {
 		this.frameStateMachineComponent = frameStateMachineComponent;
 		putComponent(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
 	}
 
-	public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
+	public void setPropertiesComponent(@NotNull PropertiesComponent propertiesComponent) {
 		this.propertiesComponent = propertiesComponent;
 		putComponent(Component.PROPERTIES, propertiesComponent);
 	}
@@ -76,7 +85,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @return the component to get if the name exist, null-object otherwise.
 	 */
 	public Optional<Component> getComponentByName(String name) {
-		return Optional.of(components.get(name));
+		return Optional.ofNullable(components.get(name));
 	}
 
 	/**
@@ -85,7 +94,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @param name the name of the component to be added.
 	 * @param component the component to be added.
 	 */
-	public void putComponent(String name, Component component) {
+	public void putComponent(@NotNull String name, @NotNull Component component) {
 		if (component instanceof Renderable)
 			this.renderableComponents.add((Renderable) component);
 		if (component instanceof PropertiesComponent)
@@ -106,7 +115,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 			throw new MandatoryComponentIsRequiredException("FrameStateMachineComponent cannot be removed.");
 		else if (component instanceof PropertiesComponent)
 			throw new MandatoryComponentIsRequiredException("Properties Component cannot be removed.");
-		return Optional.of(components.remove(name));
+		return Optional.ofNullable(components.remove(name));
 	}
 
 	@Override
@@ -199,15 +208,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return getPropertiesComponent().getType();
 	}
 
-	public void setState(String state){
-		getPropertiesComponent().setState(state);
-	}
-
-	public String getState(){
-		return getPropertiesComponent().getState();
-
-	}
-
 	public Point2D getCenter(){
 		return getPropertiesComponent().getCenter();
 	}
@@ -242,18 +242,22 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		for (String type : this.components.keySet())
 		{
 			Component component = this.components.get(type);
-			if (component instanceof Shareable)
+			if (isComponentSharedOnly(component))
 				cloneComponents.put(type, component);
 			else
-				cloneComponents.put(type, component.clone());
+				cloneComponents.put(type, ((CloneableComponent)component).clone());
 		}
 		return cloneComponents;
+	}
+
+	private boolean isComponentSharedOnly(Component component) {
+		return component instanceof Shareable && !(component instanceof CloneableComponent);
 	}
 
 	public Set<Frame> getCurrentFrames() {
 		Set<Frame> frames = new LinkedHashSet<>();
 		for (Renderable renderable : renderableComponents)
-			frames.addAll(renderable.getFrames());
+			frames.addAll(renderable.getCurrentFrames());
 		return frames;
 	}
 
@@ -287,4 +291,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 					.filter(c ->c instanceof Shareable)
 					.collect(Collectors.toSet());
 	}
+
+
 }

@@ -14,7 +14,7 @@ public class MockRenderableComponent extends MockComponent implements Renderable
     }
 
     @Override
-    public List<Frame> getFrames() {
+    public List<Frame> getCurrentFrames() {
         return mockFrames;
     }
 
