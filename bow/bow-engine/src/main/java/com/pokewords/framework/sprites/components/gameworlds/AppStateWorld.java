@@ -5,7 +5,7 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.components.Frame;
 import com.pokewords.framework.views.RenderedLayers;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 
 import java.awt.*;
@@ -40,7 +40,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         sprites.add(sprite);
         indexSpriteMap.put(id, sprite);
         spriteIndexMap.put(sprite, id);
-        addFrameToRenderedLayer(sprite.getCurrentFrame().getLayerIndex(), sprite.getCurrentFrame());
+        addFramesToRenderedLayer(sprite.getRenderedFrames());
         return id;
     }
 
@@ -60,6 +60,16 @@ public class AppStateWorld implements AppStateLifeCycleListener {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    /**
+     * Add the frames to the rendered layer.
+     * @param renderedFrames The Frame will be add in the rendered layer.
+     */
+    private void addFramesToRenderedLayer(Collection<Frame> renderedFrames) {
+        for (Frame frame: renderedFrames) {
+            addFrameToRenderedLayer(frame.getLayerIndex(), frame);
+        }
     }
 
     /**
@@ -209,19 +219,17 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
 
     /**
-     * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
+     * @return the sprites within the area (w, h) from the center point of the given sprite
      */
-    public Set<Sprite> getSpritesWithinArea(Sprite sprite, int x, int y, int w, int h) {
-        int spriteCenterX = sprite.getX() + sprite.getW() / 2;
-        int spriteCenterY = sprite.getY() + sprite.getH() / 2;
+    public Set<Sprite> getSpritesWithinArea(Sprite sprite, int w, int h) {
         return null;
     }
 
     /**
      * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
      */
-    public Set<Sprite> getSpritesWithinArea(Sprite sprite, Rectangle area) {
-        return this.getSpritesWithinArea(sprite, area.x, area.y, area.width, area.height);
+    public Set<Sprite> getSpritesWithinArea(Sprite sprite, Dimension dimension) {
+        return this.getSpritesWithinArea(sprite, dimension.width, dimension.height);
     }
 
     /**

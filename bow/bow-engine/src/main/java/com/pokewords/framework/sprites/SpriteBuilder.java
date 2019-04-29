@@ -56,8 +56,8 @@ public class SpriteBuilder {
                                             };
                                          })
                                  .setupParser(new LinScript(FileUtility.read("my_home")))
-                                 .setPropertiesComponent(new PropertiesComponent())
-                                 .addComponent(Component.COLLIDABLE, new CollidableComponent())
+                                 .setPropertiesComponent(new PropertiesComponent("type"))
+                                 .addComponent(Component.COLLIDABLE, CollidableComponent.getInstance())
                                  .build();
     }
 
