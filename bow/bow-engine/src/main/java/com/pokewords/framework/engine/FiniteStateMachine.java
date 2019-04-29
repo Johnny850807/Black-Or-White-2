@@ -308,9 +308,10 @@ public class FiniteStateMachine<T> implements Cloneable{
 	/**
 	 * @return the shallow copied FSM
 	 */
-	public FiniteStateMachine clone(){
+	@SuppressWarnings("unchecked")
+    public FiniteStateMachine<T> clone(){
 		try {
-			return (FiniteStateMachine) super.clone();
+			return (FiniteStateMachine<T>) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
