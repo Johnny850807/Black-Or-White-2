@@ -43,9 +43,15 @@ public class Script {
         return this;
     }
 
+    public List<Segment> getSegmentsByName(String segmentName) {
+        return segments.stream()
+                .filter(segment -> segment.getStringByKey(Segment.Def.NAME).equals(segmentName))
+                .collect(Collectors.toList());
+    }
+
     public Optional<Segment> getSegmentById(String segmentId) {
         for (Segment segment : segments) {
-            if (segment.getStringByKey(Segment.ID).equals(segmentId)) {
+            if (segment.getStringByKey(Segment.Def.ID).equals(segmentId)) {
                 return Optional.of(segment);
             }
         }
@@ -54,7 +60,7 @@ public class Script {
 
     public List<Segment> getSegmentsByDescription(String segmentDescription) {
         return segments.stream()
-                .filter(segment -> segment.getStringByKey(Segment.DESCRIPTION).equals(segmentDescription))
+                .filter(segment -> segment.getStringByKey(Segment.Def.DESCRIPTION).equals(segmentDescription))
                 .collect(Collectors.toList());
     }
 

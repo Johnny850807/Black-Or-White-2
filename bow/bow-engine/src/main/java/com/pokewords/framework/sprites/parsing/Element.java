@@ -3,44 +3,70 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.ElementAttributeNameDoesNotExistException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+
+/**
+ *  基本上maps不要直接傳給client
+ * @author nyngwang
+ */
 public class Element {
-
-    private Map<String, String> stringMap;
-    private Map<String, Integer> intMap;
-
-    public Element() {
-        this.stringMap = new HashMap<>();
-        this.intMap = new HashMap<>();
+    public interface Def {
+        String NAME = "name";
     }
-
-    // [!] The two getter's behavior of throwing exception is not consistent.
-
-    public void addPair(String name, int value) {
-        intMap.put(name, value);
-    }
-
-    public void addPair(String name, String value) {
-        stringMap.put(name, value);
-    }
-
-    public String getString(String name){
-        if (!stringMap.containsKey(name)) {
-            throw new ElementAttributeNameDoesNotExistException("Invalid attribute name for element!");
+    private static class Maps {
+        private Map<String, String> stringMap;
+        private Map<String, Integer> integerMap;
+        private Maps() {
+            stringMap = new HashMap<>();
+            integerMap = new HashMap<>();
         }
-        return stringMap.getOrDefault(name, "");
+    }
+    private Segment parentSegment;
+    private Maps maps;
+
+    public Element(String elementName, Segment parentSegment) {
+        init();
+        maps.stringMap.put(Def.NAME, elementName);
+        this.parentSegment = parentSegment;
     }
 
-    public int getInt(String name){
-        if (!intMap.containsKey(name)) {
-            throw new ElementAttributeNameDoesNotExistException("Invalid attribute name for element!");
-        }
-        return intMap.get(name);
+    private void init() {
+        maps = new Maps();
+    }
+
+    // Maps management
+
+    public Element putKVPair(String key, String value) {
+        maps.stringMap.put(key, value);
+        return this;
+    }
+
+    public Element putKVPair(String key, int value) {
+        maps.integerMap.put(key, value);
+        return this;
+    }
+
+    public Optional<String> getStringByKey(String key) {
+        return Optional.of(maps.stringMap.get(key));
+    }
+
+    public Optional<Integer> getIntByKey(String key) {
+        return Optional.of(maps.integerMap.get(key));
+    }
+
+    // getter
+
+    public Segment getParentSegment() {
+        return parentSegment;
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        // TODO: Pretty print
+        return null;
     }
 }

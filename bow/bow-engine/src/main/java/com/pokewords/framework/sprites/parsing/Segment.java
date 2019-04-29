@@ -1,46 +1,96 @@
 package com.pokewords.framework.sprites.parsing;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
+ *  基本上maps不要直接傳給client
  * @author nyngwang
  */
 public class Segment {
+    public interface Def {
+        String NAME = "name";
+        String ID = "segment-id";
+        String DESCRIPTION = "segment-description";
+    }
     private static class Maps {
-        public Map<String, String> stringMap;
-        public Map<String, Integer> integerMap;
-        public Maps() {
+        private Map<String, String> stringMap;
+        private Map<String, Integer> integerMap;
+        private Maps() {
             stringMap = new HashMap<>();
             integerMap = new HashMap<>();
         }
     }
-    public static final String ID = "segment-id";
-    public static final String DESCRIPTION = "segment-description";
-
     private Script parentScript;
     private ArrayList<Element> elements;
     private Maps maps;
 
-    public Segment(Script parentScript) {
+    public Segment(String segmentName, int segmentId, Script parentScript) {
+        init(segmentName, segmentId, parentScript);
+    }
+
+    public Segment(String segmentName, int segmentId, String segmentDescription, Script parentScript) {
+        init(segmentName, segmentId, parentScript);
+        maps.stringMap.put(Def.DESCRIPTION, segmentDescription);
+    }
+
+    private void init(String segmentName, int segmentId, Script parentScript) {
+        maps.stringMap.put(Script.Def.SEGMENT, segmentName);
+        maps.integerMap.put(Def.ID, segmentId);
         this.parentScript = parentScript;
+        elements = new ArrayList<>();
         maps = new Maps();
     }
 
-    // Fluent key-value pair g/setter
+    // Elements management
 
-    Segment addKeyValuePair(String key, String value);
-    Segment addKeyValuePair(String key, int value);
-    String getStringByKey(String key);
-    int getIntByKey(String key);
+    public Segment addElement(Element element) {
+        elements.add(element);
+        return this;
+    }
 
-    //
+    public List<Element> getElementsByName(String elementName) {
+        return elements.stream()
+                .filter(element -> element.getStringByKey(Element.Def.NAME).equals(elementName))
+                .collect(Collectors.toList());
+    }
 
-    void addElement(Element element);
-    List<Element> getElements();
+    // Maps management
 
-    String toString();
+    public Segment putKVPair(String key, String value) {
+        maps.stringMap.put(key, value);
+        return this;
+    }
+
+    public Segment putKVPair(String key, int value) {
+        maps.integerMap.put(key, value);
+        return this;
+    }
+
+    public Optional<String> getStringByKey(String key) {
+        return Optional.of(maps.stringMap.get(key));
+    }
+
+    public Optional<Integer> getIntByKey(String key) {
+        return Optional.of(maps.integerMap.get(key));
+    }
+
+    // getter
+
+    public Script getParentScript() {
+        return parentScript;
+    }
+
+    // Not recommended
+
+    public List<Element> getElements() {
+        return elements;
+    }
+
+    @Override
+    public String toString() {
+        // TODO: Pretty print
+        return null;
+    }
 
 }
