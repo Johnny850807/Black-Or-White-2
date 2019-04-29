@@ -27,7 +27,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	/**
 	 * Save each state in the List, its index is the index of the state
 	 */
-	private ArrayList<T> stateList = new ArrayList<>();
+	private List<T> stateList = new ArrayList<>();
 
 	/**
 	 * matrix for storing events and states
@@ -67,15 +67,18 @@ public class FiniteStateMachine<T> implements Cloneable{
 		StringBuilder result = new StringBuilder();
 		result.append("Current State：").append(currentState);
 		result.append("\n\n");
-		for(int i = 0; i < matrix.size(); i++){
+		for(int i = 0; i < matrix.size(); i++)
+		{
 			result.append(i).append("|");
-			for(int j = 0; j < matrix.get(i).size(); j++){
-				if(matrix.get(i).get(j).equals(matrix.get(i).get(0)) &&
-						j != 0){
+			int initStateIndex = matrix.get(i).get(0);
+			for(int j = 0; j < matrix.get(i).size(); j++)
+			{
+				int stateIndex = matrix.get(i).get(j);
+				if(stateIndex == initStateIndex && j != 0){
 					result.append("-");
 				}else {
 					result.append("(").append(j).append(")");
-					result.append(matrix.get(i).get(j));
+					result.append(stateIndex);
 				}
 				result.append(",");
 			}
@@ -98,11 +101,11 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 *   fsm.addState(G);
 	 *   fsm.addState(H);
 	 *
-	 *   fsm.addTransition(A,WakeUp,H);
-	 *   fsm.addTransition(B,GO,H);
-	 *   fsm.addTransition(D,Sleep,C);
-	 *   fsm.addTransition(B,WakeUp,E);
-	 *   fsm.addTransition(C,Sleep,A);
+	 *   fsm.addTransition(A, WakeUp, H);
+	 *   fsm.addTransition(B, GO, H);
+	 *   fsm.addTransition(D, Sleep, C);
+	 *   fsm.addTransition(B, WakeUp, E);
+	 *   fsm.addTransition(C, Sleep, A);
 	 *
 	 *   e.g.
 	 *    fsm.setCurrentState(A);
@@ -121,17 +124,26 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param event trigger event name
 	 * @return currentState
 	 */
-	public T trigger(String event){
-		if(currentState == null){
-			throw new FiniteStateMachineException("currentState not exists");
-		}
-		if(isEventExists(event)){
+	public T trigger(String event) {
+		if(currentState == null)
+			throw new FiniteStateMachineException("Current State Not Exists");
+		if(isEventExists(event))
+		{
 			int eventIndex = getEventIndexFromEventMap(event);
 			StateNode currentNode = getStateNodeByState(currentState);
-			int currentNumber = matrix.get(currentNode.getStateNumber()).get(eventIndex);
-			currentState = stateList.get(currentNumber);
+			currentState = getStateFromMatrix(currentNode.getStateID(), eventIndex);
 		}
 		return currentState;
+	}
+
+	/**
+	 * Obtain a state from matrix.
+	 * @param row in the matrix.
+	 * @param col in the matrix.
+	 * @return a state from row and col in matrix.
+	 */
+	private T getStateFromMatrix(int row, int col) {
+		return stateList.get(matrix.get(row).get(col));
 	}
 
 	/**
@@ -139,11 +151,10 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param currentState to be replaced
 	 */
 	public void setCurrentState(T currentState){
-		if(!isStateExists(currentState)){
-            throw new FiniteStateMachineException("State not exist");
-		}else {
+		if(!isStateExists(currentState))
+            throw new FiniteStateMachineException("State Not Exist");
+		else
 			this.currentState = getStateNodeByState(currentState).getState();
-		}
 	}
 
 	/**
@@ -151,7 +162,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param t the state
 	 * @return mapped Statenode
 	 */
-	private StateNode getStateNodeByState(T t){
+	private StateNode getStateNodeByState(T t) {
 		return stateNodesMap.get(t.hashCode());
 	}
 
@@ -165,7 +176,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	/**
 	 * @return <tt>true</tt> if this event exists.
 	 */
-	private boolean isEventExists(String event){
+	private boolean isEventExists(String event) {
 		return eventMap.containsKey(event);
 	}
 
@@ -173,7 +184,9 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param event event
 	 * @return event index if this event exists.
 	 */
-	private int getEventIndexFromEventMap(String event){
+	private int getEventIndexFromEventMap(String event) {
+		if(!isEventExists(event))
+			throw new FiniteStateMachineException("Event Not Exist");
 		return eventMap.get(event);
 	}
 
@@ -181,7 +194,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * Associates @param event with the event index in eventToIndexMap.
 	 * Add an event if the event not exists.
 	 */
-	private void addEvent(String event){
+	private void addEvent(String event) {
 		if(!isEventExists(event)) {
 			eventMap.put(event, eventIndex++);
 		}
@@ -190,7 +203,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	/**
 	 * @return current state
 	 */
-	public T getCurrentState(){
+	public T getCurrentState() {
 		return currentState;
 	}
 
@@ -218,7 +231,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 *
 	 * @param t new state
 	 */
-	public void addState(T t){
+	public void addState(T t) {
 		stateList.add(t);
 		int stateNumber = stateList.size()-1;
 		StateNode newNode = new StateNode(t,stateNumber);
@@ -226,14 +239,25 @@ public class FiniteStateMachine<T> implements Cloneable{
 		ArrayList<Integer> initEventList = new ArrayList<>();
 		initEventList.add(stateNumber);
 		matrix.add(initEventList);
-		for(int i = 0; i < matrix.size(); i++) {
+		for(int i = 0; i < matrix.size(); i++)
+		{
 			while(matrix.get(i).size() != matrix.size()){
-				matrix.get(i).add(matrix.get(i).get(0));
+				addNewState(i);
 			}
 		}
 	}
 
-	public ArrayList<T> getStates(){
+	/**
+	 * Add a index of new state in the List.
+	 * @param index index of new state.
+	 */
+	private void addNewState(int index){
+		List<Integer> row = matrix.get(index);
+		int initStateIndex = matrix.get(index).get(0);
+		row.add(initStateIndex);
+	}
+
+	public List<T> getStates() {
 		return stateList;
 	}
 
@@ -243,15 +267,28 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param event the triggering event's name
 	 * @param to is triggered state
 	 */
-	public void addTransition(T from, String event, T to){
-		if(!isStateExists(from) || !isStateExists(to)){
+	public void addTransition(T from, String event, T to) {
+		if(!validateFromStateAndToStateExist(from, to))
 			throw new FiniteStateMachineException("Not exists");
-		}else {
+		else
+		{
 			addEvent(event);
 			StateNode fromState = getStateNodeByState(from);
 			StateNode toState = getStateNodeByState(to);
-			matrix.get(fromState.getStateNumber()).set(getEventIndexFromEventMap(event), toState.getStateNumber());
+			setDataInMatrix(fromState.getStateID(), getEventIndexFromEventMap(event), toState.getStateID());
 		}
+	}
+
+	/**
+	 * validate that FromState and ToState exist
+	 * @param states State array
+	 * @return <tt>true</tt> if all states exists.
+	 */
+	private boolean validateFromStateAndToStateExist(T ... states) {
+		for (T state : states)
+			if (!isStateExists(state))
+				return false;
+		return true;
 	}
 
 	/**
@@ -280,29 +317,41 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param targetState target state
 	 * @param excepts those that want to be filtered out.
 	 */
-	public void addTransitionFromAllStates(String event, T targetState, T ...excepts){
-		if(!isStateExists(targetState)){
-            throw new FiniteStateMachineException("targetState not exists");
-		}else{
+	public void addTransitionFromAllStates(String event, T targetState, T ...excepts) {
+		if(!isStateExists(targetState))
+            throw new FiniteStateMachineException("Target State Not Exists");
+		else
+		{
 			addEvent(event);
 			StateNode targetStateNode = getStateNodeByState(targetState);
-			if(excepts.length > 0){
+			if(excepts.length > 0)
+			{
 				List<Integer> exceptsNodeList = new ArrayList<>();
-				for (T exceptState : excepts){
+				for (T exceptState : excepts)
+				{
 					StateNode exceptsNode = getStateNodeByState(exceptState);
-					exceptsNodeList.add(exceptsNode.getStateNumber());
+					exceptsNodeList.add(exceptsNode.getStateID());
 				}
-				for (int i = 0; i < matrix.size(); i++){
-					if(!exceptsNodeList.contains(i)){
-						matrix.get(i).set(getEventIndexFromEventMap(event), targetStateNode.getStateNumber());
-					}
-				}
-			}else {
-				for (ArrayList<Integer> state : matrix){
-					state.set(getEventIndexFromEventMap(event), targetStateNode.getStateNumber());
+				for (int row = 0; row < matrix.size(); row++)
+				{
+					if(!exceptsNodeList.contains(row))
+						setDataInMatrix(row, getEventIndexFromEventMap(event), targetStateNode.getStateID());
 				}
 			}
+			else
+				for (ArrayList<Integer> state : matrix)
+					state.set(getEventIndexFromEventMap(event), targetStateNode.getStateID());
 		}
+	}
+
+	/**
+	 * Update the data in a matrix.
+	 * @param row Matrix row.
+	 * @param col Matrix column.
+	 * @param newData New data to set.
+	 */
+	private void setDataInMatrix(int row, int col, int newData){
+		matrix.get(row).set(col, newData);
 	}
 
 	/**
@@ -318,16 +367,16 @@ public class FiniteStateMachine<T> implements Cloneable{
 	}
 
 	private class StateNode {
-		private int stateNumber;
+		private int stateID;
 		private T state;
 
-		private StateNode(T state, int stateNumber){
+		private StateNode(T state, int stateID){
 			this.state = state;
-			this.stateNumber = stateNumber;
+			this.stateID = stateID;
 		}
 
-		private int getStateNumber() {
-			return stateNumber;
+		private int getStateID() {
+			return stateID;
 		}
 
 		private T getState() {
@@ -340,13 +389,13 @@ public class FiniteStateMachine<T> implements Cloneable{
 			if (this == o) return true;
 			if (o == null || getClass() != o.getClass()) return false;
 			StateNode stateNode = (StateNode) o;
-			return stateNumber == stateNode.stateNumber &&
+			return stateID == stateNode.stateID &&
 					state.equals(stateNode.state);
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(stateNumber, state);
+			return Objects.hash(stateID, state);
 		}
 	}
 
