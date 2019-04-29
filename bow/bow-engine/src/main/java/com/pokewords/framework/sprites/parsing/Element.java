@@ -28,10 +28,9 @@ public class Element {
     private Segment parentSegment;
     private Maps maps;
 
-    public Element(String elementName, Segment parentSegment) {
+    public Element(String elementName) {
         init();
         maps.stringMap.put(Def.NAME, elementName);
-        this.parentSegment = parentSegment;
     }
 
     private void init() {
@@ -58,11 +57,13 @@ public class Element {
         return Optional.of(maps.integerMap.get(key));
     }
 
-    // getter
+    // parentSegment management
 
     public Segment getParentSegment() {
         return parentSegment;
     }
+
+    public void setParentSegment(Segment parentSegment) { this.parentSegment = parentSegment; }
 
     @Override
     public String toString() {

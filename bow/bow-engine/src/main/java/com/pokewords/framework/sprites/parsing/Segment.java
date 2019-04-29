@@ -47,6 +47,7 @@ public class Segment {
 
     public Segment addElement(Element element) {
         elements.add(element);
+        element.setParentSegment(this);
         return this;
     }
 

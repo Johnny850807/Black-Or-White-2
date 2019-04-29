@@ -36,7 +36,15 @@ public class Script {
                 FileUtility.read("path/to/script_text"),
                 Script.Rules.Parser.parse("path/to/script_rules"));
 
-        script.addSegment(new Segment("frame", 1, "punch"));
+        script.addSegment(
+               new Segment("frame", 1, "punch")
+                   .addElement(new Element("bow"))
+                   .addElement(new Element("cow")))
+              .addSegment(
+               new Segment("frame", 2, "punch")
+                   .addElement(new Element("dow"))
+                   .addElement(new Element("fow"))
+              );
     }
 
     public interface Def {
