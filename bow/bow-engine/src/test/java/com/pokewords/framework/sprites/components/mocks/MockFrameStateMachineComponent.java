@@ -1,17 +1,15 @@
-package com.pokewords.framework.sprites.components;
+package com.pokewords.framework.sprites.components.mocks;
 
-import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-public class MockComponent extends Component {
-    protected boolean hasStarted = false;
-    protected boolean hasDestroyed = false;
-    protected boolean isRunning = false;
-    protected int enterCount;
-    protected int exitCount;
-    protected int updateCount = 0;
-    protected Sprite sprite;
-
+public class MockFrameStateMachineComponent extends FrameStateMachineComponent implements MockComponent{
+    private boolean hasStarted = false;
+    private boolean hasDestroyed = false;
+    private boolean isRunning = false;
+    private int enterCount;
+    private int exitCount;
+    private int updateCount = 0;
 
     @Override
     public void onAppStateStart(AppStateWorld world) {
@@ -20,51 +18,58 @@ public class MockComponent extends Component {
 
     @Override
     public void onAppStateEnter() {
-        enterCount ++;
+        enterCount++;
         isRunning = true;
     }
 
     @Override
     public void onAppStateExit() {
+        assert isRunning : "onAppStateEnter() should be triggered before onAppStateExit().";
         exitCount++;
         isRunning = false;
     }
 
     @Override
     public void onAppStateDestroy() {
+        assert !isRunning : "onAppStateExit() should be triggered before onAppStateDestroy().";
         hasDestroyed = true;
     }
 
     @Override
     public void onUpdate(double tpf) {
+        assert isRunning : "onUpdate() should be triggered after onAppStateEnter().";
         updateCount++;
     }
 
+
+    @Override
     public boolean hasStarted() {
         return hasStarted;
     }
 
+    @Override
     public boolean hasDestroyed() {
         return hasDestroyed;
     }
 
+    @Override
     public boolean isRunning() {
         return isRunning;
     }
 
+    @Override
     public int getEnterCount() {
         return enterCount;
     }
 
+    @Override
     public int getExitCount() {
         return exitCount;
     }
 
+    @Override
     public int getUpdateCount() {
         return updateCount;
     }
 
-    public Sprite getSprite() {
-        return sprite;
-    }
 }

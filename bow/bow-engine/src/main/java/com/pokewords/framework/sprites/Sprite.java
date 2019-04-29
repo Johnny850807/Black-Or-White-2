@@ -2,26 +2,25 @@ package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * @author johnny850807, nyngwang
  */
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
-	private AppStateWorld world;
+	protected AppStateWorld world;
+	protected Map<String, Component> components = new HashMap<>();
+	private Collection<Renderable> renderableComponents = new HashSet<>();
 	private FrameStateMachineComponent frameStateMachineComponent;
 	private PropertiesComponent propertiesComponent;
-	private Map<String, Component> components = new HashMap<>();
-	private LinkedList<Renderable> renderableComponents = new LinkedList<>();
 
 	/**
 	 * default constructor, empty FrameStateMachineComponent and default PropertiesComponent
@@ -46,11 +45,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	/**
-	 * Return the entire component map.
-	 * @return the component map.
+	 * @return all components
 	 */
-	public Map<String, Component> getComponents() {
-		return components;
+	public Collection<Component> getComponents() {
+		return components.values();
 	}
 
 	/**
@@ -162,54 +160,64 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return Objects.hash(components);
 	}
 
-	public void setBody(int x, int y, int w, int h){
+	public void setBody(int x, int y, int w, int h) {
 		getPropertiesComponent().setBody(x, y, w, h);
 	}
-	public void setBody(Rectangle body){
+
+	public void setBody(Rectangle body) {
 		getPropertiesComponent().setBody(body);
 	}
 
-	public Rectangle getBody(){
+	public Rectangle getBody() {
 		return getPropertiesComponent().getBody();
 	}
 
-	public void setPosition(Point position){
+	public void setPosition(Point position) {
 		getPropertiesComponent().setPosition(position);
 	}
 
-	public void setPosition(int x, int y){
+	public void setPosition(int x, int y) {
 		getPropertiesComponent().setPosition(x, y);
 	}
 
-	public Point2D getPosition(){
+	public Point2D getPosition() {
 		return getPropertiesComponent().getPosition();
 	}
 
-	public int getX(){
+	public int getX() {
 		return (int) getPosition().getX();
 	}
 
-	public int getY(){
+	public int getY() {
 		return (int) getPosition().getY();
 	}
-	public int getW(){
+
+	public int getW() {
 		return (int) getBody().getWidth();
 	}
-	public int getH(){
+
+	public int getH() {
 		return (int) getBody().getHeight();
 	}
 
-
-	public void setType(String type){
+	public void setType(String type) {
 		getPropertiesComponent().setType(type);
 	}
 
-	public String getType(){
+	public String getType() {
 		return getPropertiesComponent().getType();
 	}
 
-	public Point2D getCenter(){
+	public Point2D getCenter() {
 		return getPropertiesComponent().getCenter();
+	}
+
+	public void setCenter(int x, int y) {
+		getPropertiesComponent().setCenter(x, y);
+	}
+
+	public void setCenter(Point point) {
+		getPropertiesComponent().setCenter(point);
 	}
 
 	public Sprite clone(){
@@ -230,13 +238,21 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	/**
-	 * Make the components injected
+	 * Make the components injected.
 	 * @see ComponentInjector#inject(Sprite)
 	 */
 	public void injectComponents(){
 		ComponentInjector.inject(this);
 	}
 
+	/**
+	 * This method will copy entirely the Sprite's component-map following rules:
+	 * If a component implements Shareable or it doesn't implement Cloneable,
+	 * the component should is shared in the new map.
+	 * Otherwise, the component should be invoked clone(), hence it's expected having a
+	 * different reference to the original component.
+	 * @return the copied components.
+	 */
 	private Map<String, Component> copyComponents(){
 		HashMap<String, Component> cloneComponents = new HashMap<>();
 		for (String type : this.components.keySet())
@@ -251,26 +267,23 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	private boolean isComponentSharedOnly(Component component) {
-		return component instanceof Shareable && !(component instanceof CloneableComponent);
+		return !(component instanceof CloneableComponent) || component instanceof Shareable;
 	}
 
-	public Set<Frame> getCurrentFrames() {
+	/**
+	 * @return all the frames that should be rendered in the present state.
+	 */
+	public Set<Frame> getRenderedFrames() {
 		Set<Frame> frames = new LinkedHashSet<>();
 		for (Renderable renderable : renderableComponents)
-			frames.addAll(renderable.getCurrentFrames());
+			frames.addAll(renderable.getRenderedFrames());
 		return frames;
 	}
 
-	public List<Renderable> getRenderableComponents() {
+	public Collection<Renderable> getRenderableComponents() {
 		return renderableComponents;
 	}
 
-	public Set<Renderable> getRenderedComponents() {
-		return components.values().stream()
-				.filter(c -> c instanceof Renderable)
-				.map(c -> (Renderable)c)
-				.collect(Collectors.toSet());
-	}
 
 	/**
 	 * @return all components not marked by Shareable interface
@@ -292,5 +305,13 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 					.collect(Collectors.toSet());
 	}
 
-
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder("----- Sprite -----");
+		for (String componentName : components.keySet()) {
+			stringBuilder.append("\n== Component: ").append(componentName);
+			stringBuilder.append(" ==\n").append(components.get(componentName));
+		}
+		return stringBuilder.toString();
+	}
 }

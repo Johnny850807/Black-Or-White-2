@@ -5,6 +5,7 @@ import com.pokewords.framework.engine.FiniteStateMachine;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -126,7 +127,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
      * which is the current frame (state).
      */
     @Override
-    public List<Frame> getCurrentFrames() {
+    public Collection<Frame> getRenderedFrames() {
         LinkedList<Frame> frames = new LinkedList<>();
         frames.add(getCurrentFrame());
         return frames;

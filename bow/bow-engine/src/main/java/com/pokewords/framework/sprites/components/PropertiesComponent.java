@@ -104,7 +104,7 @@ public class PropertiesComponent extends CloneableComponent {
 
 	private void validatePropertiesComponent() {
 		if (StringUtility.anyNullOrEmpty(type))
-			throw new RuntimeException("The type and state of a Sprite should be set before the app started..");
+			throw new RuntimeException("The type of a Sprite should be set before the app started..");
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	public interface PositionListener{
-		void onPositionUpdated(Point2D point);
+		void onPositionUpdated(int x, int y);
 	}
 
 	public interface StateListener{
@@ -152,7 +152,7 @@ public class PropertiesComponent extends CloneableComponent {
 	 * Trigger all positionListener's onPositionUpdated() method
 	 */
 	protected void notifyPositionListeners(){
-		positionListeners.forEach(listener -> listener.onPositionUpdated(body.getLocation()));
+		positionListeners.forEach(listener -> listener.onPositionUpdated(getX(), getY()));
 	}
 
 	@Override
@@ -168,5 +168,14 @@ public class PropertiesComponent extends CloneableComponent {
 	@Override
 	public int hashCode() {
 		return Objects.hash(body, center, type);
+	}
+
+	@Override
+	public String toString() {
+		return "PropertiesComponent{" +
+				"body=" + body +
+				", center=" + center +
+				", type='" + type + '\'' +
+				'}';
 	}
 }

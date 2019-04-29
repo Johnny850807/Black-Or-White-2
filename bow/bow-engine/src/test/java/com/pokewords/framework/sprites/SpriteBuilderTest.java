@@ -2,7 +2,7 @@ package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.sprites.components.MockComponent;
+import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class SpriteBuilderTest extends AbstractTest {
     public void testAddComponent() {
         PropertiesComponent propertiesComponent = new PropertiesComponent("TYPE");
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
-        MockComponent mockComponent = new MockComponent();
+        MockComponentImp mockComponent = new MockComponentImp();
 
         Sprite sprite = spriteBuilder.init()
                     .setPropertiesComponent(propertiesComponent)

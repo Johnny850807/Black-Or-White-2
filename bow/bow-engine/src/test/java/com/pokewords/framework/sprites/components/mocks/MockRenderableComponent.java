@@ -1,12 +1,13 @@
-package com.pokewords.framework.sprites.components;
+package com.pokewords.framework.sprites.components.mocks;
 
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.sprites.components.Renderable;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class MockRenderableComponent extends MockComponent implements Renderable{
+public class MockRenderableComponent extends MockComponentImp implements Renderable {
     private LinkedList<Frame> mockFrames = new LinkedList<>();
 
     public void addFrame(Frame frame) {
@@ -14,7 +15,7 @@ public class MockRenderableComponent extends MockComponent implements Renderable
     }
 
     @Override
-    public List<Frame> getCurrentFrames() {
+    public List<Frame> getRenderedFrames() {
         return mockFrames;
     }
 
