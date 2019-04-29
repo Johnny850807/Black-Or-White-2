@@ -264,7 +264,7 @@ public class Script {
         private static void setupScript(String scriptText) {
 
             Pattern pattern = Pattern.compile(
-                    "<(\\w+)> +(\\S+)(?: +(\\S+))? *\\n(.*?)\\n</\\1>",
+                    "<(\\w+)> +(\\S+)(?: +(\\S+))? *(\\n.*?)\\n</\\1>",
                     Pattern.DOTALL | Pattern.MULTILINE);
             Matcher matcher = pattern.matcher(scriptText);
 
