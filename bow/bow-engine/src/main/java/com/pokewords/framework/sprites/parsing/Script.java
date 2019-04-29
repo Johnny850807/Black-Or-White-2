@@ -14,12 +14,15 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
+ *   Script 改為 Class 而非 Interface：
+ *     從介面 Script 到 LinScript 的差別應該只有合法的 key-value pairs
+ *     Client 只要為具體的 Script 定義自己的 segment-name, element-name
  *
- *   從介面 Script 到 LinScript 的差別應該只有合法的 key-value pairs
- *      Client 只要為具體的 Script 定義自己的 segment-name, element-name
- *      Script 應該不需要是 Interface
- *
- *   檢查合法的 segment-name, element-name, key 另外開一個類別做
+ *   Q: 是否在 Script.Parser 時一同比對 Script.Rules？
+ *   Q: 是否需要將 Segment及 Element也嵌入進來，得到
+ *      Script.Segment
+ *      Script.Element
+ *      增加凝聚力？
  *   
  * @author nyngwang
  */
