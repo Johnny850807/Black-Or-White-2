@@ -88,7 +88,7 @@ public class SpriteTest extends AbstractTest {
         sprite.putComponent("r2", r2);
         sprite.putComponent("r3", r3);
 
-        Set<Frame> currentFrames = sprite.getRenderedFrames();
+        Collection<Frame> currentFrames = sprite.getRenderedFrames();
         assertTrue(currentFrames.contains(StubFactory.FSCM.FRAME_A));  //the initial state of the stub should be contained
         assertTrue(currentFrames.contains(rf1));
         assertTrue(currentFrames.contains(rf2));

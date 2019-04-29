@@ -134,15 +134,15 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     /**
      * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
      */
-    public Set<Sprite> getSpritesWithinArea(Sprite sprite, int x, int y, int w, int h) {
+    public Set<Sprite> getSpritesWithinArea(Sprite sprite, int w, int h) {
         return null;
     }
 
     /**
      * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
      */
-    public Set<Sprite> getSpritesWithinArea(Sprite sprite, Rectangle area) {
-        return this.getSpritesWithinArea(sprite, area.x, area.y, area.width, area.height);
+    public Set<Sprite> getSpritesWithinArea(Sprite sprite, Dimension dimension) {
+        return this.getSpritesWithinArea(sprite, dimension.width, dimension.height);
     }
 
     /**

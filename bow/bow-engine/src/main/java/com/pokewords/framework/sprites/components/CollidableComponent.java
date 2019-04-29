@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 /**
@@ -17,7 +18,8 @@ public class CollidableComponent extends Component implements Shareable {
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) { }
+	public void onAppStateStart(AppStateWorld world) {
+	}
 
 	@Override
 	public void onUpdate(double tpf) { }

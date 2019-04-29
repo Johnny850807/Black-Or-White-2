@@ -260,7 +260,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	/**
 	 * @return all the frames that should be rendered in the present state.
 	 */
-	public Set<Frame> getRenderedFrames() {
+	public Collection<Frame> getRenderedFrames() {
 		Set<Frame> frames = new LinkedHashSet<>();
 		for (Renderable renderable : renderableComponents)
 			frames.addAll(renderable.getRenderedFrames());
@@ -291,6 +291,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 					.filter(c ->c instanceof Shareable)
 					.collect(Collectors.toSet());
 	}
+
+	public boolean isCollidable() {
+        return getComponentByName(Component.COLLIDABLE).isPresent();
+    }
 
 	@Override
 	public boolean equals(Object o) {
