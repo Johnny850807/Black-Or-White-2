@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.ScriptParsingErrorException;
 import com.pokewords.framework.engine.exceptions.ScriptRulesParserException;
 import com.pokewords.framework.engine.exceptions.SegmentNameUnrecognizableException;
+import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.components.Frame;
 import com.pokewords.framework.sprites.components.FrameFactory;
@@ -27,6 +28,17 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class Script {
+    /**
+     * Demo
+     */
+    public static void main(String[] args) {
+        Script script = Script.Parser.parse(
+                FileUtility.read("path/to/script_text"),
+                Script.Rules.Parser.parse("path/to/script_rules"));
+
+        script.addSegment(new Segment("frame", 1, "punch"));
+    }
+
     public interface Def {
         String SEGMENT = "Segment";
         String ELEMENT = "Element";
@@ -34,7 +46,7 @@ public class Script {
     private ArrayList<Segment> segments;
     private Rules rules;
 
-    public Script(Rules rules) {
+    private Script(Rules rules) {
         segments = new ArrayList<>();
         this.rules = rules;
     }
@@ -43,6 +55,7 @@ public class Script {
 
     public Script addSegment(Segment segment) {
         segments.add(segment);
+        segment.setParentScript(this);
         return this;
     }
 
@@ -399,7 +412,9 @@ public class Script {
             fsmc.addState(frame);
         }
 
-        public Script parse(String scriptText) {}
+        public static Script parse(String scriptText, Rules scriptRules) {
+            return null;
+        }
 
     }
 }

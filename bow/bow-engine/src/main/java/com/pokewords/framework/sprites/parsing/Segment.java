@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.engine.utils.FileUtility;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,7 +11,7 @@ import java.util.stream.Collectors;
  */
 public class Segment {
     public interface Def {
-        String NAME = "name";
+        String NAME = "segment-name";
         String ID = "segment-id";
         String DESCRIPTION = "segment-description";
     }
@@ -25,19 +27,18 @@ public class Segment {
     private ArrayList<Element> elements;
     private Maps maps;
 
-    public Segment(String segmentName, int segmentId, Script parentScript) {
-        init(segmentName, segmentId, parentScript);
+    public Segment(String segmentName, int segmentId) {
+        init(segmentName, segmentId);
     }
 
-    public Segment(String segmentName, int segmentId, String segmentDescription, Script parentScript) {
-        init(segmentName, segmentId, parentScript);
+    public Segment(String segmentName, int segmentId, String segmentDescription) {
+        init(segmentName, segmentId);
         maps.stringMap.put(Def.DESCRIPTION, segmentDescription);
     }
 
-    private void init(String segmentName, int segmentId, Script parentScript) {
-        maps.stringMap.put(Script.Def.SEGMENT, segmentName);
+    private void init(String segmentName, int segmentId) {
+        maps.stringMap.put(Def.NAME, segmentName);
         maps.integerMap.put(Def.ID, segmentId);
-        this.parentScript = parentScript;
         elements = new ArrayList<>();
         maps = new Maps();
     }
@@ -75,11 +76,13 @@ public class Segment {
         return Optional.of(maps.integerMap.get(key));
     }
 
-    // getter
+    // parentScript management
 
     public Script getParentScript() {
         return parentScript;
     }
+
+    public void setParentScript(Script parentScript) { this.parentScript = parentScript; }
 
     // Not recommended
 
