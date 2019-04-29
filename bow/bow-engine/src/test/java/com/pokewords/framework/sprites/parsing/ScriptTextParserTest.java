@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ScriptTextParserTest extends AbstractTest {
-    ScriptTextParser parser = release.scriptTextParser();
+    ScriptTextParser parser = release.scriptParser();
     FrameFactory frameFactory = mock.frameFactory();
 
     final String SCRIPT =

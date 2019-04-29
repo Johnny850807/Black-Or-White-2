@@ -9,6 +9,7 @@ import com.pokewords.framework.sprites.parsing.*;
 import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.ioc.IocFactory;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -17,7 +18,10 @@ import java.util.function.BiConsumer;
  *   先做出Sprite
  *   再parse得出Script
  *   用Script完成fsmc
+ *      Script傳給FSMBuilder製作出Frame完成FSM component?
  *   SpriteWeaver用(Script, Sprite)完成Sprite
+ *      fsmc只是sprite的一部分
+ *      SpriteWeaver完成sprite的所有部分
  *
  *
  * @author nyngwang
@@ -35,21 +39,16 @@ public class SpriteBuilder {
                                  .addComponent(Component.COLLIDABLE, new CollidableComponent())
                                  .buildScriptFromScriptTextPath("path/to/script_text")
                                      .buildScriptFromScriptText(FileUtility.read("path/to/script_text"))
-                                     .setScript(new ScriptTextParser(
-                                             new ReleaseIocFactory(),
-                                             new ScriptTextParser.Rules() {
-
-                                             })
-                                             .parse(FileUtility.read("path/to/script_text")))
+                                     .setScript(null)
                                  .addWeaverNode((script, sprite) -> {
-                                                    Element bow = script.getFrameSegment()
-                                                                        .getElement("bow");
+                                                    List<Element> bows = script.getSegmentById("frame")
+                                                            .get().getElementsByName("bow");
                                                 })
                                  .build();
     }
 
     private Sprite sprite;
-    private ScriptTextParser scriptTextParser;
+    private Script.Parser scriptParser;
     private Script script;
     private SpriteWeaver spriteWeaver;
     private FrameFactory frameFactory;
@@ -75,11 +74,11 @@ public class SpriteBuilder {
 
     /**
      * Initialize sprite, mandatory components and script-parser.
-     * @param iocFactory The provider of new scriptTextParser.
+     * @param iocFactory The provider of new scriptParser.
      * @return The current builder.
      */
     public SpriteBuilder init(IocFactory iocFactory) {
-        scriptTextParser = iocFactory.scriptTextParser();
+        scriptParser = iocFactory.scriptParser();
         frameFactory = iocFactory.frameFactory();
         return init();
     }
@@ -109,7 +108,7 @@ public class SpriteBuilder {
      * @return The current builder.
      */
     public SpriteBuilder buildScriptFromScriptText(String scriptText) {
-        script = scriptTextParser.parse(scriptText);
+        script = scriptParser.parse(scriptText);
         return this;
     }
 
@@ -172,7 +171,7 @@ public class SpriteBuilder {
      */
     public Sprite build() {
         validateScript();
-        completeFSMComponentByScript();
+        // 啟動Weaver
         spriteWeaver.weave();
         ComponentInjector.inject(sprite);
         return sprite;
@@ -188,16 +187,6 @@ public class SpriteBuilder {
             );
         }
     }
-
-    private void completeFSMComponentByScript() {
-        FrameStateMachineComponent fsmComponent = sprite.getFrameStateMachineComponent();
-
-        frameFactory.createFrame(script.getFrameSegment());
-
-        fsmComponent.addFrame(script.getFrameSegment());
-
-    }
-
 
 
     /**

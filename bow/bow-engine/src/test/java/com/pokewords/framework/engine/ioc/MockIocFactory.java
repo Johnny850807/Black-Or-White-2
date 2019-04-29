@@ -15,7 +15,7 @@ public class MockIocFactory implements IocFactory
     }
 
     @Override
-    public ScriptTextParser scriptTextParser() {
+    public ScriptTextParser scriptParser() {
         return null;
     }
 

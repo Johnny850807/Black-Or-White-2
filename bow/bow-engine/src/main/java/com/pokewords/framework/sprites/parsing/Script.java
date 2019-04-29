@@ -1,13 +1,10 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.engine.exceptions.ScriptParserException;
 import com.pokewords.framework.engine.exceptions.ScriptParsingErrorException;
 import com.pokewords.framework.engine.exceptions.ScriptRulesParserException;
-import com.pokewords.framework.engine.exceptions.SegmentNameUnrecognizableException;
 import com.pokewords.framework.engine.utils.FileUtility;
-import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.components.Frame;
-import com.pokewords.framework.sprites.components.FrameFactory;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -24,6 +21,9 @@ import java.util.stream.Collectors;
  *      Script.Segment
  *      Script.Element
  *      增加凝聚力？
+ *
+ *   Q: 似乎應該將 Script.Rules 傳下去給 Segment 及 Element？
+ *      不用，因為parse完的東西已存到maps
  *   
  * @author nyngwang
  */
@@ -227,64 +227,80 @@ public class Script {
 
     /**
      *  The Script.Parser
+     *
+     *  只管建立 Script，不用擔心 FSM component
+     *
      */
     public static class Parser {
 
-        private FrameFactory frameFactory;
-        private FrameStateMachineComponent fsmc;
-        private FrameSegment frameSegment;
-        private GallerySegment gallerySegment;
-        private Script script;
-        private OnParsingFrameListener listener;
+        private static Script script;
+        private static Rules rules;
+        private static Segment segment;
 
-        /**
-         * Constructor.
-         * @param iocFactory abstract factory for dependency.
-         */
-        public ScriptTextParser(IocFactory iocFactory, Rules rules) {
-            this.frameFactory = iocFactory.frameFactory();
-            fsmc = null;
-            frameSegment = null;
-            gallerySegment = null;
-            script = null;
-            listener = null;
+        //
+
+        private Parser() { }
+
+        public static Script parse(String scriptText, Rules rules) {
+
+            init(rules);
+            // 依照新的定義，應該是不用分 frameSegment / gallerySegment
+            setupScript(scriptText);
+            addSomethingToScript();
+                for (SegmentBlock segmentBlock : segmentBlocks) {
+                    processSegmentBlock(segmentBlock);
+                }
+
+
+            1;
+            return script;
         }
 
-        private void init() {
-            fsmc = null;
-            frameSegment = null;
-            gallerySegment = null;
-            script = null;
-            listener = null;
+        private static void init(Rules rules) {
+            script = new Script(rules);
+            Parser.rules = rules;
         }
 
-        @Override
-        public FrameStateMachineComponent parse(Script script, OnParsingFrameListener listener) {
+        private static void setupScript(String scriptText) {
 
-            // Prepare for fsm construction.
-            fsmc = new FrameStateMachineComponent();
-            this.script = script;
-            this.listener = listener;
-
-            // Start parsing.
-            String scriptText = script.getText();
-            Pattern globalTagPattern = Pattern.compile(
-                    "<(\\w+)>(.*?)</\\1>",
+            Pattern pattern = Pattern.compile(
+                    "<(\\w+)> +(\\S+)(?: +(\\S+))? *\\n(.*?)\\n</\\1>",
                     Pattern.DOTALL | Pattern.MULTILINE);
-            Matcher globalTagPatternMatcher = globalTagPattern.matcher(scriptText);
+            Matcher matcher = pattern.matcher(scriptText);
 
-            while (globalTagPatternMatcher.find()) {
+            while (matcher.find()) {
+                String segmentName = matcher.group(1);
+                String segmentId = matcher.group(2);
+                String segmentDescription = matcher.group(3);
+                String segmentContent = matcher.group(4);
 
-                String tagName = globalTagPatternMatcher.group(1);
-                String tagContent = globalTagPatternMatcher.group(2);
-                processTag(tagName, tagContent);
+                setupSegment(segmentName, segmentId, segmentDescription, segmentContent);
             }
 
-            init();
-
-            return fsmc;
         }
 
+        private static void setupSegment(
+                String segmentName, String segmentId, String segmentDescription, String segmentContent) {
+            if ( !rules.validSegmentNames.contains(segmentName) ) {
+                throw new ScriptParserException("Segment name is unrecognizable!");
+            }
+
+            // 如果segmentDescription == null，不影響
+            segment = new Segment(segmentName, Integer.parseInt(segmentId), segmentDescription);
+            setupSegmentContent(segmentContent);
+        }
+
+        private static void setupSegmentContent(String segmentContent) {
+
+            // TODO: 1. 設置 kv-pairs
+            //       2. 如果有則設置 Elements
+
+            Pattern pattern = Pattern.compile(
+                    "??????????",
+                    Pattern.DOTALL | Pattern.MULTILINE);
+            Matcher matcher;
+
+        }
 
         /**
          * Process the tag.
@@ -418,10 +434,6 @@ public class Script {
             // 5. Finally, create frame and add it to fsmc
             Frame frame = frameFactory.createFrame(frameSegment);
             fsmc.addState(frame);
-        }
-
-        public static Script parse(String scriptText, Rules scriptRules) {
-            return null;
         }
 
     }

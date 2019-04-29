@@ -20,7 +20,7 @@ public class ReleaseIocFactory implements IocFactory{
     }
 
     @Override
-    public ScriptTextParser scriptTextParser() {
+    public ScriptTextParser scriptParser() {
 
         // Return the sprites.components.
 
