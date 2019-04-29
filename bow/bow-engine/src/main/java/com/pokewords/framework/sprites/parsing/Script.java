@@ -11,6 +11,7 @@ import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -42,20 +43,26 @@ public class Script {
         return this;
     }
 
-    public List<Segment> getSegments() {
-        return segments;
-    }
-
     public Optional<Segment> getSegmentById(String segmentId) {
         for (Segment segment : segments) {
-            if (segment.getSegmentId().equals(segmentId)) {
+            if (segment.getStringByKey(Segment.ID).equals(segmentId)) {
                 return Optional.of(segment);
             }
         }
         return Optional.empty();
     }
 
-    // Rules management
+    public List<Segment> getSegmentsByDescription(String segmentDescription) {
+        return segments.stream()
+                .filter(segment -> segment.getStringByKey(Segment.DESCRIPTION).equals(segmentDescription))
+                .collect(Collectors.toList());
+    }
+
+    // Not recommended
+
+    public List<Segment> getSegments() {
+        return segments;
+    }
 
     public Rules getRules() {
         return rules;
@@ -76,19 +83,34 @@ public class Script {
 
     /**
      *  The Script.Rules
-     *  Usage: As a data-struct.
      */
     public static class Rules {
-        public List<String> validSegmentNames;
-        public Map<String, String> validSegmentKVRules;
-        public List<String> validElementNames;
-        public Map<String, String> validElementKVRules;
+        private List<String> validSegmentNames;
+        private Map<String, String> validSegmentKVRules;
+        private List<String> validElementNames;
+        private Map<String, String> validElementKVRules;
 
         public Rules() {
             validSegmentNames = new ArrayList<>();
             validSegmentKVRules = new HashMap<>();
             validElementNames = new ArrayList<>();
             validElementKVRules = new HashMap<>();
+        }
+
+        public List<String> getValidSegmentNames() {
+            return validSegmentNames;
+        }
+
+        public Map<String, String> getValidSegmentKVRules() {
+            return validSegmentKVRules;
+        }
+
+        public List<String> getValidElementNames() {
+            return validElementNames;
+        }
+
+        public Map<String, String> getValidElementKVRules() {
+            return validElementKVRules;
         }
 
         /**
