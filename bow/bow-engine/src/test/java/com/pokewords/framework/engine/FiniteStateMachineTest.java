@@ -342,6 +342,11 @@ public class FiniteStateMachineTest extends AbstractTest {
     }
 
     @Test
+    public void testEmptyFsmEquality() {
+        assertEquals(new FiniteStateMachine(), new FiniteStateMachine());
+    }
+
+    @Test
     public void testFsmEquality() {
         FiniteStateMachine<String> fsm1 = createBasicFsm();
         FiniteStateMachine<String> fsm2 = createBasicFsm();

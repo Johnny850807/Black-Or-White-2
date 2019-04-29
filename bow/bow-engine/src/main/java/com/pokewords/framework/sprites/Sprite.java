@@ -147,19 +147,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 			component.onAppStateDestroy();
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Sprite sprite = (Sprite) o;
-		return Objects.equals(components, sprite.components);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(components);
-	}
-
 	public void setBody(int x, int y, int w, int h) {
 		getPropertiesComponent().setBody(x, y, w, h);
 	}
@@ -303,6 +290,19 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return components.values().stream()
 					.filter(c ->c instanceof Shareable)
 					.collect(Collectors.toSet());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Sprite sprite = (Sprite) o;
+		return Objects.equals(components, sprite.components);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(components);
 	}
 
 	@Override

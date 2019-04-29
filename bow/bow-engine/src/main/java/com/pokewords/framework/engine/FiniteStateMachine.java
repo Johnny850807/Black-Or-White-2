@@ -356,7 +356,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 		if (o == null || getClass() != o.getClass()) return false;
 		FiniteStateMachine<?> that = (FiniteStateMachine<?>) o;
 		return eventIndex == that.eventIndex &&
-				currentState.equals(that.currentState) &&
+				Objects.equals(currentState, that.currentState) &&
 				eventMap.equals(that.eventMap) &&
 				stateList.equals(that.stateList) &&
 				matrix.equals(that.matrix) &&
