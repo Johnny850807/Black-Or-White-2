@@ -23,25 +23,26 @@ public class PrototypeFactoryTest extends AbstractTest {
     }
 
     @Test
-    public void testCloneExistentPrototype(){
+    public void testAddAndCloneAndRemovePrototype(){
         final String NAME = "Sprite";
+        // given a simple sprite added as a prototype
         Sprite sprite = createSimpleSprite();
         prototypeFactory.addPrototype(NAME, sprite);
+
+        // then clone it from the factory will work
         assertNotSameButEquals(sprite, prototypeFactory.cloneSprite(NAME));
-    }
 
-    @Test
-    public void testAddAndRemovePrototype(){
-        final String NAME = "Sprite";
-        Sprite sprite = createSimpleSprite();
-        prototypeFactory.addPrototype(NAME, sprite);
-        prototypeFactory.cloneSprite(NAME);
 
+        // given that sprite removed from the factory
         try{
             prototypeFactory.removePrototype(NAME);
+
+            // then clone it should throw exception (not found)
             prototypeFactory.cloneSprite(NAME);
             fail();
-        }catch (GameEngineException err) { }
+        } catch (GameEngineException err) {
+
+        }
     }
 
 

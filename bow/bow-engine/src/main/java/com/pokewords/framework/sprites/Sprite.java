@@ -148,64 +148,64 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	public void setBody(int x, int y, int w, int h) {
-		getPropertiesComponent().setBody(x, y, w, h);
-	}
+        getPropertiesComponent().setBody(x, y, w, h);
+    }
 
-	public void setBody(Rectangle body) {
-		getPropertiesComponent().setBody(body);
-	}
+    public void setBody(Rectangle body) {
+        getPropertiesComponent().setBody(body);
+    }
 
-	public Rectangle getBody() {
-		return getPropertiesComponent().getBody();
-	}
+    public Rectangle getBody() {
+        return getPropertiesComponent().getBody();
+    }
 
-	public void setPosition(Point position) {
-		getPropertiesComponent().setPosition(position);
-	}
+    public void setPosition(Point position) {
+        getPropertiesComponent().setPosition(position);
+    }
 
-	public void setPosition(int x, int y) {
-		getPropertiesComponent().setPosition(x, y);
-	}
+    public void setPosition(int x, int y) {
+        getPropertiesComponent().setPosition(x, y);
+    }
 
-	public Point2D getPosition() {
-		return getPropertiesComponent().getPosition();
-	}
+    public Point2D getPosition() {
+        return getPropertiesComponent().getPosition();
+    }
 
-	public int getX() {
-		return (int) getPosition().getX();
-	}
+    public int getX() {
+        return (int) getPosition().getX();
+    }
 
-	public int getY() {
-		return (int) getPosition().getY();
-	}
+    public int getY() {
+        return (int) getPosition().getY();
+    }
 
-	public int getW() {
-		return (int) getBody().getWidth();
-	}
+    public int getW() {
+        return (int) getBody().getWidth();
+    }
 
-	public int getH() {
-		return (int) getBody().getHeight();
-	}
+    public int getH() {
+        return (int) getBody().getHeight();
+    }
 
-	public void setType(String type) {
-		getPropertiesComponent().setType(type);
-	}
+    public void setType(String type) {
+        getPropertiesComponent().setType(type);
+    }
 
-	public String getType() {
-		return getPropertiesComponent().getType();
-	}
+    public String getType() {
+        return getPropertiesComponent().getType();
+    }
 
-	public Point2D getCenter() {
-		return getPropertiesComponent().getCenter();
-	}
+    public Point2D getCenter() {
+        return getPropertiesComponent().getCenter();
+    }
 
-	public void setCenter(int x, int y) {
-		getPropertiesComponent().setCenter(x, y);
-	}
+    public void setCenter(int x, int y) {
+        getPropertiesComponent().setCenter(x, y);
+    }
 
-	public void setCenter(Point point) {
-		getPropertiesComponent().setCenter(point);
-	}
+    public void setCenter(Point point) {
+        getPropertiesComponent().setCenter(point);
+    }
 
 	public Sprite clone(){
 		try {

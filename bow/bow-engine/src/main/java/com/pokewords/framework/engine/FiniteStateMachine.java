@@ -42,7 +42,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	private ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
 
 	/**
-	 * Save each state,key is hashcode of state.
+	 * Save each state, key is hashcode of state.
 	 */
 	private Map<Integer, StateNode> stateNodesMap = new HashMap<>();
 
@@ -51,7 +51,7 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * Show the overall status and currentState of the current matrix.
 	 * The first number of each line is the index of the first state of each line,
 
-	 * e.g. 3|(0)122,(1)target,(2)z --> first state is '122' and it's index is 3.
+	 * e.g. 3|(0)122, (1)target, (2)z --> first state is '122' and it's index is 3.
 	 *
 	 * If the other states are the same (pointing to itself), use "-" instead
 	 *
@@ -122,29 +122,38 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @return currentState
 	 */
 	public T trigger(String event){
-		if(currentState == null){
-			throw new FiniteStateMachineException("currentState not exists");
-		}
-		if(isEventExists(event)){
+        if(currentState == null)
+            throw new FiniteStateMachineException("CurrentState not exists");
+
+		if(isEventExists(event)) {
 			int eventIndex = getEventIndexFromEventMap(event);
 			StateNode currentNode = getStateNodeByState(currentState);
-			int currentNumber = matrix.get(currentNode.getStateNumber()).get(eventIndex);
-			currentState = stateList.get(currentNumber);
+            currentState = getState(currentNode.getStateNumber(), eventIndex);
 		}
 		return currentState;
 	}
+
+	private int getStateId(int row, int col) {
+        return matrix.get(row).get(col);
+    }
+
+    private T getState(int row, int col) {
+	    return stateList.get(getStateId(row, col));
+    }
 
 	/**
 	 * Replaces currentState
 	 * @param currentState to be replaced
 	 */
 	public void setCurrentState(T currentState){
-		if(!isStateExists(currentState)){
-            throw new FiniteStateMachineException("State not exist");
-		}else {
-			this.currentState = getStateNodeByState(currentState).getState();
-		}
+		validateCurrentState();
+		this.currentState = currentState;
 	}
+
+	private void validateCurrentState() {
+        if(!isStateExists(currentState))
+            throw new FiniteStateMachineException("State not exist");
+    }
 
 	/**
 	 * Obtain the stateNode by @param state
@@ -220,13 +229,13 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 */
 	public void addState(T t){
 		stateList.add(t);
-		int stateNumber = stateList.size()-1;
-		StateNode newNode = new StateNode(t,stateNumber);
+		int stateNumber = stateList.size() - 1;
+		StateNode newNode = new StateNode(t, stateNumber);
 		stateNodesMap.put(t.hashCode(), newNode);
 		ArrayList<Integer> initEventList = new ArrayList<>();
 		initEventList.add(stateNumber);
 		matrix.add(initEventList);
-		for(int i = 0; i < matrix.size(); i++) {
+		for (int i = 0; i < matrix.size(); i++) {
 			while(matrix.get(i).size() != matrix.size()){
 				matrix.get(i).add(matrix.get(i).get(0));
 			}
@@ -244,15 +253,24 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param to is triggered state
 	 */
 	public void addTransition(T from, String event, T to){
-		if(!isStateExists(from) || !isStateExists(to)){
-			throw new FiniteStateMachineException("Not exists");
-		}else {
+		if(!stateExists(from, to))
+		    throw new FiniteStateMachineException("Not exists");
+		else
+		{
 			addEvent(event);
 			StateNode fromState = getStateNodeByState(from);
 			StateNode toState = getStateNodeByState(to);
 			matrix.get(fromState.getStateNumber()).set(getEventIndexFromEventMap(event), toState.getStateNumber());
 		}
 	}
+
+	private boolean stateExists(T ...states) {
+        for (T state : states) {
+            if (!isStateExists(state))
+                return false;
+        }
+	    return true;
+    }
 
 	/**
 	 * Point all states to a specific state(@param targetState), and call this event @param event.
@@ -281,26 +299,27 @@ public class FiniteStateMachine<T> implements Cloneable{
 	 * @param excepts those that want to be filtered out.
 	 */
 	public void addTransitionFromAllStates(String event, T targetState, T ...excepts){
-		if(!isStateExists(targetState)){
+		if(!isStateExists(targetState))
             throw new FiniteStateMachineException("targetState not exists");
-		}else{
+		else
+		{
 			addEvent(event);
 			StateNode targetStateNode = getStateNodeByState(targetState);
-			if(excepts.length > 0){
+			if(excepts.length > 0)
+			{
 				List<Integer> exceptsNodeList = new ArrayList<>();
-				for (T exceptState : excepts){
+				for (T exceptState : excepts) {
 					StateNode exceptsNode = getStateNodeByState(exceptState);
 					exceptsNodeList.add(exceptsNode.getStateNumber());
 				}
-				for (int i = 0; i < matrix.size(); i++){
-					if(!exceptsNodeList.contains(i)){
+				for (int i = 0; i < matrix.size(); i++)
+					if(!exceptsNodeList.contains(i))
 						matrix.get(i).set(getEventIndexFromEventMap(event), targetStateNode.getStateNumber());
-					}
-				}
-			}else {
-				for (ArrayList<Integer> state : matrix){
+			}
+			else
+			{
+				for (ArrayList<Integer> state : matrix)
 					state.set(getEventIndexFromEventMap(event), targetStateNode.getStateNumber());
-				}
 			}
 		}
 	}
