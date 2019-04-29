@@ -9,9 +9,8 @@ import com.sun.istack.internal.Nullable;
 
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -21,11 +20,12 @@ import java.util.function.Consumer;
 
 public class AppStateWorld implements AppStateLifeCycleListener {
     private List<Sprite> sprites;
+    private Map<Integer, Sprite> indexSpriteMap;
+    private Map<Sprite, Integer> spriteIndexMap;
     private RenderedLayers renderedLayers;
     private List<CollisionHandler> collisionHandlers;
 
     public AppStateWorld() {
-        sprites = new ArrayList<>();
         List<List<Frame>> layers = new ArrayList<>();
         renderedLayers = new RenderedLayers(layers);
         collisionHandlers = new ArrayList<>();
@@ -35,9 +35,13 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @param sprite the spawned sprite to be added into the world
      * @return the Sprite's unique id
      */
-    public void spawn(Sprite sprite) {
+    public int spawn(Sprite sprite) {
+        int id = sprites.size() - 1;
         sprites.add(sprite);
+        indexSpriteMap.put(id, sprite);
+        spriteIndexMap.put(sprite, id);
         addFrameToRenderedLayer(sprite.getCurrentFrame().getLayerIndex(), sprite.getCurrentFrame());
+        return id;
     }
 
     /**
@@ -48,6 +52,14 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      */
     public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, @Nullable Consumer<Integer> callback) {
         //TODO
+        new Thread(() -> {
+            try {
+                Thread.sleep(time);
+                spawn(sprite);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     /**
@@ -57,9 +69,11 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      */
     private void addFrameToRenderedLayer(int index, Frame frame) {
         List<List<Frame>> layers = renderedLayers.getLayers();
-        if (index >= layers.size() - 1)
-            for (int i = 0; i < layers.size() - index + 1; i++)
+        if (index >= layers.size() - 1) {
+            for (int i = 0; i < layers.size() - index + 1; i++) {
                 layers.add(new ArrayList<>());
+            }
+        }
         layers.get(index).add(frame);
     }
 
@@ -76,7 +90,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public List<Sprite> getSprites() {
-        return sprites;
+        return new ArrayList<>(sprites);
     }
 
     public List<CollisionHandler> getCollisionHandlers() {
@@ -85,43 +99,54 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     @Override
     public void onAppStateStart(AppStateWorld world) {
-        if (world != this)
+        if (world != this) {
             throw new GameEngineException("The world is not consistent from triggering the onAppStateStart() method from the AppState");
+        }
 
-        for (Sprite sprite: sprites)
+        for (Sprite sprite: sprites) {
             sprite.onAppStateStart(this);
+        }
     }
 
     @Override
     public void onAppStateEnter() {
-        for (Sprite sprite: sprites)
+        for (Sprite sprite: sprites) {
             sprite.onAppStateEnter();
+        }
     }
 
     @Override
     public void onAppStateExit() {
-        for (Sprite sprite: sprites)
+        for (Sprite sprite: sprites) {
             sprite.onAppStateExit();
+        }
     }
 
     @Override
     public void onAppStateDestroy() {
-        for (Sprite sprite: sprites)
+        for (Sprite sprite: sprites) {
             sprite.onAppStateDestroy();
+        }
     }
 
 
     @Override
     public void onUpdate(double tpf) {
-        for (Sprite sprite: sprites)
+        for (Sprite sprite: sprites) {
             sprite.onUpdate(tpf);
+        }
 
         // to notify sprites if they have collided
-        for (Sprite sprite1: sprites)
-            for (Sprite sprite2: sprites)
-                if (sprite1 != sprite2 && isCollided(sprite1, sprite2))
-                    for (CollisionHandler collisionHandler: collisionHandlers)
+        for (Sprite sprite1: sprites) {
+            for (Sprite sprite2: sprites) {
+                if (sprite1 != sprite2 && isCollided(sprite1, sprite2)) {
+                    for (CollisionHandler collisionHandler: collisionHandlers) {
                         collisionHandler.onCollision(sprite1, sprite2);
+                    }
+                }
+            }
+        }
+
     }
 
     /**
@@ -138,42 +163,48 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return if the sprite is in the world
      */
     public boolean contains(Sprite sprite) {
-        return true;
+        return spriteIndexMap.containsKey(sprite);
     }
 
     /**
      * @return if the sprite who owns the id is in the world
      */
     public boolean contains(int spriteId) {
-        return true;
+        return indexSpriteMap.containsKey(spriteId);
     }
 
     /**
      * @return the sprite's id
      */
     public int getId(Sprite sprite) {
-        return 0;
+        return spriteIndexMap.get(sprite);
     }
 
     /**
      * @return the sprite who owns the id
      */
     public Sprite getSprite(int spriteId) {
-        return null;
+        return indexSpriteMap.get(spriteId);
     }
 
     /**
      * @return the sprites within the area (x, y, w, h)
      */
     public Set<Sprite> getSpritesWithinArea(int x, int y, int w, int h) {
-        return null;
+        return this.getSpritesWithinArea(new Rectangle(h, w, x, y));
     }
 
     /**
      * @return the sprites within the area (x, y, w, h)
      */
     public Set<Sprite> getSpritesWithinArea(Rectangle area) {
-        return this.getSpritesWithinArea(area.x, area.y, area.width, area.height);
+        Set<Sprite> spritesWithinArea = new HashSet<>();
+        for (Sprite sprite: sprites) {
+            if (area.contains(sprite.getBody())) {
+                spritesWithinArea.add(sprite);
+            }
+        }
+        return spritesWithinArea;
     }
 
 
@@ -181,6 +212,8 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
      */
     public Set<Sprite> getSpritesWithinArea(Sprite sprite, int x, int y, int w, int h) {
+        int spriteCenterX = sprite.getX() + sprite.getW() / 2;
+        int spriteCenterY = sprite.getY() + sprite.getH() / 2;
         return null;
     }
 
