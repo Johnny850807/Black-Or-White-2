@@ -10,18 +10,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- *   Script 改為 Class 而非 Interface：
- *     從介面 Script 到 LinScript 的差別應該只有合法的 key-value pairs
- *     Client 只要為具體的 Script 定義自己的 segment-name, element-name
+ *   - Script 改為 Class：用 fields 來反應差異。
+ *   - Script.Parser.parse() 中使用到 Script.Rules
+ *   - 只有合法的資料會存進 Segment 及 Element 的 maps，故目前 Segment / Element 不存 Rules
  *
- *   Q: 是否在 Script.Parser 時一同比對 Script.Rules？
  *   Q: 是否需要將 Segment及 Element也嵌入進來，得到
  *      Script.Segment
  *      Script.Element
  *      增加凝聚力？
- *
- *   Q: 似乎應該將 Script.Rules 傳下去給 Segment 及 Element？
- *      不用，因為parse完的東西已存到maps
  *   
  * @author nyngwang
  */
