@@ -12,15 +12,12 @@ import java.util.function.BiConsumer;
 
 /**
  *
- *   #2
- *   先做出Sprite
- *   再parse得出Script
- *   用Script完成fsmc
- *      Script傳給FSMBuilder製作出Frame完成FSM component?
- *   SpriteWeaver用(Script, Sprite)完成Sprite
- *      fsmc只是sprite的一部分
- *      SpriteWeaver完成sprite的所有部分
- *
+ *   1. 先做出 Sprite
+ *   2. 再 Script.Parser.parse() 得出 Script
+ *   3. SpriteWeaver用(Script, Sprite)完成Sprite
+ *   TODO:
+ *      - 包含處理 FSM Component
+ *      - 及 Sprite 的其他部分
  *
  * @author nyngwang
  */
@@ -31,12 +28,11 @@ public class SpriteBuilder {
         SpriteBuilder builder = new SpriteBuilder(new ReleaseIocFactory());
 
         Sprite mySprite = builder.init()
-                                     .init(new ReleaseIocFactory())
+                                     .setIocFactory(new ReleaseIocFactory())
                                  .setFSMComponent(new FrameStateMachineComponent())
                                  .setPropertiesComponent(new PropertiesComponent())
                                  .addComponent(Component.COLLIDABLE, new CollidableComponent())
-                                 .buildScriptFromScriptTextPath("path/to/script_text")
-                                     .buildScriptFromScriptText(FileUtility.read("path/to/script_text"))
+                                 .buildScriptFromPath("path/to/script_text")
                                      .setScript(null)
                                  .addWeaverNode((script, sprite) -> {
                                                     List<Element> bows = script.getSegmentById("frame")
@@ -46,160 +42,61 @@ public class SpriteBuilder {
     }
 
     private Sprite sprite;
-    private Script.Parser scriptParser;
-    private Script script;
     private SpriteWeaver spriteWeaver;
-    private FrameFactory frameFactory;
+    private Script script;
 
-    /**
-     * The constructor of SpriteBuilder.
-     * @param iocFactory To do dependency injection.
-     */
+
     public SpriteBuilder(IocFactory iocFactory) {
-        init(iocFactory);
+        init();
+        spriteWeaver = new SpriteWeaver(iocFactory, sprite);
     }
 
-    /**
-     * Initialize sprite and mandatory components.
-     * @return The current builder.
-     */
-    public SpriteBuilder init() {
-        sprite = new Sprite(new FrameStateMachineComponent(), new PropertiesComponent());
-        script = null;
-        spriteWeaver = new SpriteWeaver();
+    public SpriteBuilder setIocFactory(IocFactory iocFactory) {
+        spriteWeaver.setIocFactory(iocFactory);
         return this;
     }
 
-    /**
-     * Initialize sprite, mandatory components and script-parser.
-     * @param iocFactory The provider of new scriptParser.
-     * @return The current builder.
-     */
-    public SpriteBuilder init(IocFactory iocFactory) {
-        scriptParser = iocFactory.scriptParser();
-        frameFactory = iocFactory.frameFactory();
-        return init();
+    public SpriteBuilder init() {
+        sprite = new Sprite(new FrameStateMachineComponent(), new PropertiesComponent());
+        script = null;
+        return this;
     }
 
-    /**
-     * Set the script directly
-     * @param script for the sprite
-     * @return The current builder.
-     */
+    public SpriteBuilder setFSMComponent(FrameStateMachineComponent fsmComponent) {
+        spriteWeaver.setFSMComponent(fsmComponent);
+        return this;
+    }
+
+    public SpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
+        spriteWeaver.setPropertiesComponent(propertiesComponent);
+        return this;
+    }
+
+    public SpriteBuilder addComponent(String name, Component component) {
+        spriteWeaver.addComponent(name, component);
+        return this;
+    }
+
+    public SpriteBuilder buildScriptFromPath(String path) {
+        script = Script.Parser.parse(FileUtility.read(path),
+                 Script.Rules.Parser.parse(Script.Rules.Def.DEFAULT_RULES_TEXT));
+        return this;
+    }
+
     public SpriteBuilder setScript(Script script) {
         this.script = script;
         return this;
     }
 
-    /**
-     * Build script object by the script-text loaded from the path.
-     * @param pathToScriptText path to the script-text.
-     * @return The current builder.
-     */
-    public SpriteBuilder buildScriptFromScriptTextPath(String pathToScriptText) {
-        return buildScriptFromScriptText(FileUtility.read(pathToScriptText));
-    }
-
-    /**
-     * Build script object by the script-text.
-     * @param scriptText the script-text
-     * @return The current builder.
-     */
-    public SpriteBuilder buildScriptFromScriptText(String scriptText) {
-        script = scriptParser.parse(scriptText);
-        return this;
-    }
-
-    /**
-     * Add weaver-node for sprite weaver.
-     * @param node lambda to setup sprite by the script
-     * @return The current builder.
-     */
     public SpriteBuilder addWeaverNode(BiConsumer<Script, Sprite> node) {
         spriteWeaver.addNode(node);
         return this;
     }
 
-    /**
-     * Let the client provide FSM component directly.
-     * @param fsmComponent the FSM for the sprite.
-     * @return The current builder.
-     */
-    public SpriteBuilder setFSMComponent(FrameStateMachineComponent fsmComponent) {
-        this.fsmComponent = fsmComponent;
-        prepareSprite();
-        return this;
-    }
-
-    /**
-     * Add Properties Component to the current sprite.
-     * @param propertiesComponent The Properties Component required to define FSM.
-     * @return The current builder.
-     */
-    public SpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
-        this.propertiesComponent = propertiesComponent;
-        prepareSprite();
-        return this;
-    }
-
-    /**
-     * Add component to sprite.
-     * @param name component name
-     * @param component component
-     * @return The current builder.
-     */
-    public SpriteBuilder addComponent(String name, Component component) {
-
-        validateSpriteMandatoryComponents();
-
-        if (sprite.getComponentByName(name).isPresent()) {
-            throw new SpriteBuilderException("Duplicate component name is not allowed.");
-        }
-
-        sprite.putComponent(name, component);
-
-        return this;
-    }
-
-
-
-    /**
-     * Return the built sprite.
-     * @return The sprite.
-     */
     public Sprite build() {
-        validateScript();
-        // 啟動Weaver
         spriteWeaver.weave();
         ComponentInjector.inject(sprite);
         return sprite;
-    }
-
-    private void validateScript() {
-        if (script == null) {
-            throw new SpriteBuilderException(
-                    "Script is required, use setScript(), " +
-                    "buildScriptFromScriptText(), " +
-                    "buildScriptFromScriptTextPath() " +
-                    "to setup script."
-            );
-        }
-    }
-
-
-    /**
-     * Check the sprite is ready before access.
-     * @throws SpriteBuilderException if the mandatory components are not initiated
-     */
-    private void validateSpriteMandatoryComponents() {
-        if (fsmComponent == null) {
-            throw new SpriteBuilderException(
-                    "FrameStateMachineComponent is required, use setupParser() to create it");
-        }
-        if (propertiesComponent == null) {
-            throw new SpriteBuilderException(
-                    "PropertiesComponent is required, use setPropertiesComponent() to create it");
-        }
     }
 
 }

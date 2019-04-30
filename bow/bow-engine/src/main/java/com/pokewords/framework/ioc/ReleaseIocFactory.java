@@ -20,14 +20,6 @@ public class ReleaseIocFactory implements IocFactory{
     }
 
     @Override
-    public ScriptTextParser scriptParser() {
-
-        // Return the sprites.components.
-
-        return null;
-    }
-
-    @Override
     public PrototypeFactory prototypeFactory() {
         return prototypeFactory == null ?
                 prototypeFactory = new PrototypeFactoryImp() : prototypeFactory;

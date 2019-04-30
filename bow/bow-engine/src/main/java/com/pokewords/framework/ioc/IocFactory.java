@@ -11,8 +11,6 @@ public interface IocFactory {
 
 	FrameFactory frameFactory();
 
-	Script.Parser scriptParser();
-
 	PrototypeFactory prototypeFactory();
 
 	SoundPlayer soundPlayer();

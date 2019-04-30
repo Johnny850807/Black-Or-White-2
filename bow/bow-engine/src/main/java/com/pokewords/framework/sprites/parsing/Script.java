@@ -109,6 +109,9 @@ public class Script {
      *  The Script.Rules
      */
     public static class Rules {
+        public interface Def {
+            String DEFAULT_RULES_TEXT = DefaultRulesText.LINSCRIPT_RULES;
+        }
         private static class Pair {
             public String regex;
             public String type;
@@ -184,8 +187,8 @@ public class Script {
 
             private static void blockRouter(String blockName, String blockContent) {
                 switch (blockName) {
-                    case Def.SEGMENT: segmentBlock = blockContent; break;
-                    case Def.ELEMENT: elementBlock = blockContent; break;
+                    case Script.Def.SEGMENT: segmentBlock = blockContent; break;
+                    case Script.Def.ELEMENT: elementBlock = blockContent; break;
                     default: throw new ScriptRulesParserException(
                         "Script.Rules Parsing Error: Unrecognized Script Node Name."
                     );

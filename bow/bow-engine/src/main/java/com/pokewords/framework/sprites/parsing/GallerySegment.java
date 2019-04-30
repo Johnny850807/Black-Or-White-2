@@ -11,7 +11,7 @@ public class GallerySegment {
     public GallerySegment() {
     }
 
-    public Gallery toGallery(){
-        return new Gallery(intMap.get("w"), intMap.get("h"), intMap.get("row"), intMap.get("col"));
-    }
+//    public Gallery toGallery(){
+//        return new Gallery(intMap.get("w"), intMap.get("h"), intMap.get("row"), intMap.get("col"));
+//    }
 }
