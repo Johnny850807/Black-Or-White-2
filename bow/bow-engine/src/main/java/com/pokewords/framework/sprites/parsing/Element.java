@@ -1,12 +1,8 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.engine.exceptions.ElementAttributeNameDoesNotExistException;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 /**

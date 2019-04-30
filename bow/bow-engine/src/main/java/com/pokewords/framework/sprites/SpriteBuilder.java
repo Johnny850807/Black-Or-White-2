@@ -1,12 +1,10 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
-import com.pokewords.framework.engine.exceptions.ScriptException;
+import com.pokewords.framework.engine.exceptions.SpriteBuilderException;
 import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.parsing.*;
-import com.pokewords.framework.engine.exceptions.DuplicateComponentNameException;
 import com.pokewords.framework.ioc.IocFactory;
 
 import java.util.List;
@@ -155,7 +153,7 @@ public class SpriteBuilder {
         validateSpriteMandatoryComponents();
 
         if (sprite.getComponentByName(name).isPresent()) {
-            throw new DuplicateComponentNameException("Duplicate component name is not allowed.");
+            throw new SpriteBuilderException("Duplicate component name is not allowed.");
         }
 
         sprite.putComponent(name, component);
@@ -179,7 +177,7 @@ public class SpriteBuilder {
 
     private void validateScript() {
         if (script == null) {
-            throw new ScriptException(
+            throw new SpriteBuilderException(
                     "Script is required, use setScript(), " +
                     "buildScriptFromScriptText(), " +
                     "buildScriptFromScriptTextPath() " +
@@ -191,15 +189,15 @@ public class SpriteBuilder {
 
     /**
      * Check the sprite is ready before access.
-     * @throws MandatoryComponentIsRequiredException if the mandatory components are not initiated
+     * @throws SpriteBuilderException if the mandatory components are not initiated
      */
     private void validateSpriteMandatoryComponents() {
         if (fsmComponent == null) {
-            throw new MandatoryComponentIsRequiredException(
+            throw new SpriteBuilderException(
                     "FrameStateMachineComponent is required, use setupParser() to create it");
         }
         if (propertiesComponent == null) {
-            throw new MandatoryComponentIsRequiredException(
+            throw new SpriteBuilderException(
                     "PropertiesComponent is required, use setPropertiesComponent() to create it");
         }
     }

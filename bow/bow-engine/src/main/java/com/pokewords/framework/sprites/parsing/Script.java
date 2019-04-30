@@ -194,14 +194,12 @@ public class Script {
                 while (matcher.find()) {
                     String validName = matcher.group(1);
                     String kvBlock = matcher.group(2);
-
                     validNames.add(validName);
                     addKVRulesFromBlock(validKVRules, kvBlock);
                 }
             }
 
             private static void addKVRulesFromBlock(Map<String, String> validKVRules, String kvBlock) {
-
                 Pattern pattern = Pattern.compile(
                         " {8}(.+?) (.*?)(?=\\n|\\Z)",
                         Pattern.DOTALL | Pattern.MULTILINE);
@@ -210,7 +208,6 @@ public class Script {
                 while (matcher.find()) {
                     String key = matcher.group(1);
                     String value = matcher.group(2);
-
                     validKVRules.put(key, value);
                 }
             }
@@ -313,23 +310,37 @@ public class Script {
             while (matcher.find()) {
                 String key = matcher.group(1);
                 String value = matcher.group(2);
-                validateKVPairsOfWhom(key, value, whom);
-                switch (whom) {
-                    case Def.SEGMENT:
-                        segment.putKVPair(key, value);
-                        // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
-                        break;
-                    case Def.ELEMENT:
-                        // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
-                        element.putKVPair(key, value);
-                        break;
-                    default:
-                }
+                validateKVPairOfWhom(key, value, whom);
+                putKVPairOfWhom(key, value, whom);
             }
         }
 
-        private static void validateKVPairsOfWhom(String key, String value, String whom) {
+        private static void validateKVPairOfWhom(String key, String value, String whom) {
+            switch (whom) {
+                case Def.SEGMENT:
+                    segment.putKVPair(key, value);
+                    // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
+                    break;
+                case Def.ELEMENT:
+                    // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
+                    element.putKVPair(key, value);
+                    break;
+                default:
+            }
+        }
 
+        private static void putKVPairOfWhom(String key, String value, String whom) {
+            switch (whom) {
+                case Def.SEGMENT:
+                    segment.putKVPair(key, value);
+                    // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
+                    break;
+                case Def.ELEMENT:
+                    // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
+                    element.putKVPair(key, value);
+                    break;
+                default:
+            }
         }
 
         // 注意是一個element而不是多個
