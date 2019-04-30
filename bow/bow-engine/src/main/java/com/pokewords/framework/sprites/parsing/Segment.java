@@ -31,6 +31,7 @@ public class Segment {
         init(segmentName, segmentId);
     }
 
+    // segmentDescription == null時等同做 Segment(name, id)
     public Segment(String segmentName, int segmentId, String segmentDescription) {
         init(segmentName, segmentId);
         maps.stringMap.put(Def.DESCRIPTION, segmentDescription);
