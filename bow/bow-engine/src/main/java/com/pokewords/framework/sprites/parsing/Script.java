@@ -109,10 +109,18 @@ public class Script {
      *  The Script.Rules
      */
     public static class Rules {
+        private static class Pair {
+            public String regex;
+            public String type;
+            private Pair(String regex, String type) {
+                this.regex = regex;
+                this.type = type;
+            }
+        }
         private Set<String> validSegmentNames;
-        private Map<String, String> validSegmentKVRules;
+        private Map<String, Pair> validSegmentKVRules;
         private Set<String> validElementNames;
-        private Map<String, String> validElementKVRules;
+        private Map<String, Pair> validElementKVRules;
 
         public Rules() {
             validSegmentNames = new HashSet<>();
@@ -125,7 +133,7 @@ public class Script {
             return validSegmentNames;
         }
 
-        public Map<String, String> getValidSegmentKVRules() {
+        public Map<String, Pair> getValidSegmentKVRules() {
             return validSegmentKVRules;
         }
 
@@ -133,7 +141,7 @@ public class Script {
             return validElementNames;
         }
 
-        public Map<String, String> getValidElementKVRules() {
+        public Map<String, Pair> getValidElementKVRules() {
             return validElementKVRules;
         }
 
@@ -185,7 +193,7 @@ public class Script {
             }
 
             private static void addRulesFromBlock(
-                    Set<String> validNames, Map<String, String> validKVRules, String block) {
+                    Set<String> validNames, Map<String, Pair> validKVRules, String block) {
                 Pattern pattern = Pattern.compile(
                         " {4}(\\w+)\n(.*?)(?=(?:\\n {4}\\w)|\\Z)",
                         Pattern.DOTALL | Pattern.MULTILINE);
@@ -199,16 +207,17 @@ public class Script {
                 }
             }
 
-            private static void addKVRulesFromBlock(Map<String, String> validKVRules, String kvBlock) {
+            private static void addKVRulesFromBlock(Map<String, Pair> validKVRules, String kvBlock) {
                 Pattern pattern = Pattern.compile(
-                        " {8}(.+?) (.*?)(?=\\n|\\Z)",
+                        " {8}(.+?) (.+?) (.+?) *\\n|\\Z",
                         Pattern.DOTALL | Pattern.MULTILINE);
                 Matcher matcher = pattern.matcher(kvBlock);
 
                 while (matcher.find()) {
                     String key = matcher.group(1);
-                    String value = matcher.group(2);
-                    validKVRules.put(key, value);
+                    String regex = matcher.group(2);
+                    String type = matcher.group(3);
+                    validKVRules.put(key, new Pair(regex, type));
                 }
             }
         }
@@ -310,36 +319,58 @@ public class Script {
             while (matcher.find()) {
                 String key = matcher.group(1);
                 String value = matcher.group(2);
-                validateKVPairOfWhom(key, value, whom);
+                validateKeyOfKVPairOfWhom(key, whom);
+                validateValueOfKVPairOfWhom(key, value, whom);
                 putKVPairOfWhom(key, value, whom);
             }
         }
 
-        private static void validateKVPairOfWhom(String key, String value, String whom) {
+        private static void validateKeyOfKVPairOfWhom(String key, String whom) {
             switch (whom) {
                 case Def.SEGMENT:
-                    segment.putKVPair(key, value);
-                    // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
+                    if ( !rules.validSegmentKVRules.containsKey(key) ) {
+                        throw new ScriptParserException(
+                            "validateKeyOfKVPairOfWhom(String key, String whom): key is invalid");
+                    }
                     break;
                 case Def.ELEMENT:
-                    // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
-                    element.putKVPair(key, value);
+                    if ( !rules.validElementKVRules.containsKey(key) ) {
+                        throw new ScriptParserException(
+                            "validateKeyOfKVPairOfWhom(String key, String whom): key is invalid");
+                    }
                     break;
-                default:
+                default: throw new ScriptParserException(
+                    "validateKeyOfKVPairOfWhom(String key, String whom): whom is invalid");
+            }
+        }
+
+        private static void validateValueOfKVPairOfWhom(String key, String value, String whom) {
+            switch (whom) {
+                case Def.SEGMENT: if (!Pattern.matches(rules.validSegmentKVRules.get(key).regex, value)) {
+                    throw new ScriptParserException(
+                        "validateValueOfKVPairOfWhom(String key, String value, String whom): value is invalid");
+                } break;
+                case Def.ELEMENT: if ( !Pattern.matches(rules.validElementKVRules.get(key).regex, value) ) {
+                    throw new ScriptParserException(
+                        "validateValueOfKVPairOfWhom(String key, String value, String whom): value is invalid");
+                } break;
+                default: throw new ScriptParserException(
+                    "validateValueOfKVPairOfWhom(String key, String value, String whom): whom is invalid");
             }
         }
 
         private static void putKVPairOfWhom(String key, String value, String whom) {
             switch (whom) {
-                case Def.SEGMENT:
-                    segment.putKVPair(key, value);
-                    // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
-                    break;
-                case Def.ELEMENT:
-                    // TODO: 現在要怎麼知道要呼叫哪個...(string, int) or (string, string)？
-                    element.putKVPair(key, value);
-                    break;
-                default:
+                case Def.SEGMENT: switch (rules.validSegmentKVRules.get(key).type) {
+                    case "Integer": segment.putKVPair(key, Integer.parseInt(value)); break;
+                    case "String": segment.putKVPair(key, value); break;
+                } break;
+                case Def.ELEMENT: switch (rules.validElementKVRules.get(key).type) {
+                    case "Integer": element.putKVPair(key, Integer.parseInt(value)); break;
+                    case "String": element.putKVPair(key, value); break;
+                } break;
+                default: throw new ScriptParserException(
+                    "putKVPairOfWhom(String key, String value, String whom): whom is invalid");
             }
         }
 
