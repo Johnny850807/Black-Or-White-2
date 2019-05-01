@@ -12,9 +12,16 @@ import java.util.function.Consumer;
 
 public class TextureFrame implements Frame {
 	private Image image;
+	private int layerIndex;
 
-	public TextureFrame(Image image) {
+	public TextureFrame(Image image, int layerIndex) {
 		this.image = image;
+		this.layerIndex = layerIndex;
+	}
+
+	@Override
+	public int getLayerIndex() {
+		return layerIndex;
 	}
 
 	@Override

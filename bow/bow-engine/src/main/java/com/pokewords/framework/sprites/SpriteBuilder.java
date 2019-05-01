@@ -30,7 +30,7 @@ public class SpriteBuilder {
                                      .setIocFactory(new ReleaseIocFactory())
                                  .setFSMComponent(new FrameStateMachineComponent())
                                  .setPropertiesComponent(new PropertiesComponent())
-                                 .addComponent(Component.COLLIDABLE, new CollidableComponent())
+                                 .addComponent(Component.COLLIDABLE, CollidableComponent.getInstance())
                                  .buildScriptFromPath("path/to/script_text")
                                      .setScript(null)
                                  .addWeaverNode((script, sprite) -> {

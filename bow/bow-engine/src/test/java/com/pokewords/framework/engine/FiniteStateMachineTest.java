@@ -1,34 +1,38 @@
 package com.pokewords.framework.engine;
 
+import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.exceptions.FiniteStateMachineException;
 import com.pokewords.framework.engine.utils.StringUtility;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
 /**
  * @author johnny850807 (waterball)
  */
-public class FiniteStateMachineTest {
+public class FiniteStateMachineTest extends AbstractTest {
     //States
-    final String A = "A";
-    final String B = "B";
-    final String C = "C";
-    final String TARGET = "target";
-    final String START = "start";
-    final String END = "end";
+    private final String A = "A";
+    private final String B = "B";
+    private final String C = "C";
+    private final String TARGET = "target";
+    private final String START = "start";
+    private final String END = "end";
 
     //Events
-    final String N1 = "1";
-    final String N2 = "2";
-    final String N3 = "3";
-    final String EVENT = "event";
-    final String NEXT = "next";
-    final String ASCII = "ascii";
-    final String SHOOT = "shoot";
-    final String FINALIZE = "finalize";
+    private final String N1 = "1";
+    private final String N2 = "2";
+    private final String N3 = "3";
+    private final String EVENT = "event";
+    private final String NEXT = "next";
+    private final String ASCII = "ascii";
+    private final String SHOOT = "shoot";
+    private final String FINALIZE = "finalize";
 
-    final int TEST_LOOP = 30;
+    private final int TEST_LOOP = 30;
 
     @Test
     public void testShouldReturnNullIfGetCurrentStateIfNoCurrentStateSet(){
@@ -322,6 +326,7 @@ public class FiniteStateMachineTest {
         for (String lowerCaseCharacter : lowerCaseCharacters) {
             assertTriggered(fsm, lowerCaseCharacter, FINALIZE, END);
         }
+        System.out.println(fsm.toString());
     }
 
     private void assertTriggered(FiniteStateMachine<String> fsm, String fromState, String event, String toState){
@@ -334,5 +339,52 @@ public class FiniteStateMachineTest {
         fsm.setCurrentState(state);
         assertEquals(state, fsm.trigger(event));
         assertEquals(state, fsm.getCurrentState());
+    }
+
+    @Test
+    public void testEmptyFsmEquality() {
+        assertEquals(new FiniteStateMachine(), new FiniteStateMachine());
+    }
+
+    @Test
+    public void testFsmEquality() {
+        FiniteStateMachine<String> fsm1 = createBasicFsm();
+        FiniteStateMachine<String> fsm2 = createBasicFsm();
+        assertEquals(fsm1, fsm2);
+
+        fsm2.addState("FSM2 has been changed, they should no longer be equal.");
+        assertNotEquals(fsm1, fsm2);
+    }
+
+    @Test
+    public void testFsmHashcode() {
+        FiniteStateMachine<String> fsm1 = createBasicFsm();
+        FiniteStateMachine<String> fsm2 = createBasicFsm();
+        assertEquals(fsm1.hashCode(), fsm2.hashCode());
+
+        fsm2.addState("FSM2 has been changed, they should no longer be equal.");
+        assertNotEquals(fsm1.hashCode(), fsm2.hashCode());
+    }
+
+    @Test
+    public void testGetAllStates() {
+        FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
+        String[] states = new String[]{"a", "123", "test", "", "-\\-"};
+        for (String state : states) {
+            fsm.addState(state);
+        }
+
+        Set<String> statesFromFsm = new HashSet<>(fsm.getStates());
+        for (String state : states) {
+            assertTrue(statesFromFsm.contains(state));
+        }
+    }
+
+    @Test
+    public void testShallowClone() {
+        FiniteStateMachine<String> fsm = createBasicFsm();
+        FiniteStateMachine<String> clone = fsm.clone();
+
+        assertNotSameButEquals(fsm, clone);
     }
 }

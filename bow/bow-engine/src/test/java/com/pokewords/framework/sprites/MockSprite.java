@@ -9,7 +9,6 @@ public class MockSprite extends Sprite{
     public int onAppStateDestroyCount = 0;
     public int onUpdateCount = 0;
 
-
     @Override
     public void onAppStateStart(AppStateWorld world) {
         onAppStateStartCount ++;

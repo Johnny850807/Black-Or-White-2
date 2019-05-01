@@ -2,7 +2,7 @@ package com.pokewords.framework.ioc;
 
 import com.pokewords.framework.engine.UserConfig;
 import com.pokewords.framework.sprites.PrototypeFactory;
-import com.pokewords.framework.sprites.PrototypeFactoryImp;
+import com.pokewords.framework.sprites.DefaultPrototypeFactory;
 import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.sprites.components.TextureFrameFactory;
 import com.pokewords.framework.views.DefaultInputManager;
@@ -22,7 +22,7 @@ public class ReleaseIocFactory implements IocFactory{
     @Override
     public PrototypeFactory prototypeFactory() {
         return prototypeFactory == null ?
-                prototypeFactory = new PrototypeFactoryImp() : prototypeFactory;
+                prototypeFactory = new DefaultPrototypeFactory() : prototypeFactory;
     }
 
     @Override

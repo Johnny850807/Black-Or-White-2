@@ -12,25 +12,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PropertiesComponent extends Component {
+public class PropertiesComponent extends CloneableComponent {
 	private Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private Point center = new Point();
 	private String type;
-	private String state;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
-	private List<StateListener> stateListeners = new ArrayList<StateListener>();
 
 	public PropertiesComponent() {
+	}
 
+	public PropertiesComponent(String type) {
+		this.type = type;
 	}
 
 	@Override
 	public PropertiesComponent clone() {
 		PropertiesComponent clone = (PropertiesComponent) super.clone();
 		clone.body = (Rectangle) this.body.clone();
+		clone.center = (Point) this.center.clone();
 		clone.positionListeners = new ArrayList<>();
-		clone.stateListeners = new ArrayList<>();
 		return clone;
 	}
 
@@ -51,7 +52,6 @@ public class PropertiesComponent extends Component {
 	public int getX(){
 		return (int) getPosition().getX();
 	}
-
 	public int getY(){
 		return (int) getPosition().getY();
 	}
@@ -61,6 +61,7 @@ public class PropertiesComponent extends Component {
 	public int getH(){
 		return (int) getBody().getHeight();
 	}
+
 
 	public Point2D getPosition(){
 		return body.getLocation();
@@ -84,13 +85,12 @@ public class PropertiesComponent extends Component {
 		this.type = type;
 	}
 
-	public String getState() {
-		return state;
+	public void setCenter(int x, int y) {
+		this.setCenter(new Point(x, y));
 	}
 
-	public void setState(String state) {
-		this.state = state;
-		notifyStateListeners();
+	public void setCenter(Point center) {
+		this.center = center;
 	}
 
 	public Point2D getCenter() {
@@ -99,8 +99,12 @@ public class PropertiesComponent extends Component {
 
 	@Override
 	public void onAppStateStart(AppStateWorld world) {
-        if (StringUtility.anyNullOrEmpty(type, state))
-            throw new RuntimeException("The type and state of a Sprite should be set before the app started..");
+        validatePropertiesComponent();
+	}
+
+	private void validatePropertiesComponent() {
+		if (StringUtility.anyNullOrEmpty(type))
+			throw new RuntimeException("The type of a Sprite should be set before the app started..");
 	}
 
 	@Override
@@ -124,27 +128,13 @@ public class PropertiesComponent extends Component {
 	}
 
 	public interface PositionListener{
-		void onPositionUpdated(Point2D point);
+		void onPositionUpdated(int x, int y);
 	}
 
 	public interface StateListener{
 		void onStateUpdated(String state);
 	}
 
-	public void addStateListener(StateListener stateListener){
-		stateListeners.add(stateListener);
-	}
-
-	public void removeStateListener(StateListener stateListener){
-		stateListeners.remove(stateListener);
-	}
-
-	/**
-	 * Trigger all stateListener's onStateUpdated() method
-	 */
-	protected void notifyStateListeners(){
-		stateListeners.forEach(listener -> listener.onStateUpdated(state));
-	}
 
 	public void addPositionListener(PositionListener positionListener){
 		positionListeners.add(positionListener);
@@ -158,15 +148,11 @@ public class PropertiesComponent extends Component {
 		return positionListeners;
 	}
 
-	public List<StateListener> getStateListeners() {
-		return stateListeners;
-	}
-
 	/**
 	 * Trigger all positionListener's onPositionUpdated() method
 	 */
 	protected void notifyPositionListeners(){
-		positionListeners.forEach(listener -> listener.onPositionUpdated(body.getLocation()));
+		positionListeners.forEach(listener -> listener.onPositionUpdated(getX(), getY()));
 	}
 
 	@Override
@@ -175,12 +161,21 @@ public class PropertiesComponent extends Component {
 		if (o == null || getClass() != o.getClass()) return false;
 		PropertiesComponent that = (PropertiesComponent) o;
 		return body.equals(that.body) &&
-				type.equals(that.type) &&
-				state.equals(that.state);
+				center.equals(that.center) &&
+				type.equals(that.type);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(body, type, state);
+		return Objects.hash(body, center, type);
+	}
+
+	@Override
+	public String toString() {
+		return "PropertiesComponent{" +
+				"body=" + body +
+				", center=" + center +
+				", type='" + type + '\'' +
+				'}';
 	}
 }
