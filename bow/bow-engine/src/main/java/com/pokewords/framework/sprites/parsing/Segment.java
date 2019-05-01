@@ -2,6 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.utils.FileUtility;
 
+import javax.print.DocFlavor;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,8 +95,19 @@ public class Segment {
 
     @Override
     public String toString() {
-        // TODO: Pretty print
-        return null;
+        return toString(4);
     }
 
+    public String toString(int indentation) {
+        StringBuilder resultBuilder = new StringBuilder();
+        String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
+        resultBuilder.append("<" + maps.stringMap.get(Def.NAME) + ">")
+               .append(" " + maps.integerMap.get(Def.ID))
+               .append(" " + maps.stringMap.get(Def.DESCRIPTION)).append("\\n");
+        for (Map.Entry<String, String> entry : maps.stringMap.entrySet()) { resultBuilder.append(indent + entry.getKey() + " " + entry.getValue() + "\\n"); }
+        for (Map.Entry<String, Integer> entry : maps.integerMap.entrySet()) { resultBuilder.append(indent + entry.getKey() + " " + entry.getValue() + "\\n"); }
+        for (Element element : elements) { resultBuilder.append(indent + element.toString(indentation)); }
+        resultBuilder.append("</" + maps.stringMap.get(Def.NAME) + ">").append("\\n");
+        return resultBuilder.toString();
+    }
 }

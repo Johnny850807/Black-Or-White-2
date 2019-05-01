@@ -95,23 +95,32 @@ public class Script {
 
     @Override
     public String toString() {
+        return toString(4);
+    }
 
+    public String toString(int indentation) {
         // TODO: Print by order: gallery -> frame, with id ascending
+        StringBuilder resultBuilder = new StringBuilder();
 
-        StringBuilder result = new StringBuilder();
-        for (Segment segment : segments) {
-            result.append(segment);
+        for (String segmentName : rules.validSegmentNames) {
+            List<Segment> segments = getSegmentsByName(segmentName);
+            segments.sort(new Comparator<Segment>() {
+                @Override
+                public int compare(Segment o1, Segment o2) {
+                    int left = o1.getIntByKey(Segment.Def.ID).get();
+                    int right = o2.getIntByKey(Segment.Def.ID).get();
+                    return left < right ? -1 : left > right ? 1 : 0;
+                }
+            });
+            for (Segment segment : segments) { resultBuilder.append(segment.toString(indentation)); }
         }
-        return result.toString();
+        return resultBuilder.toString();
     }
 
     /**
      *  The Script.Rules
      */
     public static class Rules {
-        public interface Def {
-            String DEFAULT_RULES_TEXT = DefaultRulesText.LINSCRIPT_RULES;
-        }
         private static class Pair {
             public String regex;
             public String type;

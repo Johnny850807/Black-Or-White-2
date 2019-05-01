@@ -1,6 +1,5 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.exceptions.SpriteBuilderException;
 import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.*;
@@ -79,7 +78,7 @@ public class SpriteBuilder {
 
     public SpriteBuilder buildScriptFromPath(String path) {
         script = Script.Parser.parse(FileUtility.read(path),
-                 Script.Rules.Parser.parse(Script.Rules.Def.DEFAULT_RULES_TEXT));
+                 ScriptSample.LinScript.RULES);
         return this;
     }
 

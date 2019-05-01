@@ -10,6 +10,15 @@ import java.util.Optional;
  * @author nyngwang
  */
 public class Element {
+    public static void main(String[] args) {
+        Element element = new Element("bow");
+        element.putKVPair("hey", 123);
+        element.putKVPair("hey2", 456);
+        element.putKVPair("yo", "yo");
+        element.putKVPair("yoho", "yoho");
+        System.out.println(element);
+    }
+
     public interface Def {
         String NAME = "name";
     }
@@ -63,7 +72,16 @@ public class Element {
 
     @Override
     public String toString() {
-        // TODO: Pretty print
-        return null;
+        return toString(4);
+    }
+
+    public String toString(int indentation) {
+        StringBuilder resultBuilder = new StringBuilder();
+        String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
+        resultBuilder.append("<" + maps.stringMap.get(Def.NAME) + ">").append("\\n");
+        for (Map.Entry<String, String> entry : maps.stringMap.entrySet()) { resultBuilder.append(indent + entry.getKey() + " " + entry.getValue() + "\\n"); }
+        for (Map.Entry<String, Integer> entry : maps.integerMap.entrySet()) { resultBuilder.append(indent + entry.getKey() + " " + entry.getValue() + "\\n"); }
+        resultBuilder.append("</" + maps.stringMap.get(Def.NAME) + ">").append("\\n");
+        return resultBuilder.toString();
     }
 }
