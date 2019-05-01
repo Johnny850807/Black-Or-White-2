@@ -42,7 +42,7 @@ public class FiniteStateMachine<T> implements Cloneable{
     private ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
 
     /**
-     * Save each state,key is hashcode of state.
+     * Save each state, key is hashcode of state.
      */
     private Map<Integer, StateNode> stateNodesMap = new HashMap<>();
 

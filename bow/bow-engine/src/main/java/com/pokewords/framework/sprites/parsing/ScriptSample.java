@@ -1,8 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *  Usage:
  *
@@ -44,7 +41,4 @@ public interface ScriptSample {
         Script.Rules RULES = Script.Rules.Parser.parse(RULES_TEXT);
     }
 
-    public class NewRules extends Script.Rules {
-
-    }
 }

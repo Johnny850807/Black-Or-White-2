@@ -1,8 +1,10 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.ScriptParserException;
 import com.pokewords.framework.engine.exceptions.ScriptRulesParserException;
 import com.pokewords.framework.engine.utils.FileUtility;
+import com.sun.corba.se.impl.io.TypeMismatchException;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
  *      Script.Segment
  *      Script.Element
  *      增加凝聚力？
- *   
+ *
  * @author nyngwang
  */
 public class Script {
@@ -69,7 +71,7 @@ public class Script {
 
     public Optional<Segment> getSegmentById(String segmentId) {
         for (Segment segment : segments) {
-            if (segment.getStringByKey(Segment.Def.ID).equals(segmentId)) {
+            if (segment.getStringByKey(Segment.Def.ID).orElse("").equals(segmentId)) {
                 return Optional.of(segment);
             }
         }
@@ -104,15 +106,13 @@ public class Script {
 
         for (String segmentName : rules.validSegmentNames) {
             List<Segment> segments = getSegmentsByName(segmentName);
-            segments.sort(new Comparator<Segment>() {
-                @Override
-                public int compare(Segment o1, Segment o2) {
-                    int left = o1.getIntByKey(Segment.Def.ID).get();
-                    int right = o2.getIntByKey(Segment.Def.ID).get();
-                    return left < right ? -1 : left > right ? 1 : 0;
-                }
+            segments.sort((o1, o2) -> {
+                int left = o1.getIntByKey(Segment.Def.ID).get();
+                int right = o2.getIntByKey(Segment.Def.ID).get();
+                return Integer.compare(left, right);
             });
-            for (Segment segment : segments) { resultBuilder.append(segment.toString(indentation)); }
+            for (Segment segment : segments)
+                resultBuilder.append(segment.toString(indentation));
         }
         return resultBuilder.toString();
     }
@@ -127,6 +127,7 @@ public class Script {
             private Pair(String regex, String type) {
                 this.regex = regex;
                 this.type = type;
+
             }
         }
         private Set<String> validSegmentNames;
