@@ -8,7 +8,10 @@ import com.pokewords.framework.sprites.components.Frame;
 
 /**
  * @author shawn
- *
+ * TODO windows exit
+ * TODO GameApplication should give right of access to the GameEngine and its relevant classes (builders, ASM...)
+ * TODO onAppInit - windows configurations
+ * TODO onAppLoading -Template methods
  */
 public abstract class GameApplication implements AppView {
 
@@ -82,6 +85,11 @@ public abstract class GameApplication implements AppView {
 		this.y = y;
 	}
 
+	@Override
+	public void onAppLoading() {
+		// TODO template methods, load what? onAppStatesConfig(ASM?) ? onSpriteConfig(SpriteDeclarator)?
+	}
+
 	/**
 	 * @param color GameView background color
 	 */
@@ -95,21 +103,13 @@ public abstract class GameApplication implements AppView {
 	 */
 	@Override
 	public void onRender(RenderedLayers renderedLayers) {
-		gamePanel.setRenderedLayers(renderedLayers);
+		gamePanel.renderedLayers = renderedLayers;
 		gamePanel.repaint();
 	}
 
 
 	private class GamePanel extends JPanel {
 		private RenderedLayers renderedLayers;
-
-		/**
-		 * set the new renderedLayers.
-		 * @param renderedLayers new renderedLayers.
-		 */
-		private void setRenderedLayers(RenderedLayers renderedLayers){
-			this.renderedLayers = renderedLayers;
-		}
 
 		/**
 		 * Repaint the frame in each renderedLayers

@@ -5,13 +5,12 @@ import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.InputManager;
-import javafx.scene.input.KeyCode;
 
 import java.awt.event.KeyEvent;
 
-public class MainState extends AppState {
+public class MainAppState extends AppState {
     private InputManager inputManager;
-    public MainState(AppStateMachine appStateMachine) {
+    public MainAppState(AppStateMachine appStateMachine) {
         super(appStateMachine);
     }
 

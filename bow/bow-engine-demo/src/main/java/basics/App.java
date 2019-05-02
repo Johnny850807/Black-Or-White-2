@@ -3,19 +3,13 @@ package basics;
 import com.pokewords.framework.views.GameApplication;
 
 public class App extends GameApplication {
-    public App() {
-        setWindowLocation(200, 200);
-        setWindowName("My Game");
-        setWindowSize(200, 200);
-    }
 
     public void onAppInit() {
-
+        setWindowLocation(750, 320);
+        setWindowName("Basic Game Demo");
+        setWindowSize(1000, 650);
     }
 
-    public void onAppLoading() {
-
-    }
 
     public void onAppStarted() {
 

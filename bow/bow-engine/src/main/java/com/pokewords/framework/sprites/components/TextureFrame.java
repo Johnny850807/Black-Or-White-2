@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 
 public class TextureFrame implements Frame {
+	private Sprite sprite;
 	private Image image;
 	private int layerIndex;
 
@@ -34,8 +35,9 @@ public class TextureFrame implements Frame {
 
 	}
 
+	@Override
 	public void renderItself(Canvas canvas) {
-
+		canvas.render(sprite.getX(), sprite.getY(), image);
 	}
 
 }
