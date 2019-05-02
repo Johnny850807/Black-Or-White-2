@@ -2,6 +2,8 @@ package com.pokewords.framework.views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+
 import com.pokewords.framework.sprites.components.Frame;
 
 /**
@@ -116,12 +118,12 @@ public abstract class GameApplication implements AppView {
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-			for(int i = 0; i < renderedLayers.layers.size(); i++) {
-				for(int j = 0; j < renderedLayers.layers.size(); j++) {
-					Frame frames = renderedLayers.layers.get(i).get(j);
-					frames.renderItself(GraphicsCanvas.of(g));
-				}
-			}
+            List<List<Frame>> layers = renderedLayers.layers;
+            for (List<Frame> layer : layers) {
+                for (Frame frames : layer) {
+                    frames.renderItself(GraphicsCanvas.of(g));
+                }
+            }
 		}
 	}
 
