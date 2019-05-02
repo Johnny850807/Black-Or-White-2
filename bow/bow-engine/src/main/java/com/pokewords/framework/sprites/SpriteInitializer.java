@@ -84,6 +84,11 @@ public class SpriteInitializer {
         return initializationMode;
     }
 
+
+    public SpriteDeclarator declare(@NotNull Object type) {
+        return new SpriteDeclarator(type.toString());
+    }
+
     public SpriteDeclarator declare(@NotNull String type) {
         return new SpriteDeclarator(type);
     }
@@ -95,6 +100,11 @@ public class SpriteInitializer {
         protected SpriteDeclarator(String type) {
             this.type = type;
             this.declaration = new Declaration(type);
+        }
+
+        public SpriteDeclarator with(@NotNull Object componentName, @NotNull Component component) {
+            declaration.componentMap.put(componentName.toString(), component);
+            return this;
         }
 
         public SpriteDeclarator with(@NotNull String componentName, @NotNull Component component) {
@@ -119,11 +129,6 @@ public class SpriteInitializer {
 
         public SpriteDeclarator collidable() {
             declaration.componentMap.put(Component.COLLIDABLE, CollidableComponent.getInstance());
-            return this;
-        }
-
-        public SpriteDeclarator clickable(ClickableComponent clickableComponent) {
-            declaration.componentMap.put(Component.CLICKABLE, clickableComponent);
             return this;
         }
 
@@ -262,7 +267,7 @@ public class SpriteInitializer {
         String scriptPath = "";
         Script script;  // use script rather than scriptPath iff script != null
 
-        Set<SpriteWeaver.Node> weaverNodes = new LinkedHashSet<>();
+        List<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
 
         public Declaration(String type) {
             this.type = type;
@@ -287,18 +292,6 @@ public class SpriteInitializer {
         }
     }
 
-
-    public static void main(String[] args) {
-        SpriteInitializer spriteInitializer = new SpriteInitializer(new ReleaseIocFactory());
-
-        Sprite hero = spriteInitializer.declare("hero")
-                        .with("path/to/script.bow")
-                        .position(250, 250)
-                        .collidable()
-                        .weaver((script, sprite) -> { /*weaving*/})
-                        .commit()
-                        .create();
-    }
 }
 
 

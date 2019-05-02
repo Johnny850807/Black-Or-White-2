@@ -3,7 +3,7 @@ package basics.components;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-public class HeroComponent extends CloneableComponent {
+public class BulletComponent extends CloneableComponent {
     public int hp;
 
     @Override

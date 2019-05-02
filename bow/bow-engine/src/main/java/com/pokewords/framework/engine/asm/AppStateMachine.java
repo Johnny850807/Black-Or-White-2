@@ -53,7 +53,7 @@ public class AppStateMachine extends FiniteStateMachine<AppState> implements Gam
 		getCurrentState().onUpdate(tpf);
 	}
 
-	public void setClientInitState(AppState clientInitState) {
+	public void setGameInitialState(AppState clientInitState) {
 		this.clientInitState = clientInitState;
 	}
 

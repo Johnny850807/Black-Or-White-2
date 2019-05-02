@@ -1,5 +1,6 @@
 package com.pokewords.framework.engine;
 
+import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.views.AppView;
 import com.pokewords.framework.sprites.PrototypeFactory;
 import com.pokewords.framework.engine.asm.AppStateMachine;
@@ -7,13 +8,18 @@ import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 public class GameEngine {
+	private IocFactory iocFactory;
 	private AppView gameView;
 	private UserConfig userConfig;
 	private PrototypeFactory prototypeFactory;
 	private AppStateMachine appStateMachine;
 
-	public void launchEngine() {
+	public GameEngine(IocFactory iocFactory) {
+		this.iocFactory = iocFactory;
+	}
 
+	public void launchEngine() {
+		gameView.onAppInit();
 	}
 
 	public void keyPressed(int key) {

@@ -1,9 +1,9 @@
 package com.pokewords.framework.sprites.components.ai;
 
-import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-public class AI extends Component {
+public class AI extends CloneableComponent {
 
 	private BehaviorTree behaviorTree;
 

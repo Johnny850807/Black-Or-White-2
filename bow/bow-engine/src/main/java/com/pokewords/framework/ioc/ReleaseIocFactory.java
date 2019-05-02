@@ -1,8 +1,11 @@
 package com.pokewords.framework.ioc;
 
+import com.pokewords.framework.engine.GameEngine;
 import com.pokewords.framework.engine.UserConfig;
+import com.pokewords.framework.sprites.DefaultSpriteBuilder;
 import com.pokewords.framework.sprites.PrototypeFactory;
 import com.pokewords.framework.sprites.DefaultPrototypeFactory;
+import com.pokewords.framework.sprites.SpriteBuilder;
 import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.sprites.components.TextureFrameFactory;
 import com.pokewords.framework.views.DefaultInputManager;
@@ -12,6 +15,7 @@ import com.pokewords.framework.views.SoundPlayer;
 public class ReleaseIocFactory implements IocFactory{
     private TextureFrameFactory textureFrameFactory;
     private PrototypeFactory prototypeFactory;
+
 
     @Override
     public FrameFactory frameFactory() {
@@ -38,5 +42,10 @@ public class ReleaseIocFactory implements IocFactory{
     @Override
     public InputManager inputManager() {
         return new DefaultInputManager();
+    }
+
+    @Override
+    public SpriteBuilder spriteBuilder() {
+        return new DefaultSpriteBuilder(this);
     }
 }

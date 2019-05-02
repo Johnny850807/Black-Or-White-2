@@ -236,6 +236,11 @@ public class FiniteStateMachine<T> implements Cloneable{
         return stateList;
     }
 
+
+    public void addTransition(T from, Object event, T to) {
+        addTransition(from, event.toString(), to);
+    }
+
     /**
      * Create a trigger transition with two different states
      * @param from T that will be changed
@@ -251,6 +256,10 @@ public class FiniteStateMachine<T> implements Cloneable{
             StateNode toState = getStateNodeByState(to);
             matrix.get(fromState.getStateNumber()).set(getEventIndexFromEventMap(event), toState.getStateNumber());
         }
+    }
+
+    public void addTransitionFromAllStates(Object event, T targetState, T ...excepts) {
+        addTransitionFromAllStates(event.toString(), targetState, excepts);
     }
 
     /**
