@@ -4,14 +4,17 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.SpriteDeclaratorException;
 import com.pokewords.framework.engine.utils.StringUtility;
 import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.ReleaseIocFactory;
+import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.sprites.components.PropertiesComponent;
+import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.*;
 
 /**
@@ -114,6 +117,26 @@ public class SpriteInitializer {
             return this;
         }
 
+        public SpriteDeclarator collidable() {
+            declaration.componentMap.put(Component.COLLIDABLE, CollidableComponent.getInstance());
+            return this;
+        }
+
+        public SpriteDeclarator clickable(ClickableComponent clickableComponent) {
+            declaration.componentMap.put(Component.CLICKABLE, clickableComponent);
+            return this;
+        }
+
+        public SpriteDeclarator position(int x, int y) {
+            declaration.propertiesComponent.setPosition(x, y);
+            return this;
+        }
+
+        public SpriteDeclarator position(@NotNull Point point) {
+            declaration.propertiesComponent.setPosition(point);
+            return this;
+        }
+
         public SpriteDeclarator with(@NotNull Script script) {
             declaration.script = script;
             return this;
@@ -124,7 +147,7 @@ public class SpriteInitializer {
             return this;
         }
 
-        public void commit() throws SpriteDeclaratorException {
+        public SpriteCreator commit() throws SpriteDeclaratorException {
             validateDeclarations();
 
             if (initializationMode == InitializationMode.NON_LAZY)  //non-lazy mode needn't save the declarations, simply init it after declare it
@@ -132,6 +155,13 @@ public class SpriteInitializer {
             else
                 declarationMap.put(type, declaration);
 
+            return new SpriteCreator();
+        }
+
+        public class SpriteCreator {
+            public Sprite create() {
+                return createSprite(type);
+            }
         }
 
         private void validateDeclarations() throws SpriteDeclaratorException {
@@ -141,7 +171,13 @@ public class SpriteInitializer {
 
         private void validatePropertiesComponentSet() throws SpriteDeclaratorException {
             if (declaration.propertiesComponent == null)
-                throw new SpriteDeclaratorException(String.format("Error occurs during declaring the sprite '%s', 'PropertiesComponent' should not be set (or it should not be null).", type));
+                throw new SpriteDeclaratorException(String.format("Error occurs during declaring the sprite '%s', " +
+                        "'PropertiesComponent' should not be set (or it should not be null).", type));
+
+            if (!declaration.propertiesComponent.getType().equals(type))
+                throw new SpriteDeclaratorException(String.format("Error occurs during declaring the sprite '%s', " +
+                        "your propertiesComponent's type given is %s, but your sprite's type is declared as %s.",
+                        type, declaration.propertiesComponent.getType(), type));
         }
 
         private void validateFrameStateMachineComponentSet() throws SpriteDeclaratorException {
@@ -230,6 +266,7 @@ public class SpriteInitializer {
 
         public Declaration(String type) {
             this.type = type;
+            this.propertiesComponent = new PropertiesComponent(type);
         }
 
         protected void startInitializingSprite() {
@@ -251,6 +288,17 @@ public class SpriteInitializer {
     }
 
 
+    public static void main(String[] args) {
+        SpriteInitializer spriteInitializer = new SpriteInitializer(new ReleaseIocFactory());
+
+        Sprite hero = spriteInitializer.declare("hero")
+                        .with("path/to/script.bow")
+                        .position(250, 250)
+                        .collidable()
+                        .weaver((script, sprite) -> { /*weaving*/})
+                        .commit()
+                        .create();
+    }
 }
 
 

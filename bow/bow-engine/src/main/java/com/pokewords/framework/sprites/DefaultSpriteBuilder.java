@@ -27,17 +27,17 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         DefaultSpriteBuilder builder = new DefaultSpriteBuilder(new ReleaseIocFactory());
 
         Sprite mySprite = builder.init()
-                                     .setIocFactory(new ReleaseIocFactory())
-                                 .setFSMComponent(new FrameStateMachineComponent())
-                                 .setPropertiesComponent(new PropertiesComponent())
-                                 .addComponent(Component.COLLIDABLE, CollidableComponent.getInstance())
-                                 .buildScriptFromPath("path/to/script_text")
-                                     .setScript(null)
-                                 .addWeaverNode((script, sprite) -> {
-                                                    List<Element> bows = script.getSegmentById("frame")
-                                                            .get().getElementsByName("bow");
-                                                })
-                                 .build();
+                            .setIocFactory(new ReleaseIocFactory())
+                            .setFSMComponent(new FrameStateMachineComponent())
+                            .setPropertiesComponent(new PropertiesComponent())
+                            .addComponent(Component.COLLIDABLE, CollidableComponent.getInstance())
+                            .buildScriptFromPath("path/to/script_text")
+                            .setScript(null)
+                            .addWeaverNode((script, sprite) -> {
+                                List<Element> bows = script.getSegmentById("frame")
+                                        .get().getElementsByName("bow");
+                            })
+                            .build();
     }
 
     private Sprite sprite;
