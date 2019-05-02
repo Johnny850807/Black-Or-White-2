@@ -11,15 +11,32 @@ import com.pokewords.framework.sprites.components.Frame;
 public abstract class GameApplication implements AppView {
 
 	/**
-	 * Initial parameter
+	 * The default value of the length and width of the window
 	 */
 	private int height = 200, width = 200;
+
+	/**
+	 * The default value of the window at the position of the screen
+	 */
 	private int x = 0, y = 0;
+
+	/**
+	 * The default value of the window background color
+	 */
 	private Color backgroundColor = Color.BLACK;
+
+	/**
+	 * The default value of the window name.
+	 */
 	private String windowName = "Game engine";
-	private JPanel gamePanel = new JPanel();
+
+	private GamePanel gamePanel = new GamePanel();
+
 	private JFrame gameFrame = new JFrame(windowName);
 
+	/**
+	 * Launch the game window
+	 */
 	public void launch() {
 		gameCustomizedSetting();
 	}
@@ -70,18 +87,32 @@ public abstract class GameApplication implements AppView {
 		this.backgroundColor = color;
 	}
 
+	/**
+	 * Repaint the gamePanel with the frame inside the RenderedLayers.
+	 * @param renderedLayers new renderedLayers.
+	 */
 	@Override
 	public void onRender(RenderedLayers renderedLayers) {
-		gamePanel = new GamePanel(renderedLayers);
+		gamePanel.setRenderedLayers(renderedLayers);
+		gamePanel.repaint();
 	}
+
 
 	private class GamePanel extends JPanel {
 		private RenderedLayers renderedLayers;
 
-		public GamePanel(RenderedLayers renderedLayers){
+		/**
+		 * set the new renderedLayers.
+		 * @param renderedLayers new renderedLayers.
+		 */
+		private void setRenderedLayers(RenderedLayers renderedLayers){
 			this.renderedLayers = renderedLayers;
 		}
 
+		/**
+		 * Repaint the frame in each renderedLayers
+		 * @param g Basic graph
+		 */
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
