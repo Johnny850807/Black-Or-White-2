@@ -36,7 +36,7 @@ public class ReleaseIocFactory implements IocFactory{
     }
 
     @Override
-    public InputManager inputs() {
+    public InputManager inputManager() {
         return new DefaultInputManager();
     }
 }

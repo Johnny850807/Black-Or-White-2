@@ -94,7 +94,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public DefaultSpriteBuilder addWeaverNode(BiConsumer<Script, Sprite> node) {
+    public DefaultSpriteBuilder addWeaverNode(SpriteWeaver.Node node) {
         spriteWeaver.addNode(node);
         return this;
     }
@@ -102,7 +102,6 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     @Override
     public Sprite build() {
         spriteWeaver.weave();
-        ComponentInjector.inject(sprite);
         return sprite;
     }
 

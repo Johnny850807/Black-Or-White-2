@@ -5,8 +5,6 @@ import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.Script;
 
-import java.util.function.BiConsumer;
-
 /**
  * @author nyngwang
  */
@@ -24,7 +22,7 @@ public interface SpriteBuilder {
 
     SpriteBuilder setScript(Script script);
 
-    SpriteBuilder addWeaverNode(BiConsumer<Script, Sprite> node);
+    SpriteBuilder addWeaverNode(SpriteWeaver.Node node);
 
     Sprite build();
 }

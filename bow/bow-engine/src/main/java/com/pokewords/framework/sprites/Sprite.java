@@ -1,6 +1,6 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
+import com.pokewords.framework.engine.exceptions.MandatoryComponentRequiredException;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.Frame;
 import com.pokewords.framework.sprites.components.*;
@@ -110,9 +110,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public Optional<Component> removeComponentByName(String name) {
 		Component component = components.get(name);
 		if (component instanceof FrameStateMachineComponent)
-			throw new MandatoryComponentIsRequiredException("FrameStateMachineComponent cannot be removed.");
+			throw new MandatoryComponentRequiredException("FrameStateMachineComponent cannot be removed.");
 		else if (component instanceof PropertiesComponent)
-			throw new MandatoryComponentIsRequiredException("Properties Component cannot be removed.");
+			throw new MandatoryComponentRequiredException("Properties Component cannot be removed.");
 		return Optional.ofNullable(components.remove(name));
 	}
 

@@ -17,7 +17,7 @@ public class MainAppState extends AppState {
     @Override
     public void onAppStateStart(AppStateWorld world) {
         super.onAppStateStart(world);
-        inputManager = iocFactory.inputs();
+        inputManager = iocFactory.inputManager();
     }
 
     public void onAppStateEnter() {

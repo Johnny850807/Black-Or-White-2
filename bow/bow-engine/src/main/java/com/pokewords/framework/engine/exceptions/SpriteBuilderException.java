@@ -1,6 +1,6 @@
 package com.pokewords.framework.engine.exceptions;
 
-public class SpriteBuilderException extends GameEngineException {
+public class SpriteBuilderException extends SpriteDeclaratorException {
     public SpriteBuilderException(String message) {
         super(message);
     }

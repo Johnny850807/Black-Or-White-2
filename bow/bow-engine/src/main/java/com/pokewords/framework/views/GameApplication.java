@@ -87,7 +87,7 @@ public abstract class GameApplication implements AppView {
 
 	@Override
 	public void onAppLoading() {
-		// TODO template methods, load what? onAppStatesConfig(ASM?) ? onSpriteConfig(SpriteDeclarator)?
+		// TODO template methods, load what? onAppStatesConfig(ASM?) ? onSpriteConfig(SpriteInitializer)?
 	}
 
 	/**

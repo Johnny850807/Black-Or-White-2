@@ -1,7 +1,9 @@
 package com.pokewords.framework.engine.exceptions;
 
-import java.util.function.Supplier;
-
+/**
+ * The base exception of all module exceptions.
+ * @author johnny850807 (waterball)
+ */
 public class GameEngineException extends RuntimeException {
     public GameEngineException(String message) {
         super(message);

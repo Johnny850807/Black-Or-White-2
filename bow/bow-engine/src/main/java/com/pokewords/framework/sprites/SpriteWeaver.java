@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
 public class SpriteWeaver {
-    private LinkedList<BiConsumer<Script, Sprite>> weaverNodes;
+    private LinkedList<SpriteWeaver.Node> weaverNodes;
     private IocFactory iocFactory;
     private FrameStateMachineComponent fsmComponent;
     private PropertiesComponent propertiesComponent;
@@ -23,7 +23,7 @@ public class SpriteWeaver {
         this.sprite = sprite;
     }
 
-    public void addNode(BiConsumer<Script, Sprite> node) {
+    public void addNode(SpriteWeaver.Node node) {
         weaverNodes.add(node);
     }
 
@@ -63,5 +63,16 @@ public class SpriteWeaver {
             throw new SpriteBuilderException(
                     "PropertiesComponent is required, use setPropertiesComponent() to create it");
         }
+    }
+
+
+    @FunctionalInterface
+    public interface Node {
+        /**
+         * Each weaverNodes is responsible parsing their recognizable segments or elements.
+         * @param sprite the sprite
+         * @param script the sprite's declaration script.
+         */
+        void onWeaving(Script script, Sprite sprite);
     }
 }

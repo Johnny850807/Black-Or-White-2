@@ -2,6 +2,7 @@ package com.pokewords.framework.ioc;
 
 import com.pokewords.framework.engine.UserConfig;
 import com.pokewords.framework.sprites.PrototypeFactory;
+import com.pokewords.framework.sprites.SpriteBuilder;
 import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.views.InputManager;
@@ -17,6 +18,7 @@ public interface IocFactory {
 
 	UserConfig userConfig();
 
-	InputManager inputs();
+	InputManager inputManager();
 
+	SpriteBuilder spriteBuilder();
 }

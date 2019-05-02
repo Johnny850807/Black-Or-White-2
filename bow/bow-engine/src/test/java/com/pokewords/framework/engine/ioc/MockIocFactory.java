@@ -35,7 +35,7 @@ public class MockIocFactory implements IocFactory
     }
 
     @Override
-    public InputManager inputs() {
+    public InputManager inputManager() {
         return null;
     }
 }
