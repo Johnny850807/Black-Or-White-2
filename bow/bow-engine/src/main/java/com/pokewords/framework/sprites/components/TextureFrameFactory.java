@@ -10,7 +10,6 @@ import java.util.Map;
 
 
 /**
- *
  * @author Johnny850807
  */
 public class TextureFrameFactory implements FrameFactory {
@@ -18,13 +17,15 @@ public class TextureFrameFactory implements FrameFactory {
 
     @Override
     public Frame createFrame(FrameSegment frameSegment) {
-        Script script = frameSegment.getScript();
-        int pic = frameSegment.getInt(FrameSegment.PIC);
-        GallerySegment gallerySegment = script.getGallerySegment(pic);
-        String path = gallerySegment.getString("path");
-        if (!galleryMap.containsKey(path))
-            galleryMap.put(path, gallerySegment.toGallery());
-        Gallery gallery = galleryMap.get(path);
-        return new TextureFrame(gallery.getImage(pic));
+//        Script script = frameSegment.getScript();
+//        int pic = frameSegment.getInt(FrameSegment.PIC);
+//        GallerySegment gallerySegment = script.getGallerySegment(pic);
+//        String path = gallerySegment.getString("path");
+//        if (!galleryMap.containsKey(path))
+//            galleryMap.put(path, gallerySegment.toGallery());
+//        Gallery gallery = galleryMap.get(path);
+//        int layer = frameSegment.getInt("layer");
+//        return new TextureFrame(gallery.getImage(pic), layer);
+        return null;
     }
 }

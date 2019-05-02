@@ -4,15 +4,35 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
 import com.pokewords.framework.views.RenderedLayers;
+import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class AppStateWorld implements AppStateLifeCycleListener {
 
     private List<Sprite> sprites;
     private List<CollisionHandler> collisionHandlers;
 
-    public void spawn(Sprite sprite) {
+    /**
+     * @param sprite the spawned sprite to be added into the world
+     * @return the Sprite's unique id
+     */
+    public int spawn(Sprite sprite) {
+        //TODO
+        return 0;
+    }
+
+    /**
+     * @param sprite the spawned sprite to be added into the world
+     * @param time the time-delay to spawn
+     * @param timeUnit the time unit of
+     * @param callback the callback receives the spawned sprite's id when the sprite is actually spawned
+     */
+    public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, @Nullable Consumer<Integer> callback) {
         //TODO
     }
 
@@ -66,5 +86,69 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     @Override
     public void onUpdate(double tpf) {
         //TODO
+    }
+
+    /**
+     * @return if the sprite is in the world
+     */
+    public boolean contains(Sprite sprite) {
+        return true;
+    }
+
+    /**
+     * @return if the sprite who owns the id is in the world
+     */
+    public boolean contains(int spriteId) {
+        return true;
+    }
+
+    /**
+     * @return the sprite's id
+     */
+    public int getId(Sprite sprite) {
+        return 0;
+    }
+
+    /**
+     * @return the sprite who owns the id
+     */
+    public Sprite getSprite(int spriteId) {
+        return null;
+    }
+
+    /**
+     * @return the sprites within the area (x, y, w, h)
+     */
+    public Set<Sprite> getSpritesWithinArea(int x, int y, int w, int h) {
+        return null;
+    }
+
+    /**
+     * @return the sprites within the area (x, y, w, h)
+     */
+    public Set<Sprite> getSpritesWithinArea(Rectangle area) {
+        return this.getSpritesWithinArea(area.x, area.y, area.width, area.height);
+    }
+
+
+    /**
+     * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
+     */
+    public Set<Sprite> getSpritesWithinArea(Sprite sprite, int w, int h) {
+        return null;
+    }
+
+    /**
+     * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
+     */
+    public Set<Sprite> getSpritesWithinArea(Sprite sprite, Dimension dimension) {
+        return this.getSpritesWithinArea(sprite, dimension.width, dimension.height);
+    }
+
+    /**
+     * @return the sprites collided with the given sprite
+     */
+    public Set<Sprite> getSpritesCollidedWith(Sprite sprite) {
+        return null;
     }
 }

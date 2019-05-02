@@ -5,7 +5,7 @@ import com.pokewords.framework.engine.exceptions.NoSuchPrototypeException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PrototypeFactoryImp implements PrototypeFactory{
+public class DefaultPrototypeFactory implements PrototypeFactory{
     private Map<String, Sprite> spriteMap = new HashMap<>();
 
     @Override
