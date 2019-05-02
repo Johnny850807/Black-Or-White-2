@@ -1,101 +1,30 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.utils.FileUtility;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
-import com.pokewords.framework.sprites.components.*;
-import com.pokewords.framework.sprites.parsing.*;
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
+import com.pokewords.framework.sprites.components.PropertiesComponent;
+import com.pokewords.framework.sprites.parsing.Script;
 
-import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
- *
- *   1. 先做出 Sprite
- *   2. 再 Script.Parser.parse() 得出 Script
- *   3. SpriteWeaver用(Script, Sprite)完成Sprite
- *   TODO:
- *      - 包含處理 FSM Component
- *      - 及 Sprite 的其他部分
- *
  * @author nyngwang
  */
-public class SpriteBuilder {
+public interface SpriteBuilder {
 
-    public static void main(String[] args) {
+    SpriteBuilder init();
 
-        SpriteBuilder builder = new SpriteBuilder(new ReleaseIocFactory());
+    SpriteBuilder setFSMComponent(FrameStateMachineComponent fsmComponent);
 
-        Sprite mySprite = builder.init()
-                                     .setIocFactory(new ReleaseIocFactory())
-                                 .setFSMComponent(new FrameStateMachineComponent())
-                                 .setPropertiesComponent(new PropertiesComponent())
-                                 .addComponent(Component.COLLIDABLE, CollidableComponent.getInstance())
-                                 .buildScriptFromPath("path/to/script_text")
-                                     .setScript(null)
-                                 .addWeaverNode((script, sprite) -> {
-                                                    List<Element> bows = script.getSegmentById("frame")
-                                                            .get().getElementsByName("bow");
-                                                })
-                                 .build();
-    }
+    SpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent);
 
-    private Sprite sprite;
-    private SpriteWeaver spriteWeaver;
-    private Script script;
+    SpriteBuilder addComponent(String name, Component component);
 
+    SpriteBuilder buildScriptFromPath(String path);
 
-    public SpriteBuilder(IocFactory iocFactory) {
-        init();
-        spriteWeaver = new SpriteWeaver(iocFactory, sprite);
-    }
+    SpriteBuilder setScript(Script script);
 
-    public SpriteBuilder setIocFactory(IocFactory iocFactory) {
-        spriteWeaver.setIocFactory(iocFactory);
-        return this;
-    }
+    SpriteBuilder addWeaverNode(BiConsumer<Script, Sprite> node);
 
-    public SpriteBuilder init() {
-        sprite = new Sprite(new FrameStateMachineComponent(), new PropertiesComponent());
-        script = null;
-        return this;
-    }
-
-    public SpriteBuilder setFSMComponent(FrameStateMachineComponent fsmComponent) {
-        spriteWeaver.setFSMComponent(fsmComponent);
-        return this;
-    }
-
-    public SpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
-        spriteWeaver.setPropertiesComponent(propertiesComponent);
-        return this;
-    }
-
-    public SpriteBuilder addComponent(String name, Component component) {
-        spriteWeaver.addComponent(name, component);
-        return this;
-    }
-
-    public SpriteBuilder buildScriptFromPath(String path) {
-        script = Script.Parser.parse(FileUtility.read(path),
-                 ScriptSample.LinScript.RULES);
-        return this;
-    }
-
-    public SpriteBuilder setScript(Script script) {
-        this.script = script;
-        return this;
-    }
-
-    public SpriteBuilder addWeaverNode(BiConsumer<Script, Sprite> node) {
-        spriteWeaver.addNode(node);
-        return this;
-    }
-
-    public Sprite build() {
-        spriteWeaver.weave();
-        ComponentInjector.inject(sprite);
-        return sprite;
-    }
-
+    Sprite build();
 }
