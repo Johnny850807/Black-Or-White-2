@@ -10,7 +10,7 @@ public class GamePanel extends JPanel implements AppView {
     private Color backgroundColor;
     private RenderedLayers renderedLayers = new RenderedLayers();
 
-    public void setBackground(Color backgroundColor) {
+    public void setGamePanelBackground(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 

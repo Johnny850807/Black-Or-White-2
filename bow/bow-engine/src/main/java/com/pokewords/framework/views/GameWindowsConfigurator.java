@@ -46,7 +46,7 @@ public class GameWindowsConfigurator {
     }
 
     public GameWindowsConfigurator backgroundColor(Color color){
-        this.gameFrame.setBackground(color);
+        this.gameFrame.setGamePanelBackground(color);
         return this;
     }
 

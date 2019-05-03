@@ -4,11 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameFrame extends JFrame implements AppView{
-    private GamePanel gamePanel = new GamePanel();
+    private GamePanel gamePanel;
+
+    public GameFrame(GamePanel gamePanel) throws HeadlessException {
+        this.gamePanel = gamePanel;
+        setContentPane(gamePanel);
+    }
 
     @Override
     public void onAppInit() {
-        setContentPane(gamePanel);
         gamePanel.onAppInit();
         setVisible(true);
     }
@@ -28,7 +32,8 @@ public class GameFrame extends JFrame implements AppView{
         gamePanel.onRender(renderedLayers);
     }
 
-    public void setBackground(Color backgroundColor) {
-        gamePanel.setBackground(backgroundColor);
+    public void setGamePanelBackground(Color gamePanelBackground) {
+        gamePanel.setGamePanelBackground(gamePanelBackground);
     }
+
 }

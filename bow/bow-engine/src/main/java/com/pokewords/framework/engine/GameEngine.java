@@ -62,16 +62,4 @@ public class GameEngine {
 		this.gameView = gameView;
 	}
 
-	public void setUserConfig(UserConfig userConfig) {
-		this.userConfig = userConfig;
-	}
-
-	public void setPrototypeFactory(PrototypeFactory prototypeFactory) {
-		this.prototypeFactory = prototypeFactory;
-	}
-
-	public void setAppStateMachine(AppStateMachine asm) {
-		this.appStateMachine = asm;
-	}
-
 }

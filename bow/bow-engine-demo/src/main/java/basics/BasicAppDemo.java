@@ -10,6 +10,8 @@ import basics.states.GameOverAppState;
 import basics.states.MainAppState;
 import basics.weaver.MyWeaverNode;
 import com.pokewords.framework.engine.asm.AppStateMachine;
+import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.GameWindowsConfigurator;
@@ -18,13 +20,17 @@ import java.awt.*;
 
 public class BasicAppDemo extends GameApplication {
 
+    public BasicAppDemo(IocFactory iocFactory) {
+        super(iocFactory);
+    }
+
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
         gameWindowsConfigurator.name("Basic BasicAppDemo Demo")
-                            .atCenter()
                             .size(600, 600)
                             .resizable(false)
-                            .backgroundColor(Color.black);
+                            .backgroundColor(Color.black)
+                            .atCenter();
     }
 
     @Override
@@ -41,8 +47,7 @@ public class BasicAppDemo extends GameApplication {
                     .with("path/to/monster.bow")
                     .with(ComponentName.CHARACTER, new CharacterComponent())
                     .with(ComponentName.MONSTER_AI, new MonsterAI())
-                    .collidable()
-                    .weaver(new MyWeaverNode())
+                    .collidable()                    .weaver(new MyWeaverNode())
                     .commit();
 
         spriteInitializer.declare(SpriteType.BULLET)
@@ -65,6 +70,7 @@ public class BasicAppDemo extends GameApplication {
 
 
     public static void main(String[] args) {
-        new BasicAppDemo().launch();
+        BasicAppDemo app = new BasicAppDemo(new ReleaseIocFactory());
+        app.launch();
     }
 }

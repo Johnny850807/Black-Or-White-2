@@ -19,12 +19,17 @@ import com.pokewords.framework.sprites.components.Frame;
  * TODO onAppLoading -Template methods
  */
 public abstract class GameApplication implements AppView {
-	private IocFactory iocFactory = new ReleaseIocFactory();
+	private IocFactory iocFactory;
 	private GameEngine gameEngine;
-	private GameFrame gameFrame = new GameFrame();
+	private GameFrame gameFrame;
 	private SpriteInitializer spriteInitializer;
 
-	/**
+    public GameApplication(IocFactory iocFactory) {
+        this.iocFactory = iocFactory;
+        gameFrame = new GameFrame(new GamePanel());
+    }
+
+    /**
 	 * Launch the game application.
 	 */
 	public void launch() {
