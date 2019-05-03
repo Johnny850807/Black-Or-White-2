@@ -108,7 +108,7 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	@Override
-	public void onUpdate(double tpf) {
+	public void onUpdate(double timePerFrame) {
 
 	}
 

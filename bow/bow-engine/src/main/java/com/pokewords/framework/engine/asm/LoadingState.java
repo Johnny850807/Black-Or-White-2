@@ -2,21 +2,12 @@ package com.pokewords.framework.engine.asm;
 
 public class LoadingState extends AppState {
 
-	public void startLoading() {
-
-	}
-
-	public void onEnter() {
-
-	}
-
-	public void onExit() {
-
+	enum SpriteName {
+		LOADING_TEXT
 	}
 
 	@Override
 	public void onAppStateEnter() {
-
 	}
 
 	@Override
@@ -30,7 +21,7 @@ public class LoadingState extends AppState {
 	}
 
 	@Override
-	public void onUpdate(double tpf) {
+	public void onUpdate(double timePerFrame) {
 
 	}
 }

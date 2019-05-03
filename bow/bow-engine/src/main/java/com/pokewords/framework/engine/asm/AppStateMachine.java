@@ -65,8 +65,8 @@ public class AppStateMachine implements GameLifecycleListener {
 
 
 	@Override
-	public void onUpdate(double tpf) {
-		fsm.getCurrentState().onUpdate(tpf);
+	public void onUpdate(double timePerFrame) {
+		fsm.getCurrentState().onUpdate(timePerFrame);
 	}
 
 	public void setGameInitialState(AppState clientInitState) {

@@ -17,6 +17,9 @@ public class GameEngine {
 	private InputManager inputManager;
 	private UserConfig userConfig;
 	private AppStateMachine appStateMachine;
+	private Thread gameLoopingThread;
+	private boolean running = false;
+	private int timePerFrame = 15;  //ms
 
 	public GameEngine(IocFactory iocFactory, GameWindowsConfigurator gameWindowsConfigurator) {
 		this.iocFactory = iocFactory;
@@ -31,6 +34,23 @@ public class GameEngine {
 
 	public void launchEngine() {
 		gameView.onAppInit();
+		gameLoopingThread = new Thread(this::gameLooping);
+		gameLoopingThread.start();
+		gameView.onAppLoading();
+	}
+
+	private void gameLooping() {
+		running = true;
+		try {
+			while (running)
+			{
+				Thread.sleep(timePerFrame);
+				appStateMachine.onUpdate(timePerFrame);
+			}
+		} catch (InterruptedException ignored) {
+
+		}
+
 	}
 
 	public AppView getGameView() {

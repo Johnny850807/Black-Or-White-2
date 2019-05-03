@@ -6,8 +6,6 @@ import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
 import java.awt.Image;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 
 public class TextureFrame implements Frame {
@@ -37,7 +35,7 @@ public class TextureFrame implements Frame {
 
 	@Override
 	public void renderItself(Canvas canvas) {
-		canvas.render(sprite.getX(), sprite.getY(), image);
+		canvas.renderText(sprite.getX(), sprite.getY(), image);
 	}
 
 }

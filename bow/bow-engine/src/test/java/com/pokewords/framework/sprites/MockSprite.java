@@ -30,7 +30,7 @@ public class MockSprite extends Sprite{
     }
 
     @Override
-    public void onUpdate(double tpf) {
+    public void onUpdate(double timePerFrame) {
         onUpdateCount ++;
     }
 }

@@ -124,9 +124,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onUpdate(double tpf) {
+	public void onUpdate(double timePerFrame) {
         for (Component component : components.values())
-            component.onUpdate(tpf);
+            component.onUpdate(timePerFrame);
 	}
 
 	@Override

@@ -45,6 +45,10 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		return spriteInitializer.createSprite(type);
 	}
 
+	public SpriteInitializer getSpriteInitializer() {
+		return spriteInitializer;
+	}
+
 	public boolean hasStarted() {
 		return started;
 	}

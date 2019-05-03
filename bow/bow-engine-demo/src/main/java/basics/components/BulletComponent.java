@@ -27,7 +27,7 @@ public class BulletComponent extends CloneableComponent {
     }
 
     @Override
-    public void onUpdate(double tpf) {
+    public void onUpdate(double timePerFrame) {
 
     }
 }

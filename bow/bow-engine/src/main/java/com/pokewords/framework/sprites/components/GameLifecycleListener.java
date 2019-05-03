@@ -4,9 +4,9 @@ public interface GameLifecycleListener {
 
     /**
      * triggered in every game-loop
-     * @param tpf time per frame
+     * @param timePerFrame time per frame
      */
-    void onUpdate(double tpf);
+    void onUpdate(double timePerFrame);
 
 
 

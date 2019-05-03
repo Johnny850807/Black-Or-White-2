@@ -84,7 +84,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     @Override
-    public void onUpdate(double tpf) {
+    public void onUpdate(double timePerFrame) {
         //TODO
     }
 
