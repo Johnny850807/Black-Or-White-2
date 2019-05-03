@@ -38,6 +38,10 @@ public class GameEngine {
 		gameLoopingThread = new Thread(this::gameLooping);
 		gameLoopingThread.start();
 		gameView.onAppLoading();
+
+		//Reveal below code will lead to errors, because AppStateWorld is not finished.
+//		appStateMachine.trigger(AppStateMachine.EVENT_GAME_STARTED);
+//		gameView.onAppStarted();
 	}
 
 	private void gameLooping() {
