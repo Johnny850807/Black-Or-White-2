@@ -2,10 +2,6 @@ package com.pokewords.framework.engine.asm;
 
 public class LoadingState extends AppState {
 
-	public LoadingState(AppStateMachine appStateMachine) {
-		super(appStateMachine);
-	}
-
 	public void startLoading() {
 
 	}

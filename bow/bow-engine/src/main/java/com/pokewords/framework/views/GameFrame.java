@@ -3,8 +3,12 @@ package com.pokewords.framework.views;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class GameFrame extends JFrame implements AppView{
     private GamePanel gamePanel;
+    private GameWindowDefinition gameWindowDefinition;
 
     public GameFrame(GamePanel gamePanel) throws HeadlessException {
         this.gamePanel = gamePanel;
@@ -36,4 +40,15 @@ public class GameFrame extends JFrame implements AppView{
         gamePanel.setGamePanelBackground(gamePanelBackground);
     }
 
+    public void applyGameWindowDefinition(GameWindowDefinition gameWindowDefinition) {
+        this.gameWindowDefinition = gameWindowDefinition;
+        setName(gameWindowDefinition.name);
+        setSize(gameWindowDefinition.size.x, gameWindowDefinition.size.y);
+        setLocation(gameWindowDefinition.location);
+        setGamePanelBackground(gameWindowDefinition.gamePanelBackground);
+    }
+
+    public GameWindowDefinition getGameWindowDefinition() {
+        return gameWindowDefinition;
+    }
 }

@@ -18,6 +18,8 @@ import com.pokewords.framework.views.GameWindowsConfigurator;
 
 import java.awt.*;
 
+import static com.pokewords.framework.sprites.SpriteInitializer.InitializationMode.LAZY;
+
 public class BasicAppDemo extends GameApplication {
 
     public BasicAppDemo(IocFactory iocFactory) {
@@ -28,13 +30,15 @@ public class BasicAppDemo extends GameApplication {
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
         gameWindowsConfigurator.name("Basic BasicAppDemo Demo")
                             .size(600, 600)
-                            .resizable(false)
-                            .backgroundColor(Color.black)
-                            .atCenter();
+                            .gamePanelBackground(Color.decode("#1B4032"))
+                            .atCenter()
+                            .apply();
     }
 
     @Override
     protected void onSpriteInitializer(SpriteInitializer spriteInitializer) {
+        spriteInitializer.setInitializationMode(LAZY);
+
         spriteInitializer.declare(SpriteType.HERO)
                     .with("path/to/hero.bow")
                     .position(280, 500)
@@ -60,10 +64,8 @@ public class BasicAppDemo extends GameApplication {
 
     @Override
     protected void onAppStatesConfiguration(AppStateMachine asm) {
-        MainAppState mainAppState = new MainAppState(asm);
-        GameOverAppState gameOverAppState = new GameOverAppState(asm);
-        asm.addState(mainAppState);
-        asm.addState(gameOverAppState);
+        MainAppState mainAppState = asm.createState(MainAppState.class);
+        GameOverAppState gameOverAppState = asm.createState(GameOverAppState.class);
         asm.setGameInitialState(mainAppState);
         asm.addTransition(mainAppState, AppStateEvent.OVER, gameOverAppState);
     }

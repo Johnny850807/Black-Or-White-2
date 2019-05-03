@@ -1,47 +1,36 @@
 package com.pokewords.framework.views;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
-
 import com.pokewords.framework.engine.GameEngine;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.SpriteInitializer;
-import com.pokewords.framework.sprites.components.Frame;
 
 /**
- * @author shawn
- * TODO windows exit
- * TODO GameApplication should give right of access to the GameEngine and its relevant classes (builders, ASM...)
- * TODO onAppInit - windows configurations
- * TODO onAppLoading -Template methods
+ * @author johnny850807 (waterball), shawn
  */
 public abstract class GameApplication implements AppView {
-	private IocFactory iocFactory;
 	private GameEngine gameEngine;
 	private GameFrame gameFrame;
-	private SpriteInitializer spriteInitializer;
+	private GameWindowsConfigurator gameWindowsConfigurator;
 
     public GameApplication(IocFactory iocFactory) {
-        this.iocFactory = iocFactory;
-        gameFrame = new GameFrame(new GamePanel());
+		gameFrame = new GameFrame(new GamePanel());
+		gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
+        gameEngine = new GameEngine(iocFactory, gameWindowsConfigurator);
+        gameEngine.setGameView(this);
     }
 
     /**
 	 * Launch the game application.
 	 */
 	public void launch() {
-		gameEngine = new GameEngine(iocFactory);
-		gameEngine.setGameView(this);
 		gameEngine.launchEngine();
 	}
 
 	@Override
 	public void onAppInit() {
 		gameFrame.onAppInit();
-		onGameWindowsConfiguration(new GameWindowsConfigurator(gameFrame));
+		onGameWindowsConfiguration(gameWindowsConfigurator);
 	}
 
 	protected abstract void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator);
@@ -50,7 +39,7 @@ public abstract class GameApplication implements AppView {
 	@Override
 	public void onAppLoading() {
 		gameFrame.onAppLoading();
-		onSpriteInitializer(spriteInitializer = new SpriteInitializer(iocFactory));
+		onSpriteInitializer(gameEngine.getSpriteInitializer());
 		onAppStatesConfiguration(gameEngine.getAppStateMachine());
 	}
 

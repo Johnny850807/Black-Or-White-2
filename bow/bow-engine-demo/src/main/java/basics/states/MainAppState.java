@@ -1,45 +1,53 @@
 package basics.states;
 
 
+import basics.namespace.SpriteType;
 import com.pokewords.framework.engine.asm.AppState;
-import com.pokewords.framework.engine.asm.AppStateMachine;
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-import com.pokewords.framework.views.InputManager;
 
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class MainAppState extends AppState {
-    private InputManager inputManager;
-    public MainAppState(AppStateMachine appStateMachine) {
-        super(appStateMachine);
-    }
 
     @Override
     public void onAppStateStart(AppStateWorld world) {
         super.onAppStateStart(world);
-        inputManager = iocFactory.inputManager();
     }
 
+    @Override
     public void onAppStateEnter() {
+        AppStateWorld world = getAppStateWorld();
+        world.spawn(createSprite(SpriteType.HERO));
 
+        for (int i = 0; i < 8; i++)
+            world.spawn(createMonsterAtRandomPosition());
     }
 
+    private Sprite createMonsterAtRandomPosition() {
+        Random random = new Random();
+        Sprite monster = createSprite(SpriteType.MONSTER);
+        monster.setPosition(random.nextInt(getWindowSize().x), random.nextInt(getWindowSize().y));
+        return monster;
+    }
+
+    @Override
     public void onAppStateExit() {
-
+        getAppStateWorld().clear();
     }
 
-    public void onAppStateDestroy() {
-
-    }
+    @Override
+    public void onAppStateDestroy() { }
 
     public void onUpdate(double tpf) {
-        if (inputManager.getButtonBeingHeld(KeyEvent.VK_W))
+        if (getInputManager().getButtonBeingHeld(KeyEvent.VK_W))
             moveUp();
-        if (inputManager.getButtonBeingHeld(KeyEvent.VK_S))
+        if (getInputManager().getButtonBeingHeld(KeyEvent.VK_S))
             moveDown();
-        if (inputManager.getButtonBeingHeld(KeyEvent.VK_A))
+        if (getInputManager().getButtonBeingHeld(KeyEvent.VK_A))
             moveLeft();
-        if (inputManager.getButtonBeingHeld(KeyEvent.VK_D))
+        if (getInputManager().getButtonBeingHeld(KeyEvent.VK_D))
             moveRight();
     }
 

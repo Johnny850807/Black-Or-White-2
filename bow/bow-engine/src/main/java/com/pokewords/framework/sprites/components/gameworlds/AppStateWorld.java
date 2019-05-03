@@ -151,4 +151,12 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     public Set<Sprite> getSpritesCollidedWith(Sprite sprite) {
         return null;
     }
+
+
+    /**
+     * Clear the world. This method will remove all the sprites and the states within the world.
+     */
+    public void clear() {
+        //TODO
+    }
 }

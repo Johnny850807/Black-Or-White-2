@@ -2,6 +2,9 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public interface AppStateLifeCycleListener extends GameLifecycleListener{
     /**
      * triggered when the AppState is started. (this will be triggered only once for each alive app state)
