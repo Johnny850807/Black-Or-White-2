@@ -22,7 +22,7 @@ public class GameOverAppState extends AppState {
     }
 
     @Override
-    public void onUpdate(double timePerFrame) {
+    public void onUpdate(int timePerFrame) {
 
     }
 }

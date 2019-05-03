@@ -2,12 +2,9 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.Logger;
 import com.pokewords.framework.engine.utils.StringUtility;
-import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +60,7 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 
-	public Point2D getPosition(){
+	public Point getPosition(){
 		return body.getLocation();
 	}
 
@@ -93,7 +90,7 @@ public class PropertiesComponent extends CloneableComponent {
 		this.center = center;
 	}
 
-	public Point2D getCenter() {
+	public Point getCenter() {
 		return center;
 	}
 
@@ -108,7 +105,7 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	@Override
-	public void onUpdate(double timePerFrame) {
+	public void onUpdate(int timePerFrame) {
 
 	}
 

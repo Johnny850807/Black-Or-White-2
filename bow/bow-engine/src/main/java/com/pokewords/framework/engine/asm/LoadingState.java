@@ -52,7 +52,7 @@ public class LoadingState extends AppState {
 	private int addOrMinute = 1;
 
 	@Override
-	public void onUpdate(double timePerFrame) {
+	public void onUpdate(int timePerFrame) {
 		int red = currentColor.getRed() + addOrMinute;
 		int green = currentColor.getGreen() + addOrMinute;
 		int blue = currentColor.getBlue() + addOrMinute;

@@ -26,7 +26,7 @@ public class StringComponent extends Component implements Shareable, Renderable 
     public void onAppStateDestroy() { }
 
     @Override
-    public void onUpdate(double timePerFrame) { }
+    public void onUpdate(int timePerFrame) { }
 
     @Override
     public List<StringFrame> getRenderedFrames() {

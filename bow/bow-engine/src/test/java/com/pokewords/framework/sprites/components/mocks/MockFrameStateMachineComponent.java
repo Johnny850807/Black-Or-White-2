@@ -36,7 +36,7 @@ public class MockFrameStateMachineComponent extends FrameStateMachineComponent i
     }
 
     @Override
-    public void onUpdate(double timePerFrame) {
+    public void onUpdate(int timePerFrame) {
         assert isRunning : "onUpdate() should be triggered after onAppStateEnter().";
         updateCount++;
     }

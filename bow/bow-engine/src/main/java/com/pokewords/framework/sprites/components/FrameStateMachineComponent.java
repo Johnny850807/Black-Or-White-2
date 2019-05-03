@@ -33,7 +33,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
     }
 
     @Override
-    public void onUpdate(double timePerFrame) {
+    public void onUpdate(int timePerFrame) {
         trigger(Events.UPDATE);
         Frame frame = getCurrentFrame();
         frame.apply(world, sprite);

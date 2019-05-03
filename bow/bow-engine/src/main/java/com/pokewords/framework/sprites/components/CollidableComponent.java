@@ -22,7 +22,7 @@ public class CollidableComponent extends Component implements Shareable {
 	}
 
 	@Override
-	public void onUpdate(double timePerFrame) { }
+	public void onUpdate(int timePerFrame) { }
 
 	@Override
 	public void onAppStateEnter() { }

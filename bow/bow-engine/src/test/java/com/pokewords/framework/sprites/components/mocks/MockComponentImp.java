@@ -36,7 +36,7 @@ public class MockComponentImp extends Component implements MockComponent {
     }
 
     @Override
-    public void onUpdate(double timePerFrame) {
+    public void onUpdate(int timePerFrame) {
         assert isRunning : "onUpdate() should be triggered after onAppStateEnter().";
         updateCount++;
     }

@@ -33,6 +33,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	private Collection<Renderable> renderableComponents = new HashSet<>();
 	private FrameStateMachineComponent frameStateMachineComponent;
 	private PropertiesComponent propertiesComponent;
+	private int timePerFrame;
 
 
 	protected Sprite(String type) {
@@ -132,7 +133,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onUpdate(double timePerFrame) {
+	public void onUpdate(int timePerFrame) {
+		this.timePerFrame = timePerFrame;
         for (Component component : components.values())
             component.onUpdate(timePerFrame);
 	}
@@ -175,7 +177,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         getPropertiesComponent().setPosition(x, y);
     }
 
-    public Point2D getPosition() {
+    public Point getPosition() {
         return getPropertiesComponent().getPosition();
     }
 
@@ -214,6 +216,17 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     public void setCenter(Point point) {
         getPropertiesComponent().setCenter(point);
     }
+
+    public void move(int velocityX, int velocityY) {
+		getPosition().translate((int)(velocityX*timePerFrame), (int)(velocityY*timePerFrame));
+	}
+    public void moveX(int velocityX) {
+		getPosition().translate((int) (velocityX*timePerFrame), 0);
+	}
+
+	public void moveY(int velocityY) {
+		getPosition().translate(0, (int) (velocityY*timePerFrame));
+	}
 
 	public Sprite clone(){
 		try {

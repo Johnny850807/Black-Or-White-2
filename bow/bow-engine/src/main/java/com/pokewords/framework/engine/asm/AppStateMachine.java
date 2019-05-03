@@ -73,7 +73,7 @@ public class AppStateMachine implements GameLifecycleListener {
 
 
 	@Override
-	public void onUpdate(double timePerFrame) {
+	public void onUpdate(int timePerFrame) {
 		fsm.getCurrentState().onUpdate(timePerFrame);
 	}
 

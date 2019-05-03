@@ -49,7 +49,7 @@ public class SpriteWeaver {
     }
 
     private void validateComponentName(String name) {
-        if (sprite.getComponentByName(name).isPresent()) {
+        if (sprite.hasComponent(name)) {
             throw new SpriteBuilderException("Duplicate component name is not allowed.");
         }
     }

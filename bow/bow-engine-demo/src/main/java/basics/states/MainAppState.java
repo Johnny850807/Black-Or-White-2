@@ -40,7 +40,7 @@ public class MainAppState extends AppState {
     @Override
     public void onAppStateDestroy() { }
 
-    public void onUpdate(double timePerFrame) {
+    public void onUpdate(int timePerFrame) {
         if (getInputManager().getButtonBeingHeld(KeyEvent.VK_W))
             moveUp();
         if (getInputManager().getButtonBeingHeld(KeyEvent.VK_S))
