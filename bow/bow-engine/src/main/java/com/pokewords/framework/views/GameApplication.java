@@ -14,9 +14,10 @@ public abstract class GameApplication implements AppView {
 	private GameWindowsConfigurator gameWindowsConfigurator;
 
     public GameApplication(IocFactory iocFactory) {
-		gameFrame = new GameFrame(new GamePanel());
+    	InputManager inputManager = iocFactory.inputManager();
+		gameFrame = new GameFrame(new GamePanel(inputManager));
 		gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
-        gameEngine = new GameEngine(iocFactory, gameWindowsConfigurator);
+        gameEngine = new GameEngine(iocFactory, inputManager, gameWindowsConfigurator);
         gameEngine.setGameView(this);
     }
 

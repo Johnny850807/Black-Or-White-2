@@ -21,9 +21,9 @@ public class GameEngine {
 	private boolean running = false;
 	private int timePerFrame = 15;  //ms
 
-	public GameEngine(IocFactory iocFactory, GameWindowsConfigurator gameWindowsConfigurator) {
+	public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator) {
 		this.iocFactory = iocFactory;
-		this.inputManager = iocFactory.inputManager();
+		this.inputManager = inputManager;
 		this.spriteInitializer = new SpriteInitializer(iocFactory);
 		this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator);
 	}
@@ -50,6 +50,7 @@ public class GameEngine {
 			while (running)
 			{
 				Thread.sleep(timePerFrame);
+				inputManager.onUpdate(timePerFrame);
 				appStateMachine.onUpdate(timePerFrame);
 			}
 		} catch (InterruptedException ignored) {
