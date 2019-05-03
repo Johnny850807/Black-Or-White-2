@@ -7,5 +7,5 @@ import java.util.Collection;
  * @author johnny850807 (waterball)
  */
 public interface Renderable {
-    Collection<Frame> getRenderedFrames();
+    Collection<? extends Frame> getRenderedFrames();
 }

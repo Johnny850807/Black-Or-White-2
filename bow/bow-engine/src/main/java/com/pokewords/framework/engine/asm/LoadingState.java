@@ -1,6 +1,12 @@
 package com.pokewords.framework.engine.asm;
 
+import com.pokewords.framework.sprites.components.StringsComponent;
+import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+
 import java.awt.*;
+
+import static com.pokewords.framework.engine.asm.LoadingState.ComponentName.STRINGS;
+import static com.pokewords.framework.engine.asm.LoadingState.SpriteName.LOADING_TEXT;
 
 public class LoadingState extends AppState {
 	private Color originalColor;
@@ -8,6 +14,24 @@ public class LoadingState extends AppState {
 
 	enum SpriteName {
 		LOADING_TEXT
+	}
+
+	enum ComponentName {
+		STRINGS
+	}
+
+	@Override
+	public void onAppStateStart(AppStateWorld world) {
+		super.onAppStateStart(world);
+
+		getSpriteInitializer().declare(LOADING_TEXT)
+							.with(STRINGS, createLoadingStringsComponent());
+	}
+
+	private StringsComponent createLoadingStringsComponent() {
+		StringsComponent stringsComponent = new StringsComponent();
+		stringsComponent.addString(getGameWindowDefinition().center(), "Loading ...");
+		return stringsComponent;
 	}
 
 	@Override

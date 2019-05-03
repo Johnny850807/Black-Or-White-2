@@ -8,8 +8,8 @@ import com.pokewords.framework.views.Canvas;
 import java.awt.Image;
 
 
-public class TextureFrame implements Frame {
-	private Sprite sprite;
+public class TextureFrame extends DefaultFrame {
+	private Sprite sprite;  //TODO how to inject the sprite?
 	private Image image;
 	private int layerIndex;
 
@@ -21,16 +21,6 @@ public class TextureFrame implements Frame {
 	@Override
 	public int getLayerIndex() {
 		return layerIndex;
-	}
-
-	@Override
-	public void apply(AppStateWorld gameWorld, Sprite sprite) {
-
-	}
-
-	@Override
-	public void addEffect(GameEffect effect) {
-
 	}
 
 	@Override
