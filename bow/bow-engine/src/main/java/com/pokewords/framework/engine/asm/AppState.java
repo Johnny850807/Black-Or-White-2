@@ -69,6 +69,10 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		return gameWindowsConfigurator.getGameWindowDefinition().size;
 	}
 
+	public GameWindowsConfigurator getGameWindowsConfigurator() {
+		return gameWindowsConfigurator;
+	}
+
 	public GameWindowDefinition getGameWindowDefinition() {
 		return gameWindowsConfigurator.getGameWindowDefinition();
 	}

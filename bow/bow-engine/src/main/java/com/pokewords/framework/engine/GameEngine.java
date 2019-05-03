@@ -34,6 +34,7 @@ public class GameEngine {
 
 	public void launchEngine() {
 		gameView.onAppInit();
+		appStateMachine.trigger(AppStateMachine.EVENT_LOADING);
 		gameLoopingThread = new Thread(this::gameLooping);
 		gameLoopingThread.start();
 		gameView.onAppLoading();

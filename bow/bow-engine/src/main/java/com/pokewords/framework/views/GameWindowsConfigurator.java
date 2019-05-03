@@ -18,6 +18,4 @@ public interface GameWindowsConfigurator {
 
     GameWindowDefinition getGameWindowDefinition();
 
-    void apply();
-
 }

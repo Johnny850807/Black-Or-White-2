@@ -28,18 +28,17 @@ public class BasicAppDemo extends GameApplication {
 
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
-        gameWindowsConfigurator.name("Basic BasicAppDemo Demo")
+        gameWindowsConfigurator.name("BasicAppDemo Demo")
                             .size(600, 600)
                             .gamePanelBackground(Color.decode("#1B4032"))
-                            .atCenter()
-                            .apply();
+                            .atCenter();
     }
 
     @Override
     protected void onSpriteInitializer(SpriteInitializer spriteInitializer) {
         spriteInitializer.setInitializationMode(LAZY);
 
-        spriteInitializer.declare(SpriteType.HERO)
+        /*spriteInitializer.declare(SpriteType.HERO)
                     .with("path/to/hero.bow")
                     .position(280, 500)
                     .with(ComponentName.CHARACTER, new CharacterComponent())
@@ -59,7 +58,7 @@ public class BasicAppDemo extends GameApplication {
                 .with(ComponentName.BULLET, new BulletComponent())
                 .collidable()
                 .weaver(new MyWeaverNode())
-                .commit();
+                .commit();*/
     }
 
     @Override

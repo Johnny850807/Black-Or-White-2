@@ -31,12 +31,14 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
     @Override
     public GameWindowsConfigurator name(String windowName){
         gameWindowDefinition.name = windowName;
+        gameFrame.setName(windowName);
         return this;
     }
 
     @Override
     public GameWindowsConfigurator size(int width, int height){
         gameWindowDefinition.size = new Point(width, height);
+        gameFrame.setSize(width, height);
         return this;
     }
 
@@ -50,19 +52,18 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
     @Override
     public GameWindowsConfigurator location(int x, int y){
         gameWindowDefinition.location = new Point(x, y);
+        gameFrame.setLocation(x, y);
         return this;
     }
 
     @Override
     public GameWindowsConfigurator gamePanelBackground(Color color){
         gameWindowDefinition.gamePanelBackground = color;
+        gameFrame.setGamePanelBackground(color);
+        gameFrame.repaint();
         return this;
     }
 
-    @Override
-    public void apply() {
-        gameFrame.applyGameWindowDefinition(gameWindowDefinition);
-    }
 
     @Override
     public GameWindowDefinition getGameWindowDefinition() {

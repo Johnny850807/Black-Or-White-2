@@ -5,7 +5,6 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.SpriteInitializer;
 import com.pokewords.framework.sprites.components.GameLifecycleListener;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-import com.pokewords.framework.views.GameWindowDefinition;
 import com.pokewords.framework.views.GameWindowsConfigurator;
 import com.pokewords.framework.views.InputManager;
 
@@ -13,6 +12,8 @@ import com.pokewords.framework.views.InputManager;
  * @author johnny850807 (waterball)
  */
 public class AppStateMachine implements GameLifecycleListener {
+	public static final String EVENT_LOADING = "Start Loading";
+	public static final String EVENT_GAME_STARTED = "Game Started";
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
 	private SpriteInitializer spriteInitializer;
 	private GameWindowsConfigurator gameWindowsConfigurator;
@@ -23,9 +24,15 @@ public class AppStateMachine implements GameLifecycleListener {
 	public AppStateMachine(InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
 		this.inputManager = inputManager;
 		this.spriteInitializer = spriteInitializer;
-		this.loadingState = createState(LoadingState.class);
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
-		fsm.setCurrentState(loadingState);
+		setupStates();
+	}
+
+	private void setupStates() {
+		AppState initialState = createState(EmptyAppState.class);
+		this.loadingState = createState(LoadingState.class);
+		fsm.setCurrentState(initialState);
+		fsm.addTransition(initialState, EVENT_LOADING, loadingState);
 	}
 
 	public <T extends AppState> T createState(Class<T> appStateType) {
@@ -42,15 +49,16 @@ public class AppStateMachine implements GameLifecycleListener {
 	}
 
 	public AppState trigger(String event) {
-		AppState enteredAppState = fsm.trigger(event);
-		if (getCurrentState() != enteredAppState)
+		AppState from = fsm.getCurrentState();
+		AppState to = fsm.trigger(event);
+		if (from != to)
 		{
-			getCurrentState().onAppStateExit();
-			if (!enteredAppState.hasStarted())
-				enteredAppState.onAppStateStart(onCreateAppStateWorld());
-			enteredAppState.onAppStateEnter();
+			from.onAppStateExit();
+			if (!to.hasStarted())
+				to.onAppStateStart(onCreateAppStateWorld());
+			to.onAppStateEnter();
 		}
-		return enteredAppState;
+		return to;
 	}
 
 	/**

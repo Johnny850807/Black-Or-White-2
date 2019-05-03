@@ -40,14 +40,6 @@ public class GameFrame extends JFrame implements AppView{
         gamePanel.setGamePanelBackground(gamePanelBackground);
     }
 
-    public void applyGameWindowDefinition(GameWindowDefinition gameWindowDefinition) {
-        this.gameWindowDefinition = gameWindowDefinition;
-        setName(gameWindowDefinition.name);
-        setSize(gameWindowDefinition.size.x, gameWindowDefinition.size.y);
-        setLocation(gameWindowDefinition.location);
-        setGamePanelBackground(gameWindowDefinition.gamePanelBackground);
-    }
-
     public GameWindowDefinition getGameWindowDefinition() {
         return gameWindowDefinition;
     }

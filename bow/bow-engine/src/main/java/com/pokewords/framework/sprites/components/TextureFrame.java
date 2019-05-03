@@ -35,7 +35,7 @@ public class TextureFrame implements Frame {
 
 	@Override
 	public void renderItself(Canvas canvas) {
-		canvas.renderText(sprite.getX(), sprite.getY(), image);
+		canvas.renderImage(sprite.getX(), sprite.getY(), image);
 	}
 
 }
