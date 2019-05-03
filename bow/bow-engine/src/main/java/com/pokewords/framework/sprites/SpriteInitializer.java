@@ -4,10 +4,10 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.SpriteDeclaratorException;
 import com.pokewords.framework.engine.utils.StringUtility;
 import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
-import com.pokewords.framework.sprites.components.*;
+import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.parsing.Element;
+import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
+import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.Script;
 import org.jetbrains.annotations.NotNull;
 
@@ -171,8 +171,9 @@ public class SpriteInitializer {
 
         private void validateDeclarations() throws SpriteDeclaratorException {
             validatePropertiesComponentSet();
-            validateFrameStateMachineComponentSet();
+            validateScriptPathIfNotNull();
         }
+
 
         private void validatePropertiesComponentSet() throws SpriteDeclaratorException {
             if (declaration.propertiesComponent == null)
@@ -185,14 +186,9 @@ public class SpriteInitializer {
                         type, declaration.propertiesComponent.getType(), type));
         }
 
-        private void validateFrameStateMachineComponentSet() throws SpriteDeclaratorException {
-            if (declaration.script == null && StringUtility.isNullOrEmpty(declaration.scriptPath) && declaration.frameStateMachineComponent == null)
-                throw new SpriteDeclaratorException(
-                        String.format("Error occurs during declaring the sprite '%s', you should set the scriptPath of the sprite '%s'. " +
-                                "(Alternatively, you can set the script instance or directly the FrameStateMachineComponent instance.)",
-                                type, type));
-
-            if (Files.notExists(Paths.get(declaration.scriptPath)))
+        private void validateScriptPathIfNotNull() throws SpriteDeclaratorException {
+            if (!StringUtility.isNullOrEmpty(declaration.scriptPath) &&
+                    Files.notExists(Paths.get(declaration.scriptPath)))
                 throw new SpriteDeclaratorException(String.format("Error occurs during declaring the sprite '%s', the scriptPath '%s' does not exist.", type, declaration.scriptPath));
         }
     }
@@ -261,11 +257,11 @@ public class SpriteInitializer {
     private class Declaration {
         String type;
         PropertiesComponent propertiesComponent;
-        FrameStateMachineComponent frameStateMachineComponent;
         Map<String, Component> componentMap = new HashMap<>();
 
+        FrameStateMachineComponent frameStateMachineComponent;
+        Script script;
         String scriptPath = "";
-        Script script;  // use script rather than scriptPath iff script != null
 
         List<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
 
@@ -287,7 +283,7 @@ public class SpriteInitializer {
                 spriteBuilder.setFSMComponent(frameStateMachineComponent);
             else if (script != null)
                 spriteBuilder.setScript(script);
-            else
+            else if (scriptPath != null)
                 spriteBuilder.buildScriptFromPath(scriptPath);
         }
     }

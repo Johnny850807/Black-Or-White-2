@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.sprites.components.frames.Frame;
+
 import java.util.Collection;
 
 /**

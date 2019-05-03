@@ -3,7 +3,7 @@ package com.pokewords.framework.engine.ioc;
 import com.pokewords.framework.engine.UserConfig;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.PrototypeFactory;
-import com.pokewords.framework.sprites.components.FrameFactory;
+import com.pokewords.framework.sprites.components.frames.FrameFactory;
 import com.pokewords.framework.views.InputManager;
 import com.pokewords.framework.views.SoundPlayer;
 

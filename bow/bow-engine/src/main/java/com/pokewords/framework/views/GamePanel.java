@@ -1,6 +1,6 @@
 package com.pokewords.framework.views;
 
-import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.sprites.components.frames.Frame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -87,7 +87,7 @@ public class GamePanel extends JPanel implements AppView {
 
     private void drawRenderedLayers(Graphics g) {
         List<List<Frame>> layers = renderedLayers.layers;
-        for (List<com.pokewords.framework.sprites.components.Frame> layer : layers) {
+        for (List<Frame> layer : layers) {
             for (Frame frames : layer) {
                 frames.renderItself(GraphicsCanvas.of(g));
             }

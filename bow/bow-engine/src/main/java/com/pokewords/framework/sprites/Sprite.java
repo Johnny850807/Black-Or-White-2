@@ -1,10 +1,9 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.MandatoryComponentRequiredException;
 import com.pokewords.framework.engine.exceptions.SpriteException;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import org.jetbrains.annotations.NotNull;

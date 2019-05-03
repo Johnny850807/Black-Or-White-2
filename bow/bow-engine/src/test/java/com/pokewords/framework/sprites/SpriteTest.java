@@ -3,7 +3,7 @@ package com.pokewords.framework.sprites;
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.utils.StubFactory;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.Shareable;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.mocks.MockComponent;

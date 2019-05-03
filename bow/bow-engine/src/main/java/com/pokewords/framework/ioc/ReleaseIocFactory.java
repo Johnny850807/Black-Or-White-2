@@ -1,27 +1,19 @@
 package com.pokewords.framework.ioc;
 
-import com.pokewords.framework.engine.GameEngine;
 import com.pokewords.framework.engine.UserConfig;
 import com.pokewords.framework.sprites.DefaultSpriteBuilder;
 import com.pokewords.framework.sprites.PrototypeFactory;
 import com.pokewords.framework.sprites.DefaultPrototypeFactory;
 import com.pokewords.framework.sprites.SpriteBuilder;
-import com.pokewords.framework.sprites.components.FrameFactory;
-import com.pokewords.framework.sprites.components.TextureFrameFactory;
+import com.pokewords.framework.sprites.components.frames.FrameFactory;
+import com.pokewords.framework.sprites.components.frames.TextureFrameFactory;
 import com.pokewords.framework.views.DefaultInputManager;
 import com.pokewords.framework.views.InputManager;
 import com.pokewords.framework.views.SoundPlayer;
 
 public class ReleaseIocFactory implements IocFactory{
-    private TextureFrameFactory textureFrameFactory;
     private PrototypeFactory prototypeFactory;
 
-
-    @Override
-    public FrameFactory frameFactory() {
-        return textureFrameFactory == null ?
-                textureFrameFactory = new TextureFrameFactory() : textureFrameFactory;
-    }
 
     @Override
     public PrototypeFactory prototypeFactory() {

@@ -1,9 +1,9 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.sprites.components.frames.StringFrame;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 

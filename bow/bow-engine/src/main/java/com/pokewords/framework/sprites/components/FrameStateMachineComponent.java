@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.FiniteStateMachine;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
 import java.util.Collection;
