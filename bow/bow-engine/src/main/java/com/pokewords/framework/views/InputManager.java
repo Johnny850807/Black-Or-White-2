@@ -1,9 +1,12 @@
 package com.pokewords.framework.views;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 
 //TODO Define sufficient methods
 public interface InputManager {
+
+    void onUpdate(double timePerFrame);
 
     /**
      * @return true Iff the button is pressed down
@@ -57,7 +60,7 @@ public interface InputManager {
     /**
      * Add an event hitting the mouse down
      */
-    void onMouseHitDown();
+    void onMouseHitDown(Point position);
 
     /**
      * @return true Iff the mouse is released up from being held.

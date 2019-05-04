@@ -1,6 +1,6 @@
 package com.pokewords.framework.engine.exceptions;
 
-public class NoSuchPrototypeException extends GameEngineException{
+public class NoSuchPrototypeException extends GameEngineException {
     public NoSuchPrototypeException(String message) {
         super(message);
     }

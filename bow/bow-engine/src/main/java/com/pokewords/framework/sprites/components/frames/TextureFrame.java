@@ -1,16 +1,15 @@
-package com.pokewords.framework.sprites.components;
+package com.pokewords.framework.sprites.components.frames;
 
 
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.frames.DefaultFrame;
 import com.pokewords.framework.views.Canvas;
 
 import java.awt.Image;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 
-public class TextureFrame implements Frame {
+public class TextureFrame extends DefaultFrame {
+	private Sprite sprite;  //TODO how to inject the sprite?
 	private Image image;
 	private int layerIndex;
 
@@ -25,17 +24,8 @@ public class TextureFrame implements Frame {
 	}
 
 	@Override
-	public void apply(AppStateWorld gameWorld, Sprite sprite) {
-
-	}
-
-	@Override
-	public void addEffect(GameEffect effect) {
-
-	}
-
 	public void renderItself(Canvas canvas) {
-
+		canvas.renderImage(sprite.getX(), sprite.getY(), image);
 	}
 
 }

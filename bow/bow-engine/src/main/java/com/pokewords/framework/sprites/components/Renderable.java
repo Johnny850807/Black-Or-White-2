@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.sprites.components.frames.Frame;
+
 import java.util.Collection;
 
 /**
@@ -7,5 +9,5 @@ import java.util.Collection;
  * @author johnny850807 (waterball)
  */
 public interface Renderable {
-    Collection<Frame> getRenderedFrames();
+    Collection<? extends Frame> getRenderedFrames();
 }

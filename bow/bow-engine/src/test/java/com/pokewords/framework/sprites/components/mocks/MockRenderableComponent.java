@@ -1,6 +1,6 @@
 package com.pokewords.framework.sprites.components.mocks;
 
-import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.Renderable;
 
 import java.util.LinkedList;

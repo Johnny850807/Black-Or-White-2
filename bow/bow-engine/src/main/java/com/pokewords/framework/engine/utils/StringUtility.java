@@ -1,7 +1,5 @@
 package com.pokewords.framework.engine.utils;
 
-import java.util.Arrays;
-
 public class StringUtility {
     /**
      * @param s the string
@@ -23,6 +21,9 @@ public class StringUtility {
         return false;
     }
 
+    /**
+     * @return an array of characters as strings from 'a'~'z' then 'A'~'Z'
+     */
     public static String[] characters(){
         String[] characters = new String[52];
 
@@ -39,6 +40,9 @@ public class StringUtility {
         return characters;
     }
 
+    /**
+     * @return an array of lowercase characters as strings
+     */
     public static String[] lowerCaseCharacters(){
         String[] lowerCaseCharacters = new String[26];
         for (int i = 97; i < 123; i++) {
@@ -47,6 +51,9 @@ public class StringUtility {
         return lowerCaseCharacters;
     }
 
+    /**
+     * @return an array of uppercase characters as strings
+     */
     public static String[] upperCaseCharacters(){
         String[] lowerCaseCharacters = new String[26];
         for (int i = 65; i < 91; i++) {
@@ -55,9 +62,4 @@ public class StringUtility {
         return lowerCaseCharacters;
     }
 
-    public static void main(String[] args) {
-        System.out.println(Arrays.toString(StringUtility.lowerCaseCharacters()));
-        System.out.println(Arrays.toString(StringUtility.upperCaseCharacters()));
-        System.out.println(Arrays.toString(StringUtility.characters()));
-    }
 }

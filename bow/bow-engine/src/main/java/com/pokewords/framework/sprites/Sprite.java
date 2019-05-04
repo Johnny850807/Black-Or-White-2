@@ -1,8 +1,9 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.exceptions.MandatoryComponentIsRequiredException;
+import com.pokewords.framework.engine.exceptions.MandatoryComponentRequiredException;
+import com.pokewords.framework.engine.exceptions.SpriteException;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * A sprite is the fundamental unit in AppStateGameWorld.
+ *  - It's guaranteed to have a propertiesComponent which records the sprite's body, type, ... and so one.
+ *  - When the engine renders the sprite, it actually queries all of the sprite's RenderableComponents.
+ *  - FrameStateMachineComponent is on of the common RenderableComponents.
+ *  - FrameStateMachineComponent uses the Finite State Machine to represent the sprite's states, and decides
+ *  what to be rendered in each state. use Sprite#trigger(event) to instruct the FrameStateMachineComponent.
+ *
+ * @see AppStateWorld
+ * @see FrameStateMachineComponent
+ * @see PropertiesComponent
  * @author johnny850807, nyngwang
  */
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
@@ -21,34 +32,33 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	private Collection<Renderable> renderableComponents = new HashSet<>();
 	private FrameStateMachineComponent frameStateMachineComponent;
 	private PropertiesComponent propertiesComponent;
+	private int timePerFrame;
 
-	/**
-	 * default constructor, empty FrameStateMachineComponent and default PropertiesComponent
-	 */
-	protected Sprite() {
-		this(new FrameStateMachineComponent(), new PropertiesComponent());
+
+	protected Sprite(String type) {
+		this(new PropertiesComponent(type));
 	}
 
-	public Sprite(final FrameStateMachineComponent frameStateMachineComponent) {
-		this(frameStateMachineComponent, new PropertiesComponent());
-	}
-
-	/**
-	 * The constructor of Sprite.
-	 * @param frameStateMachineComponent The mandatory component to define the view of the Sprite.
-	 * @param propertiesComponent The mandatory component to define the properties of the Sprite.
-	 */
-	public Sprite(final FrameStateMachineComponent frameStateMachineComponent,
-				  final PropertiesComponent propertiesComponent) {
-		putComponent(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
-		putComponent(Component.PROPERTIES, propertiesComponent);
+	public Sprite(final PropertiesComponent propertiesComponent) {
+		this.propertiesComponent = propertiesComponent;
 	}
 
 	/**
-	 * @return all components
+	 * @return all components the sprite owns.
 	 */
 	public Collection<Component> getComponents() {
 		return components.values();
+	}
+
+	/**
+	 * trigger a event to the sprite's frameStateMachineComponent, if the sprite doesn't have
+	 * the frameStateMachineComponent, SpriteException thrown
+	 */
+	public void trigger(Object event) throws SpriteException {
+		if (frameStateMachineComponent != null)
+			frameStateMachineComponent.trigger(event.toString());
+		else
+			throw new SpriteException("The sprite doesn't have the FrameStateMachineComponent, it cannot be triggered.");
 	}
 
 	/**
@@ -67,14 +77,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return propertiesComponent;
 	}
 
-	public void setFrameStateMachineComponent(@NotNull FrameStateMachineComponent frameStateMachineComponent) {
-		this.frameStateMachineComponent = frameStateMachineComponent;
-		putComponent(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
-	}
 
-	public void setPropertiesComponent(@NotNull PropertiesComponent propertiesComponent) {
-		this.propertiesComponent = propertiesComponent;
-		putComponent(Component.PROPERTIES, propertiesComponent);
+	public boolean hasComponent(String name) {
+		return components.containsKey(name);
 	}
 
 	/**
@@ -82,8 +87,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @param name the name of the component to get.
 	 * @return the component to get if the name exist, null-object otherwise.
 	 */
-	public Optional<Component> getComponentByName(String name) {
-		return Optional.ofNullable(components.get(name));
+	public Component getComponentByName(String name) {
+		return components.get(name);
 	}
 
 	/**
@@ -96,7 +101,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		if (component instanceof Renderable)
 			this.renderableComponents.add((Renderable) component);
 		if (component instanceof PropertiesComponent)
-			this.propertiesComponent = (PropertiesComponent) component;
+			throw new SpriteException("PropertiesComponent's already set during the sprite's initiation, " +
+					"you can't override it with another one.");
 		else if (component instanceof FrameStateMachineComponent)
 			this.frameStateMachineComponent = (FrameStateMachineComponent) component;
 		components.put(name, component);
@@ -107,13 +113,15 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @param name the name of the component to be removed.
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
-	public Optional<Component> removeComponentByName(String name) {
+	public void removeComponentByName(String name) {
+		if (!hasComponent(name))
+			throw new SpriteException("FrameStateMachineComponent cannot be removed.");
+
 		Component component = components.get(name);
-		if (component instanceof FrameStateMachineComponent)
-			throw new MandatoryComponentIsRequiredException("FrameStateMachineComponent cannot be removed.");
-		else if (component instanceof PropertiesComponent)
-			throw new MandatoryComponentIsRequiredException("Properties Component cannot be removed.");
-		return Optional.ofNullable(components.remove(name));
+		if (component instanceof PropertiesComponent)
+			throw new MandatoryComponentRequiredException("PropertiesComponent cannot be removed.");
+
+		components.remove(name);
 	}
 
 	@Override
@@ -124,9 +132,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onUpdate(double tpf) {
+	public void onUpdate(int timePerFrame) {
+		this.timePerFrame = timePerFrame;
         for (Component component : components.values())
-            component.onUpdate(tpf);
+            component.onUpdate(timePerFrame);
 	}
 
 	@Override
@@ -167,7 +176,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         getPropertiesComponent().setPosition(x, y);
     }
 
-    public Point2D getPosition() {
+    public Point getPosition() {
         return getPropertiesComponent().getPosition();
     }
 
@@ -206,6 +215,17 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     public void setCenter(Point point) {
         getPropertiesComponent().setCenter(point);
     }
+
+    public void move(int velocityX, int velocityY) {
+		getPosition().translate((int)(velocityX*timePerFrame), (int)(velocityY*timePerFrame));
+	}
+    public void moveX(int velocityX) {
+		getPosition().translate((int) (velocityX*timePerFrame), 0);
+	}
+
+	public void moveY(int velocityY) {
+		getPosition().translate(0, (int) (velocityY*timePerFrame));
+	}
 
 	public Sprite clone(){
 		try {
@@ -293,7 +313,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	public boolean isCollidable() {
-        return getComponentByName(Component.COLLIDABLE).isPresent();
+        return hasComponent(Component.COLLIDABLE);
     }
 
 	@Override

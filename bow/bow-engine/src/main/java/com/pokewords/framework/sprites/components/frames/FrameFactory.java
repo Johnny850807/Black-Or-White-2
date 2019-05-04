@@ -1,4 +1,4 @@
-package com.pokewords.framework.sprites.components;
+package com.pokewords.framework.sprites.components.frames;
 
 
 import com.pokewords.framework.sprites.parsing.FrameSegment;

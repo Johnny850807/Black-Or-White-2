@@ -12,8 +12,13 @@ public class GraphicsCanvas implements Canvas{
     }
 
     @Override
-    public void render(int x, int y, Image image) {
+    public void renderImage(int x, int y, Image image) {
         canvas.graphics.drawImage(image, x, y, null);
+    }
+
+    @Override
+    public void renderText(int x, int y, String text) {
+        canvas.graphics.drawString(text, x, y);
     }
 
 }

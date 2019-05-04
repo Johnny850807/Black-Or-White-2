@@ -11,11 +11,11 @@ import static org.junit.Assert.assertSame;
 
 public class SpriteBuilderTest extends AbstractTest {
     final String MOCK = "mock";
-    SpriteBuilder spriteBuilder;
+    DefaultSpriteBuilder spriteBuilder;
 
     @Before
     public void setup(){
-        spriteBuilder = new SpriteBuilder(mock);
+        spriteBuilder = new DefaultSpriteBuilder(mock);
     }
 
     @Test

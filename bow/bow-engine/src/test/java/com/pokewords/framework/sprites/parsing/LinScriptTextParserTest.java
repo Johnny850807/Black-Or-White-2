@@ -1,17 +1,14 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.AbstractTest;
-import com.pokewords.framework.sprites.components.FrameFactory;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Comparator;
-
 import static org.junit.Assert.assertEquals;
 
-public class FrameStateMachineLinScriptParserTest extends AbstractTest {
-    FrameStateMachineScriptParser parser = new FrameStateMachineLinScriptParser(release);
+public class LinScriptTextParserTest extends AbstractTest {
+    ScriptTextParser parser = new LinScriptTextParser(release);
 
     final String SCRIPT =
             "<gallery>\n" +

@@ -3,15 +3,17 @@ package com.pokewords.framework.sprites.components.gameworlds;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
-import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
 
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -20,15 +22,19 @@ import java.util.function.Consumer;
 
 public class AppStateWorld implements AppStateLifeCycleListener {
     private List<Sprite> sprites;
+    private AtomicInteger spriteAmount;
     private Map<Integer, Sprite> indexSpriteMap;
     private Map<Sprite, Integer> spriteIndexMap;
     private RenderedLayers renderedLayers;
     private List<CollisionHandler> collisionHandlers;
 
     public AppStateWorld() {
-        List<List<Frame>> layers = new ArrayList<>();
-        renderedLayers = new RenderedLayers(layers);
+        sprites = new ArrayList<>();
+        spriteAmount = new AtomicInteger(0);
+        renderedLayers = new RenderedLayers(new ArrayList<>());
         collisionHandlers = new ArrayList<>();
+        indexSpriteMap = new HashMap<>();
+        spriteIndexMap = new IdentityHashMap<>();
     }
 
     /**
@@ -36,7 +42,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the Sprite's unique id
      */
     public int spawn(Sprite sprite) {
-        int id = sprites.size() - 1;
+        int id = spriteAmount.incrementAndGet();
         sprites.add(sprite);
         indexSpriteMap.put(id, sprite);
         spriteIndexMap.put(sprite, id);
@@ -51,11 +57,13 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @param callback the callback receives the spawned sprite's id when the sprite is actually spawned
      */
     public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, @Nullable Consumer<Integer> callback) {
-        //TODO
         new Thread(() -> {
             try {
                 Thread.sleep(time);
-                spawn(sprite);
+                int id = spawn(sprite);
+                if (callback != null) {
+                    callback.accept(id);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -100,7 +108,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public List<Sprite> getSprites() {
-        return new ArrayList<>(sprites);
+        return sprites;
     }
 
     public List<CollisionHandler> getCollisionHandlers() {
@@ -141,9 +149,9 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
 
     @Override
-    public void onUpdate(double tpf) {
+    public void onUpdate(int timePerFrame) {
         for (Sprite sprite: sprites) {
-            sprite.onUpdate(tpf);
+            sprite.onUpdate(timePerFrame);
         }
 
         // to notify sprites if they have collided
@@ -200,42 +208,58 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     /**
      * @return the sprites within the area (x, y, w, h)
      */
-    public Set<Sprite> getSpritesWithinArea(int x, int y, int w, int h) {
-        return this.getSpritesWithinArea(new Rectangle(h, w, x, y));
+    public Collection<Sprite> getSpritesWithinArea(int x, int y, int w, int h) {
+        return getSpritesWithinArea(new Rectangle(h, w, x, y));
     }
 
     /**
      * @return the sprites within the area (x, y, w, h)
      */
-    public Set<Sprite> getSpritesWithinArea(Rectangle area) {
-        Set<Sprite> spritesWithinArea = new HashSet<>();
-        for (Sprite sprite: sprites) {
+    public Collection<Sprite> getSpritesWithinArea(Rectangle area) {
+        List<Sprite> sprites = new ArrayList<>();
+        for (Sprite sprite: this.sprites) {
             if (area.contains(sprite.getBody())) {
-                spritesWithinArea.add(sprite);
+                sprites.add(sprite);
             }
         }
-        return spritesWithinArea;
+        return sprites;
     }
 
 
     /**
      * @return the sprites within the area (w, h) from the center point of the given sprite
      */
-    public Set<Sprite> getSpritesWithinArea(Sprite sprite, int w, int h) {
-        return null;
+    public Collection<Sprite> getSpritesWithinArea(Sprite sprite, int w, int h) {
+        Point2D center = sprite.getCenter();
+        int x = (int) center.getX() - sprite.getW() / 2;
+        int y = (int) center.getY() - sprite.getH() / 2;
+        return getSpritesWithinArea(new Rectangle(h, w, x, y));
     }
 
     /**
      * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
      */
-    public Set<Sprite> getSpritesWithinArea(Sprite sprite, Dimension dimension) {
-        return this.getSpritesWithinArea(sprite, dimension.width, dimension.height);
+    public Collection<Sprite> getSpritesWithinArea(Sprite sprite, Dimension dimension) {
+        return getSpritesWithinArea(sprite, dimension.width, dimension.height);
     }
 
     /**
      * @return the sprites collided with the given sprite
      */
-    public Set<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        return null;
+    public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
+        return getSpritesWithinArea(sprite.getBody());
+    }
+
+
+    /**
+     * Clear the world. This method will remove all the sprites and the states within the world.
+     */
+    public void clear() {
+        sprites.clear();
+        spriteAmount = new AtomicInteger(0);
+        renderedLayers.setLayers(new ArrayList<>());
+        collisionHandlers.clear();
+        indexSpriteMap.clear();
+        spriteIndexMap.clear();
     }
 }

@@ -40,7 +40,7 @@ public class MockPropertiesComponent extends PropertiesComponent implements Mock
     }
 
     @Override
-    public void onUpdate(double tpf) {
+    public void onUpdate(int timePerFrame) {
         assert isRunning : "onUpdate() should be triggered after onAppStateEnter().";
         updateCount++;
     }
