@@ -8,8 +8,14 @@ import com.pokewords.framework.views.GameWindowsConfigurator;
 import com.pokewords.framework.views.InputManager;
 
 /**
+<<<<<<< HEAD
+ * @author Joanna
+ */
+
+=======
  * @author johnny850807 (waterball)
  */
+>>>>>>> b70e76fbc90938e82bc81cfef5ac53453c6732ab
 public class GameEngine {
 	private IocFactory iocFactory;
 	private AppView gameView;

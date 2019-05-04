@@ -1,8 +1,9 @@
 package com.pokewords.framework.sprites;
 
 /**
- *
+ * @author Joanna
  */
+
 public class ComponentInjector {
 
 	/**
