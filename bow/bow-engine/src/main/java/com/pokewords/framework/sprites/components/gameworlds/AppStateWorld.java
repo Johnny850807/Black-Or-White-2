@@ -43,11 +43,15 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      */
     public int spawn(Sprite sprite) {
         int id = spriteAmount.incrementAndGet();
+        addSpriteIntoWorld(id, sprite);
+        addFramesToRenderedLayer(sprite.getRenderedFrames());
+        return id;
+    }
+
+    private void addSpriteIntoWorld(int id, Sprite sprite) {
         sprites.add(sprite);
         indexSpriteMap.put(id, sprite);
         spriteIndexMap.put(sprite, id);
-        addFramesToRenderedLayer(sprite.getRenderedFrames());
-        return id;
     }
 
     /**
@@ -153,8 +157,13 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         for (Sprite sprite: sprites) {
             sprite.onUpdate(timePerFrame);
         }
+        notifyCollisionHandler();
+    }
 
-        // to notify sprites if they have collided
+    /**
+     * To notify sprites if they have collided
+     */
+    private void notifyCollisionHandler() {
         for (Sprite sprite1: sprites) {
             for (Sprite sprite2: sprites) {
                 if (sprite1 != sprite2 && isCollided(sprite1, sprite2)) {
@@ -164,7 +173,6 @@ public class AppStateWorld implements AppStateLifeCycleListener {
                 }
             }
         }
-
     }
 
     /**
