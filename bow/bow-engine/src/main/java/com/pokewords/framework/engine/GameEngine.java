@@ -10,7 +10,6 @@ import com.pokewords.framework.views.InputManager;
 /**
  * @author johnny850807 (waterball)
  */
-
 public class GameEngine {
 	private IocFactory iocFactory;
 	private AppView gameView;
