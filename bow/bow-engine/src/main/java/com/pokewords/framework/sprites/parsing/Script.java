@@ -6,6 +6,7 @@ import com.pokewords.framework.engine.exceptions.ScriptRulesParserException;
 import com.pokewords.framework.engine.utils.FileUtility;
 import com.sun.corba.se.impl.io.TypeMismatchException;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,19 +29,23 @@ public class Script {
      * Demo
      */
     public static void main(String[] args) {
-        Script script = Script.Parser.parse(
-                FileUtility.read("path/to/script_text"),
-                Script.Rules.Parser.parse("path/to/script_rules"));
+        try {
+            Script script = Script.Parser.parse(
+                    FileUtility.read("path/to/script_text"),
+                    Script.Rules.Parser.parse("path/to/script_rules"));
 
-        script.addSegment(
-               new Segment("frame", 1, "punch")
-                   .addElement(new Element("bow"))
-                   .addElement(new Element("cow")))
-              .addSegment(
-               new Segment("frame", 2, "punch")
-                   .addElement(new Element("dow"))
-                   .addElement(new Element("fow"))
-              );
+            script.addSegment(
+                    new Segment("frame", 1, "punch")
+                            .addElement(new Element("bow"))
+                            .addElement(new Element("cow")))
+                    .addSegment(
+                            new Segment("frame", 2, "punch")
+                                    .addElement(new Element("dow"))
+                                    .addElement(new Element("fow"))
+                    );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public interface Def {

@@ -11,60 +11,28 @@ import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
 public class SpriteWeaver {
-    private LinkedList<SpriteWeaver.Node> weaverNodes;
     private IocFactory iocFactory;
-    private FrameStateMachineComponent fsmComponent;
-    private PropertiesComponent propertiesComponent;
-    private Sprite sprite;
+    private LinkedList<SpriteWeaver.Node> weaverNodes;
 
-    public SpriteWeaver(IocFactory iocFactory, Sprite sprite) {
-        weaverNodes = new LinkedList<>();
+    public SpriteWeaver(IocFactory iocFactory) {
         this.iocFactory = iocFactory;
-        this.sprite = sprite;
+        init();
     }
 
-    public void addNode(SpriteWeaver.Node node) {
+    private void init() {
+        weaverNodes = new LinkedList<Node>();
+        weaverNodes.add(new GameEngineWeaverNode());
+    }
+
+    public void addWeaverNode(SpriteWeaver.Node node) {
         weaverNodes.add(node);
     }
 
-    public void weave() {
-
-    }
-
-    public void setIocFactory(IocFactory iocFactory) {
-        this.iocFactory = iocFactory;
-    }
-
-    public void setFSMComponent(FrameStateMachineComponent fsmComponent) {
-        this.fsmComponent = fsmComponent;
-    }
-
-    public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
-        this.propertiesComponent = propertiesComponent;
-    }
-
-    public void addComponent(String name, Component component) {
-        validateComponentName(name);
-        sprite.putComponent(name, component);
-    }
-
-    private void validateComponentName(String name) {
-        if (sprite.hasComponent(name)) {
-            throw new SpriteBuilderException("Duplicate component name is not allowed.");
+    public void weave(Script script, Sprite sprite) {
+        for (Node weaverNode : weaverNodes) {
+            weaverNode.onWeaving(script, sprite);
         }
     }
-
-    private void validateSpriteMandatoryComponents() {
-        if (fsmComponent == null) {
-            throw new SpriteBuilderException(
-                    "FrameStateMachineComponent is required, use setupParser() to create it");
-        }
-        if (propertiesComponent == null) {
-            throw new SpriteBuilderException(
-                    "PropertiesComponent is required, use setPropertiesComponent() to create it");
-        }
-    }
-
 
     @FunctionalInterface
     public interface Node {
