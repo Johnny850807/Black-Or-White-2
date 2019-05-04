@@ -31,7 +31,7 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
     @Override
     public GameWindowsConfigurator name(String windowName){
         gameWindowDefinition.name = windowName;
-        gameFrame.setName(windowName);
+        gameFrame.setTitle(windowName);
         return this;
     }
 

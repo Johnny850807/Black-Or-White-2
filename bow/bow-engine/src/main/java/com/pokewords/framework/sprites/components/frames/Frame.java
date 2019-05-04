@@ -5,11 +5,11 @@ import com.pokewords.framework.sprites.components.GameEffect;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
+import java.util.IdentityHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public interface Frame extends Cloneable{
-
 	/**
 	 * @return get the layer index  (z-index)
 	 */
