@@ -5,8 +5,8 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.GameLifecycleListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
-import com.pokewords.framework.views.inputs.InputManager;
 
 /**
  * @author johnny850807 (waterball)
@@ -17,12 +17,12 @@ public class AppStateMachine implements GameLifecycleListener {
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
 	private SpriteInitializer spriteInitializer;
 	private GameWindowsConfigurator gameWindowsConfigurator;
-	private InputManager inputManager;
+	private Inputs inputs;
 	private AppState loadingState;
 	private AppState gameInitialState;
 
-	public AppStateMachine(InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
-		this.inputManager = inputManager;
+	public AppStateMachine(Inputs inputs, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
+		this.inputs = inputs;
 		this.spriteInitializer = spriteInitializer;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
 		setupStates();
@@ -39,7 +39,7 @@ public class AppStateMachine implements GameLifecycleListener {
 		T state;
 		try {
 			state = appStateType.newInstance();
-			state.inject(inputManager, this, spriteInitializer, gameWindowsConfigurator);
+			state.inject(inputs, this, spriteInitializer, gameWindowsConfigurator);
 			fsm.addState(state);
 			return state;
 		} catch (InstantiationException|IllegalAccessException e) {

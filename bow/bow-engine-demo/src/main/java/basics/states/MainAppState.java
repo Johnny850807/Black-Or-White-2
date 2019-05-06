@@ -66,13 +66,13 @@ public class MainAppState extends AppState {
     public void onAppStateDestroy() { }
 
     public void onUpdate(int timePerFrame) {
-        if (getInputManager().getButtonBeingHeld(KeyEvent.VK_W))
+        if (getInputs().getButtonBeingHeld(KeyEvent.VK_W))
             moveUp();
-        if (getInputManager().getButtonBeingHeld(KeyEvent.VK_S))
+        if (getInputs().getButtonBeingHeld(KeyEvent.VK_S))
             moveDown();
-        if (getInputManager().getButtonBeingHeld(KeyEvent.VK_A))
+        if (getInputs().getButtonBeingHeld(KeyEvent.VK_A))
             moveLeft();
-        if (getInputManager().getButtonBeingHeld(KeyEvent.VK_D))
+        if (getInputs().getButtonBeingHeld(KeyEvent.VK_D))
             moveRight();
     }
 
