@@ -1,7 +1,9 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.sprites.components.frames.StringFrame;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.marks.Renderable;
+import com.pokewords.framework.sprites.components.marks.Shareable;
 
 import java.awt.*;
 import java.util.LinkedList;

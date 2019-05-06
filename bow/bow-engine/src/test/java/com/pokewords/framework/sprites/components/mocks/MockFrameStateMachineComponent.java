@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites.components.mocks;
 
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class MockFrameStateMachineComponent extends FrameStateMachineComponent implements MockComponent{
     private boolean hasStarted = false;

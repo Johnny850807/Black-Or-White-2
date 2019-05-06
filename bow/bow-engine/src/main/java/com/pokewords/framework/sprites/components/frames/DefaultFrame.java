@@ -1,13 +1,12 @@
 package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.GameEffect;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DefaultFrame implements Frame{
+public abstract class DefaultFrame implements Frame {
     public List<GameEffect> effects = new ArrayList<>();
 
     @Override

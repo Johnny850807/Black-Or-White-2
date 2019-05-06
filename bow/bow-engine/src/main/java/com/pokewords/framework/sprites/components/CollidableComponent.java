@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.marks.Shareable;
 
 /**
  * The singleton shareable CollidableComponent, its equals() method will always return true, and

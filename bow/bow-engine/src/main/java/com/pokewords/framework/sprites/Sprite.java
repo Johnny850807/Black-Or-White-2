@@ -1,11 +1,14 @@
 package com.pokewords.framework.sprites;
 
+import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.engine.exceptions.MandatoryComponentRequiredException;
 import com.pokewords.framework.engine.exceptions.SpriteException;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.*;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.marks.Renderable;
+import com.pokewords.framework.sprites.components.marks.Shareable;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
