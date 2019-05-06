@@ -1,12 +1,12 @@
 package com.pokewords.framework.engine.asm;
 
-import com.pokewords.framework.engine.FiniteStateMachine;
+import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
-import com.pokewords.framework.sprites.SpriteInitializer;
-import com.pokewords.framework.sprites.components.GameLifecycleListener;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-import com.pokewords.framework.views.GameWindowsConfigurator;
-import com.pokewords.framework.views.InputManager;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.engine.listeners.GameLifecycleListener;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.views.windows.GameWindowsConfigurator;
+import com.pokewords.framework.views.inputs.InputManager;
 
 /**
  * @author johnny850807 (waterball)

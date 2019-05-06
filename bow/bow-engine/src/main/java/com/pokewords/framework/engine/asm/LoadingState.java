@@ -1,7 +1,7 @@
 package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.sprites.components.StringsComponent;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 import java.awt.*;
 

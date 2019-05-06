@@ -2,8 +2,8 @@ package com.pokewords.framework.sprites.components.mocks;
 
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.components.GameEffect;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.frames.GameEffect;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
 import java.util.*;

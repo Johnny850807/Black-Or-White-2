@@ -3,7 +3,12 @@ package com.pokewords.framework.views;
 import com.pokewords.framework.engine.GameEngine;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.sprites.SpriteInitializer;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.views.inputs.InputManager;
+import com.pokewords.framework.views.windows.GameFrame;
+import com.pokewords.framework.views.windows.GameFrameWindowsConfigurator;
+import com.pokewords.framework.views.windows.GamePanel;
+import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 /**
  * @author johnny850807 (waterball), shawn

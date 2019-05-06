@@ -4,7 +4,7 @@ package basics.states;
 import basics.namespace.SpriteType;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 import java.awt.event.KeyEvent;
 import java.util.Random;

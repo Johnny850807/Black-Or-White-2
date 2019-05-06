@@ -1,7 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.views.Gallery;
-
 /**
  *  TODO: 保留直到 Segment 可以如 GallerySegment 方便使用
  *        暫時留下 Segment 做不到/不方便的部分

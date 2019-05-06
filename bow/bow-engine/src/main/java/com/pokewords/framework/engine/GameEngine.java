@@ -1,11 +1,11 @@
 package com.pokewords.framework.engine;
 
 import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.sprites.SpriteInitializer;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.AppView;
 import com.pokewords.framework.engine.asm.AppStateMachine;
-import com.pokewords.framework.views.GameWindowsConfigurator;
-import com.pokewords.framework.views.InputManager;
+import com.pokewords.framework.views.windows.GameWindowsConfigurator;
+import com.pokewords.framework.views.inputs.InputManager;
 
 /**
  * @author Joanna

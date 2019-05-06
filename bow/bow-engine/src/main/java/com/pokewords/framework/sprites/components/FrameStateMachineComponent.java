@@ -1,10 +1,12 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.Events;
-import com.pokewords.framework.engine.FiniteStateMachine;
+import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.marks.Renderable;
+import com.pokewords.framework.sprites.components.marks.Shareable;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -14,7 +16,7 @@ import java.util.Objects;
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable{
+public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable {
     protected FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
     protected Sprite sprite;
     protected AppStateWorld world;

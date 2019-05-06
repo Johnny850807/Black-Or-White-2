@@ -1,9 +1,7 @@
 package com.pokewords.framework.sprites.components.frames;
 
-import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.components.frames.FrameFactory;
 import com.pokewords.framework.sprites.parsing.FrameSegment;
-import com.pokewords.framework.views.Gallery;
+import com.pokewords.framework.views.helpers.Gallery;
 
 import java.util.HashMap;
 import java.util.Map;

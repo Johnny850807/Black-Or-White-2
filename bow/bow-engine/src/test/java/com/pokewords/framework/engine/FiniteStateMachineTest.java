@@ -1,6 +1,7 @@
 package com.pokewords.framework.engine;
 
 import com.pokewords.framework.AbstractTest;
+import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.engine.exceptions.FiniteStateMachineException;
 import com.pokewords.framework.engine.utils.StringUtility;
 import org.junit.Test;
