@@ -1,41 +1,64 @@
 package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.engine.FiniteStateMachine;
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.engine.exceptions.GameEngineException;
+import com.pokewords.framework.sprites.SpriteInitializer;
 import com.pokewords.framework.sprites.components.GameLifecycleListener;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.views.GameWindowsConfigurator;
+import com.pokewords.framework.views.InputManager;
 
 /**
- * @author johnny850807
+ * @author johnny850807 (waterball)
  */
-public class AppStateMachine extends FiniteStateMachine<AppState> implements GameLifecycleListener {
-	protected IocFactory iocFactory;
-	protected AppState currentState;
-	protected AppState loadingState;
-	protected AppState clientInitState;
+public class AppStateMachine implements GameLifecycleListener {
+	public static final String EVENT_LOADING = "Start Loading";
+	public static final String EVENT_GAME_STARTED = "Game Started";
+	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
+	private SpriteInitializer spriteInitializer;
+	private GameWindowsConfigurator gameWindowsConfigurator;
+	private InputManager inputManager;
+	private AppState loadingState;
+	private AppState gameInitialState;
 
-
-	public AppStateMachine(IocFactory iocFactory, AppState loadingState) {
-		this.iocFactory = iocFactory;
-		this.loadingState = loadingState;
-		this.currentState = loadingState;
+	public AppStateMachine(InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
+		this.inputManager = inputManager;
+		this.spriteInitializer = spriteInitializer;
+		this.gameWindowsConfigurator = gameWindowsConfigurator;
+		setupStates();
 	}
 
-//	public AppStateMachine(IocFactory iocFactory) {
-//		this(iocFactory, new LoadingState(this));
-//	}
+	private void setupStates() {
+		AppState initialState = createState(EmptyAppState.class);
+		this.loadingState = createState(LoadingState.class);
+		fsm.setCurrentState(initialState);
+		fsm.addTransition(initialState, EVENT_LOADING, loadingState);
+	}
 
-	@Override
-	public AppState trigger(String event) {
-		AppState enteredAppState = super.trigger(event);
-		if (currentState != enteredAppState)
-		{
-			currentState.onAppStateExit();
-			if (!enteredAppState.isStarted())
-				enteredAppState.onAppStateStart(onInitAppStateWorld());
-			enteredAppState.onAppStateEnter();
+	public <T extends AppState> T createState(Class<T> appStateType) {
+		T state;
+		try {
+			state = appStateType.newInstance();
+			state.inject(inputManager, this, spriteInitializer, gameWindowsConfigurator);
+			fsm.addState(state);
+			return state;
+		} catch (InstantiationException|IllegalAccessException e) {
+			throw new GameEngineException(String.format("Error occurs during createState(appStateType), " +
+					"please make sure %s has an empty public constructor.", appStateType.getName()), e);
 		}
-		return enteredAppState;
+	}
+
+	public AppState trigger(String event) {
+		AppState from = fsm.getCurrentState();
+		AppState to = fsm.trigger(event);
+		if (from != to)
+		{
+			from.onAppStateExit();
+			if (!to.hasStarted())
+				to.onAppStateStart(onCreateAppStateWorld());
+			to.onAppStateEnter();
+		}
+		return to;
 	}
 
 	/**
@@ -44,28 +67,34 @@ public class AppStateMachine extends FiniteStateMachine<AppState> implements Gam
 	 * For customizing your default init world, overwrite this method.
 	 * @return the init app state world
 	 */
-	public AppStateWorld onInitAppStateWorld(){
+	public AppStateWorld onCreateAppStateWorld(){
 		return new AppStateWorld();
 	}
 
+
 	@Override
-	public void onUpdate(double tpf) {
-		getCurrentState().onUpdate(tpf);
+	public void onUpdate(int timePerFrame) {
+		fsm.getCurrentState().onUpdate(timePerFrame);
 	}
 
-	public void setClientInitState(AppState clientInitState) {
-		this.clientInitState = clientInitState;
+	public void setGameInitialState(AppState clientInitState) {
+		this.gameInitialState = clientInitState;
 	}
 
-	public void setLoadingState(AppState loadingState) {
-		this.loadingState = loadingState;
+	public AppState getCurrentState() {
+		return fsm.getCurrentState();
 	}
 
 	public AppStateWorld getCurrentStateWorld(){
-		return currentState.getAppStateWorld();
+		return getCurrentState().getAppStateWorld();
 	}
 
-	public IocFactory getIocFactory() {
-		return iocFactory;
+
+	public void addTransition(AppState from, Object event, AppState to) {
+		fsm.addTransition(from, event, to);
+	}
+
+	public void addTransitionFromAllStates(Object event, AppState targetState, AppState ...excepts) {
+		fsm.addTransitionFromAllStates(event, targetState, excepts);
 	}
 }

@@ -14,7 +14,7 @@ public class AppStateWorldTest {
     private AppStateWorld appStateWorld = new AppStateWorld();
 
     @Test
-    public void testAppStateWorldLifecycleDelegatesToSprite() {
+    public void testAppStateWorldLifecycleHasBeenDelegatedToSprite() {
         final int updateLoopCount = 100;
 
         List<MockSprite> sprites = creatSprites(20);

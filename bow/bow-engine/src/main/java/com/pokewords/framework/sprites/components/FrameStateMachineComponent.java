@@ -2,12 +2,11 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.FiniteStateMachine;
-import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
 
-import java.lang.reflect.Field;
-import java.text.Format;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -15,27 +14,18 @@ import java.util.Objects;
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends Component implements Shareable, Renderable{
-    private FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
-    private Sprite sprite;
-    private AppStateWorld world;
-    private PropertiesComponent propertiesComponent;
+public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable{
+    protected FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
+    protected Sprite sprite;
+    protected AppStateWorld world;
 
 
     public FrameStateMachineComponent() {
     }
 
-    /**
-     * This boolean indicates if the Sprite's state is triggered after the Sprite's state has been modified,
-     * (i.e. if the Sprite's state has been modified, we must trigger it in the State Machine.)
-     * If it's not triggered (false), the state's suppose to be triggered at the next onUpdate().
-     */
-    private boolean stateTriggered = false;
-
     @Override
     public void onAppStateStart(AppStateWorld world) {
         this.world = world;
-        propertiesComponent.addStateListener(state -> stateTriggered = false);
     }
 
     @Override
@@ -44,25 +34,12 @@ public class FrameStateMachineComponent extends Component implements Shareable, 
     }
 
     @Override
-    public void onUpdate(double tpf) {
-        triggerTheCurrentState();
-        applyTheFrameEffect();
-    }
-
-
-
-    private void triggerTheCurrentState() {
-        if (!stateTriggered) {
-            trigger(propertiesComponent.getState());
-            stateTriggered = true;
-        } else
-            trigger(Events.UPDATE);
-    }
-
-    private void applyTheFrameEffect() {
+    public void onUpdate(int timePerFrame) {
+        trigger(Events.UPDATE);
         Frame frame = getCurrentFrame();
         frame.apply(world, sprite);
     }
+
 
     public void addFrame(Frame frame){
         fsm.addState(frame);
@@ -87,6 +64,7 @@ public class FrameStateMachineComponent extends Component implements Shareable, 
     public void setCurrentFrame(Frame frame){
         this.fsm.setCurrentState(frame);
     }
+
     @Override
     public void onAppStateExit() {
 
@@ -97,25 +75,6 @@ public class FrameStateMachineComponent extends Component implements Shareable, 
 
     }
 
-    public AppStateWorld getAppStateWorld() {
-        return world;
-    }
-
-    public PropertiesComponent getPropertiesComponent() {
-        return propertiesComponent;
-    }
-
-    public boolean isStateTriggered() {
-        return stateTriggered;
-    }
-
-    public void setAppStateWorld(AppStateWorld appStateWorld) {
-        this.world = appStateWorld;
-    }
-
-    public void setPropertiesComponent(PropertiesComponent propertiesComponent) {
-        this.propertiesComponent = propertiesComponent;
-    }
 
     public FiniteStateMachine<Frame> getFsm() {
         return fsm;
@@ -138,21 +97,38 @@ public class FrameStateMachineComponent extends Component implements Shareable, 
     }
 
     @Override
+    public String toString() {
+        return String.format("\nFSM: \n%s\n", fsm);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FrameStateMachineComponent that = (FrameStateMachineComponent) o;
-        return stateTriggered == that.stateTriggered &&
-                fsm.equals(that.fsm);
+        return fsm.equals(that.fsm) &&
+                Objects.equals(sprite, that.sprite) &&
+                Objects.equals(world, that.world);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fsm, stateTriggered);
+        return Objects.hash(fsm, sprite, world);
     }
 
-    @Override
+    /**
+     * @return all the frames (states) that this finite state machine owns
+     */
     public List<Frame> getFrames() {
+        return fsm.getStates();
+    }
+
+    /**
+     * @return get all the frames that rendered in the present loop, expected to be only one frame,
+     * which is the current frame (state).
+     */
+    @Override
+    public Collection<Frame> getRenderedFrames() {
         LinkedList<Frame> frames = new LinkedList<>();
         frames.add(getCurrentFrame());
         return frames;

@@ -1,81 +1,63 @@
 package com.pokewords.framework.views;
 
-import javax.swing.*;
-import java.awt.*;
-import com.pokewords.framework.sprites.components.Frame;
+import com.pokewords.framework.engine.GameEngine;
+import com.pokewords.framework.engine.asm.AppStateMachine;
+import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.sprites.SpriteInitializer;
 
 /**
- * @author shawn
- *
+ * @author johnny850807 (waterball), shawn
  */
 public abstract class GameApplication implements AppView {
+	private GameEngine gameEngine;
+	private GameFrame gameFrame;
+	private GameWindowsConfigurator gameWindowsConfigurator;
 
-	/**
-	 * Initial parameter
+    public GameApplication(IocFactory iocFactory) {
+    	InputManager inputManager = iocFactory.inputManager();
+		gameFrame = new GameFrame(new GamePanel(inputManager));
+		gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
+        gameEngine = new GameEngine(iocFactory, inputManager, gameWindowsConfigurator);
+        gameEngine.setGameView(this);
+    }
+
+    /**
+	 * Launch the game application.
 	 */
-	private int height = 200, width = 200;
-	private int x = 0,y = 0;
-	private Color backgroundColor = Color.BLACK;
-	private String windowName = "Game engine";
-	private JPanel gamePanel = new JPanel();
-	private JFrame gameFrame = new JFrame(windowName);
-
-
 	public void launch() {
-		gameCustomizedSetting();
+		gameEngine.launchEngine();
 	}
 
-	/**
-	 * Template method
-	 * According to the parameter setting gameView
-	 */
-	private void gameCustomizedSetting() {
-		gamePanel.setBackground(backgroundColor);
-		gameFrame.setLocation(x,y);
-		gameFrame.setSize(width,height);
-		gameFrame.add(gamePanel);
-		gameFrame.setTitle(windowName);
-		gameFrame.setVisible(true);
+	@Override
+	public void onAppInit() {
+		gameFrame.onAppInit();
+		onGameWindowsConfiguration(gameWindowsConfigurator);
 	}
 
-	/**
-	 * @param windowName window name
-	 */
-	public void setWindowName(String windowName){
-		this.windowName = windowName;
-	}
-
-	/**
-	 * @param width Window width
-	 * @param height Window height
-	 */
-	public void setWindowSize(int width, int height){
-		this.width = width;
-		this.height = height;
-	}
-
-	/**
-	 * Window location
-	 * @param x Window's x coordinate
-	 * @param y Window's y coordinate
-	 */
-	public void setWindowLocation(int x, int y){
-		this.x = x;
-		this.y = y;
-	}
-
-	/**
-	 * @param color GameView background color
-	 */
-	public void setWindowbackgroundColor(Color color){
-		this.backgroundColor = color;
-	}
-
+	protected abstract void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator);
 
 
 	@Override
-	public void onRender(RenderedLayers renderedLayers) {
-
+	public void onAppLoading() {
+		gameFrame.onAppLoading();
+		onSpriteInitializer(gameEngine.getSpriteInitializer());
+		onAppStatesConfiguration(gameEngine.getAppStateMachine());
 	}
+
+	protected abstract void onSpriteInitializer(SpriteInitializer spriteInitializer);
+	protected abstract void onAppStatesConfiguration(AppStateMachine asm);
+
+	@Override
+	public void onAppStarted() {
+		// hooked
+	}
+
+	@Override
+	public void onRender(RenderedLayers renderedLayers) {
+		gameFrame.onRender(renderedLayers);
+	}
+
+
+
 
 }

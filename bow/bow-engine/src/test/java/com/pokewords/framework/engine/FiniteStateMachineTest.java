@@ -1,15 +1,19 @@
 package com.pokewords.framework.engine;
 
+import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.exceptions.FiniteStateMachineException;
 import com.pokewords.framework.engine.utils.StringUtility;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
 /**
  * @author johnny850807 (waterball)
  */
-public class FiniteStateMachineTest {
+public class FiniteStateMachineTest extends AbstractTest {
     //States
     private final String A = "A";
     private final String B = "B";
@@ -335,5 +339,52 @@ public class FiniteStateMachineTest {
         fsm.setCurrentState(state);
         assertEquals(state, fsm.trigger(event));
         assertEquals(state, fsm.getCurrentState());
+    }
+
+    @Test
+    public void testEmptyFsmEquality() {
+        assertEquals(new FiniteStateMachine(), new FiniteStateMachine());
+    }
+
+    @Test
+    public void testFsmEquality() {
+        FiniteStateMachine<String> fsm1 = createBasicFsm();
+        FiniteStateMachine<String> fsm2 = createBasicFsm();
+        assertEquals(fsm1, fsm2);
+
+        fsm2.addState("FSM2 has been changed, they should no longer be equal.");
+        assertNotEquals(fsm1, fsm2);
+    }
+
+    @Test
+    public void testFsmHashcode() {
+        FiniteStateMachine<String> fsm1 = createBasicFsm();
+        FiniteStateMachine<String> fsm2 = createBasicFsm();
+        assertEquals(fsm1.hashCode(), fsm2.hashCode());
+
+        fsm2.addState("FSM2 has been changed, they should no longer be equal.");
+        assertNotEquals(fsm1.hashCode(), fsm2.hashCode());
+    }
+
+    @Test
+    public void testGetAllStates() {
+        FiniteStateMachine<String> fsm = new FiniteStateMachine<>();
+        String[] states = new String[]{"a", "123", "test", "", "-\\-"};
+        for (String state : states) {
+            fsm.addState(state);
+        }
+
+        Set<String> statesFromFsm = new HashSet<>(fsm.getStates());
+        for (String state : states) {
+            assertTrue(statesFromFsm.contains(state));
+        }
+    }
+
+    @Test
+    public void testShallowClone() {
+        FiniteStateMachine<String> fsm = createBasicFsm();
+        FiniteStateMachine<String> clone = fsm.clone();
+
+        assertNotSameButEquals(fsm, clone);
     }
 }

@@ -1,71 +1,74 @@
 package com.pokewords.framework.engine;
 
+import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.sprites.SpriteInitializer;
 import com.pokewords.framework.views.AppView;
-import com.pokewords.framework.sprites.PrototypeFactory;
 import com.pokewords.framework.engine.asm.AppStateMachine;
-import com.pokewords.framework.engine.asm.AppState;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.views.GameWindowsConfigurator;
+import com.pokewords.framework.views.InputManager;
 
+/**
+ * @author Joanna
+ */
 public class GameEngine {
+	private IocFactory iocFactory;
 	private AppView gameView;
+	private SpriteInitializer spriteInitializer;
+	private InputManager inputManager;
 	private UserConfig userConfig;
-	private PrototypeFactory prototypeFactory;
 	private AppStateMachine appStateMachine;
+	private Thread gameLoopingThread;
+	private boolean running = false;
+	private int timePerFrame = 15;  //ms
 
-	public void launchEngine() {
-
-	}
-
-	public void keyPressed(int key) {
-
-	}
-
-	public void mouseClicked(int x, int y) {
-
-	}
-
-	public void addAppState(AppState state) {
-
-	}
-
-	public void startLooping() {
-
-	}
-
-	public AppStateWorld getWorld() {
-		return null;
-	}
-
-	public UserConfig getUserConfig() {
-		return null;
-	}
-
-	public AppView getGameView() {
-		return gameView;
-	}
-
-	public PrototypeFactory getPrototypeFactory() {
-		return prototypeFactory;
-	}
-
-	public AppStateMachine getAppStateMachine() {
-		return appStateMachine;
+	public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator) {
+		this.iocFactory = iocFactory;
+		this.inputManager = inputManager;
+		this.spriteInitializer = new SpriteInitializer(iocFactory);
+		this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator);
 	}
 
 	public void setGameView(AppView gameView) {
 		this.gameView = gameView;
 	}
 
-	public void setUserConfig(UserConfig userConfig) {
-		this.userConfig = userConfig;
+	public void launchEngine() {
+		gameView.onAppInit();
+		appStateMachine.trigger(AppStateMachine.EVENT_LOADING);
+		gameLoopingThread = new Thread(this::gameLooping);
+		gameLoopingThread.start();
+		gameView.onAppLoading();
+
+		//Reveal below code will lead to errors, because AppStateWorld is not finished.
+//		appStateMachine.trigger(AppStateMachine.EVENT_GAME_STARTED);
+//		gameView.onAppStarted();
 	}
 
-	public void setPrototypeFactory(PrototypeFactory prototypeFactory) {
-		this.prototypeFactory = prototypeFactory;
+	private void gameLooping() {
+		running = true;
+		try {
+			while (running)
+			{
+				Thread.sleep(timePerFrame);
+				inputManager.onUpdate(timePerFrame);
+				appStateMachine.onUpdate(timePerFrame);
+			}
+		} catch (InterruptedException ignored) {
+
+		}
+
 	}
 
-	public void setAppStateMachine(AppStateMachine asm) {
-		this.appStateMachine = asm;
+	public AppView getGameView() {
+		return gameView;
+	}
+
+	public AppStateMachine getAppStateMachine() {
+		return appStateMachine;
+	}
+
+	public SpriteInitializer getSpriteInitializer() {
+		return spriteInitializer;
 	}
 
 }

@@ -1,8 +1,15 @@
 package com.pokewords.framework.views;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class DefaultInputManager implements InputManager {
+
+
+    @Override
+    public void onUpdate(double timePerFrame) {
+
+    }
 
     @Override
     public boolean getButtonPressedDown(int key) {
@@ -50,7 +57,7 @@ public class DefaultInputManager implements InputManager {
     }
 
     @Override
-    public void onMouseHitDown() {
+    public void onMouseHitDown(Point position) {
 
     }
 
