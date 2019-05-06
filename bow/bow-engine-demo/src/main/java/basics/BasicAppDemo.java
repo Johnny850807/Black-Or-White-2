@@ -20,7 +20,7 @@ import java.awt.*;
 
 import static com.pokewords.framework.sprites.SpriteInitializer.InitializationMode.LAZY;
 
-public class BasicAppDemo extends GameApplication {
+public class  BasicAppDemo extends GameApplication {
 
     public BasicAppDemo(IocFactory iocFactory) {
         super(iocFactory);
