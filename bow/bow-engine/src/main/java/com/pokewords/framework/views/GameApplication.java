@@ -45,11 +45,11 @@ public abstract class GameApplication implements AppView {
 	@Override
 	public void onAppLoading() {
 		gameFrame.onAppLoading();
-		onSpriteInitializer(gameEngine.getSpriteInitializer());
+		onSpriteDeclaration(gameEngine.getSpriteInitializer());
 		onAppStatesConfiguration(gameEngine.getAppStateMachine());
 	}
 
-	protected abstract void onSpriteInitializer(SpriteInitializer spriteInitializer);
+	protected abstract void onSpriteDeclaration(SpriteInitializer spriteInitializer);
 	protected abstract void onAppStatesConfiguration(AppStateMachine asm);
 
 	@Override

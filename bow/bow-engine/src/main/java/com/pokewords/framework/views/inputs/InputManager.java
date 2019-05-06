@@ -20,7 +20,7 @@ public interface InputManager {
     void onButtonPressedDown(int key);
 
     /**
-     * @return true Iff the button is being held.
+     * @return true Iff the button is being held.  
      */
     boolean getButtonBeingHeld(int key);
 
