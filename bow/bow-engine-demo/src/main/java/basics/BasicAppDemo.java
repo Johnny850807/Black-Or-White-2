@@ -29,7 +29,7 @@ public class  BasicAppDemo extends GameApplication {
     }
 
     @Override
-    protected void onSpriteInitializer(SpriteInitializer spriteInitializer) {
+    protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.setInitializationMode(LAZY);
 
         /*spriteInitializer.declare(SpriteType.HERO)
@@ -46,7 +46,7 @@ public class  BasicAppDemo extends GameApplication {
                     .with(ComponentName.MONSTER_AI, new MonsterAI())
                     .collidable()                    .weaver(new MyWeaverNode())
                     .commit();
-
+S
         spriteInitializer.declare(SpriteType.BULLET)
                 .with("path/to/bullet.bow")
                 .with(ComponentName.BULLET, new BulletComponent())
