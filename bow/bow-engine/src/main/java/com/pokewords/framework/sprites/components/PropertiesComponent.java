@@ -95,7 +95,7 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) {
+	public void onAppStateCreate(AppStateWorld world) {
         validatePropertiesComponent();
 	}
 

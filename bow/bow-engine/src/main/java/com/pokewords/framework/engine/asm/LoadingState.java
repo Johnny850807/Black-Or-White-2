@@ -21,8 +21,8 @@ public class LoadingState extends AppState {
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) {
-		super.onAppStateStart(world);
+	public void onAppStateCreate(AppStateWorld world) {
+		super.onAppStateCreate(world);
 
 		getSpriteInitializer().declare(LOADING_TEXT)
 							.with(STRINGS, createLoadingStringsComponent());

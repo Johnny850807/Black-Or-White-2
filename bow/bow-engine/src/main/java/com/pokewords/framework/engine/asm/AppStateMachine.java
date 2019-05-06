@@ -55,7 +55,7 @@ public class AppStateMachine implements GameLifecycleListener {
 		{
 			from.onAppStateExit();
 			if (!to.hasStarted())
-				to.onAppStateStart(onCreateAppStateWorld());
+				to.onAppStateCreate(onCreateAppStateWorld());
 			to.onAppStateEnter();
 		}
 		return to;

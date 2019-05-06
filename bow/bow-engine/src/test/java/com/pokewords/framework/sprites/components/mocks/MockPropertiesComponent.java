@@ -16,7 +16,7 @@ public class MockPropertiesComponent extends PropertiesComponent implements Mock
     }
 
     @Override
-    public void onAppStateStart(AppStateWorld world) {
+    public void onAppStateCreate(AppStateWorld world) {
         hasStarted = true;
     }
 

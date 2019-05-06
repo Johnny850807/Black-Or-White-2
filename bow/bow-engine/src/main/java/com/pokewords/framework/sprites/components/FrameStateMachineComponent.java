@@ -26,7 +26,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
     }
 
     @Override
-    public void onAppStateStart(AppStateWorld world) {
+    public void onAppStateCreate(AppStateWorld world) {
         this.world = world;
     }
 

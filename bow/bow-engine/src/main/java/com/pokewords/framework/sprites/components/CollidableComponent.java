@@ -18,7 +18,7 @@ public class CollidableComponent extends Component implements Shareable {
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) {
+	public void onAppStateCreate(AppStateWorld world) {
 	}
 
 	@Override
