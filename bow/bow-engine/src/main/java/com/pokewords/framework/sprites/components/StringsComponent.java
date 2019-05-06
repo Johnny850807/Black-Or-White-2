@@ -21,7 +21,7 @@ public class StringsComponent extends Component implements Shareable, Renderable
     }
 
     @Override
-    public void onAppStateStart(AppStateWorld world) { }
+    public void onAppStateCreate(AppStateWorld world) { }
 
     @Override
     public void onAppStateEnter() { }

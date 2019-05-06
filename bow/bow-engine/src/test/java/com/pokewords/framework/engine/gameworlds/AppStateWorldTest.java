@@ -20,7 +20,7 @@ public class AppStateWorldTest {
         for (Sprite sprite : sprites)
             appStateWorld.spawn(sprite);
 
-        appStateWorld.onAppStateStart(appStateWorld);
+        appStateWorld.onAppStateCreate(appStateWorld);
         appStateWorld.onAppStateEnter();
 
         for (int i = 0; i < updateLoopCount; i++) {

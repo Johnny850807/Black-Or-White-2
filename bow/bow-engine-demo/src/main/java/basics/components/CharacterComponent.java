@@ -7,7 +7,7 @@ public class CharacterComponent extends CloneableComponent {
     public int hp;
 
     @Override
-    public void onAppStateStart(AppStateWorld world) {
+    public void onAppStateCreate(AppStateWorld world) {
 
     }
 

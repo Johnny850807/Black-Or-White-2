@@ -128,10 +128,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world){
+	public void onAppStateCreate(AppStateWorld world){
 		this.world = world;
 		for (Component component : components.values())
-			component.onAppStateStart(world);
+			component.onAppStateCreate(world);
 	}
 
 	@Override
@@ -228,6 +228,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public void moveY(int velocityY) {
 		getPosition().translate(0, velocityY*timePerFrame);
+	}
+
+	public boolean isType(Object obj) {
+		return getType().equals(obj.toString());
 	}
 
 	public Sprite clone(){

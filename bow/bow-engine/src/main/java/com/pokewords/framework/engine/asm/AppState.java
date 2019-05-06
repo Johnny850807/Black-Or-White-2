@@ -35,10 +35,10 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) {
+	public void onAppStateCreate(AppStateWorld world) {
 		this.started = true;
 		this.appStateWorld = world;
-		this.appStateWorld.onAppStateStart(world);
+		this.appStateWorld.onAppStateCreate(world);
 	}
 
 	protected Sprite createSprite(Object type) {
