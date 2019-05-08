@@ -9,5 +9,6 @@ import java.util.Collection;
  * @author johnny850807 (waterball)
  */
 public interface Renderable {
+    Collection<? extends Frame> getAllFrames();
     Collection<? extends Frame> getRenderedFrames();
 }
