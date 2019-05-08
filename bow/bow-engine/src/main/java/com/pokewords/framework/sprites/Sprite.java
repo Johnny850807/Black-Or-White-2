@@ -34,6 +34,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	protected Map<String, Component> components = new HashMap<>();
 	private Collection<Renderable> renderableComponents = new HashSet<>();
 	private FrameStateMachineComponent frameStateMachineComponent;
+	private CollidableComponent collidableComponent;
 	private PropertiesComponent propertiesComponent;
 	private int timePerFrame;
 
@@ -63,6 +64,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		else
 			throw new SpriteException("The sprite doesn't have the FrameStateMachineComponent, it cannot be triggered.");
 	}
+
 
 	/**
 	 * The getter of FrameStateMachineComponent.

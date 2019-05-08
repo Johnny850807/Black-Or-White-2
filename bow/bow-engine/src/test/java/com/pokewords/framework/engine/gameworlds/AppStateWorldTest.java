@@ -44,7 +44,7 @@ public class AppStateWorldTest {
     private List<MockSprite> creatSprites(int count) {
         List<MockSprite> sprites = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            sprites.add(new MockSprite());
+            sprites.add(new MockSprite("mock"));
         }
         return sprites;
     }

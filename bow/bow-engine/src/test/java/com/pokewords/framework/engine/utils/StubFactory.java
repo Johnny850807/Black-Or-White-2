@@ -43,7 +43,8 @@ public interface StubFactory {
             static Sprite createSimpleSprite(){
                 PropertiesComponent propertiesComponent = new PropertiesComponent();
                 FrameStateMachineComponent frameStateMachineComponent = createFrameStateMachineComponentStub();
-                Sprite spriteStub = new Sprite(frameStateMachineComponent, propertiesComponent);
+                Sprite spriteStub = new Sprite(propertiesComponent);
+                spriteStub.putComponent("FSM", frameStateMachineComponent);
                 spriteStub.setBody(STUB_BODY);
                 spriteStub.setType(STUB_TYPE);
                 spriteStub.putComponent(COLLIDABLE_COMP_NAME, COLLIDABLE_COMPONENT);
@@ -72,7 +73,8 @@ public interface StubFactory {
                 MockPropertiesComponent pc = new MockPropertiesComponent(TYPE);
                 MockFrameStateMachineComponent mfsmc = new MockFrameStateMachineComponent();
 
-                Sprite sprite = new Sprite(mfsmc, pc);
+                Sprite sprite = new Sprite(pc);
+                sprite.putComponent("FSM", mfsmc);
                 sprite.putComponent(MOCK1, mockComponent1);
                 sprite.putComponent(MOCK2, mockComponent2);
                 sprite.putComponent(MOCK3, mockComponent3);

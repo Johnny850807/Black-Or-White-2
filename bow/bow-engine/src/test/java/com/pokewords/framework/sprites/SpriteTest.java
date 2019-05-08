@@ -98,11 +98,9 @@ public class SpriteTest extends AbstractTest {
     @Test
     public void testSpriteEqualsAndHashCode() {
         //given two sprites with same type and body
-        Sprite sp1 = new Sprite();
-        Sprite sp2 = new Sprite();
-        sp1.setType("type");
+        Sprite sp1 = new Sprite("type");
         sp1.setBody(50, 50, 50, 50);
-        sp2.setType("type");
+        Sprite sp2 = new Sprite("type");
         sp2.setBody(50, 50, 50, 50);
 
         //then they should be equal, and hashcode should be the same
@@ -115,9 +113,9 @@ public class SpriteTest extends AbstractTest {
         Sprite sprite = createSpriteWithOnlyMockComponents();
 
         // when get components by their names, they should exist
-        assertTrue(sprite.getComponentByName(MOCK1).isPresent());
-        assertTrue(sprite.getComponentByName(MOCK2).isPresent());
-        assertTrue(sprite.getComponentByName(MOCK3).isPresent());
+        assertTrue(sprite.hasComponent(MOCK1));
+        assertTrue(sprite.hasComponent(MOCK2));
+        assertTrue(sprite.hasComponent(MOCK3));
     }
 
     @Test
@@ -130,9 +128,9 @@ public class SpriteTest extends AbstractTest {
         sprite.removeComponentByName(MOCK3);
 
         // then those components should be removed successfully
-        assertFalse(sprite.getComponentByName(MOCK1).isPresent());
-        assertFalse(sprite.getComponentByName(MOCK2).isPresent());
-        assertFalse(sprite.getComponentByName(MOCK3).isPresent());
+        assertFalse(sprite.hasComponent(MOCK1));
+        assertFalse(sprite.hasComponent(MOCK2));
+        assertFalse(sprite.hasComponent(MOCK3));
     }
 
     @Test

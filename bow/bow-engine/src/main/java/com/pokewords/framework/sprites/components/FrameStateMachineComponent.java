@@ -68,15 +68,6 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
     @Override
     public void onAppStateDestroy() { }
 
-
-    public FiniteStateMachine<EffectFrame> getFsm() {
-        return fsm;
-    }
-
-    public void setFsm(FiniteStateMachine<EffectFrame> fsm) {
-        this.fsm = fsm;
-    }
-
     /**
      * @return the actual inner finite state machine which contains the frames and transitions
      */
