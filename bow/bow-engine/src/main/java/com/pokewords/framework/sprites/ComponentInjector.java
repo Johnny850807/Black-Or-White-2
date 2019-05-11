@@ -7,6 +7,9 @@ package com.pokewords.framework.sprites;
 public class ComponentInjector {
 
 	/**
+	 * - Inject the sprite instance into its all components
+	 * - Inject the sprite instance into its all Renderable Component's frames (access those frames by invoking `#Renderable.getAllFrames()` (edited) 
+	 *
 	 * Inject the Sprite's components via reflection,
 	 * this method will locate each field of each component belongs to the sprite,
 	 * and inject the field if it's of Sprite type or if it's of the Component type that
