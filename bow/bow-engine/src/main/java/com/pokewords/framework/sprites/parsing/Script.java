@@ -26,7 +26,7 @@ public interface Script {
     List<Segment> getSegmentsByName(String segmentName);
     Optional<Segment> getSegmentById(String segmentId);
     List<Segment> getSegmentsByDescription(String segmentDescription);
+    List<Segment> getSegments();
 
-    // List<Segment> getSegments();
-    // Rules getRules();
+    String toString(int indentation);
 }

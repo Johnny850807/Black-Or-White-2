@@ -19,5 +19,7 @@ public interface Element {
     // parentSegment management
     Segment getParentSegment();
     Element setParentSegment(Segment parentSegment);
+
+    // print
     String toString(int indentation);
 }

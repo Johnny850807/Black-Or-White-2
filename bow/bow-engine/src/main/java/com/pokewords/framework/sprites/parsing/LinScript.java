@@ -9,10 +9,7 @@ import java.util.stream.Collectors;
 /**
  *   ScriptRules: LinScriptRules
  *   ScriptParser: LinScriptParser
- *
- *   LinScriptParser.parse() uses LinScriptRules
- *
- *   Script doesn't have to store Rules (?)
+ *                 LinScriptParser.parse() uses LinScriptRules
  *
  * @author nyngwang
  */
@@ -33,15 +30,16 @@ public class LinScript implements Script {
     @Override
     public List<Segment> getSegmentsByName(String segmentName) {
         return segments.stream()
-                .filter(segment -> segment.getStringByKey(ScriptDef.LinScript.SEGMENT).orElse("")
-                        .equals(segmentName))
+                .filter(segment ->
+                        segment.getStringByKey(ScriptDef.LinScript.Segment.NAME)
+                               .equals(segmentName))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<Segment> getSegmentById(String segmentId) {
         for (Segment segment : segments)
-            if (segment.getStringByKey(Segment.Def.ID).orElse("").equals(segmentId))
+            if (segment.getStringByKey(ScriptDef.LinScript.Segment.ID).equals(segmentId))
                 return Optional.of(segment);
         return Optional.empty();
     }
@@ -49,15 +47,13 @@ public class LinScript implements Script {
     @Override
     public List<Segment> getSegmentsByDescription(String segmentDescription) {
         return segments.stream()
-                .filter(segment -> segment.getStringByKey(Segment.Def.DESCRIPTION).equals(segmentDescription))
+                .filter(segment ->
+                        segment.getStringByKey(ScriptDef.LinScript.Segment.DESCRIPTION)
+                               .equals(segmentDescription))
                 .collect(Collectors.toList());
     }
-
-    // Not recommended
-
-    public List<Segment> getSegments() {
-        return segments;
-    }
+    @Override
+    public List<Segment> getSegments() { return segments; }
 
 
     @Override
@@ -65,19 +61,22 @@ public class LinScript implements Script {
         return toString(4);
     }
 
+    @Override
     public String toString(int indentation) {
-        // TODO: Print by order: gallery -> frame, with id ascending
         StringBuilder resultBuilder = new StringBuilder();
 
-        for (String segmentName : rules.validSegmentNames) {
-            List<Segment> segments = getSegmentsByName(segmentName);
-            segments.sort((o1, o2) -> {
-                int left = o1.getIntByKey(Segment.Def.ID).get();
-                int right = o2.getIntByKey(Segment.Def.ID).get();
-                return Integer.compare(left, right);
-            });
-            for (Segment segment : segments)
-                resultBuilder.append(segment.toString(indentation));
+        segments.sort((o1, o2) -> {
+            String leftName = o1.getStringByKey(ScriptDef.LinScript.Segment.NAME).get();
+            String rightName = o2.getStringByKey(ScriptDef.LinScript.Segment.NAME).get();
+            int leftId = o1.getIntByKey(ScriptDef.LinScript.Segment.ID).get();
+            int rightId = o2.getIntByKey(ScriptDef.LinScript.Segment.ID).get();
+
+            return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
+                    : leftName.compareTo(rightName);
+        });
+
+        for (Segment segment : segments) {
+            resultBuilder.append(segment.toString(indentation));
         }
         return resultBuilder.toString();
     }

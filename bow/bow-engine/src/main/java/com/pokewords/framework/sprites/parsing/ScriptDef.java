@@ -20,13 +20,13 @@ public interface ScriptDef {
             );
 
             linScript.addSegment(
-                    new Segment("frame", 1, "punch")
-                            .addElement(new Element("bow"))
-                            .addElement(new Element("cow")))
+                    new LinScriptSegment("frame", 1, "punch")
+                            .addElement(new LinScriptElement("bow"))
+                            .addElement(new LinScriptElement("cow")))
                     .addSegment(
-                            new Segment("frame", 2, "punch")
-                                    .addElement(new Element("dow"))
-                                    .addElement(new Element("fow"))
+                            new LinScriptSegment("frame", 2, "punch")
+                                    .addElement(new LinScriptElement("dow"))
+                                    .addElement(new LinScriptElement("fow"))
                     );
         } catch (IOException e) {
             e.printStackTrace();

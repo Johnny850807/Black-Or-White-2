@@ -86,6 +86,7 @@ public class LinScriptSegment implements Segment {
         return toString(4);
     }
 
+    @Override
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";

@@ -25,4 +25,6 @@ public interface Segment {
     // Not recommended
     List<Element> getElements();
 
+    // print
+    String toString(int indentation);
 }
