@@ -5,7 +5,7 @@ import com.pokewords.framework.sprites.factories.SpriteWeaver;
 
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
     @Override
-    public void onWeaving(LinScript script, Sprite sprite) {
+    public void onWeaving(Script script, Sprite sprite) {
 
     }
 }

@@ -4,7 +4,7 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.parsing.LinScript;
+import com.pokewords.framework.sprites.parsing.Script;
 
 /**
  * @author nyngwang
@@ -21,7 +21,7 @@ public interface SpriteBuilder {
 
     SpriteBuilder buildScriptFromPath(String path);
 
-    SpriteBuilder setScript(LinScript script);
+    SpriteBuilder setScript(Script script);
 
     SpriteBuilder addWeaverNode(SpriteWeaver.Node node);
 
