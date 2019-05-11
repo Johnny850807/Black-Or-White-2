@@ -52,17 +52,28 @@ public class LinScriptElement implements Element {
 
     // Pretty print
     @Override
-    public String toString() {
-        return toString(4);
-    }
-
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
-        resultBuilder.append("<" + mappings.stringMap.get(ScriptDef.LinScript.Element.NAME) + ">").append("\\n");
-        for (Map.Entry<String, String> entry : mappings.stringMap.entrySet()) { resultBuilder.append(indent + entry.getKey() + " " + entry.getValue() + "\\n"); }
-        for (Map.Entry<String, Integer> entry : mappings.integerMap.entrySet()) { resultBuilder.append(indent + entry.getKey() + " " + entry.getValue() + "\\n"); }
-        resultBuilder.append("</" + mappings.stringMap.get(ScriptDef.LinScript.Element.NAME) + ">").append("\\n");
+        resultBuilder
+                .append("<").append(mappings.stringMap.get(ScriptDef.LinScript.Element.NAME)).append(">").append('\n');
+        for (Map.Entry<String, String> entry : mappings.stringMap.entrySet()) {
+            resultBuilder
+                    .append(indent).append(entry.getKey())
+                    .append(" ").append(entry.getValue()).append('\n');
+        }
+        for (Map.Entry<String, Integer> entry : mappings.integerMap.entrySet()) {
+            resultBuilder
+                    .append(indent).append(entry.getKey())
+                    .append(" ").append(entry.getValue()).append('\n');
+        }
+        resultBuilder
+                .append("</").append(mappings.stringMap.get(ScriptDef.LinScript.Element.NAME)).append(">");
         return resultBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toString(4);
     }
 }

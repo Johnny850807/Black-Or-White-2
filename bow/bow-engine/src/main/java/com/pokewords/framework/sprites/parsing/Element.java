@@ -10,7 +10,6 @@ import java.util.Optional;
  * @author nyngwang
  */
 public interface Element {
-
     // Maps management
     Element putKVPair(String key, String value);
     Element putKVPair(String key, int value);
@@ -20,4 +19,5 @@ public interface Element {
     // parentSegment management
     Segment getParentSegment();
     Element setParentSegment(Segment parentSegment);
+    String toString(int indentation);
 }

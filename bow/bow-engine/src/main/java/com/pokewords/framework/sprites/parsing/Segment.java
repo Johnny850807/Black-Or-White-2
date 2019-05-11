@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public interface Segment {
-
     // Elements management
     Segment addElement(Element element);
     List<Element> getElementsByName(String elementName);
