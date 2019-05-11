@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ScriptParserException;
-import com.pokewords.framework.engine.exceptions.ScriptRulesParserException;
+import com.pokewords.framework.engine.exceptions.LinScriptRulesParserException;
 import com.pokewords.framework.engine.utils.FileUtility;
 
 import java.io.IOException;
@@ -25,8 +25,8 @@ public class LinScript implements Script {
     // Demo
     public static void main(String[] args) {
         try {
-            ScriptParser linScriptParser = ScriptParser.getParser(ScriptDef.LinScript.PARSER);
-            ScriptRules linScriptRulesParser = ScriptRulesParser.getParser(ScriptDef.LinScript.RULES_PARSER);
+            ScriptParser linScriptParser = ScriptParser.getParser(ScriptDef.LinScript.NAME);
+            ScriptRulesParser linScriptRulesParser = ScriptRulesParser.getParser(ScriptDef.LinScript.NAME);
             Script linScript = linScriptParser.parse(
                     FileUtility.read("path/to/linscript.txt"),
                     linScriptRulesParser.parse("path/to/linscript_rules.txt")
@@ -120,42 +120,6 @@ public class LinScript implements Script {
      *  The LinScript.Rules
      */
     public static class Rules {
-        private static class Pair {
-            public String regex;
-            public String type;
-            private Pair(String regex, String type) {
-                this.regex = regex;
-                this.type = type;
-
-            }
-        }
-        private Set<String> validSegmentNames;
-        private Map<String, Pair> validSegmentKVRules;
-        private Set<String> validElementNames;
-        private Map<String, Pair> validElementKVRules;
-
-        public Rules() {
-            validSegmentNames = new HashSet<>();
-            validSegmentKVRules = new HashMap<>();
-            validElementNames = new HashSet<>();
-            validElementKVRules = new HashMap<>();
-        }
-
-        public Set<String> getValidSegmentNames() {
-            return validSegmentNames;
-        }
-
-        public Map<String, Pair> getValidSegmentKVRules() {
-            return validSegmentKVRules;
-        }
-
-        public Set<String> getValidElementNames() {
-            return validElementNames;
-        }
-
-        public Map<String, Pair> getValidElementKVRules() {
-            return validElementKVRules;
-        }
 
         /**
          *  The LinScript.Rules.Parser:
@@ -198,7 +162,7 @@ public class LinScript implements Script {
                 switch (blockName) {
                     case LinScript.Def.SEGMENT: segmentBlock = blockContent; break;
                     case LinScript.Def.ELEMENT: elementBlock = blockContent; break;
-                    default: throw new ScriptRulesParserException(
+                    default: throw new LinScriptRulesParserException(
                         "LinScript.Rules Parsing Error: Unrecognized LinScript Node Name."
                     );
                 }

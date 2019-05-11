@@ -7,10 +7,9 @@ package com.pokewords.framework.sprites.parsing;
 public interface ScriptDef {
 
     interface LinScript {
+        String NAME = "LinScript";
         String SEGMENT = "Segment";
         String ELEMENT = "Element";
-        String PARSER = "LinScript Parser";
-        String RULES_PARSER = "LinScript Rules Parser";
     }
 
 }
