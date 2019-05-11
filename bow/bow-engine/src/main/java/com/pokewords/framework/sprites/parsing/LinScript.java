@@ -11,18 +11,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- *   - LinScript 改為 Class：用 fields 來反應差異。
- *   - LinScript.Parser.parse() 中使用到 LinScript.Rules
- *   - 只有合法的資料會存進 Segment 及 Element 的 maps，故目前 Segment / Element 不存 Rules
+ *   ScriptRules: LinScriptRules
+ *   ScriptParser: LinScriptParser
  *
- *   Q: 是否需要將 Segment及 Element也嵌入進來，得到
- *      LinScript.Segment
- *      LinScript.Element
- *      增加凝聚力？
+ *   LinScriptParser.parse() uses LinScriptRules
+ *
+ *   Script doesn't have to store Rules (?)
  *
  * @author nyngwang
  */
-public class LinScript {
+public class LinScript implements Script {
     /**
      * Demo
      */
