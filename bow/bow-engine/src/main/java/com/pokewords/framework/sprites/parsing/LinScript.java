@@ -21,16 +21,18 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class LinScript implements Script {
-    /**
-     * Demo
-     */
+
+    // Demo
     public static void main(String[] args) {
         try {
-            LinScript script = LinScript.Parser.parse(
-                    FileUtility.read("path/to/script_text"),
-                    LinScript.Rules.Parser.parse("path/to/script_rules"));
+            ScriptParser linScriptParser = ScriptParser.getParser(ScriptDef.LinScript.PARSER);
+            ScriptRules linScriptRulesParser = ScriptRulesParser.getParser(ScriptDef.LinScript.RULES_PARSER);
+            Script linScript = linScriptParser.parse(
+                    FileUtility.read("path/to/linscript.txt"),
+                    linScriptRulesParser.parse("path/to/linscript_rules.txt")
+            );
 
-            script.addSegment(
+            linScript.addSegment(
                     new Segment("frame", 1, "punch")
                             .addElement(new Element("bow"))
                             .addElement(new Element("cow")))
