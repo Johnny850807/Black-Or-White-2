@@ -12,7 +12,6 @@ public class LinScriptRulesParser implements ScriptRulesParser {
     private ScriptRules linScriptRules;
     private String segmentBlock;
     private String elementBlock;
-    private boolean hasRegex;
 
     public LinScriptRulesParser() {
         init();
@@ -31,7 +30,6 @@ public class LinScriptRulesParser implements ScriptRulesParser {
         linScriptRules = new LinScriptRules();
         segmentBlock = "";
         elementBlock = "";
-        hasRegex = false;
     }
 
     private void setupBlocks(String linScriptRulesText) {
