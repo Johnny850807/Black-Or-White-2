@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 public interface ScriptRules {
-    public class Pair {
+    class Pair {
         public String regex;
         public String type;
         public Pair(String regex, String type) {

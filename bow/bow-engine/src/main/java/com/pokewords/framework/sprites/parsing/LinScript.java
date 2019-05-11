@@ -17,60 +17,36 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class LinScript implements Script {
-
-    // Demo
-    public static void main(String[] args) {
-        try {
-            ScriptParser linScriptParser = ScriptParser.getParser(ScriptDef.LinScript.NAME);
-            ScriptRulesParser linScriptRulesParser = ScriptRulesParser.getParser(ScriptDef.LinScript.NAME);
-            Script linScript = linScriptParser.parse(
-                    FileUtility.read("path/to/linscript.txt"),
-                    linScriptRulesParser.parse("path/to/linscript_rules.txt")
-            );
-
-            linScript.addSegment(
-                    new Segment("frame", 1, "punch")
-                            .addElement(new Element("bow"))
-                            .addElement(new Element("cow")))
-                    .addSegment(
-                            new Segment("frame", 2, "punch")
-                                    .addElement(new Element("dow"))
-                                    .addElement(new Element("fow"))
-                    );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private ArrayList<Segment> segments;
 
     public LinScript() {
         segments = new ArrayList<>();
     }
 
-    // Segments management
-
-    public LinScript addSegment(Segment segment) {
+    @Override
+    public Script addSegment(Segment segment) {
         segments.add(segment);
         segment.setParentScript(this);
         return this;
     }
 
+    @Override
     public List<Segment> getSegmentsByName(String segmentName) {
         return segments.stream()
-                .filter(segment -> segment.getStringByKey(Segment.Def.NAME).equals(segmentName))
+                .filter(segment -> segment.getStringByKey(ScriptDef.LinScript.SEGMENT).orElse("")
+                        .equals(segmentName))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Optional<Segment> getSegmentById(String segmentId) {
-        for (Segment segment : segments) {
-            if (segment.getStringByKey(Segment.Def.ID).orElse("").equals(segmentId)) {
+        for (Segment segment : segments)
+            if (segment.getStringByKey(Segment.Def.ID).orElse("").equals(segmentId))
                 return Optional.of(segment);
-            }
-        }
         return Optional.empty();
     }
 
+    @Override
     public List<Segment> getSegmentsByDescription(String segmentDescription) {
         return segments.stream()
                 .filter(segment -> segment.getStringByKey(Segment.Def.DESCRIPTION).equals(segmentDescription))
@@ -104,21 +80,5 @@ public class LinScript implements Script {
                 resultBuilder.append(segment.toString(indentation));
         }
         return resultBuilder.toString();
-    }
-
-    /**
-     *  The LinScript.Parser
-     *
-     *  只管建立 LinScript，不用擔心 FSM component
-     *
-     */
-    public static class Parser {
-
-        public static LinScript parse(String scriptText, Rules rules) {
-            init(rules);
-            setupScript(scriptText);
-            return script;
-        }
-
     }
 }
