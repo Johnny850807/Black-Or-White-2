@@ -28,6 +28,8 @@ public class LinScriptParser implements ScriptParser {
     private void init(ScriptRules scriptRules) {
         linScript = new LinScript();
         linScriptRules = (LinScriptRules) scriptRules;
+        segment = null;
+        element = null;
     }
 
     private void setupScript(String scriptText) {
