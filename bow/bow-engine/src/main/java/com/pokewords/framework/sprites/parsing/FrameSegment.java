@@ -1,8 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  *  TODO: 保留直到 Segment 可以如 FrameSegment 方便使用
@@ -18,7 +15,7 @@ public class FrameSegment {
     private int frameNumber;
     private String frameName;
 
-    public FrameSegment(Script script, int frameNumber, String frameName) {
+    public FrameSegment(LinScript script, int frameNumber, String frameName) {
         this.frameNumber = frameNumber;
         this.frameName = frameName;
     }

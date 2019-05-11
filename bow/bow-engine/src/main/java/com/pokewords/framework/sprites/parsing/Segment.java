@@ -1,8 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.engine.utils.FileUtility;
-
-import javax.print.DocFlavor;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,7 +21,7 @@ public class Segment {
             integerMap = new HashMap<>();
         }
     }
-    private Script parentScript;
+    private LinScript parentScript;
     private ArrayList<Element> elements;
     private Maps maps;
 
@@ -81,11 +78,11 @@ public class Segment {
 
     // parentScript management
 
-    public Script getParentScript() {
+    public LinScript getParentScript() {
         return parentScript;
     }
 
-    public void setParentScript(Script parentScript) { this.parentScript = parentScript; }
+    public void setParentScript(LinScript parentScript) { this.parentScript = parentScript; }
 
     // Not recommended
 

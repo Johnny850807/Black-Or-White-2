@@ -1,9 +1,9 @@
 package com.pokewords.framework.sprites.factories;
 
 import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.sprites.parsing.LinScript;
 import com.pokewords.framework.sprites.parsing.GameEngineWeaverNode;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.parsing.Script;
 
 import java.util.LinkedList;
 
@@ -25,7 +25,7 @@ public class SpriteWeaver {
         weaverNodes.add(node);
     }
 
-    public void weave(Script script, Sprite sprite) {
+    public void weave(LinScript script, Sprite sprite) {
         for (Node weaverNode : weaverNodes) {
             weaverNode.onWeaving(script, sprite);
         }
@@ -38,6 +38,6 @@ public class SpriteWeaver {
          * @param sprite the sprite
          * @param script the sprite's declaration script.
          */
-        void onWeaving(Script script, Sprite sprite);
+        void onWeaving(LinScript script, Sprite sprite);
     }
 }

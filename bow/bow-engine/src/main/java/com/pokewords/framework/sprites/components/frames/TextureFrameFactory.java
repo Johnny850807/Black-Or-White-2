@@ -15,7 +15,7 @@ public class TextureFrameFactory implements FrameFactory {
 
     @Override
     public Frame createFrame(FrameSegment frameSegment) {
-//        Script script = frameSegment.getScript();
+//        LinScript script = frameSegment.getScript();
 //        int pic = frameSegment.getInt(FrameSegment.PIC);
 //        GallerySegment gallerySegment = script.getGallerySegment(pic);
 //        String path = gallerySegment.getString("path");

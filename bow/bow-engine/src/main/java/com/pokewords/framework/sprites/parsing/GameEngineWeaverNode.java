@@ -2,11 +2,10 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
-import com.pokewords.framework.sprites.parsing.Script;
 
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
     @Override
-    public void onWeaving(Script script, Sprite sprite) {
+    public void onWeaving(LinScript script, Sprite sprite) {
 
     }
 }

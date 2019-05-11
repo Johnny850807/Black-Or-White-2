@@ -1,10 +1,11 @@
 package com.pokewords.framework.sprites.parsing;
 
 /**
+ *  //TODO: Should be put into ScriptDef
  *  Usage:
  *
  *    直接取得編譯好的rules：ScriptSample.LinScript.RULES
- *    自行編譯rules：Script.Parser.parse(ScriptSample.LinScript.RULES_TEXT)
+ *    自行編譯rules：LinScript.Parser.parse(ScriptSample.LinScript.RULES_TEXT)
  */
 public interface ScriptSample {
     interface LinScript {
@@ -38,7 +39,7 @@ public interface ScriptSample {
                 "        y ([1-9][0-9]+)|([0-9]) Integer\n" +
                 "        w ([1-9][0-9]+)|([0-9]) Integer\n" +
                 "        h ([1-9][0-9]+)|([0-9]) Integer";
-        Script.Rules RULES = Script.Rules.Parser.parse(RULES_TEXT);
+        com.pokewords.framework.sprites.parsing.LinScript.Rules RULES = com.pokewords.framework.sprites.parsing.LinScript.Rules.Parser.parse(RULES_TEXT);
     }
 
 }

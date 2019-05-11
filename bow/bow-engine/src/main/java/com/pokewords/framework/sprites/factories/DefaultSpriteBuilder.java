@@ -16,8 +16,8 @@ import java.util.Map;
 /**
  *
  *   1. 先做出 Sprite
- *   2. 再 Script.Parser.parse() 得出 Script
- *   3. SpriteWeaver用(Script, Sprite)完成Sprite
+ *   2. 再 LinScript.Parser.parse() 得出 LinScript
+ *   3. SpriteWeaver用(LinScript, Sprite)完成Sprite
  *   TODO:
  *      -
  *
@@ -43,7 +43,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     private IocFactory iocFactory; // for spriteWeaver constructor.
-    private Script script;
+    private LinScript script;
     private boolean hasScript;
     private Sprite sprite;
     private Map<String, Component> nameToComponent;
@@ -89,7 +89,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     @Override
     public DefaultSpriteBuilder buildScriptFromPath(String path) {
         try {
-            script = Script.Parser.parse(FileUtility.read(path),
+            script = LinScript.Parser.parse(FileUtility.read(path),
                      ScriptSample.LinScript.RULES);
             hasScript = true;
         } catch (IOException e) {
@@ -99,7 +99,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public DefaultSpriteBuilder setScript(Script script) {
+    public DefaultSpriteBuilder setScript(LinScript script) {
         this.script = script;
         hasScript = script != null;
         return this;
@@ -121,7 +121,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     private void checkScript() {
         if (!hasScript) {
-            throw new SpriteBuilderException("DefaultSpriteBuilder: Script is not set.");
+            throw new SpriteBuilderException("DefaultSpriteBuilder: LinScript is not set.");
         }
     }
 
