@@ -18,8 +18,6 @@ import java.util.Map;
  *   1. 先做出 Sprite
  *   2. 再 LinScript.Parser.parse() 得出 LinScript
  *   3. SpriteWeaver用(LinScript, Sprite)完成Sprite
- *   TODO:
- *      -
  *
  * @author nyngwang
  */
@@ -43,7 +41,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     private IocFactory iocFactory; // for spriteWeaver constructor.
-    private LinScript script;
+    private Script script;
     private boolean hasScript;
     private Sprite sprite;
     private Map<String, Component> nameToComponent;

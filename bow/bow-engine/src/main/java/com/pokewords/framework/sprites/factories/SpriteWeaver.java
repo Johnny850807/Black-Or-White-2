@@ -12,8 +12,8 @@ public class SpriteWeaver {
     private LinkedList<SpriteWeaver.Node> weaverNodes;
 
     public SpriteWeaver(IocFactory iocFactory) {
-        this.iocFactory = iocFactory;
         init();
+        this.iocFactory = iocFactory;
     }
 
     private void init() {
