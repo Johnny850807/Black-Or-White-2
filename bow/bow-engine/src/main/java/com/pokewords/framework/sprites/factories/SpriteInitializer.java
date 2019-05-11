@@ -9,7 +9,7 @@ import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.parsing.LinScript;
+import com.pokewords.framework.sprites.parsing.Script;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -143,7 +143,7 @@ public class SpriteInitializer {
             return this;
         }
 
-        public SpriteDeclarator with(@NotNull LinScript script) {
+        public SpriteDeclarator with(@NotNull Script script) {
             declaration.script = script;
             return this;
         }
@@ -261,7 +261,7 @@ public class SpriteInitializer {
         Map<String, Component> componentMap = new HashMap<>();
 
         FrameStateMachineComponent frameStateMachineComponent;
-        LinScript script;
+        Script script;
         String scriptPath = "";
 
         List<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
