@@ -40,18 +40,21 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                                  .build();
     }
 
-    private IocFactory iocFactory; // for spriteWeaver constructor.
     private Script script;
     private boolean hasScript;
     private Sprite sprite;
     private Map<String, Component> nameToComponent;
     private boolean hasPropertiesComponent;
     private SpriteWeaver spriteWeaver;
+    private ScriptParser scriptParser;
+    private ScriptRulesParser scriptRulesParser;
 
 
     public DefaultSpriteBuilder(IocFactory iocFactory) {
-        this.iocFactory = iocFactory;
         init();
+        spriteWeaver = new SpriteWeaver(iocFactory);
+        scriptParser = iocFactory.scriptParser();
+        scriptRulesParser = iocFactory.scriptRulesParser();
     }
 
     @Override
@@ -86,18 +89,20 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public DefaultSpriteBuilder buildScriptFromPath(String path) {
+
         try {
-            script = LinScript.Parser.parse(FileUtility.read(path),
-                     ScriptSample.LinScript.RULES);
+            script = scriptParser.parse(FileUtility.read(path),
+                    scriptRulesParser.parse(ScriptDef.LinScript.Sample.SCRIPT_RULES_TEXT));
             hasScript = true;
         } catch (IOException e) {
             e.printStackTrace();
+            init();
         }
         return this;
     }
 
     @Override
-    public DefaultSpriteBuilder setScript(LinScript script) {
+    public DefaultSpriteBuilder setScript(Script script) {
         this.script = script;
         hasScript = script != null;
         return this;
@@ -133,7 +138,6 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     private void startWeaver() {
-        spriteWeaver = new SpriteWeaver(iocFactory);
         spriteWeaver.weave(script, sprite);
     }
 }
