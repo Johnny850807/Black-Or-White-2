@@ -48,7 +48,7 @@ public class LinScriptParser implements ScriptParser {
                               String segmentDescription, String segmentText) {
         // 創建前validate
         validateNameOfWhom(segmentName, ScriptDef.LinScript.SEGMENT);
-        segment = new Segment(segmentName, Integer.parseInt(segmentId), segmentDescription);
+        segment = new LinScriptSegment(segmentName, Integer.parseInt(segmentId), segmentDescription);
         setupSegmentKVPairsAndElementsIfExist(segmentText);
         // 與parent的相互設置放在setup中
         linScript.addSegment(segment);
@@ -154,7 +154,7 @@ public class LinScriptParser implements ScriptParser {
             String elementName = matcher.group(1);
             String elementKVPairsText = matcher.group(2);
             validateNameOfWhom(elementName, ScriptDef.LinScript.ELEMENT);
-            element = new Element(elementName);
+            element = new LinScriptElement(elementName);
             setupKVPairsOfWhom(elementKVPairsText, ScriptDef.LinScript.ELEMENT);
             // 相互設置
             segment.addElement(element);
