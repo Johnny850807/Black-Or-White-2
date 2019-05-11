@@ -4,6 +4,7 @@ package com.pokewords.framework.sprites.parsing;
 import java.util.List;
 
 /**
+ * Script doesn't need to store its rules.
  * @author nyngwang
  */
 public interface Script {
