@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.components.mocks;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +13,11 @@ public class MockRenderableComponent extends MockComponentImp implements Rendera
 
     public void addFrame(Frame frame) {
         mockFrames.add(frame);
+    }
+
+    @Override
+    public Collection<? extends Frame> getAllFrames() {
+        return mockFrames;
     }
 
     @Override

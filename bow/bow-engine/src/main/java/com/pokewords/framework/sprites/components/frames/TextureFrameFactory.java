@@ -23,7 +23,7 @@ public class TextureFrameFactory implements FrameFactory {
 //            galleryMap.put(path, gallerySegment.toGallery());
 //        Gallery gallery = galleryMap.get(path);
 //        int layer = frameSegment.getInt("layer");
-//        return new TextureFrame(gallery.getImage(pic), layer);
+//        return new TextureEffectFrame(gallery.getImage(pic), layer);
         return null;
     }
 }

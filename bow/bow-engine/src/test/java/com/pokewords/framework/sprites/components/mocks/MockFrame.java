@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.components.mocks;
 
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.frames.GameEffect;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
@@ -9,7 +10,7 @@ import com.pokewords.framework.views.Canvas;
 import java.util.*;
 
 
-public class MockFrame implements Frame {
+public class MockFrame implements EffectFrame {
     public final String name;
     public Collection<GameEffect> effects = new HashSet<>();
     public Map<GameEffect, Integer> effectAppliedCount = new HashMap<>();

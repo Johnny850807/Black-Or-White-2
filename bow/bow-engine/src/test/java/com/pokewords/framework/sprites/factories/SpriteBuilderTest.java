@@ -21,7 +21,6 @@ public class SpriteBuilderTest extends AbstractTest {
     }
 
     @Test
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public void testAddComponent() {
         PropertiesComponent propertiesComponent = new PropertiesComponent("TYPE");
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
@@ -35,7 +34,7 @@ public class SpriteBuilderTest extends AbstractTest {
 
         assertSame(propertiesComponent, sprite.getPropertiesComponent());
         assertSame(fsmc, sprite.getFrameStateMachineComponent());
-        assertSame(mockComponent, sprite.getComponentByName(MOCK).get());
+        assertSame(mockComponent, sprite.getComponentByName(MOCK));
     }
 
 }

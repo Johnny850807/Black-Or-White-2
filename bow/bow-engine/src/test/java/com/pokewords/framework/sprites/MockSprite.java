@@ -10,7 +10,7 @@ public class MockSprite extends Sprite{
     public int onAppStateDestroyCount = 0;
     public int onUpdateCount = 0;
 
-    protected MockSprite(String type) {
+    public MockSprite(String type) {
         super(type);
     }
 
