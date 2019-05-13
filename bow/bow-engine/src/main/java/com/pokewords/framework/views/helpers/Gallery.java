@@ -4,8 +4,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joanna
@@ -28,7 +30,7 @@ public class Gallery {
      * @return image
      */
     public Image getImage(int pic){
-       return getImage(pic / row, pic % col);
+       return getImage(pic / col, pic % col);
     }
 
     /**
@@ -59,21 +61,33 @@ public class Gallery {
     }
 
     public static void main(String[] args) {
-        String pathname = "D:\\下載區\\bandit_0.bmp";
+        String pathname = "D:\\我的下載\\bandit_0.bmp";
         int imgrow = 7, imgcol = 10;
-        int row = 3, col = 4;
 
         Gallery gallery = new Gallery(pathname, imgrow, imgcol);
-        BufferedImage image = (BufferedImage) gallery.getImage(row, col);
 
         JFrame jf = new JFrame("");
-        JScrollPane scrollPane = new JScrollPane(new JLabel(new ImageIcon(image)));
+        JLabel jLabel = new JLabel();
+        JScrollPane scrollPane = new JScrollPane(jLabel);
+        jLabel.setIcon(new ImageIcon(gallery.getImage(0)));
 
         jf.getContentPane().add(scrollPane);
         jf.pack();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf.setTitle(pathname+" "+image.getWidth()+"x"+image.getHeight());
         jf.setLocationRelativeTo(null);
         jf.setVisible(true);
+
+        new Thread(()-> {
+            int pic = 0;
+            try {
+                while(true)
+                {
+                    Thread.sleep(100);
+                    pic = (pic+1) % (imgrow*imgcol);
+                    jLabel.setIcon(new ImageIcon(gallery.getImage(pic)));
+                }
+            } catch (InterruptedException ignored) { }
+        }).start();
     }
+
 }
