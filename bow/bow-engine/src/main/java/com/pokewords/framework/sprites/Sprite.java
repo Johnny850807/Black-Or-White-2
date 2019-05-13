@@ -45,6 +45,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public Sprite(final PropertiesComponent propertiesComponent) {
 		this.propertiesComponent = propertiesComponent;
+		putComponent(Component.PROPERTIES, propertiesComponent);
 	}
 
 	/**
@@ -105,11 +106,19 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public void putComponent(@NotNull String name, @NotNull Component component) {
 		if (component instanceof Renderable)
 			this.renderableComponents.add((Renderable) component);
-		if (component instanceof PropertiesComponent)
-			throw new SpriteException("PropertiesComponent's already set during the sprite's initiation, " +
-					"you can't override it with another one.");
-		else if (component instanceof FrameStateMachineComponent)
+		if (component instanceof FrameStateMachineComponent)
 			this.frameStateMachineComponent = (FrameStateMachineComponent) component;
+		if (component instanceof CollidableComponent)
+			this.collidableComponent = (CollidableComponent) component;
+		else if (component instanceof PropertiesComponent)
+		{
+			if (hasComponent(Component.PROPERTIES))
+				throw new SpriteException("PropertiesComponent's already set during the sprite's initiation, " +
+						"you can't override it with another one.");
+			else
+				this.propertiesComponent = (PropertiesComponent) component;
+		}
+
 		components.put(name, component);
 	}
 
@@ -120,7 +129,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public void removeComponentByName(String name) {
 		if (!hasComponent(name))
-			throw new SpriteException("FrameStateMachineComponent cannot be removed.");
+			throw new SpriteException("The name does not exist.");
 
 		Component component = components.get(name);
 		if (component instanceof PropertiesComponent)
@@ -239,13 +248,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public Sprite clone(){
 		try {
 			Sprite clone = (Sprite) super.clone();
-			clone.components = copyComponents();
-			for (Component component : clone.components.values()) {
-				if (component instanceof PropertiesComponent)
-					clone.propertiesComponent = (PropertiesComponent) component;
-				else if (component instanceof FrameStateMachineComponent)
-					clone.frameStateMachineComponent = (FrameStateMachineComponent) component;
-			}
+			copyComponents(clone);
 			clone.injectComponents();
 			return clone;
 		} catch (CloneNotSupportedException e) {
@@ -269,17 +272,16 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * different reference to the original component.
 	 * @return the copied components.
 	 */
-	private Map<String, Component> copyComponents(){
-		HashMap<String, Component> cloneComponents = new HashMap<>();
+	private void copyComponents(Sprite clone){
+		clone.components = new HashMap<>();
 		for (String type : this.components.keySet())
 		{
 			Component component = this.components.get(type);
 			if (isComponentSharedOnly(component))
-				cloneComponents.put(type, component);
+				clone.putComponent(type, component);
 			else
-				cloneComponents.put(type, ((CloneableComponent)component).clone());
+				clone.putComponent(type, ((CloneableComponent)component).clone());
 		}
-		return cloneComponents;
 	}
 
 	private boolean isComponentSharedOnly(Component component) {

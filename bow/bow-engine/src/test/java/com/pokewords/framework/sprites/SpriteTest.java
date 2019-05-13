@@ -53,7 +53,7 @@ public class SpriteTest extends AbstractTest {
         assertNotSameButEquals(spriteStub.getPropertiesComponent(), clone.getPropertiesComponent());
 
         // all sprites of the same type must share the FSMC !
-        //assertSame(spriteStub.getFrameStateMachineComponent(), clone.getFrameStateMachineComponent());
+        assertSame(spriteStub.getFrameStateMachineComponent(), clone.getFrameStateMachineComponent());
 
         testComponentsShareability(spriteStub.components, clone.components);
     }

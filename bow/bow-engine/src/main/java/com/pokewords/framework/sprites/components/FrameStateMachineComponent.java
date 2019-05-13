@@ -60,6 +60,8 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
 
     public void setCurrentFrame(EffectFrame frame){
         this.fsm.setCurrentState(frame);
+        renderedFrame.clear();
+        renderedFrame.add(frame);
     }
 
     @Override
