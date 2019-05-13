@@ -61,7 +61,7 @@ public class Gallery {
     }
 
     public static void main(String[] args) {
-        String pathname = "D:\\我的下載\\bandit_0.bmp";
+        String pathname = "D:/我的下載/bandit_0.bmp";
         int imgrow = 7, imgcol = 10;
 
         Gallery gallery = new Gallery(pathname, imgrow, imgcol);
