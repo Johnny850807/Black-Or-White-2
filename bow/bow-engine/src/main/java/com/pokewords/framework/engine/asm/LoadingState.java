@@ -1,7 +1,7 @@
 package com.pokewords.framework.engine.asm;
 
-import com.pokewords.framework.sprites.components.StringsComponent;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.StringComponent;
 
 import java.awt.*;
 
@@ -21,17 +21,11 @@ public class LoadingState extends AppState {
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) {
-		super.onAppStateStart(world);
+	public void onAppStateCreate(AppStateWorld world) {
+		super.onAppStateCreate(world);
 
 		getSpriteInitializer().declare(LOADING_TEXT)
-							.with(STRINGS, createLoadingStringsComponent());
-	}
-
-	private StringsComponent createLoadingStringsComponent() {
-		StringsComponent stringsComponent = new StringsComponent();
-		stringsComponent.addString(getGameWindowDefinition().center(), "Loading ...");
-		return stringsComponent;
+							.with(STRINGS, new StringComponent("Loading ..."));
 	}
 
 	@Override

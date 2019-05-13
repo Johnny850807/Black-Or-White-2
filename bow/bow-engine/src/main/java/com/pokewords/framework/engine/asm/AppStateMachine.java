@@ -1,12 +1,12 @@
 package com.pokewords.framework.engine.asm;
 
-import com.pokewords.framework.engine.FiniteStateMachine;
+import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
-import com.pokewords.framework.sprites.SpriteInitializer;
-import com.pokewords.framework.sprites.components.GameLifecycleListener;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-import com.pokewords.framework.views.GameWindowsConfigurator;
-import com.pokewords.framework.views.InputManager;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.engine.listeners.GameLifecycleListener;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.views.inputs.Inputs;
+import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 /**
  * @author johnny850807 (waterball)
@@ -17,12 +17,12 @@ public class AppStateMachine implements GameLifecycleListener {
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
 	private SpriteInitializer spriteInitializer;
 	private GameWindowsConfigurator gameWindowsConfigurator;
-	private InputManager inputManager;
+	private Inputs inputs;
 	private AppState loadingState;
 	private AppState gameInitialState;
 
-	public AppStateMachine(InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
-		this.inputManager = inputManager;
+	public AppStateMachine(Inputs inputs, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
+		this.inputs = inputs;
 		this.spriteInitializer = spriteInitializer;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
 		setupStates();
@@ -39,7 +39,7 @@ public class AppStateMachine implements GameLifecycleListener {
 		T state;
 		try {
 			state = appStateType.newInstance();
-			state.inject(inputManager, this, spriteInitializer, gameWindowsConfigurator);
+			state.inject(inputs, this, spriteInitializer, gameWindowsConfigurator);
 			fsm.addState(state);
 			return state;
 		} catch (InstantiationException|IllegalAccessException e) {
@@ -55,7 +55,7 @@ public class AppStateMachine implements GameLifecycleListener {
 		{
 			from.onAppStateExit();
 			if (!to.hasStarted())
-				to.onAppStateStart(onCreateAppStateWorld());
+				to.onAppStateCreate(onCreateAppStateWorld());
 			to.onAppStateEnter();
 		}
 		return to;

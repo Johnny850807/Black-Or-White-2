@@ -1,8 +1,8 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.engine.Logger;
+import com.pokewords.framework.commons.Logger;
 import com.pokewords.framework.engine.utils.StringUtility;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) {
+	public void onAppStateCreate(AppStateWorld world) {
         validatePropertiesComponent();
 	}
 

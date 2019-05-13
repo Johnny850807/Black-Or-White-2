@@ -1,13 +1,13 @@
 package basics.components;
 
 import com.pokewords.framework.sprites.components.CloneableComponent;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class BulletComponent extends CloneableComponent {
     public int hp;
 
     @Override
-    public void onAppStateStart(AppStateWorld world) {
+    public void onAppStateCreate(AppStateWorld world) {
 
     }
 

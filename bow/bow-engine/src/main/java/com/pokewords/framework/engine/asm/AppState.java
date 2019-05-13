@@ -1,12 +1,12 @@
 package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.SpriteInitializer;
-import com.pokewords.framework.sprites.components.AppStateLifeCycleListener;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
-import com.pokewords.framework.views.GameWindowDefinition;
-import com.pokewords.framework.views.GameWindowsConfigurator;
-import com.pokewords.framework.views.InputManager;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.views.inputs.Inputs;
+import com.pokewords.framework.views.windows.GameWindowDefinition;
+import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 import java.awt.*;
 
@@ -16,7 +16,7 @@ import java.awt.*;
 public abstract class AppState implements AppStateLifeCycleListener {
 	private AppStateMachine asm;
 	private SpriteInitializer spriteInitializer;
-	private InputManager inputManager;
+	private Inputs inputs;
 	private AppStateWorld appStateWorld;
 	private boolean started = false;
 	private GameWindowsConfigurator gameWindowsConfigurator;
@@ -27,18 +27,18 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * this method is expected to be used by the AppStateMachine for initializing injection.
 	 * @see AppStateMachine#createState(Class)
 	 */
-	protected void inject(InputManager inputManager, AppStateMachine asm, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
+	protected void inject(Inputs inputs, AppStateMachine asm, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
 		this.asm = asm;
 		this.spriteInitializer = spriteInitializer;
-		this.inputManager = inputManager;
+		this.inputs = inputs;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
 	}
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) {
+	public void onAppStateCreate(AppStateWorld world) {
 		this.started = true;
 		this.appStateWorld = world;
-		this.appStateWorld.onAppStateStart(world);
+		this.appStateWorld.onAppStateCreate(world);
 	}
 
 	protected Sprite createSprite(Object type) {
@@ -53,8 +53,8 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		return started;
 	}
 
-	public InputManager getInputManager() {
-		return inputManager;
+	public Inputs getInputs() {
+		return inputs;
 	}
 
 	public AppStateMachine getAppStateMachine() {

@@ -1,9 +1,7 @@
 package com.pokewords.framework.sprites.components.frames;
 
-import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.components.frames.FrameFactory;
 import com.pokewords.framework.sprites.parsing.FrameSegment;
-import com.pokewords.framework.views.Gallery;
+import com.pokewords.framework.views.helpers.Gallery;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +23,7 @@ public class TextureFrameFactory implements FrameFactory {
 //            galleryMap.put(path, gallerySegment.toGallery());
 //        Gallery gallery = galleryMap.get(path);
 //        int layer = frameSegment.getInt("layer");
-//        return new TextureFrame(gallery.getImage(pic), layer);
+//        return new TextureEffectFrame(gallery.getImage(pic), layer);
         return null;
     }
 }

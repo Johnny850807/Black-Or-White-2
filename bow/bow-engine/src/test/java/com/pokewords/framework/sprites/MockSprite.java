@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class MockSprite extends Sprite{
     public int onAppStateStartCount = 0;
@@ -10,7 +10,7 @@ public class MockSprite extends Sprite{
     public int onAppStateDestroyCount = 0;
     public int onUpdateCount = 0;
 
-    protected MockSprite(String type) {
+    public MockSprite(String type) {
         super(type);
     }
 
@@ -19,7 +19,7 @@ public class MockSprite extends Sprite{
     }
 
     @Override
-    public void onAppStateStart(AppStateWorld world) {
+    public void onAppStateCreate(AppStateWorld world) {
         onAppStateStartCount ++;
     }
 

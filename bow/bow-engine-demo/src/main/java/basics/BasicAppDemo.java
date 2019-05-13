@@ -1,26 +1,20 @@
 package basics;
 
-import basics.components.BulletComponent;
-import basics.components.CharacterComponent;
-import basics.components.MonsterAI;
 import basics.namespace.AppStateEvent;
-import basics.namespace.ComponentName;
-import basics.namespace.SpriteType;
 import basics.states.GameOverAppState;
 import basics.states.MainAppState;
-import basics.weaver.MyWeaverNode;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
-import com.pokewords.framework.sprites.SpriteInitializer;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
-import com.pokewords.framework.views.GameWindowsConfigurator;
+import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 import java.awt.*;
 
-import static com.pokewords.framework.sprites.SpriteInitializer.InitializationMode.LAZY;
+import static com.pokewords.framework.sprites.factories.SpriteInitializer.InitializationMode.LAZY;
 
-public class BasicAppDemo extends GameApplication {
+public class  BasicAppDemo extends GameApplication {
 
     public BasicAppDemo(IocFactory iocFactory) {
         super(iocFactory);
@@ -35,7 +29,7 @@ public class BasicAppDemo extends GameApplication {
     }
 
     @Override
-    protected void onSpriteInitializer(SpriteInitializer spriteInitializer) {
+    protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.setInitializationMode(LAZY);
 
         /*spriteInitializer.declare(SpriteType.HERO)
@@ -52,7 +46,7 @@ public class BasicAppDemo extends GameApplication {
                     .with(ComponentName.MONSTER_AI, new MonsterAI())
                     .collidable()                    .weaver(new MyWeaverNode())
                     .commit();
-
+S
         spriteInitializer.declare(SpriteType.BULLET)
                 .with("path/to/bullet.bow")
                 .with(ComponentName.BULLET, new BulletComponent())

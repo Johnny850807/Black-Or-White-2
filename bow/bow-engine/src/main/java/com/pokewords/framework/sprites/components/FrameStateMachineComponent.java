@@ -1,93 +1,79 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.Events;
-import com.pokewords.framework.engine.FiniteStateMachine;
+import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.marks.Renderable;
+import com.pokewords.framework.sprites.components.marks.Shareable;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable{
-    protected FiniteStateMachine<Frame> fsm = new FiniteStateMachine<>();
+public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable {
+    protected FiniteStateMachine<EffectFrame> fsm = new FiniteStateMachine<>();
     protected Sprite sprite;
     protected AppStateWorld world;
-
-
-    public FrameStateMachineComponent() {
-    }
+    protected final LinkedList<EffectFrame> renderedFrame = new LinkedList<>();
 
     @Override
-    public void onAppStateStart(AppStateWorld world) {
+    public void onAppStateCreate(AppStateWorld world) {
         this.world = world;
     }
 
     @Override
-    public void onAppStateEnter() {
-
-    }
+    public void onAppStateEnter() { }
 
     @Override
     public void onUpdate(int timePerFrame) {
         trigger(Events.UPDATE);
-        Frame frame = getCurrentFrame();
+        EffectFrame frame = getCurrentFrame();
         frame.apply(world, sprite);
+        renderedFrame.clear();
+        renderedFrame.add(frame);
     }
 
 
-    public void addFrame(Frame frame){
+    public void addFrame(EffectFrame frame){
         fsm.addState(frame);
     }
 
-    public void addTransition(Frame from, String event, Frame to){
+    public void addTransition(EffectFrame from, String event, EffectFrame to){
         fsm.addTransition(from, event, to);
     }
 
-    public void addTransitionFromAllFrames(String event, Frame targetFrame){
+    public void addTransitionFromAllFrames(String event, EffectFrame targetFrame){
         fsm.addTransitionFromAllStates(event, targetFrame);
     }
 
-    public Frame trigger(String event){
+    public EffectFrame trigger(String event){
         return fsm.trigger(event);
     }
 
-    public Frame getCurrentFrame(){
+    public EffectFrame getCurrentFrame(){
         return fsm.getCurrentState();
     }
 
-    public void setCurrentFrame(Frame frame){
+    public void setCurrentFrame(EffectFrame frame){
         this.fsm.setCurrentState(frame);
+        renderedFrame.clear();
+        renderedFrame.add(frame);
     }
 
     @Override
-    public void onAppStateExit() {
-
-    }
+    public void onAppStateExit() { }
 
     @Override
-    public void onAppStateDestroy() {
-
-    }
-
-
-    public FiniteStateMachine<Frame> getFsm() {
-        return fsm;
-    }
-
-    public void setFsm(FiniteStateMachine<Frame> fsm) {
-        this.fsm = fsm;
-    }
+    public void onAppStateDestroy() { }
 
     /**
      * @return the actual inner finite state machine which contains the frames and transitions
      */
-    public FiniteStateMachine<Frame> getFiniteStateMachine(){
+    public FiniteStateMachine<EffectFrame> getFiniteStateMachine(){
         return fsm;
     }
 
@@ -116,10 +102,9 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         return Objects.hash(fsm, sprite, world);
     }
 
-    /**
-     * @return all the frames (states) that this finite state machine owns
-     */
-    public List<Frame> getFrames() {
+
+    @Override
+    public Collection<? extends Frame> getAllFrames() {
         return fsm.getStates();
     }
 
@@ -128,10 +113,8 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
      * which is the current frame (state).
      */
     @Override
-    public Collection<Frame> getRenderedFrames() {
-        LinkedList<Frame> frames = new LinkedList<>();
-        frames.add(getCurrentFrame());
-        return frames;
+    public Collection<? extends Frame> getRenderedFrames() {
+        return renderedFrame;
     }
 }
 

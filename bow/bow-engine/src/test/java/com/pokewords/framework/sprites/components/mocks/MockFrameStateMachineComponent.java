@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites.components.mocks;
 
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class MockFrameStateMachineComponent extends FrameStateMachineComponent implements MockComponent{
     private boolean hasStarted = false;
@@ -12,7 +12,7 @@ public class MockFrameStateMachineComponent extends FrameStateMachineComponent i
     private int updateCount = 0;
 
     @Override
-    public void onAppStateStart(AppStateWorld world) {
+    public void onAppStateCreate(AppStateWorld world) {
         hasStarted = true;
     }
 

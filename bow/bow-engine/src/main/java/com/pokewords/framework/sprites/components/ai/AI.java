@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites.components.ai;
 
 import com.pokewords.framework.sprites.components.CloneableComponent;
-import com.pokewords.framework.sprites.components.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class AI extends CloneableComponent {
 
@@ -9,7 +9,7 @@ public class AI extends CloneableComponent {
 
 
 	@Override
-	public void onAppStateStart(AppStateWorld world) {
+	public void onAppStateCreate(AppStateWorld world) {
 
 	}
 
