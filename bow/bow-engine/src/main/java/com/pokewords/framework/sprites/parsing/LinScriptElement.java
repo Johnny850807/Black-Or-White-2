@@ -9,7 +9,7 @@ public class LinScriptElement implements Element {
 
     public LinScriptElement(String elementName) {
         init();
-        mappings.stringMap.put(ScriptDef.LinScript.Element.NAME, elementName);
+        mappings.stringMap.put(ScriptDefinitions.LinScript.Element.NAME, elementName);
     }
 
     private void init() {
@@ -56,7 +56,7 @@ public class LinScriptElement implements Element {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
         resultBuilder
-                .append("<").append(mappings.stringMap.get(ScriptDef.LinScript.Element.NAME)).append(">").append('\n');
+                .append("<").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Element.NAME)).append(">").append('\n');
         for (Map.Entry<String, String> entry : mappings.stringMap.entrySet()) {
             resultBuilder
                     .append(indent).append(entry.getKey())
@@ -68,7 +68,7 @@ public class LinScriptElement implements Element {
                     .append(" ").append(entry.getValue()).append('\n');
         }
         resultBuilder
-                .append("</").append(mappings.stringMap.get(ScriptDef.LinScript.Element.NAME)).append(">");
+                .append("</").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Element.NAME)).append(">");
         return resultBuilder.toString();
     }
 

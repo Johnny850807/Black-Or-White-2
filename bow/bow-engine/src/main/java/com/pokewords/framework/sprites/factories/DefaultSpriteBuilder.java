@@ -82,7 +82,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public DefaultSpriteBuilder addComponent(String name, Component component) {
-        sprite.putComponent(name, component);
+        nameToComponent.put(name, component);
         hasPropertiesComponent = component instanceof PropertiesComponent;
         return this;
     }
@@ -92,7 +92,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
         try {
             script = scriptParser.parse(FileUtility.read(path),
-                    scriptRulesParser.parse(ScriptDef.LinScript.Sample.SCRIPT_RULES_TEXT));
+                    scriptRulesParser.parse(ScriptDefinitions.LinScript.Samples.SCRIPT_RULES_TEXT));
             hasScript = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -132,6 +132,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         if (!hasPropertiesComponent) {
             throw new SpriteBuilderException("DefaultSpriteBuilder: PropertiesComponent is not set.");
         }
+        sprite = new Sprite((PropertiesComponent) nameToComponent.get(Component.PROPERTIES));
         for (Map.Entry<String, Component> entry : nameToComponent.entrySet()) {
             sprite.putComponent(entry.getKey(), entry.getValue());
         }

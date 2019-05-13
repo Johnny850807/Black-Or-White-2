@@ -13,15 +13,15 @@ public class LinScriptSegment implements Segment {
 
     public LinScriptSegment(String segmentName, int segmentId) {
         init();
-        mappings.stringMap.put(ScriptDef.LinScript.Segment.NAME, segmentName);
-        mappings.integerMap.put(ScriptDef.LinScript.Segment.ID, segmentId);
+        mappings.stringMap.put(ScriptDefinitions.LinScript.Segment.NAME, segmentName);
+        mappings.integerMap.put(ScriptDefinitions.LinScript.Segment.ID, segmentId);
     }
 
     public LinScriptSegment(String segmentName, int segmentId, String segmentDescription) {
         init();
-        mappings.stringMap.put(ScriptDef.LinScript.Segment.NAME, segmentName);
-        mappings.integerMap.put(ScriptDef.LinScript.Segment.ID, segmentId);
-        mappings.stringMap.put(ScriptDef.LinScript.Segment.DESCRIPTION, segmentDescription);
+        mappings.stringMap.put(ScriptDefinitions.LinScript.Segment.NAME, segmentName);
+        mappings.integerMap.put(ScriptDefinitions.LinScript.Segment.ID, segmentId);
+        mappings.stringMap.put(ScriptDefinitions.LinScript.Segment.DESCRIPTION, segmentDescription);
     }
 
     private void init() {
@@ -39,7 +39,7 @@ public class LinScriptSegment implements Segment {
     public List<Element> getElementsByName(String elementName) {
         return elements.stream()
                 .filter(element ->
-                        element.getStringByKey(ScriptDef.LinScript.Element.NAME).orElse("")
+                        element.getStringByKey(ScriptDefinitions.LinScript.Element.NAME).orElse("")
                                 .equals(elementName))
                 .collect(Collectors.toList());
     }
@@ -91,9 +91,9 @@ public class LinScriptSegment implements Segment {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
         resultBuilder
-                .append("<").append(mappings.stringMap.get(ScriptDef.LinScript.Segment.NAME)).append(">")
-                .append(" ").append(mappings.integerMap.get(ScriptDef.LinScript.Segment.ID))
-                .append(" ").append(mappings.stringMap.get(ScriptDef.LinScript.Segment.DESCRIPTION)).append('\n');
+                .append("<").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Segment.NAME)).append(">")
+                .append(" ").append(mappings.integerMap.get(ScriptDefinitions.LinScript.Segment.ID))
+                .append(" ").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Segment.DESCRIPTION)).append('\n');
         for (Map.Entry<String, String> entry : mappings.stringMap.entrySet()) {
             resultBuilder
                     .append(indent).append(entry.getKey())
@@ -108,7 +108,7 @@ public class LinScriptSegment implements Segment {
             resultBuilder.append(indent).append(element.toString(indentation)).append('\n');
         }
         resultBuilder
-                .append("</").append(mappings.stringMap.get(ScriptDef.LinScript.Segment.NAME)).append(">").append('\n');
+                .append("</").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Segment.NAME)).append(">").append('\n');
         return resultBuilder.toString();
     }
 }

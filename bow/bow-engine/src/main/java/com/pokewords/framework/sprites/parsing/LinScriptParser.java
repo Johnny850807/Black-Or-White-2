@@ -49,7 +49,7 @@ public class LinScriptParser implements ScriptParser {
     private void setupSegment(String segmentName, String segmentId,
                               String segmentDescription, String segmentText) {
         // 創建前validate
-        validateNameOfWhom(segmentName, ScriptDef.LinScript.SEGMENT);
+        validateNameOfWhom(segmentName, ScriptDefinitions.LinScript.SEGMENT);
         segment = new LinScriptSegment(segmentName, Integer.parseInt(segmentId), segmentDescription);
         setupSegmentKVPairsAndElementsIfExist(segmentText);
         // 與parent的相互設置放在setup中
@@ -59,10 +59,10 @@ public class LinScriptParser implements ScriptParser {
 
     private void validateNameOfWhom(String name, String whom) {
         switch (whom) {
-            case ScriptDef.LinScript.SEGMENT:
+            case ScriptDefinitions.LinScript.SEGMENT:
                 if ( !linScriptRules.getValidSegmentNames().contains(name) )
                     throw new LinScriptParserException("Segment name is unrecognizable!");
-            case ScriptDef.LinScript.ELEMENT:
+            case ScriptDefinitions.LinScript.ELEMENT:
                 if ( !linScriptRules.getValidElementNames().contains(name) )
                     throw new LinScriptParserException("Element name is unrecognizable!");
             default:
@@ -85,7 +85,7 @@ public class LinScriptParser implements ScriptParser {
 
     private void router(String kvPairsText, String elementText) {
         if (elementText == null) {
-            setupKVPairsOfWhom(kvPairsText, ScriptDef.LinScript.SEGMENT);
+            setupKVPairsOfWhom(kvPairsText, ScriptDefinitions.LinScript.SEGMENT);
         } else {
             setupElement(elementText);
         }
@@ -106,7 +106,7 @@ public class LinScriptParser implements ScriptParser {
 
     private void validateKVPairOfWhom(String key, String value, String whom) {
         switch (whom) {
-            case ScriptDef.LinScript.SEGMENT:
+            case ScriptDefinitions.LinScript.SEGMENT:
                 ScriptRules.Pair pair = linScriptRules.getValidSegmentKVRules().get(key);
                 if (pair == null) throw new LinScriptParserException
                     ("LinScriptParser: invalid key of script segment");
@@ -114,7 +114,7 @@ public class LinScriptParser implements ScriptParser {
                 if (Pattern.matches(pair.regex, value)) return;
                 throw new LinScriptParserException
                     ("LinScriptParser: value doesn't match regex in the script.");
-            case ScriptDef.LinScript.ELEMENT:
+            case ScriptDefinitions.LinScript.ELEMENT:
                 pair = linScriptRules.getValidElementKVRules().get(key);
                 if (pair == null) throw new LinScriptParserException
                     ("LinScriptParser: invalid key of script element");
@@ -129,13 +129,13 @@ public class LinScriptParser implements ScriptParser {
 
     private void putKVPairOfWhom(String key, String value, String whom) {
         switch (whom) {
-            case ScriptDef.LinScript.SEGMENT:
+            case ScriptDefinitions.LinScript.SEGMENT:
                 switch (linScriptRules.getValidSegmentKVRules().get(key).type) {
                     case "Integer": segment.putKVPair(key, Integer.parseInt(value)); break;
                     case "String": segment.putKVPair(key, value); break;
                 }
                 break;
-            case ScriptDef.LinScript.ELEMENT:
+            case ScriptDefinitions.LinScript.ELEMENT:
                 switch (linScriptRules.getValidElementKVRules().get(key).type) {
                     case "Integer": element.putKVPair(key, Integer.parseInt(value)); break;
                     case "String": element.putKVPair(key, value); break;
@@ -155,9 +155,9 @@ public class LinScriptParser implements ScriptParser {
         if (matcher.find()) {
             String elementName = matcher.group(1);
             String elementKVPairsText = matcher.group(2);
-            validateNameOfWhom(elementName, ScriptDef.LinScript.ELEMENT);
+            validateNameOfWhom(elementName, ScriptDefinitions.LinScript.ELEMENT);
             element = new LinScriptElement(elementName);
-            setupKVPairsOfWhom(elementKVPairsText, ScriptDef.LinScript.ELEMENT);
+            setupKVPairsOfWhom(elementKVPairsText, ScriptDefinitions.LinScript.ELEMENT);
             // 相互設置
             segment.addElement(element);
             element.setParentSegment(segment);

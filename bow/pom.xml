@@ -12,6 +12,7 @@
     <modules>
         <module>bow-engine</module>
         <module>bow-core</module>
+        <module>ningshot</module>
     </modules>
 
     <dependencies>

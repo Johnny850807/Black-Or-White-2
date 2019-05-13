@@ -44,8 +44,8 @@ public class LinScriptRulesParser implements ScriptRulesParser {
 
     private void blockRouter(String blockName, String blockContent) {
         switch (blockName) {
-            case ScriptDef.LinScript.SEGMENT: segmentBlock = blockContent; break;
-            case ScriptDef.LinScript.ELEMENT: elementBlock = blockContent; break;
+            case ScriptDefinitions.LinScript.SEGMENT: segmentBlock = blockContent; break;
+            case ScriptDefinitions.LinScript.ELEMENT: elementBlock = blockContent; break;
             default: throw new LinScriptRulesParserException(
                     "LinScriptRulesParser failed: Unrecognized script rules node name."
             );

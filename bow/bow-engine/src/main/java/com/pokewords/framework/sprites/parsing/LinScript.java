@@ -1,8 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.engine.utils.FileUtility;
-
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,7 +28,7 @@ public class LinScript implements Script {
     public List<Segment> getSegmentsByName(String segmentName) {
         return segments.stream()
                 .filter(segment ->
-                        segment.getStringByKey(ScriptDef.LinScript.Segment.NAME)
+                        segment.getStringByKey(ScriptDefinitions.LinScript.Segment.NAME)
                                .equals(segmentName))
                 .collect(Collectors.toList());
     }
@@ -39,7 +36,7 @@ public class LinScript implements Script {
     @Override
     public Optional<Segment> getSegmentById(String segmentId) {
         for (Segment segment : segments)
-            if (segment.getStringByKey(ScriptDef.LinScript.Segment.ID).equals(segmentId))
+            if (segment.getStringByKey(ScriptDefinitions.LinScript.Segment.ID).equals(segmentId))
                 return Optional.of(segment);
         return Optional.empty();
     }
@@ -48,7 +45,7 @@ public class LinScript implements Script {
     public List<Segment> getSegmentsByDescription(String segmentDescription) {
         return segments.stream()
                 .filter(segment ->
-                        segment.getStringByKey(ScriptDef.LinScript.Segment.DESCRIPTION)
+                        segment.getStringByKey(ScriptDefinitions.LinScript.Segment.DESCRIPTION)
                                .equals(segmentDescription))
                 .collect(Collectors.toList());
     }
@@ -66,10 +63,10 @@ public class LinScript implements Script {
         StringBuilder resultBuilder = new StringBuilder();
 
         segments.sort((o1, o2) -> {
-            String leftName = o1.getStringByKey(ScriptDef.LinScript.Segment.NAME).get();
-            String rightName = o2.getStringByKey(ScriptDef.LinScript.Segment.NAME).get();
-            int leftId = o1.getIntByKey(ScriptDef.LinScript.Segment.ID).get();
-            int rightId = o2.getIntByKey(ScriptDef.LinScript.Segment.ID).get();
+            String leftName = o1.getStringByKey(ScriptDefinitions.LinScript.Segment.NAME).get();
+            String rightName = o2.getStringByKey(ScriptDefinitions.LinScript.Segment.NAME).get();
+            int leftId = o1.getIntByKey(ScriptDefinitions.LinScript.Segment.ID).get();
+            int rightId = o2.getIntByKey(ScriptDefinitions.LinScript.Segment.ID).get();
 
             return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
                     : leftName.compareTo(rightName);
