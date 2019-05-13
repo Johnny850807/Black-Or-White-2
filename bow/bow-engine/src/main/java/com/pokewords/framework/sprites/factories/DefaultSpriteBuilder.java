@@ -16,10 +16,8 @@ import java.util.Map;
 /**
  *
  *   1. 先做出 Sprite
- *   2. 再 Script.Parser.parse() 得出 Script
- *   3. SpriteWeaver用(Script, Sprite)完成Sprite
- *   TODO:
- *      -
+ *   2. 再 LinScript.Parser.parse() 得出 LinScript
+ *   3. SpriteWeaver用(LinScript, Sprite)完成Sprite
  *
  * @author nyngwang
  */
@@ -42,18 +40,21 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                                  .build();
     }
 
-    private IocFactory iocFactory; // for spriteWeaver constructor.
     private Script script;
     private boolean hasScript;
     private Sprite sprite;
     private Map<String, Component> nameToComponent;
     private boolean hasPropertiesComponent;
     private SpriteWeaver spriteWeaver;
+    private ScriptParser scriptParser;
+    private ScriptRulesParser scriptRulesParser;
 
 
     public DefaultSpriteBuilder(IocFactory iocFactory) {
-        this.iocFactory = iocFactory;
         init();
+        spriteWeaver = new SpriteWeaver(iocFactory);
+        scriptParser = iocFactory.scriptParser();
+        scriptRulesParser = iocFactory.scriptRulesParser();
     }
 
     @Override
@@ -81,19 +82,21 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public DefaultSpriteBuilder addComponent(String name, Component component) {
-        sprite.putComponent(name, component);
+        nameToComponent.put(name, component);
         hasPropertiesComponent = component instanceof PropertiesComponent;
         return this;
     }
 
     @Override
     public DefaultSpriteBuilder buildScriptFromPath(String path) {
+
         try {
-            script = Script.Parser.parse(FileUtility.read(path),
-                     ScriptSample.LinScript.RULES);
+            script = scriptParser.parse(FileUtility.read(path),
+                    scriptRulesParser.parse(ScriptDefinitions.LinScript.Samples.SCRIPT_RULES_TEXT));
             hasScript = true;
         } catch (IOException e) {
             e.printStackTrace();
+            init();
         }
         return this;
     }
@@ -121,7 +124,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     private void checkScript() {
         if (!hasScript) {
-            throw new SpriteBuilderException("DefaultSpriteBuilder: Script is not set.");
+            throw new SpriteBuilderException("DefaultSpriteBuilder: LinScript is not set.");
         }
     }
 
@@ -129,13 +132,13 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         if (!hasPropertiesComponent) {
             throw new SpriteBuilderException("DefaultSpriteBuilder: PropertiesComponent is not set.");
         }
+        sprite = new Sprite((PropertiesComponent) nameToComponent.get(Component.PROPERTIES));
         for (Map.Entry<String, Component> entry : nameToComponent.entrySet()) {
             sprite.putComponent(entry.getKey(), entry.getValue());
         }
     }
 
     private void startWeaver() {
-        spriteWeaver = new SpriteWeaver(iocFactory);
         spriteWeaver.weave(script, sprite);
     }
 }
