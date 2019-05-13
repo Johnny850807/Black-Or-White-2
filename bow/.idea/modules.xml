@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/bow-core/bow-core.iml" filepath="$PROJECT_DIR$/bow-core/bow-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/bow-engine/bow-engine.iml" filepath="$PROJECT_DIR$/bow-engine/bow-engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/bow-engine-demo/bow-engine-demo.iml" filepath="$PROJECT_DIR$/bow-engine-demo/bow-engine-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/watershot/watershot.iml" filepath="$PROJECT_DIR$/watershot/watershot.iml" />
     </modules>
   </component>
 </project>
