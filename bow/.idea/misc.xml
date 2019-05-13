@@ -4,14 +4,11 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/bow-core/pom.xml" />
-        <option value="$PROJECT_DIR$/bow-engine/pom.xml" />
-        <option value="$PROJECT_DIR$/bow-engine-demo/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
-        <option value="$PROJECT_DIR$/ningshot/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </set>
     </option>
   </component>

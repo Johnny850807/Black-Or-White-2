@@ -12,7 +12,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="bow" target="8" />
       <module name="bow-core" target="8" />
       <module name="bow-engine" target="8" />
       <module name="bow-engine-demo" target="8" />
