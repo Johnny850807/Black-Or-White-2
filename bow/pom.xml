@@ -12,7 +12,6 @@
     <modules>
         <module>bow-engine</module>
         <module>bow-core</module>
-        <module>joannafire</module>
     </modules>
 
     <dependencies>

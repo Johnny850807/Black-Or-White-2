@@ -28,7 +28,7 @@ public class Gallery {
      * @return image
      */
     public Image getImage(int pic){
-       return getImage(pic / row - 1, pic % col);
+       return getImage(pic / row, pic % col);
     }
 
     /**
