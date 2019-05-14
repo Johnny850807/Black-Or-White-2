@@ -21,11 +21,11 @@ import java.util.Map;
  *
  * @author nyngwang
  */
-public class DefaultSpriteBuilder implements SpriteBuilder {
+public class LinScriptSpriteBuilder implements SpriteBuilder {
 
     public static void main(String[] args) {
 
-        DefaultSpriteBuilder builder = new DefaultSpriteBuilder(new ReleaseIocFactory());
+        LinScriptSpriteBuilder builder = new LinScriptSpriteBuilder(new ReleaseIocFactory());
 
         Sprite mySprite = builder.init()
                                  .setFSMComponent(new FrameStateMachineComponent())
@@ -40,27 +40,26 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                                  .build();
     }
 
-    private Script script;
-    private boolean hasScript;
+
     private Sprite sprite;
     private Map<String, Component> nameToComponent;
     private boolean hasPropertiesComponent;
+    private Script script;
     private SpriteWeaver spriteWeaver;
     private ScriptParser scriptParser;
     private ScriptRulesParser scriptRulesParser;
 
 
-    public DefaultSpriteBuilder(IocFactory iocFactory) {
+    public LinScriptSpriteBuilder(IocFactory iocFactory) {
         init();
+        script = new LinScript();
         spriteWeaver = new SpriteWeaver(iocFactory);
         scriptParser = iocFactory.scriptParser();
         scriptRulesParser = iocFactory.scriptRulesParser();
     }
 
     @Override
-    public DefaultSpriteBuilder init() {
-        script = null;
-        hasScript = false;
+    public LinScriptSpriteBuilder init() {
         sprite = null;
         nameToComponent = new HashMap<>();
         hasPropertiesComponent = false;
@@ -68,32 +67,31 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public DefaultSpriteBuilder setFSMComponent(FrameStateMachineComponent frameStateMachineComponent) {
+    public LinScriptSpriteBuilder setFSMComponent(FrameStateMachineComponent frameStateMachineComponent) {
         nameToComponent.put(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
         return this;
     }
 
     @Override
-    public DefaultSpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
+    public LinScriptSpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
         nameToComponent.put(Component.PROPERTIES, propertiesComponent);
         hasPropertiesComponent = true;
         return this;
     }
 
     @Override
-    public DefaultSpriteBuilder addComponent(String name, Component component) {
+    public LinScriptSpriteBuilder addComponent(String name, Component component) {
         nameToComponent.put(name, component);
-        hasPropertiesComponent = component instanceof PropertiesComponent;
+        if (component instanceof PropertiesComponent)
+            hasPropertiesComponent = true;
         return this;
     }
 
     @Override
-    public DefaultSpriteBuilder buildScriptFromPath(String path) {
-
+    public LinScriptSpriteBuilder buildScriptFromPath(String path) {
         try {
             script = scriptParser.parse(FileUtility.read(path),
                     scriptRulesParser.parse(ScriptDefinitions.LinScript.Samples.SCRIPT_RULES_TEXT));
-            hasScript = true;
         } catch (IOException e) {
             e.printStackTrace();
             init();
@@ -102,14 +100,13 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public DefaultSpriteBuilder setScript(Script script) {
+    public LinScriptSpriteBuilder setScript(Script script) {
         this.script = script;
-        hasScript = script != null;
         return this;
     }
 
     @Override
-    public DefaultSpriteBuilder addWeaverNode(SpriteWeaver.Node node) {
+    public LinScriptSpriteBuilder addWeaverNode(SpriteWeaver.Node node) {
         spriteWeaver.addWeaverNode(node);
         return this;
     }
@@ -123,18 +120,20 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     private void checkScript() {
-        if (!hasScript) {
-            throw new SpriteBuilderException("DefaultSpriteBuilder: LinScript is not set.");
+        if (script == null) {
+            throw new SpriteBuilderException("LinScriptSpriteBuilder: LinScript is not set.");
         }
     }
 
     private void setupSprite() {
         if (!hasPropertiesComponent) {
-            throw new SpriteBuilderException("DefaultSpriteBuilder: PropertiesComponent is not set.");
+            throw new SpriteBuilderException("LinScriptSpriteBuilder: PropertiesComponent is not set.");
         }
         sprite = new Sprite((PropertiesComponent) nameToComponent.get(Component.PROPERTIES));
         for (Map.Entry<String, Component> entry : nameToComponent.entrySet()) {
-            sprite.putComponent(entry.getKey(), entry.getValue());
+            if (!entry.getKey().equals(Component.PROPERTIES)) {
+                sprite.putComponent(entry.getKey(), entry.getValue());
+            }
         }
     }
 

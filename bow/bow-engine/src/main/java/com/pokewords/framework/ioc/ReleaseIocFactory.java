@@ -1,7 +1,7 @@
 package com.pokewords.framework.ioc;
 
 import com.pokewords.framework.engine.UserConfig;
-import com.pokewords.framework.sprites.factories.DefaultSpriteBuilder;
+import com.pokewords.framework.sprites.factories.LinScriptSpriteBuilder;
 import com.pokewords.framework.sprites.factories.PrototypeFactory;
 import com.pokewords.framework.sprites.factories.DefaultPrototypeFactory;
 import com.pokewords.framework.sprites.factories.SpriteBuilder;
@@ -42,7 +42,7 @@ public class ReleaseIocFactory implements IocFactory{
 
     @Override
     public SpriteBuilder spriteBuilder() {
-        return new DefaultSpriteBuilder(this);
+        return new LinScriptSpriteBuilder(this);
     }
 
     @Override

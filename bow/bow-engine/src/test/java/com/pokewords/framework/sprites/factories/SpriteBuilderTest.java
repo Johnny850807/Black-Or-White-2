@@ -5,7 +5,6 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.factories.DefaultSpriteBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,11 +12,11 @@ import static org.junit.Assert.assertSame;
 
 public class SpriteBuilderTest extends AbstractTest {
     final String MOCK = "mock";
-    DefaultSpriteBuilder spriteBuilder;
+    LinScriptSpriteBuilder spriteBuilder;
 
     @Before
     public void setup(){
-        spriteBuilder = new DefaultSpriteBuilder(mock);
+        spriteBuilder = new LinScriptSpriteBuilder(mock);
     }
 
     @Test
