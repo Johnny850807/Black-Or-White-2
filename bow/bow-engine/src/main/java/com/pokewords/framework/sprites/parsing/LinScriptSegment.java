@@ -29,6 +29,7 @@ public class LinScriptSegment implements Segment {
     }
 
     private void init() {
+        parentScript = null;
         elements = new ArrayList<>();
         mappings = new Script.Mappings();
     }
@@ -88,11 +89,6 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public String toString() {
-        return toString(4);
-    }
-
-    @Override
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
@@ -116,5 +112,10 @@ public class LinScriptSegment implements Segment {
         resultBuilder
                 .append("</").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Segment.NAME)).append(">").append('\n');
         return resultBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toString(4);
     }
 }

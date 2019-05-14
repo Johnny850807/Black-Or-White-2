@@ -6,7 +6,6 @@ import java.util.Optional;
 
 
 /**
- *  
  *  @author nyngwang
  */
 public interface Element {

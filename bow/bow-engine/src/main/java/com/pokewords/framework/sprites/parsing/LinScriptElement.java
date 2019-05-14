@@ -3,6 +3,9 @@ package com.pokewords.framework.sprites.parsing;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author nyngwang
+ */
 public class LinScriptElement implements Element {
     private LinScriptSegment parentSegment;
     private Script.Mappings mappings;
@@ -13,6 +16,7 @@ public class LinScriptElement implements Element {
     }
 
     private void init() {
+        parentSegment = null;
         mappings = new Script.Mappings();
     }
 
