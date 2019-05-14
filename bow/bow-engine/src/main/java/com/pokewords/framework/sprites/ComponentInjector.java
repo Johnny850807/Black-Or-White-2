@@ -3,6 +3,8 @@ package com.pokewords.framework.sprites;
 import com.pokewords.framework.sprites.components.Component;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author nyngwang
@@ -20,13 +22,32 @@ public class ComponentInjector {
 	public static void inject(Sprite sprite) {
 		try {
 			for (Component component : sprite.getComponents()) {
-				Field field = component.getClass().getDeclaredField("sprite");
-				field.setAccessible(true);
-				field.set(component, sprite);
+				for (Field field : getInheritedPrivateFields(component.getClass())) {
+					if (field.getType() == Sprite.class) {
+						field.setAccessible(true);
+						field.set(component, sprite);
+						field.setAccessible(false);
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	private static List<Field> getInheritedPrivateFields(Class<?> type) {
+		List<Field> result = new ArrayList<Field>();
+
+		Class<?> i = type;
+		while (i != null && i != Object.class) {
+			for (Field field : i.getDeclaredFields()) {
+				if (!field.isSynthetic()) {
+					result.add(field);
+				}
+			}
+			i = i.getSuperclass();
+		}
+
+		return result;
+	}
 }
