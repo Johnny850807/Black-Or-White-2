@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class PropertiesComponent extends CloneableComponent {
 	private Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
@@ -126,10 +129,6 @@ public class PropertiesComponent extends CloneableComponent {
 
 	public interface PositionListener{
 		void onPositionUpdated(int x, int y);
-	}
-
-	public interface StateListener{
-		void onStateUpdated(String state);
 	}
 
 

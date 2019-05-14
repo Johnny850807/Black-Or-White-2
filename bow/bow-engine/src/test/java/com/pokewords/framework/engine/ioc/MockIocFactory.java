@@ -4,6 +4,8 @@ import com.pokewords.framework.engine.UserConfig;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.factories.PrototypeFactory;
 import com.pokewords.framework.sprites.factories.SpriteBuilder;
+import com.pokewords.framework.sprites.parsing.ScriptParser;
+import com.pokewords.framework.sprites.parsing.ScriptRulesParser;
 import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.inputs.InputManager;
 
@@ -30,6 +32,16 @@ public class MockIocFactory implements IocFactory {
 
     @Override
     public SpriteBuilder spriteBuilder() {
+        return null;
+    }
+
+    @Override
+    public ScriptParser scriptParser() {
+        return null;
+    }
+
+    @Override
+    public ScriptRulesParser scriptRulesParser() {
         return null;
     }
 }

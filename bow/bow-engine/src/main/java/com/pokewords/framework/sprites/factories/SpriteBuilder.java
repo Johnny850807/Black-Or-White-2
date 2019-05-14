@@ -17,7 +17,7 @@ public interface SpriteBuilder {
 
     SpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent);
 
-    SpriteBuilder addComponent(String name, Component component);
+    SpriteBuilder addComponent(Component component);
 
     SpriteBuilder buildScriptFromPath(String path);
 

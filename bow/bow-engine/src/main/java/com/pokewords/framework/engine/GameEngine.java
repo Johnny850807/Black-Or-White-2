@@ -8,7 +8,7 @@ import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 import com.pokewords.framework.views.inputs.InputManager;
 
 /**
- * @author Joanna
+ * @author johnny850807 (waterball)
  */
 public class GameEngine {
 	private IocFactory iocFactory;
@@ -50,7 +50,6 @@ public class GameEngine {
 			while (running)
 			{
 				Thread.sleep(timePerFrame);
-				inputManager.onUpdate(timePerFrame);
 				appStateMachine.onUpdate(timePerFrame);
 			}
 		} catch (InterruptedException ignored) {

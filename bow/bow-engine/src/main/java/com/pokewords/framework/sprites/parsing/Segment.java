@@ -4,27 +4,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- *  基本上maps不要直接傳給client
- * @author nyngwang
+ *  @author nyngwang
  */
 public interface Segment {
-    // Elements management
     Segment addElement(Element element);
     List<Element> getElementsByName(String elementName);
+    List<Element> getElements();
 
-    // Maps management
-    Segment putKVPair(String key, String value);
-    Segment putKVPair(String key, int value);
+    Segment put(String key, String value);
+    Segment put(String key, int value);
     Optional<String> getStringByKey(String key);
     Optional<Integer> getIntByKey(String key);
 
-    // parentScript management
-    Script getParentScript();
     Segment setParentScript(Script parentScript);
+    Script getParentScript();
 
-    // Not recommended
-    List<Element> getElements();
-
-    // print
     String toString(int indentation);
 }

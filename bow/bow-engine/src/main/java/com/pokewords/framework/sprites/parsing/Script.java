@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Script doesn't need to store its rules.
  * @author nyngwang
  */
 public interface Script {

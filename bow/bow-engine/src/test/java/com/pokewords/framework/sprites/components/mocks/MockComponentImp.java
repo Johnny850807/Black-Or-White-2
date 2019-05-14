@@ -1,15 +1,21 @@
 package com.pokewords.framework.sprites.components.mocks;
 
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class MockComponentImp extends Component implements MockComponent {
+    private Sprite sprite;  // this field is expected to be injected
     private boolean hasStarted = false;
     private boolean hasDestroyed = false;
     private boolean isRunning = false;
     private int enterCount;
     private int exitCount;
     private int updateCount = 0;
+
+    public Sprite getSprite() {
+        return sprite;
+    }
 
     @Override
     public void onAppStateCreate(AppStateWorld world) {

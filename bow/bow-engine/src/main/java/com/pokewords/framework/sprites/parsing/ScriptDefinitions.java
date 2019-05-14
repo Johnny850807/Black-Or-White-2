@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * @author nyngwang
  */
-public interface ScriptDef {
+public interface ScriptDefinitions {
     // Demo
     static void main(String[] args) {
         try {
@@ -33,10 +33,10 @@ public interface ScriptDef {
         }
 
         Element element = new LinScriptElement("bow");
-        element.putKVPair("hey", 123);
-        element.putKVPair("hey2", 456);
-        element.putKVPair("yo", "yo");
-        element.putKVPair("yoho", "yoho");
+        element.put("hey", 123);
+        element.put("hey2", 456);
+        element.put("yo", "yo");
+        element.put("yoho", "yoho");
         System.out.println(element);
     }
 
@@ -52,17 +52,17 @@ public interface ScriptDef {
         interface Element {
             String NAME = "element-name";
         }
-        interface Sample {
+        interface Samples {
             String SCRIPT_RULES_TEXT =
                     "Segment\n" +
                     "    gallery\n" +
-                    "        startPic ([1-9][0-9]+)|([0-9]) Integer\n" +
-                    "        endPic ([1-9][0-9]+)|([0-9]) Integer\n" +
+                    "        startPic Integer\n" +
+                    "        endPic Integer\n" +
                     "        path \\S+.(bmp|jpg|png) String\n" +
-                    "        w ([1-9][0-9]+)|([0-9]) Integer\n" +
-                    "        h ([1-9][0-9]+)|([0-9]) Integer\n" +
-                    "        row ([1-9][0-9]+)|([0-9]) Integer\n" +
-                    "        col ([1-9][0-9]+)|([0-9]) Integer\n" +
+                    "        w Integer\n" +
+                    "        h Integer\n" +
+                    "        row Integer\n" +
+                    "        col Integer\n" +
                     "    frame\n" +
                     "        segment-id ([1-9][0-9]+)|([0-9]) Integer\n" +
                     "        segment-description \\S+.*?\\S+ String\n" +
