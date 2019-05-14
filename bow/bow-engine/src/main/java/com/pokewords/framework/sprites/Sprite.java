@@ -106,18 +106,13 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public void putComponent(@NotNull String name, @NotNull Component component) {
 		if (component instanceof Renderable)
 			this.renderableComponents.add((Renderable) component);
+
 		if (component instanceof FrameStateMachineComponent)
 			this.frameStateMachineComponent = (FrameStateMachineComponent) component;
-		if (component instanceof CollidableComponent)
+		else if (component instanceof CollidableComponent)
 			this.collidableComponent = (CollidableComponent) component;
 		else if (component instanceof PropertiesComponent)
-		{
-			if (hasComponent(Component.PROPERTIES))
-				throw new SpriteException("PropertiesComponent's already set during the sprite's initiation, " +
-						"you can't override it with another one.");
-			else
-				this.propertiesComponent = (PropertiesComponent) component;
-		}
+			this.propertiesComponent = (PropertiesComponent) component;
 
 		components.put(name, component);
 	}
