@@ -1,18 +1,16 @@
 package com.pokewords.framework.engine.utils;
 
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.ClickableComponent;
 import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
-import com.pokewords.framework.sprites.components.mocks.MockFrame;
-import com.pokewords.framework.sprites.components.mocks.MockFrameStateMachineComponent;
-import com.pokewords.framework.sprites.components.mocks.MockPropertiesComponent;
+import com.pokewords.framework.sprites.components.mocks.*;
 
 
 import java.awt.*;
 
-import static com.pokewords.framework.engine.utils.StubFactory.FSCM.createFrameStateMachineComponentStub;
+import static com.pokewords.framework.engine.utils.StubFactory.FrameStateMachineComponents.createFrameStateMachineComponentStub;
 
 /**
  * This utility contains all the util methods for creating Stubs that can easily be tested.
@@ -21,10 +19,9 @@ import static com.pokewords.framework.engine.utils.StubFactory.FSCM.createFrameS
 public interface StubFactory {
     interface Sprites {
         interface SimpleSprite {
-            Rectangle STUB_BODY = new Rectangle(50, 50, 100, 100);
-            String STUB_TYPE = "Stub";
-            String COLLIDABLE_COMP_NAME = "collidable component name";
-            CollidableComponent COLLIDABLE_COMPONENT = CollidableComponent.getInstance();
+            Rectangle BODY = new Rectangle(50, 50, 100, 100);
+            String TYPE = "Stub";
+            CollidableComponent COLLIDABLE_COMPONENT = new CollidableComponent();
 
             /**
              * @return Sprite spec:
@@ -36,54 +33,53 @@ public interface StubFactory {
              *      - type: "Stub"
              *
              * - FrameStateMachineComponent
-             *      @see FSCM#createFrameStateMachineComponentStub()
+             *      @see FrameStateMachineComponents#createFrameStateMachineComponentStub()
              *
              * - CollidableComponent
+             * - MockClickableComponent
              */
             static Sprite createSimpleSprite(){
                 PropertiesComponent propertiesComponent = new PropertiesComponent();
                 FrameStateMachineComponent frameStateMachineComponent = createFrameStateMachineComponentStub();
                 Sprite spriteStub = new Sprite(propertiesComponent);
-                spriteStub.putComponent("FSM", frameStateMachineComponent);
-                spriteStub.setBody(STUB_BODY);
-                spriteStub.setType(STUB_TYPE);
-                spriteStub.putComponent(COLLIDABLE_COMP_NAME, COLLIDABLE_COMPONENT);
+                spriteStub.putComponent(frameStateMachineComponent);
+                spriteStub.setBody(BODY);
+                spriteStub.setType(TYPE);
+                spriteStub.putComponent(COLLIDABLE_COMPONENT);
                 return spriteStub;
             }
         }
 
         interface SpriteWithOnlyMockComponent {
             String TYPE = "Type";
-            String MOCK1 = "Mock1";
-            String MOCK2 = "Mock2";
-            String MOCK3 = "Mock3";
 
             /**
              * @return Spec:
-             * 3 MockComponentImp :
-             *      - their names are: 'Mock1', 'Mock2' and 'Mock3'
+             * MockComponent1,
+             * MockComponent2,
+             * MockComponent3
              * MockPropertiesComponent :
              *      - type: 'Type'
              * MockFrameStateMachineComponent : empty
              */
             static Sprite createSpriteWithOnlyMockComponents() {
-                MockComponentImp mockComponent1 = new MockComponentImp();
-                MockComponentImp mockComponent2 = new MockComponentImp();
-                MockComponentImp mockComponent3 = new MockComponentImp();
+                MockComponent1 mockComponent1 = new MockComponent1();
+                MockComponent2 mockComponent2 = new MockComponent2();
+                MockComponent3 mockComponent3 = new MockComponent3();
                 MockPropertiesComponent pc = new MockPropertiesComponent(TYPE);
-                MockFrameStateMachineComponent mfsmc = new MockFrameStateMachineComponent();
+                MockFrameStateMachineComponent fsmc = new MockFrameStateMachineComponent();
 
                 Sprite sprite = new Sprite(pc);
-                sprite.putComponent("FSM", mfsmc);
-                sprite.putComponent(MOCK1, mockComponent1);
-                sprite.putComponent(MOCK2, mockComponent2);
-                sprite.putComponent(MOCK3, mockComponent3);
+                sprite.putComponent(fsmc);
+                sprite.putComponent(mockComponent1);
+                sprite.putComponent(mockComponent2);
+                sprite.putComponent(mockComponent3);
                 return sprite;
             }
         }
     }
 
-    interface FSCM {
+    interface FrameStateMachineComponents {
         MockFrame FRAME_A = new MockFrame("A");
         MockFrame FRAME_B = new MockFrame("B");
         MockFrame FRAME_C = new MockFrame("C");

@@ -58,13 +58,20 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 			throw new SpriteException("The sprite doesn't have the FrameStateMachineComponent, it cannot be triggered.");
 	}
 
-
 	public FrameStateMachineComponent getFrameStateMachineComponent() {
 		return getComponent(FrameStateMachineComponent.class);
 	}
 
 	public PropertiesComponent getPropertiesComponent() {
 		return getComponent(PropertiesComponent.class);
+	}
+
+	public CollidableComponent getCollidableComponent() {
+		return getComponent(CollidableComponent.class);
+	}
+
+	public ClickableComponent getClickableComponent() {
+		return getComponent(ClickableComponent.class);
 	}
 
 	public boolean isCollidable() {

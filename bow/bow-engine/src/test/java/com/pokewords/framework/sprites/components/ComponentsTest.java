@@ -131,13 +131,7 @@ public class ComponentsTest extends AbstractTest {
     }
 
     private FrameStateMachineComponent givenFrameStateMachineComponent() {
-        return StubFactory.FSCM.createFrameStateMachineComponentStub();
+        return StubFactory.FrameStateMachineComponents.createFrameStateMachineComponentStub();
     }
 
-    @Test
-    public void testCollidableComponentEqualsAndHashcode() {
-        assertEquals(CollidableComponent.getInstance(), CollidableComponent.getInstance());
-        assertEquals(CollidableComponent.getInstance().hashCode(),
-                CollidableComponent.getInstance().hashCode());
-    }
 }
