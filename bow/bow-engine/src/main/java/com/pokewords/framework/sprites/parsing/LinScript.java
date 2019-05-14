@@ -30,11 +30,13 @@ public class LinScript implements Script {
     }
 
     @Override
-    public Optional<Segment> getSegmentById(String segmentId) {
-        for (Segment segment : segments)
-            if (segment.getStringByKey(ScriptDefinitions.LinScript.Segment.ID).equals(segmentId))
-                return Optional.of(segment);
-        return Optional.empty();
+    public Segment getSegmentById(String segmentId) {
+        for (Segment segment : segments) {
+            if (segment.getStringByKey(ScriptDefinitions.LinScript.Segment.ID).equals(segmentId)) {
+                return segment;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -54,10 +56,10 @@ public class LinScript implements Script {
         StringBuilder resultBuilder = new StringBuilder();
 
         segments.sort((o1, o2) -> {
-            String leftName = o1.getStringByKey(ScriptDefinitions.LinScript.Segment.NAME).get();
-            String rightName = o2.getStringByKey(ScriptDefinitions.LinScript.Segment.NAME).get();
-            int leftId = o1.getIntByKey(ScriptDefinitions.LinScript.Segment.ID).get();
-            int rightId = o2.getIntByKey(ScriptDefinitions.LinScript.Segment.ID).get();
+            String leftName = o1.getStringByKey(ScriptDefinitions.LinScript.Segment.NAME);
+            String rightName = o2.getStringByKey(ScriptDefinitions.LinScript.Segment.NAME);
+            int leftId = o1.getIntByKey(ScriptDefinitions.LinScript.Segment.ID);
+            int rightId = o2.getIntByKey(ScriptDefinitions.LinScript.Segment.ID);
 
             return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
                     : leftName.compareTo(rightName);

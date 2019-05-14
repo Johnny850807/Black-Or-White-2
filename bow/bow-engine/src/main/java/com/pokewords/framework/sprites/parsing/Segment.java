@@ -13,8 +13,8 @@ public interface Segment {
 
     Segment put(String key, String value);
     Segment put(String key, int value);
-    Optional<String> getStringByKey(String key);
-    Optional<Integer> getIntByKey(String key);
+    String getStringByKey(String key);
+    Integer getIntByKey(String key);
 
     Segment setParentScript(Script parentScript);
     Script getParentScript();

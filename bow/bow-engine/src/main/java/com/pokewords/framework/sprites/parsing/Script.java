@@ -23,7 +23,7 @@ public interface Script {
     }
     Script addSegment(Segment segment);
     List<Segment> getSegmentsByName(String segmentName);
-    Optional<Segment> getSegmentById(String segmentId);
+    Segment getSegmentById(String segmentId);
     List<Segment> getSegmentsByDescription(String segmentDescription);
     List<Segment> getSegments();
 

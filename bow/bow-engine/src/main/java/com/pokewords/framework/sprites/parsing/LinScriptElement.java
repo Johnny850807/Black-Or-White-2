@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.engine.exceptions.ElementException;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,13 +35,19 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public Optional<String> getStringByKey(String key) {
-        return Optional.of(mappings.stringMap.get(key));
+    public String getStringByKey(String key) {
+        String result = mappings.stringMap.get(key);
+        if (result == null)
+            throw new ElementException(String.format("LinScriptElement: attribute %s does not exist", key));
+        return result;
     }
 
     @Override
-    public Optional<Integer> getIntByKey(String key) {
-        return Optional.of(mappings.integerMap.get(key));
+    public Integer getIntByKey(String key) {
+        Integer result = mappings.integerMap.get(key);
+        if (result == null)
+            throw new ElementException(String.format("LinScriptElement: attribute %s does not exist", key));
+        return result;
     }
 
     @Override
