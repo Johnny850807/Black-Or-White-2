@@ -1,7 +1,6 @@
 package com.pokewords.framework.engine.utils;
 
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.ClickableComponent;
 import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
@@ -42,10 +41,10 @@ public interface StubFactory {
                 PropertiesComponent propertiesComponent = new PropertiesComponent();
                 FrameStateMachineComponent frameStateMachineComponent = createFrameStateMachineComponentStub();
                 Sprite spriteStub = new Sprite(propertiesComponent);
-                spriteStub.putComponent(frameStateMachineComponent);
+                spriteStub.addComponent(frameStateMachineComponent);
                 spriteStub.setBody(BODY);
                 spriteStub.setType(TYPE);
-                spriteStub.putComponent(COLLIDABLE_COMPONENT);
+                spriteStub.addComponent(COLLIDABLE_COMPONENT);
                 return spriteStub;
             }
         }
@@ -70,10 +69,10 @@ public interface StubFactory {
                 MockFrameStateMachineComponent fsmc = new MockFrameStateMachineComponent();
 
                 Sprite sprite = new Sprite(pc);
-                sprite.putComponent(fsmc);
-                sprite.putComponent(mockComponent1);
-                sprite.putComponent(mockComponent2);
-                sprite.putComponent(mockComponent3);
+                sprite.addComponent(fsmc);
+                sprite.addComponent(mockComponent1);
+                sprite.addComponent(mockComponent2);
+                sprite.addComponent(mockComponent3);
                 return sprite;
             }
         }

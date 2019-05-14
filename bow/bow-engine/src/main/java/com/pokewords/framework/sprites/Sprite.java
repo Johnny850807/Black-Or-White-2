@@ -37,7 +37,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	public Sprite(final PropertiesComponent propertiesComponent) {
-		putComponent(propertiesComponent);
+		addComponent(propertiesComponent);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * Add a component by its name.
 	 * @param component the added component.
 	 */
-	public <T extends Component> void putComponent(@NotNull Component component) {
+	public <T extends Component> void addComponent(@NotNull Component component) {
 		components.put(component.getClass(), component);
 	}
 

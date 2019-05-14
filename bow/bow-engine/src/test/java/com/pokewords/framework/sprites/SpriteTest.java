@@ -82,9 +82,9 @@ public class SpriteTest extends AbstractTest {
         MockFrame rf3 = new MockFrame("rf3");
         r1.addFrame(rf3);
 
-        sprite.putComponent(r1);
-        sprite.putComponent(r2);
-        sprite.putComponent(r3);
+        sprite.addComponent(r1);
+        sprite.addComponent(r2);
+        sprite.addComponent(r3);
 
         Collection<? extends Frame> currentFrames = sprite.getRenderedFrames();
         assertTrue(currentFrames.contains(StubFactory.FrameStateMachineComponents.FRAME_A));  //the initial state of the stub should be contained
