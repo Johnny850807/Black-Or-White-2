@@ -40,6 +40,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		addComponent(propertiesComponent);
 	}
 
+	public Sprite(final Collection<Component> components) {
+		components.forEach(this::addComponent);
+	}
+
 	/**
 	 * @return all components the sprite owns.
 	 */
@@ -225,7 +229,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 			throw new RuntimeException(e);
 		}
 	}
-
 
 	/**
 	 * Make the components injected.

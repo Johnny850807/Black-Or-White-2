@@ -6,8 +6,6 @@ import java.awt.geom.Point2D;
 //TODO Define sufficient methods
 public interface InputManager extends Inputs {
 
-    void onUpdate(double timePerFrame);
-
     /**
      * Add an event releasing the held button up
      * @param key the button's key
