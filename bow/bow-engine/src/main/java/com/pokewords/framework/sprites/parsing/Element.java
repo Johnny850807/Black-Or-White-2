@@ -6,8 +6,8 @@ import java.util.Optional;
 
 
 /**
- *  基本上maps不要直接傳給client
- * @author nyngwang
+ *  
+ *  @author nyngwang
  */
 public interface Element {
     Element put(String key, String value);
