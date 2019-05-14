@@ -17,13 +17,13 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public Element putKVPair(String key, String value) {
+    public Element put(String key, String value) {
         mappings.stringMap.put(key, value);
         return this;
     }
 
     @Override
-    public Element putKVPair(String key, int value) {
+    public Element put(String key, int value) {
         mappings.integerMap.put(key, value);
         return this;
     }

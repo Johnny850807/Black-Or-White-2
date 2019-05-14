@@ -10,16 +10,13 @@ import java.util.Optional;
  * @author nyngwang
  */
 public interface Element {
-    // Maps management
-    Element putKVPair(String key, String value);
-    Element putKVPair(String key, int value);
+    Element put(String key, String value);
+    Element put(String key, int value);
     Optional<String> getStringByKey(String key);
     Optional<Integer> getIntByKey(String key);
 
-    // parentSegment management
-    Segment getParentSegment();
     Element setParentSegment(Segment parentSegment);
+    Segment getParentSegment();
 
-    // print
     String toString(int indentation);
 }

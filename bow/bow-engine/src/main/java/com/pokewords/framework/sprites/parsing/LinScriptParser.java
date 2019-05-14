@@ -137,8 +137,8 @@ public class LinScriptParser implements ScriptParser {
                 break;
             case ScriptDefinitions.LinScript.ELEMENT:
                 switch (linScriptRules.getValidElementKVRules().get(key).type) {
-                    case "Integer": element.putKVPair(key, Integer.parseInt(value)); break;
-                    case "String": element.putKVPair(key, value); break;
+                    case "Integer": element.put(key, Integer.parseInt(value)); break;
+                    case "String": element.put(key, value); break;
                 }
                 break;
             default:
