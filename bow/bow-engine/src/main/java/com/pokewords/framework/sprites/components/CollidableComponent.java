@@ -16,7 +16,7 @@ public class CollidableComponent extends Component implements Shareable {
 	 */
 	private Set<Object> ignoredTypes;
 
-	private CollidableComponent(Object ...ignoredTypes) {
+	public CollidableComponent(Object ...ignoredTypes) {
 		this.ignoredTypes = new HashSet<>(Arrays.asList(ignoredTypes));
 	}
 

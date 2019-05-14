@@ -128,8 +128,8 @@ public class SpriteInitializer {
             return this;
         }
 
-        public SpriteDeclarator collidable() {
-            declaration.componentMap.put(Component.COLLIDABLE, CollidableComponent.getInstance());
+        public SpriteDeclarator collidable(Object ...ignoredTypes) {
+            declaration.componentMap.put(Component.COLLIDABLE, new CollidableComponent(ignoredTypes));
             return this;
         }
 

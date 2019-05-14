@@ -5,7 +5,6 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.factories.DefaultSpriteBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +33,7 @@ public class SpriteBuilderTest extends AbstractTest {
 
         assertSame(propertiesComponent, sprite.getPropertiesComponent());
         assertSame(fsmc, sprite.getFrameStateMachineComponent());
-        assertSame(mockComponent, sprite.getComponentByName(MOCK));
+        assertSame(mockComponent, sprite.getComponent(MOCK));
     }
 
 }

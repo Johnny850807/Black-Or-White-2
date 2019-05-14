@@ -123,9 +123,9 @@ public class SpriteTest extends AbstractTest {
         Sprite sprite = createSpriteWithOnlyMockComponents();
 
         // when remove those mock components by their names
-        sprite.removeComponentByName(MOCK1);
-        sprite.removeComponentByName(MOCK2);
-        sprite.removeComponentByName(MOCK3);
+        sprite.removeComponent(MOCK1);
+        sprite.removeComponent(MOCK2);
+        sprite.removeComponent(MOCK3);
 
         // then those components should be removed successfully
         assertFalse(sprite.hasComponent(MOCK1));
