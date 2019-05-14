@@ -1,11 +1,11 @@
 package com.pokewords.framework.sprites.components.mocks;
 
-import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.ClickableComponent;
+import com.pokewords.framework.sprites.components.marks.Shareable;
 
-public class MockComponentImp extends Component implements MockComponent {
-    private Sprite sprite;  // this field is expected to be injected
+public class MockClickableComponent extends ClickableComponent implements Shareable, MockComponent {
+    private int clickCount = 0;
     private boolean hasStarted = false;
     private boolean hasDestroyed = false;
     private boolean isRunning = false;
@@ -13,8 +13,9 @@ public class MockComponentImp extends Component implements MockComponent {
     private int exitCount;
     private int updateCount = 0;
 
-    public Sprite getSprite() {
-        return sprite;
+    @Override
+    public void onClick() {
+        clickCount ++;
     }
 
     @Override
@@ -47,6 +48,7 @@ public class MockComponentImp extends Component implements MockComponent {
         updateCount++;
     }
 
+
     @Override
     public boolean hasStarted() {
         return hasStarted;
@@ -76,6 +78,4 @@ public class MockComponentImp extends Component implements MockComponent {
     public int getUpdateCount() {
         return updateCount;
     }
-
-
 }

@@ -131,10 +131,6 @@ public class PropertiesComponent extends CloneableComponent {
 		void onPositionUpdated(int x, int y);
 	}
 
-	public interface StateListener{
-		void onStateUpdated(String state);
-	}
-
 
 	public void addPositionListener(PositionListener positionListener){
 		positionListeners.add(positionListener);
