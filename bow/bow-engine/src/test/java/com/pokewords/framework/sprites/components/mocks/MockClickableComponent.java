@@ -1,10 +1,12 @@
 package com.pokewords.framework.sprites.components.mocks;
 
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.ClickableComponent;
 import com.pokewords.framework.sprites.components.marks.Shareable;
 
 public class MockClickableComponent extends ClickableComponent implements Shareable, MockComponent {
+    private Sprite sprite;
     private int clickCount = 0;
     private boolean hasStarted = false;
     private boolean hasDestroyed = false;
@@ -48,6 +50,11 @@ public class MockClickableComponent extends ClickableComponent implements Sharea
         updateCount++;
     }
 
+
+    @Override
+    public Sprite getSprite() {
+        return sprite;
+    }
 
     @Override
     public boolean hasStarted() {
