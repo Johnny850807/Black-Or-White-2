@@ -1,8 +1,6 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.engine.exceptions.MandatoryComponentRequiredException;
-import com.pokewords.framework.engine.exceptions.SpriteException;
-import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
 import com.pokewords.framework.sprites.components.marks.Shareable;
@@ -13,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ComponentMap extends HashMap<Class<? extends Component>, Component> implements Renderable{
+public class ComponentMap extends HashMap<Class<? extends Component>, Component> implements Renderable {
     private Set<Renderable> renderableComponents = new HashSet<>();
 
     @Override
