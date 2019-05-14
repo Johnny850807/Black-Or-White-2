@@ -46,12 +46,12 @@ public class LinScriptSegment implements Segment {
 
 
     @Override
-    public Segment putKVPair(String key, String value) {
+    public Segment put(String key, String value) {
         mappings.stringMap.put(key, value);
         return this;
     }
     @Override
-    public Segment putKVPair(String key, int value) {
+    public Segment put(String key, int value) {
         mappings.integerMap.put(key, value);
         return this;
     }

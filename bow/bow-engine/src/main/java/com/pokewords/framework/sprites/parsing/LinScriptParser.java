@@ -131,8 +131,8 @@ public class LinScriptParser implements ScriptParser {
         switch (whom) {
             case ScriptDefinitions.LinScript.SEGMENT:
                 switch (linScriptRules.getValidSegmentKVRules().get(key).type) {
-                    case "Integer": segment.putKVPair(key, Integer.parseInt(value)); break;
-                    case "String": segment.putKVPair(key, value); break;
+                    case "Integer": segment.put(key, Integer.parseInt(value)); break;
+                    case "String": segment.put(key, value); break;
                 }
                 break;
             case ScriptDefinitions.LinScript.ELEMENT:
