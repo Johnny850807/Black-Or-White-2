@@ -21,11 +21,11 @@ import java.util.Map;
  *
  * @author nyngwang
  */
-public class LinScriptSpriteBuilder implements SpriteBuilder {
+public class DefaultSpriteBuilder implements SpriteBuilder {
 
     public static void main(String[] args) {
 
-        LinScriptSpriteBuilder builder = new LinScriptSpriteBuilder(new ReleaseIocFactory());
+        DefaultSpriteBuilder builder = new DefaultSpriteBuilder(new ReleaseIocFactory());
 
         Sprite mySprite = builder.init()
                                  .setFSMComponent(new FrameStateMachineComponent())
@@ -50,7 +50,7 @@ public class LinScriptSpriteBuilder implements SpriteBuilder {
     private ScriptRulesParser scriptRulesParser;
 
 
-    public LinScriptSpriteBuilder(IocFactory iocFactory) {
+    public DefaultSpriteBuilder(IocFactory iocFactory) {
         init();
         script = new LinScript();
         spriteWeaver = new SpriteWeaver(iocFactory);
@@ -59,7 +59,7 @@ public class LinScriptSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public LinScriptSpriteBuilder init() {
+    public DefaultSpriteBuilder init() {
         sprite = null;
         nameToComponent = new HashMap<>();
         hasPropertiesComponent = false;
@@ -67,20 +67,20 @@ public class LinScriptSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public LinScriptSpriteBuilder setFSMComponent(FrameStateMachineComponent frameStateMachineComponent) {
+    public DefaultSpriteBuilder setFSMComponent(FrameStateMachineComponent frameStateMachineComponent) {
         nameToComponent.put(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
         return this;
     }
 
     @Override
-    public LinScriptSpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
+    public DefaultSpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
         nameToComponent.put(Component.PROPERTIES, propertiesComponent);
         hasPropertiesComponent = true;
         return this;
     }
 
     @Override
-    public LinScriptSpriteBuilder addComponent(String name, Component component) {
+    public DefaultSpriteBuilder addComponent(String name, Component component) {
         nameToComponent.put(name, component);
         if (component instanceof PropertiesComponent)
             hasPropertiesComponent = true;
@@ -88,7 +88,7 @@ public class LinScriptSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public LinScriptSpriteBuilder buildScriptFromPath(String path) {
+    public DefaultSpriteBuilder buildScriptFromPath(String path) {
         try {
             script = scriptParser.parse(FileUtility.read(path),
                     scriptRulesParser.parse(ScriptDefinitions.LinScript.Samples.SCRIPT_RULES_TEXT));
@@ -100,13 +100,13 @@ public class LinScriptSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public LinScriptSpriteBuilder setScript(Script script) {
+    public DefaultSpriteBuilder setScript(Script script) {
         this.script = script;
         return this;
     }
 
     @Override
-    public LinScriptSpriteBuilder addWeaverNode(SpriteWeaver.Node node) {
+    public DefaultSpriteBuilder addWeaverNode(SpriteWeaver.Node node) {
         spriteWeaver.addWeaverNode(node);
         return this;
     }
@@ -121,13 +121,13 @@ public class LinScriptSpriteBuilder implements SpriteBuilder {
 
     private void checkScript() {
         if (script == null) {
-            throw new SpriteBuilderException("LinScriptSpriteBuilder: LinScript is not set.");
+            throw new SpriteBuilderException("DefaultSpriteBuilder: LinScript is not set.");
         }
     }
 
     private void setupSprite() {
         if (!hasPropertiesComponent) {
-            throw new SpriteBuilderException("LinScriptSpriteBuilder: PropertiesComponent is not set.");
+            throw new SpriteBuilderException("DefaultSpriteBuilder: PropertiesComponent is not set.");
         }
         sprite = new Sprite((PropertiesComponent) nameToComponent.get(Component.PROPERTIES));
         for (Map.Entry<String, Component> entry : nameToComponent.entrySet()) {
