@@ -9,9 +9,7 @@ import com.pokewords.framework.sprites.parsing.*;
 import com.pokewords.framework.ioc.IocFactory;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -30,7 +28,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         Sprite mySprite = builder.init()
                                  .setFSMComponent(new FrameStateMachineComponent())
                                  .setPropertiesComponent(new PropertiesComponent())
-                                 .addComponent(Component.COLLIDABLE, CollidableComponent.getInstance())
+                                 .addComponent(new CollidableComponent())
                                  .buildScriptFromPath("path/to/script_text")
                                  .setScript(null)
                                  .addWeaverNode((script, sprite) -> {
@@ -40,11 +38,12 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                                  .build();
     }
 
-    private Script script;
-    private boolean hasScript;
+
     private Sprite sprite;
-    private Map<String, Component> nameToComponent;
+    private Set<Component> components;
     private boolean hasPropertiesComponent;
+    private PropertiesComponent propertiesComponent;
+    private Script script;
     private SpriteWeaver spriteWeaver;
     private ScriptParser scriptParser;
     private ScriptRulesParser scriptRulesParser;
@@ -52,6 +51,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     public DefaultSpriteBuilder(IocFactory iocFactory) {
         init();
+        script = new LinScript();
         spriteWeaver = new SpriteWeaver(iocFactory);
         scriptParser = iocFactory.scriptParser();
         scriptRulesParser = iocFactory.scriptRulesParser();
@@ -59,41 +59,38 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public DefaultSpriteBuilder init() {
-        script = null;
-        hasScript = false;
         sprite = null;
-        nameToComponent = new HashMap<>();
+        components = new HashSet<>();
         hasPropertiesComponent = false;
         return this;
     }
 
     @Override
     public DefaultSpriteBuilder setFSMComponent(FrameStateMachineComponent frameStateMachineComponent) {
-        nameToComponent.put(Component.FRAME_STATE_MACHINE, frameStateMachineComponent);
+        components.add(frameStateMachineComponent);
         return this;
     }
 
     @Override
     public DefaultSpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
-        nameToComponent.put(Component.PROPERTIES, propertiesComponent);
+        components.add(propertiesComponent);
         hasPropertiesComponent = true;
         return this;
     }
 
     @Override
-    public DefaultSpriteBuilder addComponent(String name, Component component) {
-        nameToComponent.put(name, component);
-        hasPropertiesComponent = component instanceof PropertiesComponent;
+    public DefaultSpriteBuilder addComponent(Component component) {
+        components.add(component);
+        if (component instanceof PropertiesComponent)
+            hasPropertiesComponent = true;
         return this;
     }
 
     @Override
     public DefaultSpriteBuilder buildScriptFromPath(String path) {
-
         try {
             script = scriptParser.parse(FileUtility.read(path),
-                    scriptRulesParser.parse(ScriptDefinitions.LinScript.Samples.SCRIPT_RULES_TEXT));
-            hasScript = true;
+                     ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
         } catch (IOException e) {
             e.printStackTrace();
             init();
@@ -104,7 +101,6 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     @Override
     public DefaultSpriteBuilder setScript(Script script) {
         this.script = script;
-        hasScript = script != null;
         return this;
     }
 
@@ -123,8 +119,8 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     private void checkScript() {
-        if (!hasScript) {
-            throw new SpriteBuilderException("DefaultSpriteBuilder: LinScript is not set.");
+        if (script == null) {
+            throw new SpriteBuilderException("DefaultSpriteBuilder: Script hasn't been set.");
         }
     }
 
@@ -132,10 +128,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         if (!hasPropertiesComponent) {
             throw new SpriteBuilderException("DefaultSpriteBuilder: PropertiesComponent is not set.");
         }
-        sprite = new Sprite((PropertiesComponent) nameToComponent.get(Component.PROPERTIES));
-        for (Map.Entry<String, Component> entry : nameToComponent.entrySet()) {
-            sprite.putComponent(entry.getKey(), entry.getValue());
-        }
+        sprite = new Sprite(components);
     }
 
     private void startWeaver() {

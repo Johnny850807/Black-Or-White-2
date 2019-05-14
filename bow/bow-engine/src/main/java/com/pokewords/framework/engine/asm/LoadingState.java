@@ -25,7 +25,7 @@ public class LoadingState extends AppState {
 		super.onAppStateCreate(world);
 
 		getSpriteInitializer().declare(LOADING_TEXT)
-							.with(STRINGS, new StringComponent("Loading ..."));
+							.with(new StringComponent("Loading ..."));
 	}
 
 	@Override

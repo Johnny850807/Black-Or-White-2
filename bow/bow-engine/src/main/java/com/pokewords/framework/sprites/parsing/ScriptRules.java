@@ -3,6 +3,9 @@ package com.pokewords.framework.sprites.parsing;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author nyngwang
+ */
 public interface ScriptRules {
     class Pair {
         public String regex;

@@ -81,7 +81,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * Add the frames to the rendered layer.
      * @param renderedFrames The Frame will be add in the rendered layer.
      */
-    private void addFramesToRenderedLayer(Collection<Frame> renderedFrames) {
+    private void addFramesToRenderedLayer(Collection<? extends Frame> renderedFrames) {
         for (Frame frame: renderedFrames) {
             addFrameToRenderedLayer(frame, frame.getLayerIndex());
         }

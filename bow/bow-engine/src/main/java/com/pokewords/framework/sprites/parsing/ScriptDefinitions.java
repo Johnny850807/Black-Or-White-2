@@ -33,10 +33,10 @@ public interface ScriptDefinitions {
         }
 
         Element element = new LinScriptElement("bow");
-        element.putKVPair("hey", 123);
-        element.putKVPair("hey2", 456);
-        element.putKVPair("yo", "yo");
-        element.putKVPair("yoho", "yoho");
+        element.put("hey", 123);
+        element.put("hey2", 456);
+        element.put("yo", "yo");
+        element.put("yoho", "yoho");
         System.out.println(element);
     }
 

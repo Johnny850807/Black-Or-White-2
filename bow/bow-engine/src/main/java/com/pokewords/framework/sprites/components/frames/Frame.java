@@ -1,7 +1,5 @@
 package com.pokewords.framework.sprites.components.frames;
 
-import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
 public interface Frame extends Cloneable {

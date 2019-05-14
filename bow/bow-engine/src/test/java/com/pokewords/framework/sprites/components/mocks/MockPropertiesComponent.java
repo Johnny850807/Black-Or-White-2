@@ -1,9 +1,11 @@
 package com.pokewords.framework.sprites.components.mocks;
 
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class MockPropertiesComponent extends PropertiesComponent implements MockComponent {
+    private Sprite sprite;
     private boolean hasStarted = false;
     private boolean hasDestroyed = false;
     private boolean isRunning = false;
@@ -45,6 +47,11 @@ public class MockPropertiesComponent extends PropertiesComponent implements Mock
         updateCount++;
     }
 
+
+    @Override
+    public Sprite getSprite() {
+        return sprite;
+    }
 
     @Override
     public boolean hasStarted() {

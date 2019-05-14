@@ -6,10 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * for function includes setup- prefix: includes validation and creation.
  * @author nyngwang
  */
 public class LinScriptParser implements ScriptParser {
-
     private LinScript linScript;
     private LinScriptRules linScriptRules;
     private Segment segment;
@@ -48,11 +48,9 @@ public class LinScriptParser implements ScriptParser {
 
     private void setupSegment(String segmentName, String segmentId,
                               String segmentDescription, String segmentText) {
-        // 創建前validate
         validateNameOfWhom(segmentName, ScriptDefinitions.LinScript.SEGMENT);
         segment = new LinScriptSegment(segmentName, Integer.parseInt(segmentId), segmentDescription);
         setupSegmentKVPairsAndElementsIfExist(segmentText);
-        // 與parent的相互設置放在setup中
         linScript.addSegment(segment);
         segment.setParentScript(linScript);
     }
@@ -75,7 +73,6 @@ public class LinScriptParser implements ScriptParser {
                 "(?:\\s*(<(\\w+)>.*?</\\2>)\\s*)|([^<]+)",
                 Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(segmentText);
-        // KVPairs or single Element
         while (matcher.find()) {
             String kvPairsText = matcher.group(3);
             String elementText = matcher.group(1);
@@ -131,14 +128,14 @@ public class LinScriptParser implements ScriptParser {
         switch (whom) {
             case ScriptDefinitions.LinScript.SEGMENT:
                 switch (linScriptRules.getValidSegmentKVRules().get(key).type) {
-                    case "Integer": segment.putKVPair(key, Integer.parseInt(value)); break;
-                    case "String": segment.putKVPair(key, value); break;
+                    case "Integer": segment.put(key, Integer.parseInt(value)); break;
+                    case "String": segment.put(key, value); break;
                 }
                 break;
             case ScriptDefinitions.LinScript.ELEMENT:
                 switch (linScriptRules.getValidElementKVRules().get(key).type) {
-                    case "Integer": element.putKVPair(key, Integer.parseInt(value)); break;
-                    case "String": element.putKVPair(key, value); break;
+                    case "Integer": element.put(key, Integer.parseInt(value)); break;
+                    case "String": element.put(key, value); break;
                 }
                 break;
             default:
@@ -146,7 +143,6 @@ public class LinScriptParser implements ScriptParser {
         }
     }
 
-    // 注意是一個element而不是多個
     private void setupElement(String elementText) {
         Pattern pattern = Pattern.compile(
                 "<(\\S+)>(.*?)</\\1>",
@@ -158,7 +154,6 @@ public class LinScriptParser implements ScriptParser {
             validateNameOfWhom(elementName, ScriptDefinitions.LinScript.ELEMENT);
             element = new LinScriptElement(elementName);
             setupKVPairsOfWhom(elementKVPairsText, ScriptDefinitions.LinScript.ELEMENT);
-            // 相互設置
             segment.addElement(element);
             element.setParentSegment(segment);
         }

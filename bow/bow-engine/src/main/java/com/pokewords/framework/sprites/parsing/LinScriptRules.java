@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author nyngwang
+ */
 public class LinScriptRules implements ScriptRules {
 
     private Set<String> validSegmentNames;

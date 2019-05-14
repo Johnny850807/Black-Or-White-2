@@ -50,7 +50,6 @@ public class GameEngine {
 			while (running)
 			{
 				Thread.sleep(timePerFrame);
-				inputManager.onUpdate(timePerFrame);
 				appStateMachine.onUpdate(timePerFrame);
 			}
 		} catch (InterruptedException ignored) {

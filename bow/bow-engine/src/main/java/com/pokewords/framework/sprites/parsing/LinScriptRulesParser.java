@@ -7,6 +7,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author nyngwang
+ */
 public class LinScriptRulesParser implements ScriptRulesParser {
 
     private ScriptRules linScriptRules;
