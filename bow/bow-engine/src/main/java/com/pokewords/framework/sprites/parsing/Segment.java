@@ -9,16 +9,15 @@ import java.util.stream.Collectors;
 public interface Segment {
     Segment addElement(Element element);
     List<Element> getElementsByName(String elementName);
+    List<Element> getElements();
 
     Segment put(String key, String value);
     Segment put(String key, int value);
     Optional<String> getStringByKey(String key);
     Optional<Integer> getIntByKey(String key);
 
-    Script getParentScript();
     Segment setParentScript(Script parentScript);
-
-    List<Element> getElements();
+    Script getParentScript();
 
     String toString(int indentation);
 }
