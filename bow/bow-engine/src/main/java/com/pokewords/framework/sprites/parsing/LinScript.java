@@ -4,10 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- *   ScriptRules: LinScriptRules
- *   ScriptParser: LinScriptParser
- *                 LinScriptParser.parse() uses LinScriptRules
- *
  * @author nyngwang
  */
 public class LinScript implements Script {
@@ -49,14 +45,9 @@ public class LinScript implements Script {
                                .equals(segmentDescription))
                 .collect(Collectors.toList());
     }
+
     @Override
     public List<Segment> getSegments() { return segments; }
-
-
-    @Override
-    public String toString() {
-        return toString(4);
-    }
 
     @Override
     public String toString(int indentation) {
@@ -76,5 +67,10 @@ public class LinScript implements Script {
             resultBuilder.append(segment.toString(indentation));
         }
         return resultBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toString(4);
     }
 }
