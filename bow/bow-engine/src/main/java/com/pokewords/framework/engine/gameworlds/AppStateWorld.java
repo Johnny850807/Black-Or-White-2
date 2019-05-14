@@ -6,6 +6,7 @@ import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
+import sun.awt.util.IdentityArrayList;
 
 
 import java.awt.*;
@@ -238,7 +239,9 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         Point2D center = sprite.getCenter();
         int x = (int) center.getX() - w / 2;
         int y = (int) center.getY() - h / 2;
-        return getSpritesWithinArea(new Rectangle(x, y, w, h));
+        IdentityArrayList<Sprite> sprites = (IdentityArrayList<Sprite>) getSpritesWithinArea(new Rectangle(x, y, w, h));
+        sprites.remove(sprite);
+        return sprites;
     }
 
     /**
@@ -252,7 +255,9 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the sprites collided with the given sprite
      */
     public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        return getSpritesWithinArea(sprite.getBody());
+        IdentityArrayList<Sprite> sprites = (IdentityArrayList<Sprite>) getSpritesWithinArea(sprite.getBody());
+        sprites.remove(sprite);
+        return sprites;
     }
 
 

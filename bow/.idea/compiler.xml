@@ -8,7 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bow-core" />
         <module name="bow-engine" />
-        <module name="bow-engine-demo" />
         <module name="joagunna" />
         <module name="shotgunininder" />
         <module name="shotshotning" />
@@ -18,7 +17,6 @@
     <bytecodeTargetLevel>
       <module name="bow-core" target="8" />
       <module name="bow-engine" target="8" />
-      <module name="bow-engine-demo" target="8" />
       <module name="joagunna" target="8" />
       <module name="shotgunininder" target="8" />
       <module name="shotshotning" target="8" />
