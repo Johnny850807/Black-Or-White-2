@@ -131,9 +131,7 @@ public class LinScriptSpriteBuilder implements SpriteBuilder {
         }
         sprite = new Sprite((PropertiesComponent) nameToComponent.get(Component.PROPERTIES));
         for (Map.Entry<String, Component> entry : nameToComponent.entrySet()) {
-            if (!entry.getKey().equals(Component.PROPERTIES)) {
-                sprite.putComponent(entry.getKey(), entry.getValue());
-            }
+            sprite.putComponent(entry.getKey(), entry.getValue());
         }
     }
 
