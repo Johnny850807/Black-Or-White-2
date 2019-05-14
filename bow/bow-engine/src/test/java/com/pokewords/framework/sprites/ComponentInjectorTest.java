@@ -20,6 +20,7 @@ public class ComponentInjectorTest {
         sprite.addComponent(mockComponent2);
         sprite.addComponent(mockComponent3);
 
+        sprite.injectComponents();
         assertSame(sprite, mockComponent1.getSprite());
         assertSame(sprite, mockComponent2.getSprite());
         assertSame(sprite, mockComponent3.getSprite());
