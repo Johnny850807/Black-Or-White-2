@@ -34,7 +34,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	protected Map<String, Component> components = new HashMap<>();
 	private Collection<Renderable> renderableComponents = new HashSet<>();
 	private FrameStateMachineComponent frameStateMachineComponent;
-	private CollidableComponent collidableComponent;
 	private PropertiesComponent propertiesComponent;
 	private int timePerFrame;
 
@@ -98,10 +97,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	/**
-	 * Put new component with name. If the component you put is
-	 * PropertiesComponent or FrameStateMachineComponent then this method will detect it.
-	 * @param name the name of the component to be added.
-	 * @param component the component to be added.
+	 * Add a component by its name.
+	 * @param name the name of the added component.
+	 * @param component the added component.
 	 */
 	public void putComponent(@NotNull String name, @NotNull Component component) {
 		if (component instanceof Renderable)
@@ -109,8 +107,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 		if (component instanceof FrameStateMachineComponent)
 			this.frameStateMachineComponent = (FrameStateMachineComponent) component;
-		else if (component instanceof CollidableComponent)
-			this.collidableComponent = (CollidableComponent) component;
 		else if (component instanceof PropertiesComponent)
 			this.propertiesComponent = (PropertiesComponent) component;
 
@@ -127,6 +123,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 			throw new SpriteException("The name does not exist.");
 
 		Component component = components.get(name);
+
+		if (component instanceof Renderable)
+			this.renderableComponents.remove(component);
 		if (component instanceof PropertiesComponent)
 			throw new MandatoryComponentRequiredException("PropertiesComponent cannot be removed.");
 
@@ -243,7 +242,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public Sprite clone(){
 		try {
 			Sprite clone = (Sprite) super.clone();
-			copyComponents(clone);
+			copyClonedSpritesComponents(clone);
 			clone.injectComponents();
 			return clone;
 		} catch (CloneNotSupportedException e) {
@@ -251,23 +250,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		}
 	}
 
-	/**
-	 * Make the components injected.
-	 * @see ComponentInjector#inject(Sprite)
-	 */
-	public void injectComponents(){
-		ComponentInjector.inject(this);
-	}
-
-	/**
-	 * This method will copy entirely the Sprite's component-map following rules:
-	 * If a component implements Shareable or it doesn't implement Cloneable,
-	 * the component should is shared in the new map.
-	 * Otherwise, the component should be invoked clone(), hence it's expected having a
-	 * different reference to the original component.
-	 * @return the copied components.
-	 */
-	private void copyComponents(Sprite clone){
+	private void copyClonedSpritesComponents(Sprite clone){
 		clone.components = new HashMap<>();
 		for (String type : this.components.keySet())
 		{
@@ -282,6 +265,16 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	private boolean isComponentSharedOnly(Component component) {
 		return !(component instanceof CloneableComponent) || component instanceof Shareable;
 	}
+
+	/**
+	 * Make the components injected.
+	 * @see ComponentInjector#inject(Sprite)
+	 */
+	public void injectComponents(){
+		ComponentInjector.inject(this);
+	}
+
+
 
 	/**
 	 * @return all the frames that should be rendered in the present state.
