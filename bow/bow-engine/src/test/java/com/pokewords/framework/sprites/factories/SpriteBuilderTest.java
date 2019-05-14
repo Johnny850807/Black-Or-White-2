@@ -12,7 +12,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertSame;
 
 public class SpriteBuilderTest extends AbstractTest {
-    final String MOCK = "mock";
     DefaultSpriteBuilder spriteBuilder;
 
     @Before
@@ -29,7 +28,8 @@ public class SpriteBuilderTest extends AbstractTest {
 
         Sprite sprite = spriteBuilder.init()
                     .setPropertiesComponent(propertiesComponent)
-                    .addComponent(MOCK, mockComponent)
+                    .addComponent(collidableComponent)
+                    .addComponent(mockComponent)
                     .setFSMComponent(fsmc)
                     .build();
 

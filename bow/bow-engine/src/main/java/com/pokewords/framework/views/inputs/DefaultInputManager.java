@@ -7,11 +7,6 @@ public class DefaultInputManager implements InputManager {
 
 
     @Override
-    public void onUpdate(double timePerFrame) {
-
-    }
-
-    @Override
     public boolean getButtonPressedDown(int key) {
         return false;
     }
