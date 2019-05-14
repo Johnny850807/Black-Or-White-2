@@ -103,13 +103,13 @@ public class SpriteInitializer {
             this.declaration = new Declaration(type);
         }
 
-        public SpriteDeclarator with(@NotNull Object componentName, @NotNull Component component) {
-            declaration.componentMap.put(componentName.toString(), component);
+        public SpriteDeclarator with(@NotNull Component component) {
+            declaration.components.add(component);
             return this;
         }
 
-        public SpriteDeclarator with(@NotNull String componentName, @NotNull Component component) {
-            declaration.componentMap.put(componentName, component);
+        public SpriteDeclarator with(@NotNull Script script) {
+            declaration.script = script;
             return this;
         }
 
@@ -118,18 +118,8 @@ public class SpriteInitializer {
             return this;
         }
 
-        public SpriteDeclarator with(@NotNull FrameStateMachineComponent fsmComp) {
-            declaration.frameStateMachineComponent = fsmComp;
-            return this;
-        }
-
-        public SpriteDeclarator with(@NotNull PropertiesComponent propComp) {
-            declaration.propertiesComponent = propComp;
-            return this;
-        }
-
-        public SpriteDeclarator collidable(Object ...ignoredTypes) {
-            declaration.componentMap.put(Component.COLLIDABLE, new CollidableComponent(ignoredTypes));
+        public SpriteDeclarator with(@NotNull PropertiesComponent propertiesComponent) {
+            declaration.propertiesComponent = propertiesComponent;
             return this;
         }
 
@@ -140,11 +130,6 @@ public class SpriteInitializer {
 
         public SpriteDeclarator position(@NotNull Point point) {
             declaration.propertiesComponent.setPosition(point);
-            return this;
-        }
-
-        public SpriteDeclarator with(@NotNull Script script) {
-            declaration.script = script;
             return this;
         }
 
@@ -183,7 +168,7 @@ public class SpriteInitializer {
 
             if (!declaration.propertiesComponent.getType().equals(type))
                 throw new SpriteDeclaratorException(String.format("Error occurs during declaring the sprite '%s', " +
-                        "your propertiesComponent's type given is %s, but your sprite's type is declared as %s.",
+                        "your propertiesComponent's type is '%s', but your sprite's type is declared '%s'.",
                         type, declaration.propertiesComponent.getType(), type));
         }
 
@@ -258,9 +243,8 @@ public class SpriteInitializer {
     private class Declaration {
         String type;
         PropertiesComponent propertiesComponent;
-        Map<String, Component> componentMap = new HashMap<>();
+        HashSet<Component> components = new HashSet<>();
 
-        FrameStateMachineComponent frameStateMachineComponent;
         Script script;
         String scriptPath = "";
 
@@ -274,15 +258,13 @@ public class SpriteInitializer {
         protected void startInitializingSprite() {
             setFrameStateMachineComponent();
             spriteBuilder.setPropertiesComponent(propertiesComponent);
-            componentMap.forEach(spriteBuilder::addComponent);
+            components.forEach(spriteBuilder::addComponent);
             weaverNodes.forEach(spriteBuilder::addWeaverNode);
             prototypeFactory.addPrototype(type, spriteBuilder.build());
         }
 
         private void setFrameStateMachineComponent() {
-            if (frameStateMachineComponent != null)
-                spriteBuilder.setFSMComponent(frameStateMachineComponent);
-            else if (script != null)
+            if (script != null)
                 spriteBuilder.setScript(script);
             else if (scriptPath != null)
                 spriteBuilder.buildScriptFromPath(scriptPath);

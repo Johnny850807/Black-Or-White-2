@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.marks.Shareable;
 
+import java.awt.font.ImageGraphicAttribute;
 import java.util.*;
 
 /**
@@ -16,7 +17,15 @@ public class CollidableComponent extends Component implements Shareable {
 	 */
 	private Set<Object> ignoredTypes;
 
-	public CollidableComponent(Object ...ignoredTypes) {
+	public CollidableComponent() {
+		this.ignoredTypes = new HashSet<>();
+	}
+
+	public static CollidableComponent ignoreTypes(Object ...ignoredTypes) {
+		return new CollidableComponent(ignoredTypes);
+	}
+
+	protected CollidableComponent(Object ...ignoredTypes) {
 		this.ignoredTypes = new HashSet<>(Arrays.asList(ignoredTypes));
 	}
 

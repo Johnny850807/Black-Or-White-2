@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,9 +24,6 @@ import java.util.Set;
  *  - FrameStateMachineComponent uses the Finite State Machine to represent the sprite's states, and decides
  *  what to be rendered in each state. use Sprite#trigger(event) to instruct the FrameStateMachineComponent.
  *
- * @see AppStateWorld
- * @see FrameStateMachineComponent
- * @see PropertiesComponent
  * @author johnny850807, nyngwang
  */
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
@@ -41,7 +37,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	public Sprite(final PropertiesComponent propertiesComponent) {
-		putComponent(PropertiesComponent.class, propertiesComponent);
+		putComponent(propertiesComponent);
 	}
 
 	/**
@@ -56,8 +52,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * the frameStateMachineComponent, SpriteException thrown
 	 */
 	public void trigger(Object event) throws SpriteException {
-		if (components.containsKey(FrameStateMachineComponent.class))
-			((FrameStateMachineComponent) components.get(FrameStateMachineComponent.class)).trigger(event.toString());
+		if (hasComponent(FrameStateMachineComponent.class))
+			getComponent(FrameStateMachineComponent.class).trigger(event.toString());
 		else
 			throw new SpriteException("The sprite doesn't have the FrameStateMachineComponent, it cannot be triggered.");
 	}
@@ -71,6 +67,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return getComponent(PropertiesComponent.class);
 	}
 
+	public boolean isCollidable() {
+		return hasComponent(CollidableComponent.class);
+	}
 
 	public boolean hasComponent(Class<? extends Component> type) {
 		return components.containsKey(type);
@@ -87,11 +86,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	/**
 	 * Add a component by its name.
-	 * @param type the type of the component
 	 * @param component the added component.
 	 */
-	public <T extends Component> void putComponent(@NotNull Class<T> type, @NotNull Component component) {
-		components.put(type, component);
+	public <T extends Component> void putComponent(@NotNull Component component) {
+		components.put(component.getClass(), component);
 	}
 
 	/**
@@ -263,9 +261,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return components.getShareableComponents();
 	}
 
-	public boolean isCollidable() {
-        return hasComponent(CollidableComponent.class);
-    }
 
 	@Override
 	public boolean equals(Object o) {
