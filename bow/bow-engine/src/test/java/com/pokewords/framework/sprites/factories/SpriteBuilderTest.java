@@ -13,7 +13,7 @@ import com.pokewords.framework.sprites.parsing.Script;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class SpriteBuilderTest extends AbstractTest {
     private MockDefaultSpriteBuilder mockDefaultSpriteBuilder;
@@ -21,6 +21,15 @@ public class SpriteBuilderTest extends AbstractTest {
     @Before
     public void setup(){
         mockDefaultSpriteBuilder = new MockDefaultSpriteBuilder(release);
+    }
+
+    @Test
+    public void testEmptySpriteBuilt() {
+        PropertiesComponent propertiesComponent = new PropertiesComponent("type");
+        Sprite sprite = mockDefaultSpriteBuilder.setPropertiesComponent(propertiesComponent).build();
+
+        assertEquals(1,sprite.getComponents().size());
+        assertSame(propertiesComponent,sprite.getPropertiesComponent());
     }
 
     @Test
@@ -65,5 +74,6 @@ public class SpriteBuilderTest extends AbstractTest {
                             .addWeaverNode(new MockSpriteWeaverNode())
                             .build();
     }
+
 
 }

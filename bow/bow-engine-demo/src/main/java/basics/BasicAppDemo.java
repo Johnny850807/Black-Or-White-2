@@ -22,7 +22,7 @@ public class  BasicAppDemo extends GameApplication {
 
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
-        gameWindowsConfigurator.name("BasicAppDemo Demo")
+        gameWindowsConfigurator.name("BasicAppDemo")
                             .size(600, 600)
                             .gamePanelBackground(Color.decode("#1B4032"))
                             .atCenter();
@@ -32,27 +32,6 @@ public class  BasicAppDemo extends GameApplication {
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.setInitializationMode(LAZY);
 
-        /*spriteInitializer.declare(SpriteType.HERO)
-                    .with("path/to/hero.bow")
-                    .position(280, 500)
-                    .with(ComponentName.CHARACTER, new CharacterComponent())
-                    .collidable()
-                    .weaver(new MyWeaverNode())
-                    .commit();
-
-        spriteInitializer.declare(SpriteType.MONSTER)
-                    .with("path/to/monster.bow")
-                    .with(ComponentName.CHARACTER, new CharacterComponent())
-                    .with(ComponentName.MONSTER_AI, new MonsterAI())
-                    .collidable()                    .weaver(new MyWeaverNode())
-                    .commit();
-S
-        spriteInitializer.declare(SpriteType.BULLET)
-                .with("path/to/bullet.bow")
-                .with(ComponentName.BULLET, new BulletComponent())
-                .collidable()
-                .weaver(new MyWeaverNode())
-                .commit();*/
     }
 
     @Override

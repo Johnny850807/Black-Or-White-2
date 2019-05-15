@@ -99,7 +99,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     private void expandLayersToFitTheIndex(List<List<Frame>> layers, int layerIndex) {
-        IntStream.range(layers.size(), layerIndex)
+        IntStream.range(layers.size(), layerIndex+1)
                 .forEach(i -> layers.add(new ArrayList<>()));
     }
 

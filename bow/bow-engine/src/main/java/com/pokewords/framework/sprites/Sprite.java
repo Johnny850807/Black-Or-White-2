@@ -111,6 +111,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public <T extends Component> void addComponent(@NotNull Component component) {
 		components.put(component.getClass(), component);
 		component.onComponentAdded();
+		ComponentInjector.inject(this, component);
 	}
 
 	/**
@@ -245,7 +246,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	protected void injectComponents(){
 		ComponentInjector.inject(this);
-		components.foreachComponent(Component::onComponentInjected);
 	}
 
 
@@ -297,7 +297,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	@Override
 	public String toString() {
-		StringBuilder stringBuilder = new StringBuilder("----- Sprite -----");
+		StringBuilder stringBuilder = new StringBuilder("----- Sprite(").append(getType()).append("-----");
 		for (Class componentType : components.keySet()) {
 			stringBuilder.append("\n== Component: ").append(componentType.getSimpleName());
 			stringBuilder.append(" ==\n").append(components.get(componentType));

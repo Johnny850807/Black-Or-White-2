@@ -41,12 +41,13 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
     @Override
     public void onWeaving(Script script, Sprite sprite) {
-        if (!sprite.hasComponent(FrameStateMachineComponent.class))
-            sprite.addComponent(new FrameStateMachineComponent());
+        if (sprite.hasComponent(FrameStateMachineComponent.class))
+        {
+            List<Segment> frames = script.getSegmentsByName("frame");
+            frames.parallelStream().forEach(f -> addFrame(f, sprite));
+            setNextTransitions(sprite);
+        }
 
-        List<Segment> frames = script.getSegmentsByName("frame");
-        frames.parallelStream().forEach(f -> addFrame(f, sprite));
-        setNextTransitions(sprite);
     }
 
     private void addFrame(Segment frame, Sprite sprite) {

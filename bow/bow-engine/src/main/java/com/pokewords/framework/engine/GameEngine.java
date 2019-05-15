@@ -51,6 +51,7 @@ public class GameEngine {
 			{
 				Thread.sleep(timePerFrame);
 				appStateMachine.onUpdate(timePerFrame);
+				gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
 			}
 		} catch (InterruptedException ignored) {
 

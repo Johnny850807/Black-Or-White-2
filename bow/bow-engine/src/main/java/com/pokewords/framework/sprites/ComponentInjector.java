@@ -23,18 +23,20 @@ public class ComponentInjector {
 	 * @param sprite the injected Sprite
 	 */
 	public static void inject(Sprite sprite) {
-		try {
-			for (Component component : sprite.getComponents()) {
-				for (Field field : getInheritedPrivateFields(component.getClass())) {
-					if (field.getType() == Sprite.class)
-						injectField(field, component, sprite);
-					else if (field.getType() == AppStateWorld.class)
-						injectField(field, component, sprite.getWorld());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (Component component : sprite.getComponents()) {
+			inject(sprite, component);
 		}
+	}
+
+	public static void inject(Sprite sprite, Component component) {
+		for (Field field : getInheritedPrivateFields(component.getClass())) {
+			if (field.getType() == Sprite.class)
+				injectField(field, component, sprite);
+			else if (field.getType() == AppStateWorld.class)
+				injectField(field, component, sprite.getWorld());
+		}
+
+		component.onComponentInjected();
 	}
 
 	private static List<Field> getInheritedPrivateFields(Class<?> type) {
@@ -59,7 +61,7 @@ public class ComponentInjector {
 			field.setAccessible(true);
 			field.set(component, injectedInstance);
 			field.setAccessible(accessible);
-		} catch (IllegalAccessException|NullPointerException e) {
+		} catch (IllegalAccessException | NullPointerException e) {
 			e.printStackTrace();
 		}
 	}

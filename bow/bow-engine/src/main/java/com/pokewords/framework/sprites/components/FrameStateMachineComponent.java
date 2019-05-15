@@ -92,14 +92,13 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         FrameStateMachineComponent that = (FrameStateMachineComponent) o;
         return effectFrameMap.equals(that.effectFrameMap) &&
                 fsm.equals(that.fsm) &&
-                Objects.equals(sprite, that.sprite) &&
                 Objects.equals(world, that.world) &&
                 renderedFrame.equals(that.renderedFrame);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(effectFrameMap, fsm, sprite, world, renderedFrame);
+        return Objects.hash(effectFrameMap, fsm, world, renderedFrame);
     }
 
     @Override

@@ -13,7 +13,6 @@ import java.util.Objects;
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
-	private Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private Point center = new Point();
 	private Object type;

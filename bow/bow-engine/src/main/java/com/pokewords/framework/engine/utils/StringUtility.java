@@ -1,5 +1,7 @@
 package com.pokewords.framework.engine.utils;
 
+import java.util.Map;
+
 public class StringUtility {
     /**
      * @param s the string
@@ -62,4 +64,13 @@ public class StringUtility {
         return lowerCaseCharacters;
     }
 
+
+    public static String toString(Map map) {
+        StringBuilder mapAsString = new StringBuilder("{");
+        for (Object key : map.keySet()) {
+            mapAsString.append(key).append("=").append(map.get(key)).append(", ");
+        }
+        mapAsString.delete(mapAsString.length()-2, mapAsString.length()).append("}");
+        return mapAsString.toString();
+    }
 }

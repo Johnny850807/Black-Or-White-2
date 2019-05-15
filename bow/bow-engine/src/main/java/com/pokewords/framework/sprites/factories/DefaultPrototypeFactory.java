@@ -14,7 +14,8 @@ public class DefaultPrototypeFactory implements PrototypeFactory{
         if (!spriteMap.containsKey(type))
             throw new NoSuchPrototypeException(String.format("Does not contain a Prototype named %s.", type));
 
-        return spriteMap.get(type).clone();
+        Sprite prototype = spriteMap.get(type);
+        return prototype.clone();
     }
 
     @Override

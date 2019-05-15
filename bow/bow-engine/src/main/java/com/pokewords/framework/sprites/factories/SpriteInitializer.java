@@ -23,10 +23,10 @@ import java.util.*;
 public class SpriteInitializer {
     private PrototypeFactory prototypeFactory;
     private SpriteBuilder spriteBuilder;
-    private InitializationMode initializationMode = InitializationMode.LAZY;
+    private InitializationMode initializationMode;
 
-    // <sprite's name, the sprite>
-    private Map<Object, Declaration> declarationMap = new IdentityHashMap<>();
+    // <sprite's type, the sprite>
+    private final Map<Object, Declaration> declarationMap = new HashMap<>();
 
     public enum InitializationMode {
         /**
@@ -56,7 +56,7 @@ public class SpriteInitializer {
         CUSTOM_STRICT
     }
 
-    private HashSet<Object> spriteTypesThatHaveBeenInit;
+    private final HashSet<Object> spriteTypesThatHaveBeenInit = new HashSet<>();
 
     public SpriteInitializer(IocFactory iocFactory) {
         this.prototypeFactory = iocFactory.prototypeFactory();
@@ -68,9 +68,6 @@ public class SpriteInitializer {
      */
     public void setInitializationMode(InitializationMode initializationMode) {
         this.initializationMode = initializationMode;
-
-        if (initializationMode != InitializationMode.NON_LAZY && spriteTypesThatHaveBeenInit == null)
-            spriteTypesThatHaveBeenInit = new HashSet<>();
     }
 
     public boolean hasSpriteBeenInit(Object type) {
@@ -83,7 +80,7 @@ public class SpriteInitializer {
 
 
     public SpriteDeclarator declare(@NotNull Object type) {
-        return new SpriteDeclarator(type.toString());
+        return new SpriteDeclarator(type);
     }
 
 
@@ -194,8 +191,11 @@ public class SpriteInitializer {
 
     private void validateSpriteHasBeenDeclared(Object type) {
         if (!declarationMap.containsKey(type))
+        {
+            System.out.println(StringUtility.toString(declarationMap));
             throw new SpriteDeclarationException(String.format("You haven't declared the sprite '%s', " +
-                    "use declare(type) to start your declarations.", type));
+                    "use declare(type) to start your declarations. (Did you commit your declaration?)", type));
+        }
     }
 
     private void validateUnderCustomStrictModeShouldInitByYourself(Object type) {
@@ -244,10 +244,12 @@ public class SpriteInitializer {
 
         protected void startInitializingSprite() {
             setFrameStateMachineComponent();
+            spriteBuilder.init();
             spriteBuilder.setPropertiesComponent(propertiesComponent);
             components.forEach(spriteBuilder::addComponent);
             weaverNodes.forEach(spriteBuilder::addWeaverNode);
-            prototypeFactory.addPrototype(type, spriteBuilder.build());
+            Sprite sprite = spriteBuilder.build();
+            prototypeFactory.addPrototype(type, sprite);
         }
 
         private void setFrameStateMachineComponent() {

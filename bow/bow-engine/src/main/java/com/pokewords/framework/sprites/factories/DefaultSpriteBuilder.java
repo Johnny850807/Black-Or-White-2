@@ -8,6 +8,7 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.parsing.*;
 import com.pokewords.framework.ioc.IocFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.*;
@@ -31,7 +32,6 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                                  .setPropertiesComponent(new PropertiesComponent())
                                  .addComponent(new CollidableComponent())
                                  .buildScriptFromPath("path/to/script_text")
-                                 .setScript(null)
                                  .addWeaverNode((script, sprite) -> {
                                      List<Element> bows = script.getSegmentById("frame").getElementsByName("bow");
                                  })
@@ -96,6 +96,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         try {
             script = scriptParser.parse(FileUtility.read(path),
                      ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
+            addComponent(new FrameStateMachineComponent());
         } catch (IOException e) {
             e.printStackTrace();
             init();
@@ -104,8 +105,9 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     @Override
-    public DefaultSpriteBuilder setScript(Script script) {
+    public DefaultSpriteBuilder setScript(@NotNull Script script) {
         this.script = script;
+        addComponent(new FrameStateMachineComponent());
         return this;
     }
 
@@ -117,17 +119,11 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public Sprite build() {
-        checkScript();
         setupSprite();
         setupAndStartSpriteWeaving();
         return sprite;
     }
 
-    private void checkScript() {
-        if (script == null) {
-            throw new SpriteBuilderException("DefaultSpriteBuilder: Script hasn't been set.");
-        }
-    }
 
     private void setupSprite() {
         if (!hasPropertiesComponent) {

@@ -15,16 +15,18 @@ public class StringFrame implements Frame {
     private int id;
     private int layerIndex;
     private String text;
+    private Color color;
+    private Font font;
+    private boolean renderByCenter;
 
-    public StringFrame(Sprite sprite, int id, String text) {
-        this(sprite, id, 2, text);
-    }
-
-    public StringFrame(Sprite sprite, int id, int layerIndex, String text) {
+    public StringFrame(Sprite sprite, int id, int layerIndex, String text, Color color, Font font, boolean renderByCenter) {
+        this.color = color;
         this.sprite = sprite;
         this.id = id;
         this.layerIndex = layerIndex;
         this.text = text;
+        this.font = font;
+        this.renderByCenter = renderByCenter;
     }
 
     @Override
@@ -40,10 +42,33 @@ public class StringFrame implements Frame {
 
     @Override
     public void renderItself(Canvas canvas) {
-        canvas.renderText(sprite.getX(), sprite.getY(), text);
+        if (renderByCenter)
+            canvas.renderTextByCenter(sprite.getX(), sprite.getY(), text, color, font);
+        else
+            canvas.renderText(sprite.getX(), sprite.getY(), text, color, font);
     }
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setLayerIndex(int layerIndex) {
+        this.layerIndex = layerIndex;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    public void setRenderByCenter(boolean renderByCenter) {
+        this.renderByCenter = renderByCenter;
     }
 }
