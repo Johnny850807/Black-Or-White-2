@@ -16,11 +16,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertSame;
 
 public class SpriteBuilderTest extends AbstractTest {
-    MockDefaultSpriteBuilder mockDefaultSpriteBuilder;
+    private MockDefaultSpriteBuilder mockDefaultSpriteBuilder;
 
     @Before
     public void setup(){
-        mockDefaultSpriteBuilder = new MockDefaultSpriteBuilder(mock);
+        mockDefaultSpriteBuilder = new MockDefaultSpriteBuilder(release);
     }
 
     @Test

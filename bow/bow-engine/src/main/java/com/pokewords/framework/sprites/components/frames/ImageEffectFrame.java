@@ -7,14 +7,14 @@ import com.pokewords.framework.views.Canvas;
 import java.awt.Image;
 
 
-public class TextureEffectFrame extends DefaultEffectFrame {
+public class ImageEffectFrame extends DefaultEffectFrame {
 	private Sprite sprite;
 	private int id;
 	private int layerIndex;
 	private int duration;
 	private Image image;
 
-	public TextureEffectFrame(int id, int layerIndex, int duration, Image image) {
+	public ImageEffectFrame(int id, int layerIndex, int duration, Image image) {
 		this.id = id;
 		this.layerIndex = layerIndex;
 		this.duration = duration;

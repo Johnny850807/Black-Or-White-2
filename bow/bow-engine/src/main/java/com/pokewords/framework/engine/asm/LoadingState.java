@@ -21,32 +21,21 @@ public class LoadingState extends AppState {
 	}
 
 	@Override
-	public void onAppStateCreate(AppStateWorld world) {
-		super.onAppStateCreate(world);
-
+	public void onAppStateCreating(AppStateWorld appStateWorld) {
 		getSpriteInitializer().declare(LOADING_TEXT)
 							.with(new StringComponent("Loading ..."));
 	}
 
 	@Override
-	public void onAppStateEnter() {
+	public void onAppStateEntering() {
 		originalColor = currentColor = getGameWindowDefinition().gamePanelBackground;
 	}
 
-	@Override
-	public void onAppStateExit() {
-
-	}
-
-	@Override
-	public void onAppStateDestroy() {
-
-	}
 
 	private int addOrMinute = 1;
 
 	@Override
-	public void onUpdate(int timePerFrame) {
+	public void onAppStateUpdating(int timePerFrame) {
 		int red = currentColor.getRed() + addOrMinute;
 		int green = currentColor.getGreen() + addOrMinute;
 		int blue = currentColor.getBlue() + addOrMinute;
@@ -59,5 +48,15 @@ public class LoadingState extends AppState {
 		currentColor = new Color(red, green, blue);
 
 		getGameWindowsConfigurator().gamePanelBackground(currentColor);
+	}
+
+	@Override
+	protected void onAppStateExiting() {
+
+	}
+
+	@Override
+	protected void onAppStateDestroying() {
+
 	}
 }

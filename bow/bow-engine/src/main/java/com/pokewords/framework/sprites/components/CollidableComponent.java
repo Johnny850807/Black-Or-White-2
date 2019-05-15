@@ -49,20 +49,6 @@ public class CollidableComponent extends Component implements Shareable {
 		return ignoredTypes.contains(type);
 	}
 
-	@Override
-	public void onAppStateCreate(AppStateWorld world) { }
-
-	@Override
-	public void onUpdate(int timePerFrame) { }
-
-	@Override
-	public void onAppStateEnter() { }
-
-	@Override
-	public void onAppStateExit() { }
-
-    @Override
-    public void onAppStateDestroy() { }
 
 	@Override
 	public boolean equals(Object o) {
@@ -76,4 +62,5 @@ public class CollidableComponent extends Component implements Shareable {
 	public int hashCode() {
 		return Objects.hash(ignoredTypes);
 	}
+	
 }

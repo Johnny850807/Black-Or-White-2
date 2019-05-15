@@ -12,37 +12,22 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A renderable component that can be rendered as a text
+ * A immutable renderable component that can be rendered as a text
  * @author johnny850807 (waterball)
  */
 public class StringComponent extends Component implements Shareable, Renderable {
-    private Sprite sprite;
     private String text;
     private List<StringFrame> stringFrame;
+
+    private Sprite sprite;
 
     public StringComponent(String text) {
         this.text = text;
     }
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
+    public void onComponentInjected() {
         stringFrame = Collections.singletonList(new StringFrame(sprite, 0, text));
-    }
-
-    @Override
-    public void onAppStateEnter() { }
-
-    @Override
-    public void onAppStateExit() { }
-
-    @Override
-    public void onAppStateDestroy() { }
-
-    @Override
-    public void onUpdate(int timePerFrame) { }
-
-    public StringFrame getStringFrame() {
-        return stringFrame.get(0);
     }
 
     @Override
@@ -56,13 +41,8 @@ public class StringComponent extends Component implements Shareable, Renderable 
     }
 
 
-    public void setText(String text) {
-        this.text = text;
-        if (stringFrame != null)
-            stringFrame.get(0).setText(text);
-    }
-
     public String getText() {
         return text;
     }
+
 }

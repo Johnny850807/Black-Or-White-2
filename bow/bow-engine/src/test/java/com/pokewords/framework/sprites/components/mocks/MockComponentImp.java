@@ -18,7 +18,7 @@ public class MockComponentImp extends Component implements MockComponent {
     }
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
+    public void onAppStateCreate() {
         hasStarted = true;
     }
 

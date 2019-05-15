@@ -21,7 +21,7 @@ public class MockClickableComponent extends ClickableComponent implements Sharea
     }
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
+    public void onAppStateCreate() {
         hasStarted = true;
     }
 

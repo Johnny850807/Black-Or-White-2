@@ -98,33 +98,10 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	@Override
-	public void onAppStateCreate(AppStateWorld world) {
-        validatePropertiesComponent();
-	}
-
-	private void validatePropertiesComponent() {
+	public void onAppStateCreate() {
 		Objects.requireNonNull(type);
 	}
 
-	@Override
-	public void onUpdate(int timePerFrame) {
-
-	}
-
-	@Override
-	public void onAppStateEnter() {
-
-	}
-
-	@Override
-	public void onAppStateExit() {
-
-	}
-
-	@Override
-	public void onAppStateDestroy() {
-
-	}
 
 	public interface PositionListener{
 		void onPositionUpdated(int x, int y);

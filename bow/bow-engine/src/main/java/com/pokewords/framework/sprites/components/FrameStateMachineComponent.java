@@ -28,14 +28,6 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
     }
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
-        this.world = world;
-    }
-
-    @Override
-    public void onAppStateEnter() { }
-
-    @Override
     public void onUpdate(int timePerFrame) {
         trigger(Events.UPDATE);
         EffectFrame frame = getCurrentFrame();
@@ -72,11 +64,6 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         renderedFrame.add(frame);
     }
 
-    @Override
-    public void onAppStateExit() { }
-
-    @Override
-    public void onAppStateDestroy() { }
 
     /**
      * @return the actual inner finite state machine which contains the frames and transitions

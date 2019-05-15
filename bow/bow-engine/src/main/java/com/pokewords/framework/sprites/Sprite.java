@@ -9,6 +9,7 @@ import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
 import com.pokewords.framework.sprites.components.marks.Shareable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -27,7 +28,7 @@ import java.util.Set;
  * @author johnny850807, nyngwang
  */
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
-	protected AppStateWorld world;
+	protected @Nullable AppStateWorld world;
 	protected ComponentMap components = new ComponentMap();
 	private int timePerFrame;
 
@@ -42,6 +43,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public Sprite(final Collection<Component> components) {
 		components.forEach(this::addComponent);
+	}
+
+	public void setWorld(@Nullable AppStateWorld world) {
+		this.world = world;
+	}
+
+	public AppStateWorld getWorld() {
+		return world;
 	}
 
 	/**
@@ -101,6 +110,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public <T extends Component> void addComponent(@NotNull Component component) {
 		components.put(component.getClass(), component);
+		component.onComponentAdded();
 	}
 
 	/**
@@ -109,14 +119,13 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
 	public <T extends Component> void removeComponent(Class<T> type) {
-		components.remove(type);
+		components.remove(type).onComponentRemoved();
 	}
 
 	@Override
-	public void onAppStateCreate(AppStateWorld world){
-		this.world = world;
+	public void onAppStateCreate(){
 		for (Component component : components.values())
-			component.onAppStateCreate(world);
+			component.onAppStateCreate();
 	}
 
 	@Override
@@ -176,11 +185,11 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         return (int) getPosition().getY();
     }
 
-    public int getW() {
+    public int getWidth() {
         return (int) getBody().getWidth();
     }
 
-    public int getH() {
+    public int getHeight() {
         return (int) getBody().getHeight();
     }
 
@@ -236,6 +245,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	protected void injectComponents(){
 		ComponentInjector.inject(this);
+		components.foreachComponent(Component::onComponentInjected);
 	}
 
 

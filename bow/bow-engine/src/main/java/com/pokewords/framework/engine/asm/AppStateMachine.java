@@ -33,6 +33,7 @@ public class AppStateMachine implements GameLifecycleListener {
 		this.loadingState = createState(LoadingState.class);
 		fsm.setCurrentState(initialState);
 		fsm.addTransition(initialState, EVENT_LOADING, loadingState);
+		initialState.onAppStateCreate();
 	}
 
 	public <T extends AppState> T createState(Class<T> appStateType) {
@@ -55,20 +56,10 @@ public class AppStateMachine implements GameLifecycleListener {
 		{
 			from.onAppStateExit();
 			if (!to.hasStarted())
-				to.onAppStateCreate(onCreateAppStateWorld());
+				to.onAppStateCreate();
 			to.onAppStateEnter();
 		}
 		return to;
-	}
-
-	/**
-	 * the hook method invoked whenever any AppState is started
-	 * , this then requires initializing a new AppStateWorld for that AppState.
-	 * For customizing your default init world, overwrite this method.
-	 * @return the init app state world
-	 */
-	public AppStateWorld onCreateAppStateWorld(){
-		return new AppStateWorld();
 	}
 
 

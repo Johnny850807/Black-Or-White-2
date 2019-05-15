@@ -1,15 +1,20 @@
 package com.pokewords.framework.engine.asm;
 
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+
 public final class EmptyAppState extends AppState {
     @Override
-    public void onAppStateEnter() {}
+    protected void onAppStateCreating(AppStateWorld appStateWorld) { }
 
     @Override
-    public void onAppStateExit() {}
+    protected void onAppStateEntering() { }
 
     @Override
-    public void onAppStateDestroy() {}
+    protected void onAppStateExiting() { }
 
     @Override
-    public void onUpdate(int timePerFrame) {}
+    protected void onAppStateDestroying() { }
+
+    @Override
+    protected void onAppStateUpdating(int timePerFrame) { }
 }
