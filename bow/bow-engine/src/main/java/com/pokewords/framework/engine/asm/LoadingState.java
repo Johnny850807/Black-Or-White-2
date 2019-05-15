@@ -24,8 +24,7 @@ public class LoadingState extends AppState {
 	public void onAppStateCreating(AppStateWorld appStateWorld) {
 		getSpriteInitializer().declare(CENTER_LOADING_TEXT)
 							.position(getGameWindowDefinition().center())
-							.with(new StringComponent("Loading", true))
-							.with(new LoadingTextComponent())
+							.with("assets/sheets/loadingText.bow")
 							.commit();
 
 		getSpriteInitializer().declare(TITLE_TEXT)
@@ -42,7 +41,6 @@ public class LoadingState extends AppState {
 	@Override
 	public void onAppStateEntering() {
 		originalColor = currentColor = getGameWindowDefinition().gamePanelBackground;
-
 	}
 
 
@@ -93,7 +91,6 @@ public class LoadingState extends AppState {
 			}
 		}
 	}
-
 
 	@Override
 	protected void onAppStateExiting() {

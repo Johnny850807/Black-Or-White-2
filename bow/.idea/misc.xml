@@ -13,5 +13,9 @@
       </set>
     </option>
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/bow-engine/src/main/resources/assets/sheets/loadingText.bow" />
+    <file url="file://$PROJECT_DIR$/bow-engine/src/main/resources/assets/sheets/loadingText.bow" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
 </project>

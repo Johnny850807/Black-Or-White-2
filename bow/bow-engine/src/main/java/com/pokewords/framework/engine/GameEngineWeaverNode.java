@@ -23,6 +23,7 @@ import java.util.Map;
  * (1) Create all effect frames of the given sprite from parsing all the <frame> segments, and add them
  * into the FrameStateMachineComponent of the sprite.
  * (2) Add the 'update' transitions from all frames corresponding to their 'next' attributes.
+ * (3) TODO Read the <body> element within <frame> and effect the body element in each frame
  * @author johnny850807 (waterball)
  */
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
