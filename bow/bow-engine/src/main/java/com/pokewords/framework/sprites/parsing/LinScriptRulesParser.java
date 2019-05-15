@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
  * @author nyngwang
  */
 public class LinScriptRulesParser implements ScriptRulesParser {
-
     private ScriptRules linScriptRules;
     private String segmentBlock;
     private String elementBlock;
@@ -36,7 +35,9 @@ public class LinScriptRulesParser implements ScriptRulesParser {
     }
 
     private void setupBlocks(String linScriptRulesText) {
-        Pattern pattern = Pattern.compile("(\\w+)\\n(.*?)(?=\\n\\w|\\Z)");
+        Pattern pattern = Pattern.compile(
+                "(\\S+)\\n(.*?)(?:\\Z|\\n(?=\\S))",
+                Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(linScriptRulesText);
         while (matcher.find()) {
             String blockName = matcher.group(1);
@@ -58,7 +59,7 @@ public class LinScriptRulesParser implements ScriptRulesParser {
     private void addToRulesFromBlock(Set<String> validNames, Map<String, ScriptRules.Pair> validKVRules,
                                             String textBlock) {
         Pattern pattern = Pattern.compile(
-                " {4}(\\w+)\n(.*?)(?=(?:\\n {4}\\w)|\\Z)",
+                " {4}(\\S+)\n(.*?)(?=(?:\\n {4}\\S)|\\Z)",
                 Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(textBlock);
         while (matcher.find()) {
@@ -71,14 +72,21 @@ public class LinScriptRulesParser implements ScriptRulesParser {
 
     private void addToKVRulesFromBlock(Map<String, ScriptRules.Pair> validKVRules, String kvBlock) {
         Pattern pattern = Pattern.compile(
-                " {8}(.+?) (.*?) (.+?) *\\n|\\Z",
+                " {8}(\\S+) (?:(\\S+)|(\\S+) *(\\S+))",
                 Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(kvBlock);
         while (matcher.find()) {
             String key = matcher.group(1);
-            String regex = matcher.group(2);
-            String type = matcher.group(3);
+            String regex = matcher.group(3);
+            String type = regex == null? matcher.group(2): matcher.group(4);
             validKVRules.put(key, new ScriptRules.Pair(regex, type));
         }
+    }
+
+    public static void main(String[] args) {
+        ScriptRulesParser parser = new LinScriptRulesParser();
+        ScriptRules rules = parser.parse(ScriptDefinitions.LinScript.Samples.SCRIPT_RULES_TEXT);
+        System.out.println(rules);
+
     }
 }
