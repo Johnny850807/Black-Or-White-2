@@ -17,6 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Read the <frame> Segment and the game-engine domain attributes within the frame.
+ * It does the following tasks:
+ * (1) Create all effect frames of the given sprite from parsing all the <frame> segments, and add them
+ * into the FrameStateMachineComponent of the sprite.
+ * (2) Add the 'update' transitions from all frames corresponding to their 'next' attributes.
+ * @author johnny850807 (waterball)
+ */
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
     private EffectFrameFactory effectFrameFactory;
 
@@ -33,9 +41,12 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
     @Override
     public void onWeaving(Script script, Sprite sprite) {
+        if (!sprite.hasComponent(FrameStateMachineComponent.class))
+            sprite.addComponent(new FrameStateMachineComponent());
+
         List<Segment> frames = script.getSegmentsByName("frame");
         frames.parallelStream().forEach(f -> addFrame(f, sprite));
-        setNextFrames(sprite);
+        setNextTransitions(sprite);
     }
 
     private void addFrame(Segment frame, Sprite sprite) {
@@ -43,7 +54,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         sprite.getFrameStateMachineComponent().addFrame(effectFrame);
     }
 
-    private void setNextFrames(Sprite sprite) {
+    private void setNextTransitions(Sprite sprite) {
         FrameStateMachineComponent fsmc = sprite.getFrameStateMachineComponent();
         for (Integer id : frameSegmentMap.keySet()) {
             EffectFrame from = fsmc.getFrame(id);

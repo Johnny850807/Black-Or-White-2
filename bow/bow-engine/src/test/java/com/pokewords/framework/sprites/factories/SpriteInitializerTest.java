@@ -4,8 +4,6 @@ import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.CollidableComponent;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +12,7 @@ import static org.junit.Assert.*;
 
 public class SpriteInitializerTest extends AbstractTest {
     MockPrototypeFactory mockPrototypeFactory;
-    MockSpriteBuilder mockSpriteBuilder;
+    MockDefaultSpriteBuilder mockSpriteBuilder;
     final String TYPE = "type";
     final MockComponentImp mockComponent = new MockComponentImp();
 
@@ -30,7 +28,7 @@ public class SpriteInitializerTest extends AbstractTest {
 
             @Override
             public SpriteBuilder spriteBuilder() {
-                return mockSpriteBuilder = new MockSpriteBuilder(this);
+                return mockSpriteBuilder = new MockDefaultSpriteBuilder(this);
             }
         });
     }

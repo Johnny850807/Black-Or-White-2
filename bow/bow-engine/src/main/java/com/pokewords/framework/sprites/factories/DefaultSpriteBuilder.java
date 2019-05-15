@@ -39,21 +39,25 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
 
-    private Sprite sprite;
-    private Set<Component> components;
-    private boolean hasPropertiesComponent;
-    private PropertiesComponent propertiesComponent;
-    private Script script;
-    private SpriteWeaver spriteWeaver;
-    private ScriptParser scriptParser;
-    private ScriptRulesParser scriptRulesParser;
+    protected Sprite sprite;
+    protected Set<Component> components;
+    protected boolean hasPropertiesComponent;
+    protected PropertiesComponent propertiesComponent;
+    protected Script script;
+    protected SpriteWeaver spriteWeaver;
+    protected ScriptParser scriptParser;
+    protected ScriptRulesParser scriptRulesParser;
+    protected List<SpriteWeaver.Node> defaultWeaverNodes = new LinkedList<SpriteWeaver.Node>() {
+        {
+            add(new GameEngineWeaverNode());
+        }
+    };
 
 
     public DefaultSpriteBuilder(IocFactory iocFactory) {
         init();
         script = new LinScript();
         spriteWeaver = new SpriteWeaver(iocFactory);
-        spriteWeaver.addWeaverNode(new GameEngineWeaverNode());
         scriptParser = iocFactory.scriptParser();
         scriptRulesParser = iocFactory.scriptRulesParser();
     }
@@ -115,7 +119,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     public Sprite build() {
         checkScript();
         setupSprite();
-        startWeaver();
+        setupAndStartSpriteWeaving();
         return sprite;
     }
 
@@ -132,7 +136,8 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         sprite = new Sprite(components);
     }
 
-    private void startWeaver() {
+    private void setupAndStartSpriteWeaving() {
+        spriteWeaver.addWeaverNodes(defaultWeaverNodes);
         spriteWeaver.weave(script, sprite);
     }
 }

@@ -5,6 +5,7 @@ import com.pokewords.framework.engine.GameEngineWeaverNode;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.parsing.Script;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class SpriteWeaver {
@@ -22,6 +23,10 @@ public class SpriteWeaver {
 
     public void addWeaverNode(SpriteWeaver.Node node) {
         weaverNodes.add(node);
+    }
+
+    public void addWeaverNodes(Collection<Node> nodes) {
+        weaverNodes.addAll(nodes);
     }
 
     public void removeWeaverNode(SpriteWeaver.Node node) {

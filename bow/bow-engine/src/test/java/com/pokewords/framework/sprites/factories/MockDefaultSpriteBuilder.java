@@ -4,14 +4,18 @@ import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.Sprite;
 
 /**
- * The MockSpriteBuilder records the latest built sprite.
+ * The MockDefaultSpriteBuilder records the latest built sprite with no weaver nodes as default.
+ *
+ * @see MockSpriteWeaverNode
  * @author johnny850807 (waterball)
  */
-public class MockSpriteBuilder extends DefaultSpriteBuilder {
+public class MockDefaultSpriteBuilder extends DefaultSpriteBuilder {
     private Sprite builtSprite;
 
-    public MockSpriteBuilder(IocFactory iocFactory) {
+    public MockDefaultSpriteBuilder(IocFactory iocFactory) {
         super(iocFactory);
+
+        defaultWeaverNodes.clear();
     }
 
     @Override
