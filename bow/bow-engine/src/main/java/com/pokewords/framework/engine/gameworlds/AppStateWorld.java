@@ -158,22 +158,30 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         for (Sprite sprite: sprites) {
             sprite.onUpdate(timePerFrame);
         }
-        notifyCollisionHandler();
+        findCollidedSpritesAndNotifyCollisionHandlers();
+    }
+
+    private void findCollidedSpritesAndNotifyCollisionHandlers() {
+        for (int i = 0; i < sprites.size(); i++) {
+            for (int j = i + 1; j < sprites.size(); j++) {
+                Sprite sprite1 = sprites.get(i);
+                Sprite sprite2 = sprites.get(j);
+                if (sprite1 != sprite2 && isCollided(sprite1, sprite2)) {
+                    notifyCollisionHandlers(sprite1, sprite2);
+                }
+            }
+        }
     }
 
     /**
      * To notify sprites if they have collided
      * //TODO 我會被扣兩次血
      */
-    private void notifyCollisionHandler() {
-        for (Sprite sprite1: sprites) {
-            for (Sprite sprite2: sprites) {
-                if (sprite1 != sprite2 && isCollided(sprite1, sprite2)) {
-                    for (CollisionHandler collisionHandler: collisionHandlers) {
-                        collisionHandler.onCollision(sprite1, sprite2);
-                    }
-                }
-            }
+    private void notifyCollisionHandlers(Sprite sprite1, Sprite sprite2) {
+        for (CollisionHandler collisionHandler: collisionHandlers) {
+            if ((collisionHandler.s1Type.equals(sprite1.getType()) && collisionHandler.s2Type.equals(sprite2.getType())) ||
+                    (collisionHandler.s1Type.equals(sprite2.getType()) && collisionHandler.s2Type.equals(sprite1.getType())))
+                collisionHandler.onCollision(sprite1, sprite2);
         }
     }
 
@@ -184,6 +192,11 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return true if two sprites have a collision.
      */
     private boolean isCollided(Sprite sprite1, Sprite sprite2) {
+        if (!sprite1.isCollidable() || !sprite2.isCollidable())
+            return false;
+        if (sprite1.getCollidableComponent().isIgnored(sprite2) &&
+                sprite2.getCollidableComponent().isIgnored(sprite1))
+            return false;
         return sprite1.getBody().intersects(sprite2.getBody());
     }
 
@@ -218,44 +231,44 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     /**
      * @return the sprites within the area (x, y, w, h)
      */
-    public Collection<Sprite> getSpritesWithinArea(int x, int y, int w, int h) {
-        return getSpritesWithinArea(new Rectangle(x, y, w, h));
+    public Collection<Sprite> getSpritesCollidedWithinArea(int x, int y, int w, int h) {
+        return getSpritesCollidedWithinArea(new Rectangle(x, y, w, h));
     }
 
     /**
      * @return the sprites within the area (x, y, w, h)
      */
-    public Collection<Sprite> getSpritesWithinArea(Rectangle area) {
+    public Collection<Sprite> getSpritesCollidedWithinArea(Rectangle area) {
         return sprites.stream()
-                    .filter(sprite -> area.contains(sprite.getBody()))
-                    .collect(Collectors.toList());
+                .filter(sprite -> area.intersects(sprite.getBody()))
+                .collect(Collectors.toList());
     }
 
 
     /**
      * @return the sprites within the area (w, h) from the center point of the given sprite
      */
-    public Collection<Sprite> getSpritesWithinArea(Sprite sprite, int w, int h) {
+    public Collection<Sprite> getSpritesCollidedWithinArea(Sprite sprite, int w, int h) {
         Point2D center = sprite.getCenter();
         int x = (int) center.getX() - w / 2;
         int y = (int) center.getY() - h / 2;
-        IdentityArrayList<Sprite> sprites = (IdentityArrayList<Sprite>) getSpritesWithinArea(new Rectangle(x, y, w, h));
+        IdentityArrayList<Sprite> sprites = (IdentityArrayList<Sprite>) getSpritesCollidedWithinArea(new Rectangle(x, y, w, h));
         sprites.remove(sprite);
         return sprites;
     }
 
     /**
-     * @return the sprites within the area (x, y, w, h) from the center point of the given sprite
+     * @return the sprites within the area (w, h) from the center point of the given sprite
      */
-    public Collection<Sprite> getSpritesWithinArea(Sprite sprite, Dimension dimension) {
-        return getSpritesWithinArea(sprite, dimension.width, dimension.height);
+    public Collection<Sprite> getSpritesCollidedWithinArea(Sprite sprite, Dimension dimension) {
+        return getSpritesCollidedWithinArea(sprite, dimension.width, dimension.height);
     }
 
     /**
      * @return the sprites collided with the given sprite
      */
     public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        IdentityArrayList<Sprite> sprites = (IdentityArrayList<Sprite>) getSpritesWithinArea(sprite.getBody());
+        IdentityArrayList<Sprite> sprites = (IdentityArrayList<Sprite>) getSpritesCollidedWithinArea(sprite.getBody());
         sprites.remove(sprite);
         return sprites;
     }
