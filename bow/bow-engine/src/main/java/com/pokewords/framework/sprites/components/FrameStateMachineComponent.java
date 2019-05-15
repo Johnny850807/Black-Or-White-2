@@ -23,17 +23,27 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
     protected Sprite sprite;
     protected AppStateWorld world;
 
+    protected long latestUpdateTimestamp = System.currentTimeMillis();
+    protected int frameDurationCountdown = 0;
+
     public EffectFrame getFrame(int id) {
         return effectFrameMap.get(id);
     }
 
     @Override
     public void onUpdate(int timePerFrame) {
-        trigger(Events.UPDATE);
+        frameDurationCountdown -= System.currentTimeMillis() - latestUpdateTimestamp;
+        if (frameDurationCountdown <= 0)
+        {
+            trigger(Events.UPDATE);
+            frameDurationCountdown = getCurrentFrame().getDuration();
+        }
         EffectFrame frame = getCurrentFrame();
         frame.apply(world, sprite);
         renderedFrame.clear();
         renderedFrame.add(frame);
+
+        latestUpdateTimestamp = System.currentTimeMillis();
     }
 
 

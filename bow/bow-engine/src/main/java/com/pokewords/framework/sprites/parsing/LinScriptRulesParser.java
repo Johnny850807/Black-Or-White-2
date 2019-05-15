@@ -50,8 +50,8 @@ public class LinScriptRulesParser implements ScriptRulesParser {
             case ScriptDefinitions.LinScript.SEGMENT: segmentBlock = blockContent; break;
             case ScriptDefinitions.LinScript.ELEMENT: elementBlock = blockContent; break;
             default: throw new LinScriptRulesParserException(
-                    "LinScriptRulesParser failed: Unrecognized script rules node name."
-            );
+                    String.format("LinScriptRulesParser failed: Unrecognized script rules node name (%s)."
+            , blockName));
         }
     }
 

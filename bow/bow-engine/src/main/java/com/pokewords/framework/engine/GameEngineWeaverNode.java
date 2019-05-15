@@ -97,7 +97,8 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         private Gallery gallerySegmentToGallery(Segment gallerySegment) {
             return new Gallery(gallerySegment.getStringByKey("path"),
                     gallerySegment.getIntByKey("row"),
-                    gallerySegment.getIntByKey("col"));
+                    gallerySegment.getIntByKey("col"),
+                    gallerySegment.getIntByKey("padding"));
         }
 
 

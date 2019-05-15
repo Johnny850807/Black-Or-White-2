@@ -17,11 +17,13 @@ public class Gallery {
     private String pathname;
     private int row;
     private int col;
+    private int padding;
 
-    public Gallery(String pathname, int row, int col) {
+    public Gallery(String pathname, int row, int col, int padding) {
         this.pathname = pathname;
         this.row = row;
         this.col = col;
+        this.padding = padding;  //TODO effect padding
     }
 
     /**
@@ -64,7 +66,7 @@ public class Gallery {
         String pathname = "D:/我的下載/bandit_0.bmp";
         int imgrow = 7, imgcol = 10;
 
-        Gallery gallery = new Gallery(pathname, imgrow, imgcol);
+        Gallery gallery = new Gallery(pathname, imgrow, imgcol, 0);
 
         JFrame jf = new JFrame("");
         JLabel jLabel = new JLabel();
