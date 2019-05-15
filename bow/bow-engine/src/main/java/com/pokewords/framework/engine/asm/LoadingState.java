@@ -3,28 +3,35 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.CloneableComponent;
+import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.StringComponent;
 import com.pokewords.framework.sprites.components.marks.Shareable;
+import jdk.nashorn.internal.scripts.JO;
 
 import java.awt.*;
 
-import static com.pokewords.framework.engine.asm.LoadingState.SpriteName.CENTER_LOADING_TEXT;
-import static com.pokewords.framework.engine.asm.LoadingState.SpriteName.TITLE_TEXT;
+import static com.pokewords.framework.engine.asm.LoadingState.SpriteName.*;
 
 public class LoadingState extends AppState {
 	private Color originalColor;
 	private Color currentColor;
 
 	enum SpriteName {
-		CENTER_LOADING_TEXT, TITLE_TEXT
+		CENTER_LOADING_TEXT, TITLE_TEXT, JOANNA
 	}
 
 
 	@Override
 	public void onAppStateCreating(AppStateWorld appStateWorld) {
+		getSpriteInitializer().declare(JOANNA)
+				.position(208, 360)
+				.with(new ImageComponent("assets/images/joanna.png", 2, 184, 180))
+				.commit();
+
 		getSpriteInitializer().declare(CENTER_LOADING_TEXT)
 							.position(getGameWindowDefinition().center())
-							.with("assets/sheets/loadingText.bow")
+							.with(new StringComponent("Loading", true))
+							.with(new LoadingTextComponent())
 							.commit();
 
 		getSpriteInitializer().declare(TITLE_TEXT)
@@ -35,6 +42,7 @@ public class LoadingState extends AppState {
 
 		getAppStateWorld().spawn(createSprite(CENTER_LOADING_TEXT));
 		getAppStateWorld().spawn(createSprite(TITLE_TEXT));
+		getAppStateWorld().spawn(createSprite(JOANNA));
 	}
 
 

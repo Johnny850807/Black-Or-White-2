@@ -1,7 +1,6 @@
 package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
 import java.awt.*;
@@ -43,7 +42,7 @@ public class StringFrame implements Frame {
     @Override
     public void renderItself(Canvas canvas) {
         if (renderByCenter)
-            canvas.renderTextByCenter(sprite.getX(), sprite.getY(), text, color, font);
+            canvas.renderTextWithCenterAdjusted(sprite.getX(), sprite.getY(), text, color, font);
         else
             canvas.renderText(sprite.getX(), sprite.getY(), text, color, font);
     }

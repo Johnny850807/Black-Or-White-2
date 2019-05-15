@@ -9,7 +9,7 @@ import com.pokewords.framework.sprites.components.frames.ImageEffectFrame;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.sprites.parsing.Segment;
-import com.pokewords.framework.views.helpers.Gallery;
+import com.pokewords.framework.views.helpers.SheetGallery;
 
 import java.awt.*;
 import java.util.Collections;
@@ -67,7 +67,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
     public class GameEngineEffectFrameFactory implements EffectFrameFactory {
         // < <startPic/endPic>, gallery instance>
-        private Map<Range, Gallery> galleryMap;
+        private Map<Range, SheetGallery> galleryMap;
 
         @Override
         public EffectFrame createFrame(Segment segment) {
@@ -94,8 +94,8 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
             }
         }
 
-        private Gallery gallerySegmentToGallery(Segment gallerySegment) {
-            return new Gallery(gallerySegment.getStringByKey("path"),
+        private SheetGallery gallerySegmentToGallery(Segment gallerySegment) {
+            return new SheetGallery(gallerySegment.getStringByKey("path"),
                     gallerySegment.getIntByKey("row"),
                     gallerySegment.getIntByKey("col"),
                     gallerySegment.getIntByKey("padding"));

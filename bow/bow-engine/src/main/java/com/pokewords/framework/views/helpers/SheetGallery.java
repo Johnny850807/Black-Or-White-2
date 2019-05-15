@@ -4,22 +4,20 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joanna
  */
 
-public class Gallery {
+public class SheetGallery {
     private String pathname;
     private int row;
     private int col;
     private int padding;
 
-    public Gallery(String pathname, int row, int col, int padding) {
+    public SheetGallery(String pathname, int row, int col, int padding) {
         this.pathname = pathname;
         this.row = row;
         this.col = col;
@@ -66,7 +64,7 @@ public class Gallery {
         String pathname = "D:/我的下載/bandit_0.bmp";
         int imgrow = 7, imgcol = 10;
 
-        Gallery gallery = new Gallery(pathname, imgrow, imgcol, 0);
+        SheetGallery gallery = new SheetGallery(pathname, imgrow, imgcol, 0);
 
         JFrame jf = new JFrame("");
         JLabel jLabel = new JLabel();

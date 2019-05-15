@@ -5,50 +5,72 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 
 /**
  * A immutable renderable component that can be rendered as a image.
  * @author johnny850807 (waterball)
  */
-public class ImageComponent extends Component implements Shareable, Renderable {
+public class ImageComponent extends CloneableComponent implements Renderable {
     private Image image;
     private int layerIndex;
-    private List<ImageFrame> imageFrame;
+    private int width;
+    private int height;
+    private ImageFrame imageFrame;
+    private Collection<ImageFrame> imageFrameSingletonCollection;
 
     private Sprite sprite;
 
     public ImageComponent(String imagePath, int layerIndex) {
-        this.layerIndex = layerIndex;
-        this.image = ImageUtility.readImage(imagePath);
+        this(ImageUtility.readImage(imagePath), layerIndex);
     }
 
     public ImageComponent(Image image, int layerIndex) {
+        this(image, layerIndex, image.getWidth(null), image.getHeight(null));
+    }
+
+    public ImageComponent(String imagePath, int layerIndex, int width, int height) {
+        this(ImageUtility.readImage(imagePath), layerIndex, width, height);
+    }
+
+    public ImageComponent(Image image, int layerIndex, int width, int height) {
         this.layerIndex = layerIndex;
         this.image = image;
+        this.width = width;
+        this.height = height;
     }
 
     @Override
     public void onComponentInjected() {
-        imageFrame = Collections.singletonList(new ImageFrame(sprite, 0, layerIndex, image));
+        imageFrame = new ImageFrame(sprite, 0, layerIndex, width, height, image);
+        imageFrameSingletonCollection = Collections.singleton(imageFrame);
     }
 
     @Override
     public Collection<? extends Frame> getAllFrames() {
-        return imageFrame;
+        return imageFrameSingletonCollection;
     }
 
     @Override
     public Collection<? extends Frame> getRenderedFrames() {
-        return imageFrame;
+        return imageFrameSingletonCollection;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+
+        if (imageFrame != null)
+            imageFrame.setWidth(width);
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+
+        if (imageFrame != null)
+            imageFrame.setHeight(height);
     }
 }

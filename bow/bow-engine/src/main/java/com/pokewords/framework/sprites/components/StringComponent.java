@@ -4,7 +4,6 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.frames.StringFrame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 
 import java.awt.*;
 import java.util.Collection;
@@ -15,14 +14,14 @@ import java.util.List;
  * A immutable renderable component that can be rendered as a text
  * @author johnny850807 (waterball)
  */
-public class StringComponent extends Component implements Shareable, Renderable {
+public class StringComponent extends CloneableComponent implements Renderable {
     public static final Font DEFAULT_FONT = new Font("微軟正黑體", Font.BOLD, 25);
     private String text;
     private Color color;
     private Font font;
     private boolean renderByCenter = false;
     private StringFrame stringFrame;
-    private List<StringFrame> stringFrames;
+    private Collection<StringFrame> stringFrameSingletonCollection;
 
     private Sprite sprite;
 
@@ -53,17 +52,17 @@ public class StringComponent extends Component implements Shareable, Renderable 
     @Override
     public void onComponentInjected() {
         stringFrame = new StringFrame(sprite, 0, 2, text, color, font, renderByCenter);
-        stringFrames = Collections.singletonList(stringFrame);
+        stringFrameSingletonCollection = Collections.singleton(stringFrame);
     }
 
     @Override
     public Collection<? extends Frame> getAllFrames() {
-        return stringFrames;
+        return stringFrameSingletonCollection;
     }
 
     @Override
-    public List<StringFrame> getRenderedFrames() {
-        return stringFrames;
+    public Collection<StringFrame> getRenderedFrames() {
+        return stringFrameSingletonCollection;
     }
 
 
@@ -84,8 +83,8 @@ public class StringComponent extends Component implements Shareable, Renderable 
         return renderByCenter;
     }
 
-    public List<StringFrame> getStringFrame() {
-        return stringFrames;
+    public StringFrame getStringFrame() {
+        return stringFrame;
     }
 
     public void setText(String text) {
