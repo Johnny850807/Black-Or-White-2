@@ -20,4 +20,9 @@ public interface EffectFrame extends Frame {
      * @param effect functional interface describe how the effect should apply to the given world
      */
     void addEffect(GameEffect effect);
+
+    /**
+     * @return get the frame's duration
+     */
+    int getDuration();
 }

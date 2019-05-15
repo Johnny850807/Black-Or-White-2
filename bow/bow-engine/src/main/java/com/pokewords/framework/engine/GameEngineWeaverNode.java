@@ -1,0 +1,99 @@
+package com.pokewords.framework.engine;
+
+import com.pokewords.framework.commons.Range;
+import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
+import com.pokewords.framework.sprites.components.frames.EffectFrame;
+import com.pokewords.framework.sprites.components.frames.EffectFrameFactory;
+import com.pokewords.framework.sprites.components.frames.TextureEffectFrame;
+import com.pokewords.framework.sprites.factories.SpriteWeaver;
+import com.pokewords.framework.sprites.parsing.Script;
+import com.pokewords.framework.sprites.parsing.Segment;
+import com.pokewords.framework.views.helpers.Gallery;
+
+import java.awt.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GameEngineWeaverNode implements SpriteWeaver.Node {
+    private EffectFrameFactory effectFrameFactory;
+
+    // <FrameSegment's Id, frameSegment>
+    private Map<Integer, FrameSegment> frameSegmentMap = Collections.synchronizedMap(new HashMap<>());
+
+    public GameEngineWeaverNode() {
+        this.effectFrameFactory = new GameEngineEffectFrameFactory();
+    }
+
+    public GameEngineWeaverNode(EffectFrameFactory effectFrameFactory) {
+        this.effectFrameFactory = effectFrameFactory;
+    }
+
+    @Override
+    public void onWeaving(Script script, Sprite sprite) {
+        List<Segment> frames = script.getSegmentsByName("frame");
+        frames.parallelStream().forEach(f -> addFrame(f, sprite));
+        setNextFrames(sprite);
+    }
+
+    private void addFrame(Segment frame, Sprite sprite) {
+        EffectFrame effectFrame = effectFrameFactory.createFrame(frame);
+        sprite.getFrameStateMachineComponent().addFrame(effectFrame);
+    }
+
+    private void setNextFrames(Sprite sprite) {
+        FrameStateMachineComponent fsmc = sprite.getFrameStateMachineComponent();
+        for (Integer id : frameSegmentMap.keySet()) {
+            EffectFrame from = fsmc.getFrame(id);
+            EffectFrame to = fsmc.getFrame(frameSegmentMap.get(id).getNext());
+            fsmc.addTransition(from, Events.UPDATE, to);
+        }
+    }
+
+    public class GameEngineEffectFrameFactory implements EffectFrameFactory {
+        // < <startPic/endPic>, gallery instance>
+        private Map<Range, Gallery> galleryMap;
+
+        @Override
+        public EffectFrame createFrame(Segment segment) {
+            setupGalleryMapIfNotExists(segment.getParentScript());
+            FrameSegment frameSegment = new FrameSegment(segment);
+            frameSegmentMap.put(frameSegment.getId(), frameSegment);
+
+            return new TextureEffectFrame(frameSegment.getId(), frameSegment.getLayer(), frameSegment.getDuration(),
+                    getImage(frameSegment.getPic()));
+        }
+
+        private void setupGalleryMapIfNotExists(Script script) {
+            if (galleryMap == null) {
+                synchronized (this) {
+                    if (galleryMap == null) {
+                        galleryMap = Collections.synchronizedMap(new HashMap<>());
+                        List<Segment> gallerySegments = script.getSegmentsByName("gallery");
+                        for (Segment gallerySegment : gallerySegments) {
+                            galleryMap.put(new Range(gallerySegment.getIntByKey("startPic"), gallerySegment.getIntByKey("endPic")),
+                                    gallerySegmentToGallery(gallerySegment));
+                        }
+                    }
+                }
+            }
+        }
+
+        private Gallery gallerySegmentToGallery(Segment gallerySegment) {
+            return new Gallery(gallerySegment.getStringByKey("path"),
+                    gallerySegment.getIntByKey("row"),
+                    gallerySegment.getIntByKey("col"));
+        }
+
+
+        private Image getImage(int pic) {
+            for (Range range : galleryMap.keySet())
+                if(range.within(pic))
+                    return galleryMap.get(range).getImage(pic);
+
+            throw new IllegalArgumentException(String.format("The pic %d is not within any galleries.", pic));
+        }
+    }
+}

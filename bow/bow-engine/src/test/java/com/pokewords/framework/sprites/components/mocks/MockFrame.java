@@ -12,13 +12,24 @@ import java.util.*;
 
 public class MockFrame implements EffectFrame {
     public final String name;
+    public final int id;
     public Collection<GameEffect> effects = new HashSet<>();
     public Map<GameEffect, Integer> effectAppliedCount = new HashMap<>();
     public int applyCount = 0;
     public int renderCount = 0;
 
     public MockFrame(String name) {
+        this(0, name);
+    }
+
+    public MockFrame(int id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    @Override
+    public int getId() {
+        return 0;
     }
 
     @Override
@@ -39,6 +50,11 @@ public class MockFrame implements EffectFrame {
     public void addEffect(GameEffect effect) {
         effectAppliedCount.put(effect, 0);
         effects.add(effect);
+    }
+
+    @Override
+    public int getDuration() {
+        return 0;
     }
 
     @Override

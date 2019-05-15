@@ -188,7 +188,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         getPropertiesComponent().setType(type);
     }
 
-    public String getType() {
+    public Object getType() {
         return getPropertiesComponent().getType();
     }
 

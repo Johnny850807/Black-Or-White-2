@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.factories;
 
+import com.pokewords.framework.engine.GameEngineWeaverNode;
 import com.pokewords.framework.engine.exceptions.SpriteBuilderException;
 import com.pokewords.framework.engine.utils.FileUtility;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
@@ -32,8 +33,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                                  .buildScriptFromPath("path/to/script_text")
                                  .setScript(null)
                                  .addWeaverNode((script, sprite) -> {
-                                     List<Element> bows = script.getSegmentById("frame")
-                                             .get().getElementsByName("bow");
+                                     List<Element> bows = script.getSegmentById("frame").getElementsByName("bow");
                                  })
                                  .build();
     }
@@ -53,6 +53,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         init();
         script = new LinScript();
         spriteWeaver = new SpriteWeaver(iocFactory);
+        spriteWeaver.addWeaverNode(new GameEngineWeaverNode());
         scriptParser = iocFactory.scriptParser();
         scriptRulesParser = iocFactory.scriptRulesParser();
     }

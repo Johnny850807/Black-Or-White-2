@@ -1,6 +1,6 @@
 package com.pokewords.framework.engine.exceptions;
 
-public class LinScriptParserException extends SpriteDeclaratorException {
+public class LinScriptParserException extends SpriteDeclarationException {
     public LinScriptParserException(String message) {
         super(message);
     }

@@ -16,13 +16,13 @@ public class PropertiesComponent extends CloneableComponent {
 	private Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private Point center = new Point();
-	private String type;
+	private Object type;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
 
 	public PropertiesComponent() {
 	}
 
-	public PropertiesComponent(String type) {
+	public PropertiesComponent(Object type) {
 		this.type = type;
 	}
 
@@ -77,7 +77,7 @@ public class PropertiesComponent extends CloneableComponent {
 		notifyPositionListeners();
 	}
 
-	public String getType() {
+	public Object getType() {
 		return type;
 	}
 
@@ -103,8 +103,7 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	private void validatePropertiesComponent() {
-		if (StringUtility.anyNullOrEmpty(type))
-			throw new RuntimeException("The type of a Sprite should be set before the app started..");
+		Objects.requireNonNull(type);
 	}
 
 	@Override

@@ -9,17 +9,31 @@ import java.awt.Image;
 
 public class TextureEffectFrame extends DefaultEffectFrame {
 	private Sprite sprite;
-	private Image image;
+	private int id;
 	private int layerIndex;
+	private int duration;
+	private Image image;
 
-	public TextureEffectFrame(Image image, int layerIndex) {
-		this.image = image;
+	public TextureEffectFrame(int id, int layerIndex, int duration, Image image) {
+		this.id = id;
 		this.layerIndex = layerIndex;
+		this.duration = duration;
+		this.image = image;
+	}
+
+	@Override
+	public int getId() {
+		return id;
 	}
 
 	@Override
 	public int getLayerIndex() {
 		return layerIndex;
+	}
+
+	@Override
+	public int getDuration() {
+		return duration;
 	}
 
 	@Override

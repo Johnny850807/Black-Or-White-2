@@ -15,10 +15,17 @@ import java.util.*;
  * @author johnny850807
  */
 public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable {
+    // <Frame's id, Frame>
+    protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>();
     protected FiniteStateMachine<EffectFrame> fsm = new FiniteStateMachine<>();
+    protected final LinkedList<EffectFrame> renderedFrame = new LinkedList<>();
+
     protected Sprite sprite;
     protected AppStateWorld world;
-    protected final LinkedList<EffectFrame> renderedFrame = new LinkedList<>();
+
+    public EffectFrame getFrame(int id) {
+        return effectFrameMap.get(id);
+    }
 
     @Override
     public void onAppStateCreate(AppStateWorld world) {
@@ -40,6 +47,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
 
     public void addFrame(EffectFrame frame){
         fsm.addState(frame);
+        this.effectFrameMap.put(frame.getId(), frame);
     }
 
     public void addTransition(EffectFrame from, String event, EffectFrame to){
@@ -77,6 +85,9 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         return fsm;
     }
 
+    /**
+     * @return Shallow clone
+     */
     @Override
     public FrameStateMachineComponent clone() {
         return (FrameStateMachineComponent) super.clone();
@@ -92,16 +103,17 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FrameStateMachineComponent that = (FrameStateMachineComponent) o;
-        return fsm.equals(that.fsm) &&
+        return effectFrameMap.equals(that.effectFrameMap) &&
+                fsm.equals(that.fsm) &&
                 Objects.equals(sprite, that.sprite) &&
-                Objects.equals(world, that.world);
+                Objects.equals(world, that.world) &&
+                renderedFrame.equals(that.renderedFrame);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fsm, sprite, world);
+        return Objects.hash(effectFrameMap, fsm, sprite, world, renderedFrame);
     }
-
 
     @Override
     public Collection<? extends Frame> getAllFrames() {
@@ -116,5 +128,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
     public Collection<? extends Frame> getRenderedFrames() {
         return renderedFrame;
     }
+
+
 }
 
