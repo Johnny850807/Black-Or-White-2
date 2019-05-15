@@ -24,8 +24,8 @@ public class LoadingState extends AppState {
 	@Override
 	public void onAppStateCreating(AppStateWorld appStateWorld) {
 		getSpriteInitializer().declare(JOANNA)
-				.position(208, 360)
-				.with(new ImageComponent("assets/images/joanna.png", 2, 184, 180))
+				.position(173, 319)
+				.with(new ImageComponent("assets/images/joanna.png", 2, 254, 263))
 				.commit();
 
 		getSpriteInitializer().declare(CENTER_LOADING_TEXT)
