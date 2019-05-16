@@ -142,7 +142,14 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         for (Sprite sprite: sprites) {
             sprite.onUpdate(timePerFrame);
         }
+        rejoinRenderLayers();
         findCollidedSpritesAndNotifyCollisionHandlers();
+    }
+
+    private void rejoinRenderLayers() {
+        for (Sprite sprite: sprites) {
+            addFramesToRenderedLayer(sprite.getRenderedFrames());
+        }
     }
 
     private void findCollidedSpritesAndNotifyCollisionHandlers() {
