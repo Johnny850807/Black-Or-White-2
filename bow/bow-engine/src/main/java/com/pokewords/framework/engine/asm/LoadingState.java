@@ -3,19 +3,15 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.utils.Resources;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
-import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.StringComponent;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.components.frames.StringFrame;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 import com.pokewords.framework.sprites.parsing.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import static com.pokewords.framework.engine.asm.LoadingState.SpriteName.*;
@@ -53,7 +49,7 @@ public class LoadingState extends AppState {
 
     private void configCenterLoadingText() {
         getSpriteInitializer().declare(CENTER_LOADING_TEXT)
-                .position(getGameWindowDefinition().center())
+                .position(getGameWindowDefinition().center().x-150, getGameWindowDefinition().center().y-150)
                 .with(createScript())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .commit();
@@ -72,7 +68,7 @@ public class LoadingState extends AppState {
         for (int i = 0; i <= 11; i++) {
             LinScriptSegment frameSegment = new LinScriptSegment("frame", i);
             frameSegment.put("pic", i);
-            frameSegment.put("duration", 1);
+            frameSegment.put("duration", 60);
             frameSegment.put("next", (i+1)%12);
             frameSegment.put("layer", 2);
             script.addSegment(frameSegment);

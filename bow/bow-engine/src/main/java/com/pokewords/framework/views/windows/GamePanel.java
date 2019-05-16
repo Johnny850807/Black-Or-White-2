@@ -9,6 +9,7 @@ import com.pokewords.framework.views.inputs.InputManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -92,7 +93,7 @@ public class GamePanel extends JPanel implements AppView {
     private void drawRenderedLayers(Graphics g) {
         List<List<Frame>> layers = renderedLayers.getLayers();
         for (List<Frame> layer : layers) {
-            for (Frame frames : layer) {
+            for (Frame frames : new LinkedList<>(layer)) {
                 frames.renderItself(GraphicsCanvas.of(g));
             }
         }
