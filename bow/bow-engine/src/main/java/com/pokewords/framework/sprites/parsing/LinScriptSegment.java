@@ -54,8 +54,6 @@ public class LinScriptSegment implements Segment {
         return elements;
     }
 
-
-
     @Override
     public Segment put(String key, String value) {
         mappings.stringMap.put(key, value);
@@ -79,8 +77,8 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public OptionalInt getIntByKeyOptional(String key) {
-        return mappings.integerMap.containsKey(key) ? OptionalInt.of(mappings.integerMap.get(key)) : OptionalInt.empty();
+    public Optional<Integer> getIntByKeyOptional(String key) {
+        return mappings.integerMap.containsKey(key) ? Optional.ofNullable(mappings.integerMap.get(key)) : Optional.empty();
     }
 
     @Override
