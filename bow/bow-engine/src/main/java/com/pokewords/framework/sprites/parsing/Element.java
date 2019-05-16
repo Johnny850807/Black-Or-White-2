@@ -11,6 +11,11 @@ import java.util.Optional;
 public interface Element {
     Element put(String key, String value);
     Element put(String key, int value);
+    boolean containsKey(String key);
+
+    Optional<String> getStringByKeyOptional(String key);
+    Optional<Integer> getIntByKeyOptional(String key);
+
     String getStringByKey(String key);
     Integer getIntByKey(String key);
 

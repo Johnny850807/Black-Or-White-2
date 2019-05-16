@@ -57,6 +57,8 @@ public class LinScriptSegment implements Segment {
         return elements;
     }
 
+
+
     @Override
     public Segment put(String key, String value) {
         mappings.stringMap.put(key, value);
@@ -67,6 +69,21 @@ public class LinScriptSegment implements Segment {
     public Segment put(String key, int value) {
         mappings.integerMap.put(key, value);
         return this;
+    }
+
+    @Override
+    public boolean containsKey(String key) {
+        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
+    }
+
+    @Override
+    public Optional<String> getStringByKeyOptional(String key) {
+        return Optional.ofNullable(mappings.stringMap.get(key));
+    }
+
+    @Override
+    public Optional<Integer> getIntByKeyOptional(String key) {
+        return Optional.ofNullable(mappings.integerMap.get(key));
     }
 
     @Override

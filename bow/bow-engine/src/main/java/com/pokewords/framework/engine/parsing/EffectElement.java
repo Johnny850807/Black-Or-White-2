@@ -12,7 +12,8 @@ public class EffectElement {
     }
 
     public EffectElement(Element element) {
-        this(element.getIntByKey("moveX"), element.getIntByKey("moveY"));
+        this.moveX = element.getIntByKeyOptional("moveX").orElse(0);
+        this.moveY = element.getIntByKeyOptional("moveY").orElse(0);
     }
 
     public int getMoveX() {

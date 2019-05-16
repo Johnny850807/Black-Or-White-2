@@ -6,6 +6,7 @@ import com.pokewords.framework.sprites.parsing.Element;
  * @author johnny850807 (waterball)
  */
 public class PropertiesElement {
+    public static final int NONE = -Integer.MAX_VALUE;  // represent an attribute value as none
     private int x;
     private int y;
     private int w;
@@ -23,12 +24,12 @@ public class PropertiesElement {
     }
 
     public PropertiesElement(Element element) {
-        this(element.getIntByKey("x"),
-                element.getIntByKey("y"),
-                element.getIntByKey("w"),
-                element.getIntByKey("h"),
-                element.getIntByKey("centerX"),
-                element.getIntByKey("centerY"));
+        this(element.getIntByKeyOptional("x").orElse(NONE),
+                element.getIntByKeyOptional("y").orElse(NONE),
+                element.getIntByKeyOptional("w").orElse(NONE),
+                element.getIntByKeyOptional("h").orElse(NONE),
+                element.getIntByKeyOptional("centerX").orElse(NONE),
+                element.getIntByKeyOptional("centerY").orElse(NONE));
     }
 
     public int getX() {

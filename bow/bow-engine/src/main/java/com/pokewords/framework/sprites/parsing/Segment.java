@@ -19,8 +19,13 @@ public interface Segment {
     List<Element> getElementsByName(String elementName);
     List<Element> getElements();
 
+    boolean containsKey(String key);
     Segment put(String key, String value);
     Segment put(String key, int value);
+
+    Optional<String> getStringByKeyOptional(String key);
+    Optional<Integer> getIntByKeyOptional(String key);
+
     String getStringByKey(String key);
     Integer getIntByKey(String key);
 

@@ -1,7 +1,9 @@
 package com.pokewords.framework.engine;
 
 import com.pokewords.framework.commons.Range;
+import com.pokewords.framework.engine.parsing.EffectElement;
 import com.pokewords.framework.engine.parsing.FrameSegment;
+import com.pokewords.framework.engine.parsing.PropertiesElement;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
@@ -119,11 +121,26 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
 
         private void parsePropertiesElement(FrameSegment frameSegment, EffectFrame effectFrame) {
+            frameSegment.getPropertiesElementOptional()
+                    .ifPresent(p -> effectPropertiesElement(p, effectFrame));
+        }
 
+        private void effectPropertiesElement(PropertiesElement element, EffectFrame effectFrame) {
+            effectFrame.addEffect((world, sprite) -> {
+                sprite.setBody(element.getX(), element.getY(), element.getW(), element.getH());
+            });
         }
 
         private void parseEffectElement(FrameSegment frameSegment, EffectFrame effectFrame) {
+            frameSegment.getEffectElementOptional()
+                    .ifPresent(e -> effectEffectElement(e, effectFrame));
+        }
 
+        private void effectEffectElement(EffectElement element, EffectFrame effectFrame) {
+            effectFrame.addEffect((world, sprite) -> {
+                sprite.moveX(element.getMoveX());
+                sprite.moveY(element.getMoveY());
+            });
         }
     }
 }

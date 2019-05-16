@@ -35,6 +35,21 @@ public class LinScriptElement implements Element {
     }
 
     @Override
+    public boolean containsKey(String key) {
+        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
+    }
+
+    @Override
+    public Optional<String> getStringByKeyOptional(String key) {
+        return Optional.ofNullable(mappings.stringMap.get(key));
+    }
+
+    @Override
+    public Optional<Integer> getIntByKeyOptional(String key) {
+        return Optional.ofNullable(mappings.integerMap.get(key));
+    }
+
+    @Override
     public String getStringByKey(String key) {
         String result = mappings.stringMap.get(key);
         if (result == null)

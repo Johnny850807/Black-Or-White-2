@@ -1,13 +1,9 @@
 package com.pokewords.framework.sprites.parsing;
 
 
-import com.pokewords.framework.engine.utils.FileUtility;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author nyngwang
