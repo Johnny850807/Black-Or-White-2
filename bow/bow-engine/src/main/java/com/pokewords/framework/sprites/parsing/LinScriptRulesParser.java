@@ -78,14 +78,14 @@ public class LinScriptRulesParser implements ScriptRulesParser {
     }
 
     private void parseKeyValuePair(String line) {
-        Pattern pattern = Pattern.compile(" {8}(\\S+) (?:(?:(\\S+) *(\\S+)|(\\S+)))", Pattern.DOTALL);
+        Pattern pattern = Pattern.compile(" {8}(\\S+) +(?:(\\S+) +(\\S+)|(\\S+))");
         Matcher matcher = pattern.matcher(line);
         if (!matcher.find()) {
             throw new LinScriptRulesParserException(String.format("Unrecognized line: %s", line));
         } else {
             String key = matcher.group(1);
             String regex = matcher.group(2);
-            String type = regex == null? matcher.group(4): matcher.group(3);
+            String type = regex != null? matcher.group(3): matcher.group(4);
             currentMap.put(key, new ScriptRules.Pair(regex, type));
         }
     }

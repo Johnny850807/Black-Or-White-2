@@ -64,6 +64,7 @@ public interface ScriptDefinitions {
                     "        next ([1-9][0-9]+)|([0-9]) Integer\n" +
                     "        layer ([1-9][0-9]+)|([0-9]) Integer\n" +
                     "    test\n" +
+                    "        noRegex Integer\n" +
                     "Element\n" +
                     "    sheet\n" +
                     "        padding ([1-9][0-9]+)|([0-9]) Integer\n" +
