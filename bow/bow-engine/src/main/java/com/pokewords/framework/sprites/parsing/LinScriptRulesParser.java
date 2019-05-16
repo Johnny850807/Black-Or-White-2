@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
  */
 public class LinScriptRulesParser implements ScriptRulesParser {
     private ScriptRules linScriptRules;
-    private String segmentBlock;
-    private String elementBlock;
+    private Map<String, ScriptRules.Pair> currentMap;
+    private Set<String> currentSet;
 
     public LinScriptRulesParser() {
         init();
@@ -22,64 +22,71 @@ public class LinScriptRulesParser implements ScriptRulesParser {
     @Override
     public ScriptRules parse(String linScriptRulesText) {
         init();
-        setupBlocks(linScriptRulesText);
-        addToRulesFromBlock(linScriptRules.getValidSegmentNames(), linScriptRules.getValidSegmentKVRules(), segmentBlock);
-        addToRulesFromBlock(linScriptRules.getValidElementNames(), linScriptRules.getValidElementKVRules(), elementBlock);
+        parseLines(linScriptRulesText);
         return linScriptRules;
     }
 
     private void init() {
         linScriptRules = new LinScriptRules();
-        segmentBlock = "";
-        elementBlock = "";
+        currentMap = null;
+        currentSet = null;
     }
 
-    private void setupBlocks(String linScriptRulesText) {
+    private void parseLines(String linScriptRulesText) {
         Pattern pattern = Pattern.compile(
-                "(\\S+)\\n(.*?)(?:\\Z|\\n(?=\\S))",
+                "(.+?)(?:\\n|\\Z)",
                 Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(linScriptRulesText);
         while (matcher.find()) {
-            String blockName = matcher.group(1);
-            String blockContent = matcher.group(2);
-            blockRouter(blockName, blockContent);
+            System.out.println(matcher.group(1));
+            router(matcher.group(1));
         }
     }
 
-    private void blockRouter(String blockName, String blockContent) {
-        switch (blockName) {
-            case ScriptDefinitions.LinScript.SEGMENT: segmentBlock = blockContent; break;
-            case ScriptDefinitions.LinScript.ELEMENT: elementBlock = blockContent; break;
-            default: throw new LinScriptRulesParserException(
-                    "LinScriptRulesParser failed: Unrecognized script rules node name."
-            );
+    private void router(String line) {
+        if (Pattern.matches("\\s+", line))
+            return;
+        if (Pattern.matches("\\S+", line)) {
+            changeMap(line);
+            return;
+        }
+        if (Pattern.matches(" {4}\\S+", line)) {
+            parseName(line);
+            return;
+        }
+        parseKeyValuePair(line);
+    }
+
+    private void changeMap(String blockType) {
+        switch (blockType) {
+            case ScriptDefinitions.LinScript.SEGMENT:
+                currentSet = linScriptRules.getValidSegmentNames();
+                currentMap = linScriptRules.getValidSegmentKVRules();
+                break;
+            case ScriptDefinitions.LinScript.ELEMENT:
+                currentSet = linScriptRules.getValidElementNames();
+                currentMap = linScriptRules.getValidElementKVRules();
+                break;
+            default:
+                throw new LinScriptRulesParserException(String.format("Unrecognized block type: %s", blockType));
         }
     }
 
-    private void addToRulesFromBlock(Set<String> validNames, Map<String, ScriptRules.Pair> validKVRules,
-                                            String textBlock) {
-        Pattern pattern = Pattern.compile(
-                " {4}(\\S+)\n(.*?)(?=(?:\\n {4}\\S)|\\Z)",
-                Pattern.DOTALL | Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(textBlock);
-        while (matcher.find()) {
-            String tagName = matcher.group(1);
-            String kvBlock = matcher.group(2);
-            validNames.add(tagName);
-            addToKVRulesFromBlock(validKVRules, kvBlock);
-        }
+    private void parseName(String line) {
+        String name = line.trim();
+        currentSet.add(name);
     }
 
-    private void addToKVRulesFromBlock(Map<String, ScriptRules.Pair> validKVRules, String kvBlock) {
-        Pattern pattern = Pattern.compile(
-                " {8}(\\S+) (?:(\\S+)|(\\S+) *(\\S+))",
-                Pattern.DOTALL | Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(kvBlock);
-        while (matcher.find()) {
+    private void parseKeyValuePair(String line) {
+        Pattern pattern = Pattern.compile(" {8}(\\S+) (?:(?:(\\S+) *(\\S+)|(\\S+)))", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(line);
+        if (!matcher.find()) {
+            throw new LinScriptRulesParserException(String.format("Unrecognized line: %s", line));
+        } else {
             String key = matcher.group(1);
-            String regex = matcher.group(3);
-            String type = regex == null? matcher.group(2): matcher.group(4);
-            validKVRules.put(key, new ScriptRules.Pair(regex, type));
+            String regex = matcher.group(2);
+            String type = regex == null? matcher.group(4): matcher.group(3);
+            currentMap.put(key, new ScriptRules.Pair(regex, type));
         }
     }
 
@@ -87,6 +94,5 @@ public class LinScriptRulesParser implements ScriptRulesParser {
         ScriptRulesParser parser = new LinScriptRulesParser();
         ScriptRules rules = parser.parse(ScriptDefinitions.LinScript.Samples.SCRIPT_RULES_TEXT);
         System.out.println(rules);
-
     }
 }

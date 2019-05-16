@@ -1,7 +1,11 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.LinScriptParserException;
+import com.pokewords.framework.engine.utils.Resources;
+import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -156,6 +160,17 @@ public class LinScriptParser implements ScriptParser {
             setupKVPairsOfWhom(elementKVPairsText, ScriptDefinitions.LinScript.ELEMENT);
             segment.addElement(element);
             element.setParentSegment(segment);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            ScriptParser scriptParser = new LinScriptParser();
+            String scriptString = new String(Files.readAllBytes(Resources.get("assets/scripts/loadingText.bow").toPath()));
+            Script script = scriptParser.parse(scriptString, ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
+            System.out.println("stop");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
