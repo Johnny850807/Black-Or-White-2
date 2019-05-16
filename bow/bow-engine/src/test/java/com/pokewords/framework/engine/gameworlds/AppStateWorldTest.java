@@ -114,7 +114,7 @@ public class AppStateWorldTest {
         Sprite spriteA = createSingleSprite(HERO_TYPE,150, 150, 50, 100);
         appStateWorld.spawn(spriteA);
 
-        Sprite mockSpriteB = createSingleSprite(HERO_TYPE,150, 150, 50, 100);
+        Sprite mockSpriteB = createSingleSprite(HERO_TYPE,150, 249, 50, 100);
         appStateWorld.spawn(mockSpriteB);
 
         Collection<Sprite> collisionSpriteList2 =  appStateWorld.getSpritesCollidedWith(spriteA);
