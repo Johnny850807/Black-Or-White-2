@@ -77,8 +77,8 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public Optional<Integer> getIntByKeyOptional(String key) {
-        return mappings.integerMap.containsKey(key) ? Optional.ofNullable(mappings.integerMap.get(key)) : Optional.empty();
+    public OptionalInt getIntByKeyOptional(String key) {
+        return mappings.integerMap.containsKey(key) ? OptionalInt.of(mappings.integerMap.get(key)) : OptionalInt.empty();
     }
 
     @Override

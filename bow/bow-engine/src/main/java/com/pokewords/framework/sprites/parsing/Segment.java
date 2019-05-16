@@ -22,7 +22,7 @@ public interface Segment {
     Segment put(String key, String value);
     Segment put(String key, int value);
     Optional<String> getStringByKeyOptional(String key);
-    Optional<Integer> getIntByKeyOptional(String key);
+    OptionalInt getIntByKeyOptional(String key);
 
     String getSegmentName();
     String getSegmentDescription();
