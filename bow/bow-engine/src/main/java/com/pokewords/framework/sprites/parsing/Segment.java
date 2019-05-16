@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,6 +10,12 @@ import java.util.stream.Collectors;
  */
 public interface Segment {
     Segment addElement(Element element);
+
+    default @Nullable Element getElement(String elementName) {
+        List<Element> elements = getElementsByName(elementName);
+        return elements.isEmpty() ? null : elements.get(0);
+    }
+
     List<Element> getElementsByName(String elementName);
     List<Element> getElements();
 

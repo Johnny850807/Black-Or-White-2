@@ -1,6 +1,7 @@
 package com.pokewords.framework.engine;
 
 import com.pokewords.framework.commons.Range;
+import com.pokewords.framework.engine.parsing.FrameSegment;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
@@ -23,7 +24,9 @@ import java.util.Map;
  * (1) Create all effect frames of the given sprite from parsing all the <frame> segments, and add them
  * into the FrameStateMachineComponent of the sprite.
  * (2) Add the 'update' transitions from all frames corresponding to their 'next' attributes.
- * (3) TODO Read the <body> element within <frame> and effect the body element in each frame
+ * (3) Parse and effect the elements :
+ *      i. <properties>
+ *      ii. <effect>
  * @author johnny850807 (waterball)
  */
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
@@ -45,13 +48,13 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         if (sprite.hasComponent(FrameStateMachineComponent.class))
         {
             List<Segment> frames = script.getSegmentsByName("frame");
-            frames.parallelStream().forEach(f -> addFrame(f, sprite));
+            frames.parallelStream().forEach(f -> parseAndAddFrame(f, sprite));
             setNextTransitions(sprite);
         }
 
     }
 
-    private void addFrame(Segment frame, Sprite sprite) {
+    private void parseAndAddFrame(Segment frame, Sprite sprite) {
         EffectFrame effectFrame = effectFrameFactory.createFrame(frame);
         sprite.getFrameStateMachineComponent().addFrame(effectFrame);
     }
@@ -73,10 +76,10 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         public EffectFrame createFrame(Segment segment) {
             setupGalleryMapIfNotExists(segment.getParentScript());
             FrameSegment frameSegment = new FrameSegment(segment);
-            frameSegmentMap.put(frameSegment.getId(), frameSegment);
-
-            return new ImageEffectFrame(frameSegment.getId(), frameSegment.getLayer(), frameSegment.getDuration(),
-                    getImage(frameSegment.getPic()));
+            EffectFrame effectFrame = initEffectFrame(frameSegment, segment);
+            parsePropertiesElement(frameSegment, effectFrame);
+            parseEffectElement(frameSegment, effectFrame);
+            return effectFrame;
         }
 
         private void setupGalleryMapIfNotExists(Script script) {
@@ -101,6 +104,11 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
                     gallerySegment.getIntByKey("padding"));
         }
 
+        private EffectFrame initEffectFrame(FrameSegment frameSegment, Segment segment) {
+            frameSegmentMap.put(frameSegment.getId(), frameSegment);
+            return new ImageEffectFrame(frameSegment.getId(), frameSegment.getLayer(), frameSegment.getDuration(),
+                    getImage(frameSegment.getPic()));
+        }
 
         private Image getImage(int pic) {
             for (Range range : galleryMap.keySet())
@@ -108,6 +116,14 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
                     return galleryMap.get(range).getImage(pic);
 
             throw new IllegalArgumentException(String.format("The pic %d is not within any galleries.", pic));
+        }
+
+        private void parsePropertiesElement(FrameSegment frameSegment, EffectFrame effectFrame) {
+
+        }
+
+        private void parseEffectElement(FrameSegment frameSegment, EffectFrame effectFrame) {
+
         }
     }
 }
