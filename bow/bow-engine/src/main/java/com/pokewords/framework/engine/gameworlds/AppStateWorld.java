@@ -158,11 +158,11 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         for (Sprite sprite: sprites) {
             sprite.onUpdate(timePerFrame);
         }
-        rejoinRenderLayers();
+        rejoinRenderedLayers();
         findCollidedSpritesAndNotifyCollisionHandlers();
     }
 
-    private void rejoinRenderLayers() {
+    private void rejoinRenderedLayers() {
         for (Sprite sprite: sprites) {
             addFramesToRenderedLayer(sprite.getRenderedFrames());
         }
@@ -182,7 +182,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     /**
      * To notify sprites if they have collided
-     * //TODO 我會被扣兩次血
+     * //TODO O(1) collisionHandlers map
      */
     private void notifyCollisionHandlers(Sprite sprite1, Sprite sprite2) {
         for (CollisionHandler collisionHandler: collisionHandlers) {
