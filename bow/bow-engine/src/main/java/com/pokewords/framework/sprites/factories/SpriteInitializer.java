@@ -9,6 +9,7 @@ import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.Script;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.nio.file.Files;
@@ -19,6 +20,7 @@ import java.util.*;
 /**
  * This is the direct api to the client which is a convenient way to declare and init the Sprites.
  * You can set different SpriteInitializer#InitializationMode to customize the init pattern.
+ *
  * @author johnny850807 (waterball)
  */
 public class SpriteInitializer {
@@ -124,6 +126,13 @@ public class SpriteInitializer {
             return this;
         }
 
+        public SpriteDeclarator size(int w, int y) {
+            Rectangle body = declaration.propertiesComponent.getBody();
+            declaration.propertiesComponent.setBody((int) body.getX(), (int) body.getY(),
+                    w, y);
+            return this;
+        }
+
         public SpriteDeclarator weaver(@NotNull SpriteWeaver.Node weaverNode) {
             declaration.weaverNodes.add(weaverNode);
             return this;
@@ -159,7 +168,7 @@ public class SpriteInitializer {
 
             if (!declaration.propertiesComponent.getType().equals(type))
                 throw new SpriteDeclarationException(String.format("Error occurs during declaring the sprite '%s', " +
-                        "your propertiesComponent's type is '%s', but your sprite's type is declared '%s'.",
+                                "your propertiesComponent's type is '%s', but your sprite's type is declared '%s'.",
                         type, declaration.propertiesComponent.getType(), type));
         }
 
@@ -179,8 +188,7 @@ public class SpriteInitializer {
     public Sprite createSprite(Object type) throws SpriteDeclarationException {
         validateSpriteHasBeenDeclared(type);
 
-        if (!hasSpriteBeenInit(type))
-        {
+        if (!hasSpriteBeenInit(type)) {
             validateUnderCustomStrictModeShouldInitByYourself(type);
             declarationMap.get(type).startInitializingSprite();
             spriteTypesThatHaveBeenInit.add(type);
@@ -191,8 +199,7 @@ public class SpriteInitializer {
 
 
     private void validateSpriteHasBeenDeclared(Object type) {
-        if (!declarationMap.containsKey(type))
-        {
+        if (!declarationMap.containsKey(type)) {
             System.out.println(StringUtility.toString(declarationMap));
             throw new SpriteDeclarationException(String.format("You haven't declared the sprite '%s', " +
                     "use declare(type) to start your declarations. (Did you commit your declaration?)", type));
@@ -208,15 +215,15 @@ public class SpriteInitializer {
 
     /**
      * This is the method only used under the CUSTOM (or CUSTOM_STRICT)init mode, under CUSTOM (or CUSTOM_STRICT) mode, use this method to init the sprite.
-     * @see SpriteInitializer#setInitializationMode(InitializationMode)
+     *
      * @param type the init sprite's name
+     * @see SpriteInitializer#setInitializationMode(InitializationMode)
      */
     public void initSprite(String type) throws SpriteDeclarationException {
         validateOnlyCustomInitModeCanUseThisMethod();
         validateSpriteHasBeenDeclared(type);
 
-        if (!hasSpriteBeenInit(type))
-        {
+        if (!hasSpriteBeenInit(type)) {
             declarationMap.get(type).startInitializingSprite();
             spriteTypesThatHaveBeenInit.add(type);
         }

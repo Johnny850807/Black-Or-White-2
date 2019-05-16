@@ -52,7 +52,8 @@ public class LoadingState extends AppState {
 
     private void configCenterLoadingText() {
         getSpriteInitializer().declare(CENTER_LOADING_TEXT)
-                .position(getGameWindowDefinition().center().x-150, getGameWindowDefinition().center().y-150)
+                .position(getGameWindowDefinition().center().x-75, getGameWindowDefinition().center().y-165)
+                .size(150, 150)
                 .with(createScript())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .commit();
@@ -81,7 +82,7 @@ public class LoadingState extends AppState {
 
     private void configTitleText() {
         getSpriteInitializer().declare(TITLE_TEXT)
-                .position(300, 150)
+                .position(300, 120)
                 .with(new StringComponent(new StringFrame(0, 2, "Bow Engine Demo",
                         Color.blue, new Font("AR CENA", Font.BOLD, 40), true)))
                 .commit();
