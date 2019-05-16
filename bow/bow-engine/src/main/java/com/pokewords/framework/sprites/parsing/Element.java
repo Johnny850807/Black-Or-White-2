@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.parsing;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 
 /**
@@ -14,7 +15,7 @@ public interface Element {
     boolean containsKey(String key);
 
     Optional<String> getStringByKeyOptional(String key);
-    Optional<Integer> getIntByKeyOptional(String key);
+    OptionalInt getIntByKeyOptional(String key);
 
     String getStringByKey(String key);
     Integer getIntByKey(String key);

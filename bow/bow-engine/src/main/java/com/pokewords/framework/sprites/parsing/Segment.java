@@ -24,7 +24,7 @@ public interface Segment {
     Segment put(String key, int value);
 
     Optional<String> getStringByKeyOptional(String key);
-    Optional<Integer> getIntByKeyOptional(String key);
+    OptionalInt getIntByKeyOptional(String key);
 
     String getStringByKey(String key);
     Integer getIntByKey(String key);

@@ -2,57 +2,59 @@ package com.pokewords.framework.engine.parsing;
 
 import com.pokewords.framework.sprites.parsing.Element;
 
+import java.util.OptionalInt;
+
 /**
  * @author johnny850807 (waterball)
  */
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class PropertiesElement {
-    public static final int NONE = -Integer.MAX_VALUE;  // represent an attribute value as none
-    private int x;
-    private int y;
-    private int w;
-    private int h;
-    private int centerX;
-    private int centerY;
+    private OptionalInt x;
+    private OptionalInt y;
+    private OptionalInt w;
+    private OptionalInt h;
+    private OptionalInt centerX;
+    private OptionalInt centerY;
 
     public PropertiesElement(int x, int y, int w, int h, int centerX, int centerY) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.centerX = centerX;
-        this.centerY = centerY;
+        this.x = OptionalInt.of(x);
+        this.y = OptionalInt.of(y);
+        this.w = OptionalInt.of(w);
+        this.h = OptionalInt.of(h);
+        this.centerX = OptionalInt.of(centerX);
+        this.centerY = OptionalInt.of(centerY);
     }
 
     public PropertiesElement(Element element) {
-        this(element.getIntByKeyOptional("x").orElse(NONE),
-                element.getIntByKeyOptional("y").orElse(NONE),
-                element.getIntByKeyOptional("w").orElse(NONE),
-                element.getIntByKeyOptional("h").orElse(NONE),
-                element.getIntByKeyOptional("centerX").orElse(NONE),
-                element.getIntByKeyOptional("centerY").orElse(NONE));
+        this.x = element.getIntByKeyOptional("x");
+        this.y = element.getIntByKeyOptional("y");
+        this.w = element.getIntByKeyOptional("w");
+        this.h = element.getIntByKeyOptional("h");
+        this.centerX = element.getIntByKeyOptional("centerX");
+        this.centerY = element.getIntByKeyOptional("centerY");
     }
 
-    public int getX() {
+    public OptionalInt getX() {
         return x;
     }
 
-    public int getY() {
+    public OptionalInt getY() {
         return y;
     }
 
-    public int getW() {
+    public OptionalInt getW() {
         return w;
     }
 
-    public int getH() {
+    public OptionalInt getH() {
         return h;
     }
 
-    public int getCenterX() {
+    public OptionalInt getCenterX() {
         return centerX;
     }
 
-    public int getCenterY() {
+    public OptionalInt getCenterY() {
         return centerY;
     }
 }

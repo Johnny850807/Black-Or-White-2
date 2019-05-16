@@ -4,6 +4,7 @@ import com.pokewords.framework.engine.exceptions.ElementException;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
  * @author nyngwang
@@ -45,8 +46,8 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public Optional<Integer> getIntByKeyOptional(String key) {
-        return Optional.ofNullable(mappings.integerMap.get(key));
+    public OptionalInt getIntByKeyOptional(String key) {
+        return mappings.integerMap.containsKey(key) ? OptionalInt.of(mappings.integerMap.get(key)) : OptionalInt.empty();
     }
 
     @Override

@@ -2,10 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -82,8 +79,8 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public Optional<Integer> getIntByKeyOptional(String key) {
-        return Optional.ofNullable(mappings.integerMap.get(key));
+    public OptionalInt getIntByKeyOptional(String key) {
+        return mappings.integerMap.containsKey(key) ? OptionalInt.of(mappings.integerMap.get(key)) : OptionalInt.empty();
     }
 
     @Override

@@ -127,7 +127,14 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         private void effectPropertiesElement(PropertiesElement element, EffectFrame effectFrame) {
             effectFrame.addEffect((world, sprite) -> {
-                sprite.setBody(element.getX(), element.getY(), element.getW(), element.getH());
+                int x = element.getX().orElse(sprite.getX());
+                int y = element.getY().orElse(sprite.getY());
+                int w = element.getW().orElse(sprite.getWidth());
+                int h = element.getH().orElse(sprite.getHeight());
+                int centerX = element.getCenterX().orElse((int) sprite.getCenter().getX());
+                int centerY = element.getCenterY().orElse((int) sprite.getCenter().getY());
+                sprite.setBody(x, y, w, h);
+                sprite.setCenter(centerX, centerY);
             });
         }
 
@@ -138,8 +145,8 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         private void effectEffectElement(EffectElement element, EffectFrame effectFrame) {
             effectFrame.addEffect((world, sprite) -> {
-                sprite.moveX(element.getMoveX());
-                sprite.moveY(element.getMoveY());
+                element.getMoveX().ifPresent(sprite::moveX);
+                element.getMoveY().ifPresent(sprite::moveY);
             });
         }
     }
