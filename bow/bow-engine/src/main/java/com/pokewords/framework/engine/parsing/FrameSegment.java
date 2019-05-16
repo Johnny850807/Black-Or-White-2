@@ -2,7 +2,6 @@ package com.pokewords.framework.engine.parsing;
 
 import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Segment;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -43,8 +42,8 @@ public class FrameSegment {
         this.duration = frameSegment.getIntByKey("duration");
         this.next = frameSegment.getIntByKey("next");
 
-        Element propertiesElement = frameSegment.getElement("properties");
-        Element effectElement = frameSegment.getElement("effect");
+        Element propertiesElement = frameSegment.getElementByName("properties");
+        Element effectElement = frameSegment.getElementByName("effect");
         this.propertiesElement = Optional.ofNullable(propertiesElement == null ? null : new PropertiesElement(propertiesElement));
         this.effectElement = Optional.ofNullable(effectElement == null ? null : new EffectElement(effectElement));
     }
