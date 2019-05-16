@@ -1,6 +1,7 @@
 package com.pokewords.framework.engine.parsing;
 
 import com.pokewords.framework.sprites.parsing.Element;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.OptionalInt;
 
@@ -25,7 +26,7 @@ public class PropertiesElement {
         this.centerY = OptionalInt.of(centerY);
     }
 
-    public PropertiesElement(Element element) {
+    public PropertiesElement(@NotNull Element element) {
         this.x = element.getIntByKeyOptional("x");
         this.y = element.getIntByKeyOptional("y");
         this.w = element.getIntByKeyOptional("w");

@@ -121,7 +121,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
 
         private void parsePropertiesElement(FrameSegment frameSegment, EffectFrame effectFrame) {
-            frameSegment.getPropertiesElementOptional()
+            frameSegment.getPropertiesElement()
                     .ifPresent(p -> effectPropertiesElement(p, effectFrame));
         }
 
@@ -139,7 +139,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
 
         private void parseEffectElement(FrameSegment frameSegment, EffectFrame effectFrame) {
-            frameSegment.getEffectElementOptional()
+            frameSegment.getEffectElement()
                     .ifPresent(e -> effectEffectElement(e, effectFrame));
         }
 

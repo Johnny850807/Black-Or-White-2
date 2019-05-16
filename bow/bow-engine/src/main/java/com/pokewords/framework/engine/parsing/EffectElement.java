@@ -1,6 +1,7 @@
 package com.pokewords.framework.engine.parsing;
 
 import com.pokewords.framework.sprites.parsing.Element;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.OptionalInt;
 
@@ -14,7 +15,7 @@ public class EffectElement {
         this.moveY = OptionalInt.of(moveY);
     }
 
-    public EffectElement(Element element) {
+    public EffectElement(@NotNull Element element) {
         this.moveX = element.getIntByKeyOptional("moveX");
         this.moveY = element.getIntByKeyOptional("moveY");
     }

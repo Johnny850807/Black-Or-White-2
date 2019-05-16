@@ -12,6 +12,7 @@ import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScrip
 /**
  * @author johnny850807 (waterball)
  */
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class FrameSegment {
     private int id;
     private String description;
@@ -19,19 +20,19 @@ public class FrameSegment {
     private int layer;
     private int duration;
     private int next;
-    private @Nullable PropertiesElement propertiesElement;
-    private @Nullable EffectElement effectElement;
+    private Optional<PropertiesElement> propertiesElement;
+    private Optional<EffectElement> effectElement;
 
     public FrameSegment(int id, String description, int pic, int layer, int duration, int next,
-                        @Nullable Element propertiesElement, @Nullable Element effectElement) {
+                        Element propertiesElement, Element effectElement) {
         this.id = id;
         this.description = description;
         this.pic = pic;
         this.layer = layer;
         this.duration = duration;
         this.next = next;
-        this.propertiesElement = propertiesElement == null ? null : new PropertiesElement(propertiesElement);
-        this.effectElement = effectElement == null ? null : new EffectElement(effectElement);
+        this.propertiesElement = Optional.of(new PropertiesElement(propertiesElement));
+        this.effectElement = Optional.of(new EffectElement(effectElement));
     }
 
     public FrameSegment(Segment frameSegment) {
@@ -44,8 +45,8 @@ public class FrameSegment {
 
         Element propertiesElement = frameSegment.getElement("properties");
         Element effectElement = frameSegment.getElement("effect");
-        this.propertiesElement = propertiesElement == null ? null : new PropertiesElement(propertiesElement);
-        this.effectElement = effectElement == null ? null : new EffectElement(effectElement);
+        this.propertiesElement = Optional.ofNullable(propertiesElement == null ? null : new PropertiesElement(propertiesElement));
+        this.effectElement = Optional.ofNullable(effectElement == null ? null : new EffectElement(effectElement));
     }
 
     public int getId() {
@@ -72,19 +73,12 @@ public class FrameSegment {
         return next;
     }
 
-    public @Nullable PropertiesElement getPropertiesElement() {
+
+    public Optional<PropertiesElement> getPropertiesElement() {
         return propertiesElement;
     }
 
-    public @Nullable EffectElement getEffectElement() {
+    public Optional<EffectElement> getEffectElement() {
         return effectElement;
-    }
-
-    public Optional<PropertiesElement> getPropertiesElementOptional() {
-        return Optional.ofNullable(propertiesElement);
-    }
-
-    public Optional<EffectElement> getEffectElementOptional() {
-        return Optional.ofNullable(effectElement);
     }
 }
