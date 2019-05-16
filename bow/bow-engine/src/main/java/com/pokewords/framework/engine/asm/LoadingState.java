@@ -12,7 +12,11 @@ import com.pokewords.framework.sprites.components.frames.StringFrame;
 import com.pokewords.framework.sprites.components.marks.Shareable;
 import com.pokewords.framework.sprites.parsing.*;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import static com.pokewords.framework.engine.asm.LoadingState.SpriteName.*;
 
@@ -43,7 +47,7 @@ public class LoadingState extends AppState {
 
     private void configGameWindow() {
         getGameWindowsConfigurator().size(600, 600)
-                                .gamePanelBackground(Color.decode("#1B4032"))
+                                .gamePanelBackground(Color.decode("#20053f"))
                                 .atCenter();
     }
 
@@ -85,11 +89,18 @@ public class LoadingState extends AppState {
     }
 
     private void configJoanna() {
-        getSpriteInitializer().declare(JOANNA)
-                .position(173, 319)
-                .with(new ImageComponent(new ImageFrame(0, 2, 254, 263,
-                        "assets/images/joanna.png")))
-                .commit();
+        try {
+            BufferedImage image = ImageIO.read(Resources.get("assets/images/joanna2.jpg"));
+            int width = image.getWidth() * getWindowSize().y / image.getHeight() / 2;
+            int height = getWindowSize().y / 2;
+            getSpriteInitializer().declare(JOANNA)
+                    .position((getWindowSize().x - width) / 2, getWindowSize().y - height)
+                    .with(new ImageComponent(new ImageFrame(0, 2, width, height, image)))
+                    .commit();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
