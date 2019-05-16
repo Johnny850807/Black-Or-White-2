@@ -14,26 +14,40 @@ import java.util.*;
 /**
  * @author johnny850807
  */
-public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable {
-    // <Frame's id, Frame>
-    protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>();
-    protected FiniteStateMachine<EffectFrame> fsm = new FiniteStateMachine<>();
-    protected final LinkedList<EffectFrame> renderedFrame = new LinkedList<>();
-
+public class FrameStateMachineComponent extends CloneableComponent implements Renderable {
     protected Sprite sprite;
     protected AppStateWorld world;
+    protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>(); // <Frame's id, Frame>
+    protected long latestUpdateTimestamp = System.currentTimeMillis();
+    protected int frameDurationCountdown = 0;
+
+    protected FiniteStateMachine<EffectFrame> fsm = new FiniteStateMachine<>();
+    protected LinkedList<EffectFrame> renderedFrame = new LinkedList<>();
+
 
     public EffectFrame getFrame(int id) {
         return effectFrameMap.get(id);
     }
 
     @Override
+    public void onComponentInjected() {
+        fsm.getStates().forEach(frame -> frame.setSprite(sprite));
+    }
+
+    @Override
     public void onUpdate(int timePerFrame) {
-        trigger(Events.UPDATE);
+        frameDurationCountdown -= System.currentTimeMillis() - latestUpdateTimestamp;
+        if (frameDurationCountdown <= 0)
+        {
+            trigger(Events.UPDATE);
+            frameDurationCountdown = getCurrentFrame().getDuration();
+        }
         EffectFrame frame = getCurrentFrame();
         frame.apply(world, sprite);
         renderedFrame.clear();
         renderedFrame.add(frame);
+
+        latestUpdateTimestamp = System.currentTimeMillis();
     }
 
 
@@ -77,7 +91,10 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
      */
     @Override
     public FrameStateMachineComponent clone() {
-        return (FrameStateMachineComponent) super.clone();
+        FrameStateMachineComponent clone = (FrameStateMachineComponent) super.clone();
+        clone.renderedFrame = new LinkedList<>(this.renderedFrame);
+        clone.fsm = this.fsm.clone();
+        return clone;
     }
 
     @Override
@@ -92,13 +109,12 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         FrameStateMachineComponent that = (FrameStateMachineComponent) o;
         return effectFrameMap.equals(that.effectFrameMap) &&
                 fsm.equals(that.fsm) &&
-                Objects.equals(world, that.world) &&
                 renderedFrame.equals(that.renderedFrame);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(effectFrameMap, fsm, world, renderedFrame);
+        return Objects.hash(effectFrameMap, fsm, renderedFrame);
     }
 
     @Override

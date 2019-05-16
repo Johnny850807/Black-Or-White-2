@@ -17,6 +17,11 @@ public class GraphicsCanvas implements Canvas {
     }
 
     @Override
+    public void renderImage(int x, int y, int width, int height, Image image) {
+        canvas.graphics.drawImage(image, x, y, width, height, null);
+    }
+
+    @Override
     public void renderText(int x, int y, String text, Color color, Font font) {
         canvas.graphics.setColor(color);
         canvas.graphics.setFont(font);
@@ -24,14 +29,14 @@ public class GraphicsCanvas implements Canvas {
     }
 
     @Override
-    public void renderImageByCenter(int x, int y, Image image) {
+    public void renderImageWithCenterAdjusted(int x, int y, Image image) {
         int imageWidth = image.getWidth(null);
         int imageHeight = image.getHeight(null);
         canvas.graphics.drawImage(image, x-imageWidth/2, y-imageHeight/2, null);
     }
 
     @Override
-    public void renderTextByCenter(int x, int y, String text, Color color, Font font) {
+    public void renderTextWithCenterAdjusted(int x, int y, String text, Color color, Font font) {
         canvas.graphics.setColor(color);
         canvas.graphics.setFont(font);
         int width = canvas.graphics.getFontMetrics().stringWidth(text);

@@ -33,6 +33,9 @@ public abstract class GameApplication implements AppView {
 		gameEngine.launchEngine();
 	}
 
+	/**
+	 * This method is invoked during the app's initiation.
+	 */
 	@Override
 	public void onAppInit() {
 		gameFrame.onAppInit();
@@ -42,6 +45,14 @@ public abstract class GameApplication implements AppView {
 	protected abstract void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator);
 
 
+	/**
+	 * This method is invoked during the LoadingState.
+	 *
+	 * onAppLoading() will be executed asynchronously by the GameEngine,
+	 * at the moment executing this method, the GameEngine will render the loading-state.
+	 *
+	 * Hence, it's fine to put heavy tasks as many as possible within this method.
+	 */
 	@Override
 	public void onAppLoading() {
 		gameFrame.onAppLoading();

@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.factories;
 
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
+import com.pokewords.framework.engine.utils.Resources;
 import com.pokewords.framework.engine.utils.StringUtility;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.Sprite;
@@ -164,7 +165,7 @@ public class SpriteInitializer {
 
         private void validateScriptPathIfNotNull() throws SpriteDeclarationException {
             if (!StringUtility.isNullOrEmpty(declaration.scriptPath) &&
-                    Files.notExists(Paths.get(declaration.scriptPath)))
+                    Files.notExists(Resources.get(declaration.scriptPath).toPath()))
                 throw new SpriteDeclarationException(String.format("Error occurs during declaring the sprite '%s', the scriptPath '%s' does not exist.", type, declaration.scriptPath));
         }
     }

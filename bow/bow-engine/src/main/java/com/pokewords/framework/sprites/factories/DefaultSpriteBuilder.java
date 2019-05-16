@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.factories;
 import com.pokewords.framework.engine.GameEngineWeaverNode;
 import com.pokewords.framework.engine.exceptions.SpriteBuilderException;
 import com.pokewords.framework.engine.utils.FileUtility;
+import com.pokewords.framework.engine.utils.Resources;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.*;
@@ -11,6 +12,7 @@ import com.pokewords.framework.ioc.IocFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -94,8 +96,8 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     @Override
     public DefaultSpriteBuilder buildScriptFromPath(String path) {
         try {
-            script = scriptParser.parse(FileUtility.read(path),
-                     ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
+            String scriptString = new String(Files.readAllBytes(Resources.get(path).toPath()));
+            script = scriptParser.parse(scriptString, ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
             addComponent(new FrameStateMachineComponent());
         } catch (IOException e) {
             e.printStackTrace();

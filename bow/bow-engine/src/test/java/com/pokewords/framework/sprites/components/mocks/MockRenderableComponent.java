@@ -8,6 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class MockRenderableComponent extends MockComponentImp implements Renderable {
     private LinkedList<Frame> mockFrames = new LinkedList<>();
 

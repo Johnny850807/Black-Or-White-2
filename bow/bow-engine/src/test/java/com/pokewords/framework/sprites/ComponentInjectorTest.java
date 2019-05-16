@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class ComponentInjectorTest {
 
     @Test

@@ -1,63 +1,50 @@
 package com.pokewords.framework.sprites.components.frames;
 
-import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * A frame rendered as a text.
  * @author johnny850807 (waterball)
  */
-public class StringFrame implements Frame {
-    private Sprite sprite;
-    private int id;
-    private int layerIndex;
-    private String text;
-    private Color color;
-    private Font font;
-    private boolean renderByCenter;
+public class StringFrame extends AbstractFrame implements Frame {
+    protected String text;
+    protected Color color;
+    protected Font font;
+    protected boolean renderByCenter;
 
-    public StringFrame(Sprite sprite, int id, int layerIndex, String text, Color color, Font font, boolean renderByCenter) {
-        this.color = color;
-        this.sprite = sprite;
-        this.id = id;
-        this.layerIndex = layerIndex;
+    public StringFrame(int id, int layerIndex, String text, boolean renderByCenter) {
+        this(id, layerIndex, text, Color.black, new Font("微軟正黑體", Font.PLAIN, 15), renderByCenter);
+    }
+
+    public StringFrame(int id, int layerIndex, String text, Color color, boolean renderByCenter) {
+        this(id, layerIndex, text, color, new Font("微軟正黑體", Font.PLAIN, 15), renderByCenter);
+    }
+
+    public StringFrame(int id, int layerIndex, String text, Font font, boolean renderByCenter) {
+        this(id, layerIndex, text, Color.black, font, renderByCenter);
+    }
+
+    public StringFrame(int id, int layerIndex, String text, Color color, Font font, boolean renderByCenter) {
+        super(id, layerIndex);
         this.text = text;
+        this.color = color;
         this.font = font;
         this.renderByCenter = renderByCenter;
     }
 
     @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public int getLayerIndex() {
-        return layerIndex;
-    }
-
-
-    @Override
     public void renderItself(Canvas canvas) {
         if (renderByCenter)
-            canvas.renderTextByCenter(sprite.getX(), sprite.getY(), text, color, font);
+            canvas.renderTextWithCenterAdjusted(sprite.getX(), sprite.getY(), text, color, font);
         else
             canvas.renderText(sprite.getX(), sprite.getY(), text, color, font);
     }
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setLayerIndex(int layerIndex) {
-        this.layerIndex = layerIndex;
     }
 
     public void setColor(Color color) {
@@ -70,5 +57,38 @@ public class StringFrame implements Frame {
 
     public void setRenderByCenter(boolean renderByCenter) {
         this.renderByCenter = renderByCenter;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public boolean isRenderByCenter() {
+        return renderByCenter;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        StringFrame that = (StringFrame) o;
+        return renderByCenter == that.renderByCenter &&
+                text.equals(that.text) &&
+                color.equals(that.color) &&
+                font.equals(that.font);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), text, color, font, renderByCenter);
     }
 }

@@ -1,36 +1,50 @@
-package com.pokewords.framework.views.helpers;
+package com.pokewords.framework.views.helpers.galleries;
+
+import com.pokewords.framework.commons.Range;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joanna
  */
-
-public class Gallery {
+public class SheetGallery implements Gallery {
     private String pathname;
+    private Range pictureRange;
     private int row;
     private int col;
+    private int padding;
 
-    public Gallery(String pathname, int row, int col) {
+    public SheetGallery(String pathname, Range pictureRange, int row, int col) {
+        this(pathname, pictureRange, row, col, 0);
+    }
+
+    public SheetGallery(String pathname, Range pictureRange, int row, int col, int padding) {
         this.pathname = pathname;
+        this.pictureRange = pictureRange;
         this.row = row;
         this.col = col;
+        this.padding = padding;  //TODO effect padding
+    }
+
+    @Override
+    public Range getPictureRange() {
+        return pictureRange;
     }
 
     /**
      * To get image
-     * @param pic index
+     * @param pic the picture's number
      * @return image
      */
+    @Override
     public Image getImage(int pic){
-       return getImage(pic / col, pic % col);
+       int index = pic - pictureRange.getStart();
+       return getImage(index / col, index % col);
     }
 
     /**
@@ -64,7 +78,7 @@ public class Gallery {
         String pathname = "D:/我的下載/bandit_0.bmp";
         int imgrow = 7, imgcol = 10;
 
-        Gallery gallery = new Gallery(pathname, imgrow, imgcol);
+        Gallery gallery = new SheetGallery(pathname, new Range(0, 69), imgrow, imgcol, 0);
 
         JFrame jf = new JFrame("");
         JLabel jLabel = new JLabel();

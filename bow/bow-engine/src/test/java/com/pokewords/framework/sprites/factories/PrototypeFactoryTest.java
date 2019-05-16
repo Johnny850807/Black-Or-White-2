@@ -10,6 +10,9 @@ import org.junit.Test;
 import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SimpleSprite.createSimpleSprite;
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class PrototypeFactoryTest extends AbstractTest {
     private PrototypeFactory prototypeFactory;
 

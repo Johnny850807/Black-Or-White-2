@@ -9,6 +9,12 @@ import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 /**
+ * The AppStateMachine manages the finite game states.
+ *
+ * Built-in transitions:
+ * EmptyState --(EVENT_LOADING)--> LoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
+ *
+ * Use AppStateMachine#createState(appStateType) to create your app state.
  * @author johnny850807 (waterball)
  */
 public class AppStateMachine implements GameLifecycleListener {
@@ -36,12 +42,18 @@ public class AppStateMachine implements GameLifecycleListener {
 		initialState.onAppStateCreate();
 	}
 
+	/**
+	 * Create the AppState of the given type, the AppStateMachine will add it into the machine.
+	 * @param appStateType the app state's type
+	 * @return the created AppState of the appStateType
+	 */
 	public <T extends AppState> T createState(Class<T> appStateType) {
 		T state;
 		try {
 			state = appStateType.newInstance();
 			state.inject(inputs, this, spriteInitializer, gameWindowsConfigurator);
 			fsm.addState(state);
+			state.onAppStateCreate();
 			return state;
 		} catch (InstantiationException|IllegalAccessException e) {
 			throw new GameEngineException(String.format("Error occurs during createState(appStateType), " +
@@ -49,14 +61,12 @@ public class AppStateMachine implements GameLifecycleListener {
 		}
 	}
 
-	public AppState trigger(String event) {
+	public AppState trigger(Object event) {
 		AppState from = fsm.getCurrentState();
-		AppState to = fsm.trigger(event);
+		AppState to = fsm.trigger(event.toString());
 		if (from != to)
 		{
 			from.onAppStateExit();
-			if (!to.hasStarted())
-				to.onAppStateCreate();
 			to.onAppStateEnter();
 		}
 		return to;
@@ -69,7 +79,11 @@ public class AppStateMachine implements GameLifecycleListener {
 	}
 
 	public void setGameInitialState(AppState clientInitState) {
+		if (gameInitialState != null)
+			throw new GameEngineException("You can only set the GameInitialState once.");
 		this.gameInitialState = clientInitState;
+		this.fsm.addState(gameInitialState);
+		this.fsm.addTransition(loadingState, EVENT_GAME_STARTED, gameInitialState);
 	}
 
 	public AppState getCurrentState() {
@@ -80,6 +94,13 @@ public class AppStateMachine implements GameLifecycleListener {
 		return getCurrentState().getAppStateWorld();
 	}
 
+	public AppState getGameInitialState() {
+		return gameInitialState;
+	}
+
+	public AppState getLoadingState() {
+		return loadingState;
+	}
 
 	public void addTransition(AppState from, Object event, AppState to) {
 		fsm.addTransition(from, event, to);

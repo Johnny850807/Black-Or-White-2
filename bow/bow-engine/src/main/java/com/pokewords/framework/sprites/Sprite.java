@@ -49,6 +49,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		this.world = world;
 	}
 
+	@Nullable
 	public AppStateWorld getWorld() {
 		return world;
 	}

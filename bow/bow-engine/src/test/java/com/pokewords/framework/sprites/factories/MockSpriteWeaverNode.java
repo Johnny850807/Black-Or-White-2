@@ -3,6 +3,9 @@ package com.pokewords.framework.sprites.factories;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.parsing.Script;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class MockSpriteWeaverNode implements SpriteWeaver.Node {
     private Script weavingScript;
     private Sprite weavedSprite;

@@ -4,6 +4,7 @@ import com.pokewords.framework.engine.exceptions.ElementException;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
  * @author nyngwang
@@ -35,6 +36,26 @@ public class LinScriptElement implements Element {
     }
 
     @Override
+    public String getElementName() {
+        return getStringByKey(ScriptDefinitions.LinScript.Element.NAME);
+    }
+
+    @Override
+    public Optional<String> getStringByKeyOptional(String key) {
+        return Optional.ofNullable(mappings.stringMap.get(key));
+    }
+
+    @Override
+    public OptionalInt getIntByKeyOptional(String key) {
+        return mappings.integerMap.containsKey(key) ? OptionalInt.of(mappings.integerMap.get(key)) : OptionalInt.empty();
+    }
+
+    @Override
+    public boolean containsKey(String key) {
+        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
+    }
+
+    @Override
     public String getStringByKey(String key) {
         String result = mappings.stringMap.get(key);
         if (result == null)
@@ -51,16 +72,15 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public Segment getParentSegment() {
-        return parentSegment;
-    }
-
-    @Override
     public Element setParentSegment(Segment parentSegment) {
         this.parentSegment = (LinScriptSegment) parentSegment;
         return this;
     }
 
+    @Override
+    public Segment getParentSegment() {
+        return parentSegment;
+    }
 
     // Pretty print
     @Override
