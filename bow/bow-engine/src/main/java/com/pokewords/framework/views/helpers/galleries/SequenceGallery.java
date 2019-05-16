@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  * @author johnny850807 (waterball)
  */
 public class SequenceGallery implements Gallery {
+    public static final String REGEX_SUPPORTED_FILE_NAME_PATTERN = "([1-9][0-9]*|0)\\.(bmp|jpg|png|gif)";
     private List<Image> imageSequence;
     private Range pictureRange;
 
@@ -35,10 +37,21 @@ public class SequenceGallery implements Gallery {
     private  List<Image> readImageSequenceFromHomePath(String homePath) {
         File homeDir = Resources.get(homePath);
         List<File> picFiles = Arrays.asList(Objects.requireNonNull(homeDir.listFiles()));
+        validateFileNames(picFiles);
         sortFilesByAscendingIndex(picFiles);
         return picFiles.stream()
                 .map(ImageUtility::readImage)
                 .collect(Collectors.toList());
+    }
+
+    private void validateFileNames(List<File> files) {
+        for (File file : files) {
+            String fileName = file.getName();
+            if (!Pattern.matches(REGEX_SUPPORTED_FILE_NAME_PATTERN, fileName))
+                throw new IllegalArgumentException(String.format("The file name %s is invalid, the file name" +
+                        " should be in a number form e.g. 0.png, 1.png, 2.png,...). " +
+                        "Supported file extensions : bmp, jpg, png, gif.", fileName));
+        }
     }
 
     private void sortFilesByAscendingIndex(List<File> picFiles) {
