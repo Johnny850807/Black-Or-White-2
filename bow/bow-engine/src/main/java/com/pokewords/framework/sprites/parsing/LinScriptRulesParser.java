@@ -38,7 +38,6 @@ public class LinScriptRulesParser implements ScriptRulesParser {
                 Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(linScriptRulesText);
         while (matcher.find()) {
-            System.out.println(matcher.group(1));
             router(matcher.group(1));
         }
     }

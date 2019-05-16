@@ -64,9 +64,11 @@ public class LinScriptParser implements ScriptParser {
             case ScriptDefinitions.LinScript.SEGMENT:
                 if ( !linScriptRules.getValidSegmentNames().contains(name) )
                     throw new LinScriptParserException("Segment name is unrecognizable!");
+                break;
             case ScriptDefinitions.LinScript.ELEMENT:
                 if ( !linScriptRules.getValidElementNames().contains(name) )
-                    throw new LinScriptParserException("Element name is unrecognizable!");
+                    throw new LinScriptParserException(String.format("Element name %s is unrecognizable!", name));
+                break;
             default:
                 throw new LinScriptParserException("Internal error: misuse of validateNameOfWhom()");
         }
@@ -74,7 +76,7 @@ public class LinScriptParser implements ScriptParser {
 
     private void setupSegmentKVPairsAndElementsIfExist(String segmentText) {
         Pattern pattern = Pattern.compile(
-                "(?:\\s*(<(\\w+)>.*?</\\2>)\\s*)|([^<]+)",
+                "\\s*(<(\\w+)>.*?</\\2>)\\s*|([^<]+)",
                 Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(segmentText);
         while (matcher.find()) {
