@@ -1,6 +1,8 @@
 package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.utils.Resources;
+import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.ImageComponent;
@@ -8,6 +10,7 @@ import com.pokewords.framework.sprites.components.StringComponent;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.components.frames.StringFrame;
 import com.pokewords.framework.sprites.components.marks.Shareable;
+import com.pokewords.framework.sprites.parsing.*;
 
 import java.awt.*;
 
@@ -47,8 +50,30 @@ public class LoadingState extends AppState {
     private void configCenterLoadingText() {
         getSpriteInitializer().declare(CENTER_LOADING_TEXT)
                 .position(getGameWindowDefinition().center())
-                .with("assets/scripts/loadingText.bow")
+                .with(createScript())
+                .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .commit();
+    }
+
+    private Script createScript() {
+        Script script = new LinScript();
+        Segment galleriesSegment = new LinScriptSegment("galleries", 0);
+        Element sequenceElement = new LinScriptElement("sequence");
+        sequenceElement.put("startPic", 0);
+        sequenceElement.put("endPic", 11);
+        sequenceElement.put("path", "assets/sequences/loadingProgressBar");
+        script.addSegment(galleriesSegment);
+        galleriesSegment.addElement(sequenceElement);
+
+        for (int i = 0; i <= 11; i++) {
+            LinScriptSegment frameSegment = new LinScriptSegment("frame", i);
+            frameSegment.put("pic", i);
+            frameSegment.put("duration", 1);
+            frameSegment.put("next", (i+1)%12);
+            frameSegment.put("layer", 2);
+            script.addSegment(frameSegment);
+        }
+        return script;
     }
 
     private void configTitleText() {

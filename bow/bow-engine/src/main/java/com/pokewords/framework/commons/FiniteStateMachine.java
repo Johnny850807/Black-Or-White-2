@@ -158,14 +158,14 @@ public class FiniteStateMachine<T> implements Cloneable{
      * @return <tt>true</tt> if this state exists.
      */
     private boolean isStateExists(T t){
-        return stateNodesMap.containsKey(t.hashCode());
+        return t != null && stateNodesMap.containsKey(t.hashCode());
     }
 
     /**
      * @return <tt>true</tt> if this event exists.
      */
     private boolean isEventExists(String event){
-        return eventMap.containsKey(event);
+        return event != null && eventMap.containsKey(event);
     }
 
     /**
