@@ -19,7 +19,7 @@ public class MockSprite extends Sprite{
     }
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
+    public void onAppStateCreate() {
         onAppStateStartCount ++;
     }
 

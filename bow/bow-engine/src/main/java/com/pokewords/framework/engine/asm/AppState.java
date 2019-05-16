@@ -35,11 +35,56 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onAppStateCreate(AppStateWorld world) {
+	public void onAppStateCreate() {
 		this.started = true;
-		this.appStateWorld = world;
-		this.appStateWorld.onAppStateCreate(world);
+		this.appStateWorld = onCreateAppStateWorld();
+		onAppStateCreating(appStateWorld);
+		this.appStateWorld.onAppStateCreate();
 	}
+
+	protected abstract void onAppStateCreating(AppStateWorld appStateWorld);
+
+	/**
+	 * the hook method invoked whenever any AppState is created
+	 * , this then requires initializing a new AppStateWorld for that AppState.
+	 * For customizing your AppStateWorld, overwrite this method.
+	 * @return the created app state world
+	 */
+	protected AppStateWorld onCreateAppStateWorld() {
+		return new AppStateWorld();
+	}
+
+	@Override
+	public final void onAppStateEnter() {
+		onAppStateEntering();
+		appStateWorld.onAppStateEnter();
+	}
+
+	protected abstract void onAppStateEntering();
+
+	@Override
+	public final void onAppStateExit() {
+		onAppStateExiting();
+		appStateWorld.onAppStateExit();
+	}
+
+	protected abstract void onAppStateExiting();
+
+	@Override
+	public final void onAppStateDestroy() {
+		onAppStateDestroying();
+		appStateWorld.onAppStateDestroy();
+	}
+
+	protected abstract void onAppStateDestroying();
+
+	@Override
+	public final void onUpdate(int timePerFrame) {
+		onAppStateUpdating(timePerFrame);
+		appStateWorld.onUpdate(timePerFrame);
+	}
+
+	protected abstract void onAppStateUpdating(int timePerFrame);
 
 	protected Sprite createSprite(Object type) {
 		return spriteInitializer.createSprite(type);

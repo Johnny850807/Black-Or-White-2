@@ -7,23 +7,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultPrototypeFactory implements PrototypeFactory{
-    private Map<String, Sprite> spriteMap = new HashMap<>();
+    private Map<Object, Sprite> spriteMap = new HashMap<>();
 
     @Override
-    public Sprite cloneSprite(String type) {
+    public Sprite cloneSprite(Object type) {
         if (!spriteMap.containsKey(type))
             throw new NoSuchPrototypeException(String.format("Does not contain a Prototype named %s.", type));
 
-        return spriteMap.get(type).clone();
+        Sprite prototype = spriteMap.get(type);
+        return prototype.clone();
     }
 
     @Override
-    public void addPrototype(String type, Sprite prototype) {
+    public void addPrototype(Object type, Sprite prototype) {
         spriteMap.put(type, prototype);
     }
 
     @Override
-    public void removePrototype(String type) {
+    public void removePrototype(Object type) {
         spriteMap.remove(type);
     }
 

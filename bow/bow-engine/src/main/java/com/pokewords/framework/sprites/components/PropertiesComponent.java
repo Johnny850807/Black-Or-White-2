@@ -13,16 +13,15 @@ import java.util.Objects;
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
-	private Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private Point center = new Point();
-	private String type;
+	private Object type;
 	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
 
 	public PropertiesComponent() {
 	}
 
-	public PropertiesComponent(String type) {
+	public PropertiesComponent(Object type) {
 		this.type = type;
 	}
 
@@ -77,7 +76,7 @@ public class PropertiesComponent extends CloneableComponent {
 		notifyPositionListeners();
 	}
 
-	public String getType() {
+	public Object getType() {
 		return type;
 	}
 
@@ -98,34 +97,10 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	@Override
-	public void onAppStateCreate(AppStateWorld world) {
-        validatePropertiesComponent();
+	public void onAppStateCreate() {
+		Objects.requireNonNull(type);
 	}
 
-	private void validatePropertiesComponent() {
-		if (StringUtility.anyNullOrEmpty(type))
-			throw new RuntimeException("The type of a Sprite should be set before the app started..");
-	}
-
-	@Override
-	public void onUpdate(int timePerFrame) {
-
-	}
-
-	@Override
-	public void onAppStateEnter() {
-
-	}
-
-	@Override
-	public void onAppStateExit() {
-
-	}
-
-	@Override
-	public void onAppStateDestroy() {
-
-	}
 
 	public interface PositionListener{
 		void onPositionUpdated(int x, int y);

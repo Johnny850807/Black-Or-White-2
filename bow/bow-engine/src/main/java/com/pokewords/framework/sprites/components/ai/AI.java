@@ -7,29 +7,4 @@ public class AI extends CloneableComponent {
 
 	private BehaviorTree behaviorTree;
 
-
-	@Override
-	public void onAppStateCreate(AppStateWorld world) {
-
-	}
-
-	@Override
-	public void onUpdate(int timePerFrame) {
-
-	}
-
-	@Override
-	public void onAppStateEnter() {
-
-	}
-
-	@Override
-	public void onAppStateExit() {
-
-	}
-
-	@Override
-	public void onAppStateDestroy() {
-
-	}
 }

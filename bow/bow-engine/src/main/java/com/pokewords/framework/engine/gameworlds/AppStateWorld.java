@@ -47,6 +47,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         int id = spriteCount.incrementAndGet();
         addSpriteIntoWorld(id, sprite);
         addFramesToRenderedLayer(sprite.getRenderedFrames());
+        sprite.setWorld(this);
         return id;
     }
 
@@ -96,10 +97,11 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         List<List<Frame>> layers = renderedLayers.getLayers();
         expandLayersToFitTheIndex(layers, layerIndex);
         layers.get(layerIndex).add(frame);
+        renderedLayers.setLayers(layers);
     }
 
     private void expandLayersToFitTheIndex(List<List<Frame>> layers, int layerIndex) {
-        IntStream.range(layers.size(), layerIndex)
+        IntStream.range(layers.size(), layerIndex+1)
                 .forEach(i -> layers.add(new ArrayList<>()));
     }
 
@@ -124,13 +126,9 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
-        if (world != this) {
-            throw new GameEngineException("The world is not consistent from triggering the onAppStateCreate() method from the AppState");
-        }
-
+    public void onAppStateCreate() {
         for (Sprite sprite: sprites) {
-            sprite.onAppStateCreate(this);
+            sprite.onAppStateCreate();
         }
     }
 
@@ -281,11 +279,17 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * Clear the world. This method will remove all the sprites and the states within the world.
      */
     public void clearSprites() {
-        sprites.clear();
+        sprites.forEach(this::removeSprite);
         spriteCount = new AtomicInteger(0);
         renderedLayers.setLayers(new ArrayList<>());
         idSpriteMap.clear();
         spriteIdMap.clear();
+        System.gc();
+    }
+
+    public void removeSprite(Sprite sprite) {
+        sprites.remove(sprite);
+        sprite.setWorld(null);
     }
 
     public void clearCollisionHandlers() {

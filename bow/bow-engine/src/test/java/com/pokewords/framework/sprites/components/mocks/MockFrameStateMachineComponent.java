@@ -14,7 +14,7 @@ public class MockFrameStateMachineComponent extends FrameStateMachineComponent i
     private int updateCount = 0;
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
+    public void onAppStateCreate() {
         hasStarted = true;
     }
 

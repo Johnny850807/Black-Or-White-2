@@ -9,10 +9,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class ComponentMap extends HashMap<Class<? extends Component>, Component> implements Renderable {
     private Set<Renderable> renderableComponents = new HashSet<>();
+
+    public void foreachComponent(Consumer<? super Component> consumer) {
+        values().forEach(consumer);
+    }
 
     @Override
     public boolean remove(Object type, Object component) {

@@ -15,31 +15,41 @@ import java.util.*;
  * @author johnny850807
  */
 public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable {
+    // <Frame's id, Frame>
+    protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>();
     protected FiniteStateMachine<EffectFrame> fsm = new FiniteStateMachine<>();
-    protected Sprite sprite;
-    protected AppStateWorld world;
     protected final LinkedList<EffectFrame> renderedFrame = new LinkedList<>();
 
-    @Override
-    public void onAppStateCreate(AppStateWorld world) {
-        this.world = world;
+    protected Sprite sprite;
+    protected AppStateWorld world;
+
+    protected long latestUpdateTimestamp = System.currentTimeMillis();
+    protected int frameDurationCountdown = 0;
+
+    public EffectFrame getFrame(int id) {
+        return effectFrameMap.get(id);
     }
 
     @Override
-    public void onAppStateEnter() { }
-
-    @Override
     public void onUpdate(int timePerFrame) {
-        trigger(Events.UPDATE);
+        frameDurationCountdown -= System.currentTimeMillis() - latestUpdateTimestamp;
+        if (frameDurationCountdown <= 0)
+        {
+            trigger(Events.UPDATE);
+            frameDurationCountdown = getCurrentFrame().getDuration();
+        }
         EffectFrame frame = getCurrentFrame();
         frame.apply(world, sprite);
         renderedFrame.clear();
         renderedFrame.add(frame);
+
+        latestUpdateTimestamp = System.currentTimeMillis();
     }
 
 
     public void addFrame(EffectFrame frame){
         fsm.addState(frame);
+        this.effectFrameMap.put(frame.getId(), frame);
     }
 
     public void addTransition(EffectFrame from, String event, EffectFrame to){
@@ -64,11 +74,6 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         renderedFrame.add(frame);
     }
 
-    @Override
-    public void onAppStateExit() { }
-
-    @Override
-    public void onAppStateDestroy() { }
 
     /**
      * @return the actual inner finite state machine which contains the frames and transitions
@@ -77,6 +82,9 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         return fsm;
     }
 
+    /**
+     * @return Shallow clone
+     */
     @Override
     public FrameStateMachineComponent clone() {
         return (FrameStateMachineComponent) super.clone();
@@ -92,16 +100,16 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FrameStateMachineComponent that = (FrameStateMachineComponent) o;
-        return fsm.equals(that.fsm) &&
-                Objects.equals(sprite, that.sprite) &&
-                Objects.equals(world, that.world);
+        return effectFrameMap.equals(that.effectFrameMap) &&
+                fsm.equals(that.fsm) &&
+                Objects.equals(world, that.world) &&
+                renderedFrame.equals(that.renderedFrame);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fsm, sprite, world);
+        return Objects.hash(effectFrameMap, fsm, world, renderedFrame);
     }
-
 
     @Override
     public Collection<? extends Frame> getAllFrames() {
@@ -116,5 +124,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Sh
     public Collection<? extends Frame> getRenderedFrames() {
         return renderedFrame;
     }
+
+
 }
 

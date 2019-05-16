@@ -138,7 +138,7 @@ public class SpriteTest extends AbstractTest {
         Sprite sprite = createSpriteWithOnlyMockComponents();
 
         //when the sprite got triggered app's life cycles
-        sprite.onAppStateCreate(new AppStateWorld());
+        sprite.onAppStateCreate();
 
         sprite.onAppStateEnter();
 

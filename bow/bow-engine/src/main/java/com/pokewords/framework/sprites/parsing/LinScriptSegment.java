@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.engine.exceptions.SegmentException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +47,8 @@ public class LinScriptSegment implements Segment {
     public List<Element> getElementsByName(String elementName) {
         return elements.stream()
                 .filter(element ->
-                        element.getStringByKey(ScriptDefinitions.LinScript.Element.NAME).orElse("")
-                                .equals(elementName))
+                        element.getStringByKey(ScriptDefinitions.LinScript.Element.NAME)
+                               .equals(elementName))
                 .collect(Collectors.toList());
     }
 
@@ -68,13 +70,19 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public Optional<String> getStringByKey(String key) {
-        return Optional.of(mappings.stringMap.get(key));
+    public String getStringByKey(String key) {
+        String result = mappings.stringMap.get(key);
+        if (result == null)
+            throw new SegmentException(String.format("LinScriptElement: attribute %s does not exist", key));
+        return result;
     }
 
     @Override
-    public Optional<Integer> getIntByKey(String key) {
-        return Optional.of(mappings.integerMap.get(key));
+    public Integer getIntByKey(String key) {
+        Integer result = mappings.integerMap.get(key);
+        if (result == null)
+            throw new SegmentException(String.format("LinScriptElement: attribute %s does not exist", key));
+        return result;
     }
 
     @Override
