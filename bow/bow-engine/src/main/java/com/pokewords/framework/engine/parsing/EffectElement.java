@@ -7,8 +7,8 @@ import java.util.OptionalInt;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class EffectElement {
-    private OptionalInt moveX;
-    private OptionalInt moveY;
+        private OptionalInt moveX;
+        private OptionalInt moveY;
 
     public EffectElement(int moveX, int moveY) {
         this.moveX = OptionalInt.of(moveX);

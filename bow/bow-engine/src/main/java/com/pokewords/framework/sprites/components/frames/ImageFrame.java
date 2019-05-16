@@ -13,7 +13,7 @@ public class ImageFrame extends AbstractFrame implements Frame {
    protected boolean renderWithCenterAdjusted;
 
     public ImageFrame(int id, int layerIndex, int width, int height, String imagePath) {
-        this(id, layerIndex, width, height, ImageUtility.readImage(imagePath), false);
+        this(id, layerIndex, width, height, ImageUtility.readImageFromResources(imagePath), false);
     }
 
     public ImageFrame(int id, int layerIndex, int width, int height, Image image) {
@@ -21,7 +21,7 @@ public class ImageFrame extends AbstractFrame implements Frame {
     }
 
     public ImageFrame(int id, int layerIndex, String imagePath) {
-        this(id, layerIndex, ImageUtility.readImage(imagePath), false);
+        this(id, layerIndex, ImageUtility.readImageFromResources(imagePath), false);
     }
 
     public ImageFrame(int id, int layerIndex, Image image) {
@@ -29,11 +29,11 @@ public class ImageFrame extends AbstractFrame implements Frame {
     }
 
     public ImageFrame(int id, int layerIndex, int width, int height, String imagePath, boolean renderWithCenterAdjusted) {
-        this(id, layerIndex, width, height, ImageUtility.readImage(imagePath), renderWithCenterAdjusted);
+        this(id, layerIndex, width, height, ImageUtility.readImageFromResources(imagePath), renderWithCenterAdjusted);
     }
 
     public ImageFrame(int id, int layerIndex, String imagePath, boolean renderWithCenterAdjusted) {
-        this(id, layerIndex, ImageUtility.readImage(imagePath), renderWithCenterAdjusted);
+        this(id, layerIndex, ImageUtility.readImageFromResources(imagePath), renderWithCenterAdjusted);
     }
 
     public ImageFrame(int id, int layerIndex, Image image, boolean renderWithCenterAdjusted) {

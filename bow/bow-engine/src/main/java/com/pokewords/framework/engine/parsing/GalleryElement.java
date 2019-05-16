@@ -3,8 +3,8 @@ package com.pokewords.framework.engine.parsing;
 
 import com.pokewords.framework.commons.Range;
 import com.pokewords.framework.sprites.parsing.Element;
-import com.pokewords.framework.views.helpers.Gallery;
-import com.pokewords.framework.views.helpers.SheetGallery;
+import com.pokewords.framework.views.helpers.galleries.Gallery;
+import com.pokewords.framework.views.helpers.galleries.SheetGallery;
 
 /**
  * @author johnny850807 (waterball)

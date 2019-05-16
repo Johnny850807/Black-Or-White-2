@@ -14,8 +14,7 @@ import com.pokewords.framework.sprites.factories.SpriteWeaver;
 import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.sprites.parsing.Segment;
-import com.pokewords.framework.views.helpers.Gallery;
-import com.pokewords.framework.views.helpers.SheetGallery;
+import com.pokewords.framework.views.helpers.galleries.Gallery;
 
 import java.awt.*;
 import java.util.Collections;

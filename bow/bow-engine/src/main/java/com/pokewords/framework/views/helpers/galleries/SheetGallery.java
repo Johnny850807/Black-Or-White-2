@@ -1,4 +1,4 @@
-package com.pokewords.framework.views.helpers;
+package com.pokewords.framework.views.helpers.galleries;
 
 import com.pokewords.framework.commons.Range;
 
@@ -32,18 +32,19 @@ public class SheetGallery implements Gallery {
     }
 
     @Override
-    public boolean containsPicture(int pic) {
-        return pictureRange.within(pic);
+    public Range getPictureRange() {
+        return pictureRange;
     }
 
     /**
      * To get image
-     * @param pic index
+     * @param pic the picture's number
      * @return image
      */
     @Override
     public Image getImage(int pic){
-       return getImage(pic / col, pic % col);
+       int index = pic - pictureRange.getStart();
+       return getImage(index / col, index % col);
     }
 
     /**
@@ -52,7 +53,6 @@ public class SheetGallery implements Gallery {
      * @param col the column index
      * @return image
      */
-    @Override
     public Image getImage(int row, int col){
         File f = new File(pathname);
         try {

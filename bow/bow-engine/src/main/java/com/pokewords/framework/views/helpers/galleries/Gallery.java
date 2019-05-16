@@ -1,4 +1,6 @@
-package com.pokewords.framework.views.helpers;
+package com.pokewords.framework.views.helpers.galleries;
+
+import com.pokewords.framework.commons.Range;
 
 import java.awt.*;
 
@@ -10,7 +12,9 @@ public interface Gallery {
      * @param pic the picture's number
      * @return is the pic within the gallery's picture range
      */
-    boolean containsPicture(int pic);
+    default boolean containsPicture(int pic) {
+        return getPictureRange().within(pic);
+    }
 
     /**
      * @param pic the picture's number
@@ -18,10 +22,9 @@ public interface Gallery {
      */
     Image getImage(int pic);
 
+
     /**
-     * @param row the row number
-     * @param col the column number
-     * @return the image at the grid (row, col)
+     * @return the Range of the picture number
      */
-    Image getImage(int row, int col);
+    Range getPictureRange();
 }
