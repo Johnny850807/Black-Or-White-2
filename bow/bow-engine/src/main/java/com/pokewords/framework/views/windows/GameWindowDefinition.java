@@ -3,10 +3,10 @@ package com.pokewords.framework.views.windows;
 import java.awt.*;
 
 public class GameWindowDefinition {
-    public String name;
-    public Point size;
-    public Point location;
-    public Color gamePanelBackground;
+    public String name = "Default";
+    public Point size = new Point(0, 0);
+    public Point location = new Point(0, 0);
+    public Color gamePanelBackground = Color.black;
 
     public Point center() {
         return new Point(size.x/2, size.y/2);
