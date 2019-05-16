@@ -10,12 +10,15 @@ import java.io.IOException;
 /**
  * @author Joanna
  */
-
 public class SheetGallery {
     private String pathname;
     private int row;
     private int col;
     private int padding;
+
+    public SheetGallery(String pathname, int row, int col) {
+        this(pathname, row, col, 0);
+    }
 
     public SheetGallery(String pathname, int row, int col, int padding) {
         this.pathname = pathname;
