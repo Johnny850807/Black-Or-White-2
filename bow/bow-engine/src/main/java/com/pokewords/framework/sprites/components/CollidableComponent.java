@@ -33,14 +33,6 @@ public class CollidableComponent extends Component implements Shareable {
 		return ignoredTypes;
 	}
 
-	public void addIgnoredType(Object type) {
-		ignoredTypes.add(type);
-	}
-
-	public void removeIgnoredType(Object type) {
-		ignoredTypes.remove(type);
-	}
-
 	/**
 	 * @param type the sprite's type
 	 * @return if the type is ignored during collision detection

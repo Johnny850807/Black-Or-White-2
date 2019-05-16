@@ -1,27 +1,27 @@
 <galleries> 0
     <sequence>
-        startPic: 0 endPic: 11 path: assets\sequences/loadingProgressBar
+        startPic: 0 endPic: 11 path: assets\sequences\loadingProgressBar
     </sequence>
 </galleries>
 
 <frame> 0
-   pic: 0  duration: 1  next: 1 centerX: 150 centerY: 150 layer: 2
+   pic: 0  duration: 1  next: 1  layer: 2
 </frame>
 
 <frame> 1
-   pic: 1  duration: 1  next: 2 centerX: 150 centerY: 150 layer: 2
+   pic: 1  duration: 1  next: 2  layer: 2
 </frame>
 
 <frame> 2
-   pic: 2  duration: 1  next: 3 centerX: 150 centerY: 150 layer: 2
+   pic: 2  duration: 1  next: 3  layer: 2
 </frame>
 
 <frame> 3
-   pic: 3  duration: 1  next: 4 centerX: 150 centerY: 150 layer: 2
+   pic: 3  duration: 1  next: 4  layer: 2
 </frame>
 
 <frame> 4
-   pic: 4  duration: 1  next: 5 centerX: 150 centerY: 150 layer: 2
+   pic: 4  duration: 1  next: 5  layer: 2
 </frame>
 
 <frame> 5
