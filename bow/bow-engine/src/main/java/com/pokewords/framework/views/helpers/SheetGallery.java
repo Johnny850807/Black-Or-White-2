@@ -1,5 +1,7 @@
 package com.pokewords.framework.views.helpers;
 
+import com.pokewords.framework.commons.Range;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,21 +12,28 @@ import java.io.IOException;
 /**
  * @author Joanna
  */
-public class SheetGallery {
+public class SheetGallery implements Gallery {
     private String pathname;
+    private Range pictureRange;
     private int row;
     private int col;
     private int padding;
 
-    public SheetGallery(String pathname, int row, int col) {
-        this(pathname, row, col, 0);
+    public SheetGallery(String pathname, Range pictureRange, int row, int col) {
+        this(pathname, pictureRange, row, col, 0);
     }
 
-    public SheetGallery(String pathname, int row, int col, int padding) {
+    public SheetGallery(String pathname, Range pictureRange, int row, int col, int padding) {
         this.pathname = pathname;
+        this.pictureRange = pictureRange;
         this.row = row;
         this.col = col;
         this.padding = padding;  //TODO effect padding
+    }
+
+    @Override
+    public boolean containsPicture(int pic) {
+        return pictureRange.within(pic);
     }
 
     /**
@@ -32,6 +41,7 @@ public class SheetGallery {
      * @param pic index
      * @return image
      */
+    @Override
     public Image getImage(int pic){
        return getImage(pic / col, pic % col);
     }
@@ -42,6 +52,7 @@ public class SheetGallery {
      * @param col the column index
      * @return image
      */
+    @Override
     public Image getImage(int row, int col){
         File f = new File(pathname);
         try {
@@ -67,7 +78,7 @@ public class SheetGallery {
         String pathname = "D:/我的下載/bandit_0.bmp";
         int imgrow = 7, imgcol = 10;
 
-        SheetGallery gallery = new SheetGallery(pathname, imgrow, imgcol, 0);
+        Gallery gallery = new SheetGallery(pathname, new Range(0, 69), imgrow, imgcol, 0);
 
         JFrame jf = new JFrame("");
         JLabel jLabel = new JLabel();

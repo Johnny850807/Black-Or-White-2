@@ -17,6 +17,9 @@ import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SimpleSpr
 import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SpriteWithOnlyMockComponent.*;
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class SpriteTest extends AbstractTest {
 
     @Test

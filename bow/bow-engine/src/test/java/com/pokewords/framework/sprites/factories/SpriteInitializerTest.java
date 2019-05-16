@@ -10,6 +10,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class SpriteInitializerTest extends AbstractTest {
     MockPrototypeFactory mockPrototypeFactory;
     MockDefaultSpriteBuilder mockSpriteBuilder;

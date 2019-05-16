@@ -2,6 +2,9 @@ package com.pokewords.framework.views.windows;
 
 import java.awt.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class MockGameWindowsConfigurator implements GameWindowsConfigurator {
     private GameWindowDefinition gameWindowDefinition = new GameWindowDefinition();
 

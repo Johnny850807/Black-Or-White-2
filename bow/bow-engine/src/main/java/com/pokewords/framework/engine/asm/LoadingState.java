@@ -28,6 +28,7 @@ public class LoadingState extends AppState {
 
     @Override
     public void onAppStateCreating(AppStateWorld appStateWorld) {
+        configGameWindow();
         configCenterLoadingText();
         configJoanna();
         configTitleText();
@@ -35,6 +36,12 @@ public class LoadingState extends AppState {
         getAppStateWorld().spawn(createSprite(CENTER_LOADING_TEXT));
         getAppStateWorld().spawn(createSprite(TITLE_TEXT));
         getAppStateWorld().spawn(createSprite(JOANNA));
+    }
+
+    private void configGameWindow() {
+        getGameWindowsConfigurator().size(600, 600)
+                                .gamePanelBackground(Color.decode("#1B4032"))
+                                .atCenter();
     }
 
     private void configCenterLoadingText() {

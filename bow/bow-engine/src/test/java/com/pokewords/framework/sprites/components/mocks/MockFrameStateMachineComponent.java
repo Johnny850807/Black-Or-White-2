@@ -4,6 +4,9 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class MockFrameStateMachineComponent extends FrameStateMachineComponent implements MockComponent{
     private Sprite sprite;
     private boolean hasStarted = false;

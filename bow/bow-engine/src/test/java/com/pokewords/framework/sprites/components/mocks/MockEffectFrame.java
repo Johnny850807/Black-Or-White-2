@@ -10,6 +10,9 @@ import com.pokewords.framework.views.Canvas;
 import java.util.*;
 
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class MockEffectFrame extends AbstractFrame implements EffectFrame {
     public final String name;
     public Collection<GameEffect> effects = new HashSet<>();

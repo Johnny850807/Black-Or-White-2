@@ -3,6 +3,7 @@ package com.pokewords.framework.engine;
 import com.pokewords.framework.commons.Range;
 import com.pokewords.framework.engine.parsing.EffectElement;
 import com.pokewords.framework.engine.parsing.FrameSegment;
+import com.pokewords.framework.engine.parsing.GalleryElement;
 import com.pokewords.framework.engine.parsing.PropertiesElement;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
@@ -10,8 +11,10 @@ import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.EffectFrameFactory;
 import com.pokewords.framework.sprites.components.frames.ImageEffectFrame;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
+import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.sprites.parsing.Segment;
+import com.pokewords.framework.views.helpers.Gallery;
 import com.pokewords.framework.views.helpers.SheetGallery;
 
 import java.awt.*;
@@ -72,7 +75,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
     public class GameEngineEffectFrameFactory implements EffectFrameFactory {
         // < <startPic/endPic>, gallery instance>
-        private Map<Range, SheetGallery> galleryMap;
+        private Map<Range, Gallery> galleryMap;
 
         @Override
         public EffectFrame createFrame(Segment segment) {
@@ -89,21 +92,18 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
                 synchronized (this) {
                     if (galleryMap == null) {
                         galleryMap = Collections.synchronizedMap(new HashMap<>());
-                        List<Segment> gallerySegments = script.getSegmentsByName("gallery");
-                        for (Segment gallerySegment : gallerySegments) {
-                            galleryMap.put(new Range(gallerySegment.getIntByKey("startPic"), gallerySegment.getIntByKey("endPic")),
-                                    gallerySegmentToGallery(gallerySegment));
-                        }
+                        Segment galleriesSegment = script.getSegmentByName("galleries");
+                        addAllGalleriesToGalleryMap(galleriesSegment);
                     }
                 }
             }
         }
 
-        private SheetGallery gallerySegmentToGallery(Segment gallerySegment) {
-            return new SheetGallery(gallerySegment.getStringByKey("path"),
-                    gallerySegment.getIntByKey("row"),
-                    gallerySegment.getIntByKey("col"),
-                    gallerySegment.getIntByKey("padding"));
+        private void addAllGalleriesToGalleryMap(Segment galleriesSegment) {
+            for (Element element : galleriesSegment.getElements()) {
+                GalleryElement galleryElement = new GalleryElement(element);
+                galleryMap.put(galleryElement.getRange(), galleryElement.toGallery());
+            }
         }
 
         private EffectFrame initEffectFrame(FrameSegment frameSegment, Segment segment) {

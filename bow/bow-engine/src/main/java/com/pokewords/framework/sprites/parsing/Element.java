@@ -17,6 +17,7 @@ public interface Element {
     Optional<String> getStringByKeyOptional(String key);
     OptionalInt getIntByKeyOptional(String key);
 
+    String getElementName();
     String getStringByKey(String key);
     Integer getIntByKey(String key);
 

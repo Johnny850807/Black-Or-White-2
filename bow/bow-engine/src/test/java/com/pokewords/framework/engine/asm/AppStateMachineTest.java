@@ -10,6 +10,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class AppStateMachineTest extends AbstractTest {
     private AppStateMachine appStateMachine;
     private int EVENT_NEXT = 0;

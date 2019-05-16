@@ -26,6 +26,9 @@ public interface Segment {
     Optional<String> getStringByKeyOptional(String key);
     OptionalInt getIntByKeyOptional(String key);
 
+    String getSegmentName();
+    String getSegmentDescription();
+    int getId();
     String getStringByKey(String key);
     Integer getIntByKey(String key);
 

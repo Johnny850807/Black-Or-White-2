@@ -10,6 +10,9 @@ import java.awt.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class ComponentsTest extends AbstractTest {
 
     @Test

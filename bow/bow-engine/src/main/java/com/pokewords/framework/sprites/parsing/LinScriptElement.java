@@ -51,6 +51,11 @@ public class LinScriptElement implements Element {
     }
 
     @Override
+    public String getElementName() {
+        return getStringByKey(ScriptDefinitions.LinScript.Element.NAME);
+    }
+
+    @Override
     public String getStringByKey(String key) {
         String result = mappings.stringMap.get(key);
         if (result == null)

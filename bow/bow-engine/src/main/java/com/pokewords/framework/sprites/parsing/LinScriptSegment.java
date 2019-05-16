@@ -84,6 +84,21 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
+    public String getSegmentName() {
+        return getStringByKey(ScriptDefinitions.LinScript.Segment.NAME);
+    }
+
+    @Override
+    public String getSegmentDescription() {
+        return getStringByKey(ScriptDefinitions.LinScript.Segment.DESCRIPTION);
+    }
+
+    @Override
+    public int getId() {
+        return getIntByKey(ScriptDefinitions.LinScript.Segment.ID);
+    }
+
+    @Override
     public String getStringByKey(String key) {
         String result = mappings.stringMap.get(key);
         if (result == null)
