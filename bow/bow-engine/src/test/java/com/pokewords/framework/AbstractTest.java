@@ -6,6 +6,9 @@ import com.pokewords.framework.ioc.ReleaseIocFactory;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public abstract class AbstractTest {
     protected IocFactory release = new ReleaseIocFactory();
 

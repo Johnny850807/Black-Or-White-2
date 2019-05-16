@@ -1,13 +1,9 @@
 package com.pokewords.framework.sprites.parsing;
 
 
-import com.pokewords.framework.engine.utils.FileUtility;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author nyngwang
@@ -22,6 +18,11 @@ public interface Script {
         }
     }
     Script addSegment(Segment segment);
+
+    default Segment getSegmentByName(String segmentName) {
+        return getSegmentsByName(segmentName).get(0);
+    }
+
     List<Segment> getSegmentsByName(String segmentName);
     Segment getSegmentById(String segmentId);
     List<Segment> getSegmentsByDescription(String segmentDescription);

@@ -18,7 +18,6 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	private SpriteInitializer spriteInitializer;
 	private Inputs inputs;
 	private AppStateWorld appStateWorld;
-	private boolean started = false;
 	private GameWindowsConfigurator gameWindowsConfigurator;
 
 	public AppState() { }
@@ -36,7 +35,6 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	@Override
 	public void onAppStateCreate() {
-		this.started = true;
 		this.appStateWorld = onCreateAppStateWorld();
 		onAppStateCreating(appStateWorld);
 		this.appStateWorld.onAppStateCreate();
@@ -92,10 +90,6 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	public SpriteInitializer getSpriteInitializer() {
 		return spriteInitializer;
-	}
-
-	public boolean hasStarted() {
-		return started;
 	}
 
 	public Inputs getInputs() {

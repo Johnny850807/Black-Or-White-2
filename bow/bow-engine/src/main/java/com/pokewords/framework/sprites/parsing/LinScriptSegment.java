@@ -2,10 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -67,6 +64,36 @@ public class LinScriptSegment implements Segment {
     public Segment put(String key, int value) {
         mappings.integerMap.put(key, value);
         return this;
+    }
+
+    @Override
+    public boolean containsKey(String key) {
+        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
+    }
+
+    @Override
+    public Optional<String> getStringByKeyOptional(String key) {
+        return Optional.ofNullable(mappings.stringMap.get(key));
+    }
+
+    @Override
+    public Optional<Integer> getIntByKeyOptional(String key) {
+        return mappings.integerMap.containsKey(key) ? Optional.ofNullable(mappings.integerMap.get(key)) : Optional.empty();
+    }
+
+    @Override
+    public String getSegmentName() {
+        return getStringByKey(ScriptDefinitions.LinScript.Segment.NAME);
+    }
+
+    @Override
+    public String getSegmentDescription() {
+        return getStringByKey(ScriptDefinitions.LinScript.Segment.DESCRIPTION);
+    }
+
+    @Override
+    public int getId() {
+        return getIntByKey(ScriptDefinitions.LinScript.Segment.ID);
     }
 
     @Override

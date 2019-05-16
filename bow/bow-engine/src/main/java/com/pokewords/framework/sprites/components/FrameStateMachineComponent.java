@@ -15,19 +15,25 @@ import java.util.*;
  * @author johnny850807
  */
 public class FrameStateMachineComponent extends CloneableComponent implements Shareable, Renderable {
+    protected Sprite sprite;
+    protected AppStateWorld world;
+
     // <Frame's id, Frame>
     protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>();
     protected FiniteStateMachine<EffectFrame> fsm = new FiniteStateMachine<>();
     protected final LinkedList<EffectFrame> renderedFrame = new LinkedList<>();
 
-    protected Sprite sprite;
-    protected AppStateWorld world;
 
     protected long latestUpdateTimestamp = System.currentTimeMillis();
     protected int frameDurationCountdown = 0;
 
     public EffectFrame getFrame(int id) {
         return effectFrameMap.get(id);
+    }
+
+    @Override
+    public void onComponentInjected() {
+        fsm.getStates().forEach(frame -> frame.setSprite(sprite));
     }
 
     @Override

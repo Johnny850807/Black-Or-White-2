@@ -16,7 +16,6 @@ public class PropertiesComponent extends CloneableComponent {
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private Point center = new Point();
 	private Object type;
-	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
 
 	public PropertiesComponent() {
 	}
@@ -30,7 +29,6 @@ public class PropertiesComponent extends CloneableComponent {
 		PropertiesComponent clone = (PropertiesComponent) super.clone();
 		clone.body = (Rectangle) this.body.clone();
 		clone.center = (Point) this.center.clone();
-		clone.positionListeners = new ArrayList<>();
 		return clone;
 	}
 
@@ -40,12 +38,10 @@ public class PropertiesComponent extends CloneableComponent {
 
 	public void setBody(int x, int y, int w, int h){
 		this.body.setBounds(x, y, w, h);
-		notifyPositionListeners();
 	}
 
 	public void setBody(Rectangle body) {
 		this.body = body;
-		notifyPositionListeners();
 	}
 
 	public int getX(){
@@ -68,12 +64,10 @@ public class PropertiesComponent extends CloneableComponent {
 
 	public void setPosition(Point position) {
 		this.body.setLocation(position);
-		notifyPositionListeners();
 	}
 
 	public void setPosition(int x, int y) {
 		this.body.setLocation(x, y);
-		notifyPositionListeners();
 	}
 
 	public Object getType() {
@@ -99,31 +93,6 @@ public class PropertiesComponent extends CloneableComponent {
 	@Override
 	public void onAppStateCreate() {
 		Objects.requireNonNull(type);
-	}
-
-
-	public interface PositionListener{
-		void onPositionUpdated(int x, int y);
-	}
-
-
-	public void addPositionListener(PositionListener positionListener){
-		positionListeners.add(positionListener);
-	}
-
-	public void removePositionListener(PositionListener positionListener){
-		positionListeners.remove(positionListener);
-	}
-
-	public List<PositionListener> getPositionListeners() {
-		return positionListeners;
-	}
-
-	/**
-	 * Trigger all positionListener's onPositionUpdated() method
-	 */
-	protected void notifyPositionListeners(){
-		positionListeners.forEach(listener -> listener.onPositionUpdated(getX(), getY()));
 	}
 
 	@Override

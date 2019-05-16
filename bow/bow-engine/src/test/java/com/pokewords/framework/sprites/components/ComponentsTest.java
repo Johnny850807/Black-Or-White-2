@@ -2,7 +2,7 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.utils.StubFactory;
-import com.pokewords.framework.sprites.components.mocks.MockFrame;
+import com.pokewords.framework.sprites.components.mocks.MockEffectFrame;
 import com.pokewords.framework.sprites.components.mocks.MockPositionListener;
 import org.junit.Test;
 
@@ -10,6 +10,9 @@ import java.awt.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class ComponentsTest extends AbstractTest {
 
     @Test
@@ -99,10 +102,10 @@ public class ComponentsTest extends AbstractTest {
     @Test
     public void testFrameStateMachineComponentGetCurrentFrames() {
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
-        MockFrame currentFrame = new MockFrame("A");
+        MockEffectFrame currentFrame = new MockEffectFrame("A");
         fsmc.addFrame(currentFrame);
-        fsmc.addFrame(new MockFrame("B"));
-        fsmc.addFrame(new MockFrame("C"));
+        fsmc.addFrame(new MockEffectFrame("B"));
+        fsmc.addFrame(new MockEffectFrame("C"));
         fsmc.setCurrentFrame(currentFrame);
 
         assertSame(currentFrame, fsmc.getCurrentFrame());
@@ -125,7 +128,7 @@ public class ComponentsTest extends AbstractTest {
         assertEquals(fscm1.hashCode(), fscm2.hashCode());
 
         // after fscm2's been changed, they should no longer be equal
-        fscm2.addFrame(new MockFrame("mock"));
+        fscm2.addFrame(new MockEffectFrame("mock"));
         assertNotEquals(fscm1, fscm2);
         assertNotEquals(fscm1.hashCode(), fscm2.hashCode());
     }

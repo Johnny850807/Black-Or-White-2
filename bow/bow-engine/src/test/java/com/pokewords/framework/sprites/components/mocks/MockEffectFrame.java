@@ -1,8 +1,8 @@
 package com.pokewords.framework.sprites.components.mocks;
 
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.frames.AbstractFrame;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
-import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.frames.GameEffect;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
@@ -10,31 +10,23 @@ import com.pokewords.framework.views.Canvas;
 import java.util.*;
 
 
-public class MockFrame implements EffectFrame {
+/**
+ * @author johnny850807 (waterball)
+ */
+public class MockEffectFrame extends AbstractFrame implements EffectFrame {
     public final String name;
-    public final int id;
     public Collection<GameEffect> effects = new HashSet<>();
     public Map<GameEffect, Integer> effectAppliedCount = new HashMap<>();
     public int applyCount = 0;
     public int renderCount = 0;
 
-    public MockFrame(String name) {
+    public MockEffectFrame(String name) {
         this(0, name);
     }
 
-    public MockFrame(int id, String name) {
-        this.id = id;
+    public MockEffectFrame(int id, String name) {
+        super(id, 0);
         this.name = name;
-    }
-
-    @Override
-    public int getId() {
-        return 0;
-    }
-
-    @Override
-    public int getLayerIndex() {
-        return 0;
     }
 
     @Override
@@ -66,12 +58,17 @@ public class MockFrame implements EffectFrame {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MockFrame mockFrame = (MockFrame) o;
-        return Objects.equals(name, mockFrame.name);
+        if (!super.equals(o)) return false;
+        MockEffectFrame that = (MockEffectFrame) o;
+        return applyCount == that.applyCount &&
+                renderCount == that.renderCount &&
+                name.equals(that.name) &&
+                effects.equals(that.effects) &&
+                effectAppliedCount.equals(that.effectAppliedCount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(super.hashCode(), name, effects, effectAppliedCount, applyCount, renderCount);
     }
 }

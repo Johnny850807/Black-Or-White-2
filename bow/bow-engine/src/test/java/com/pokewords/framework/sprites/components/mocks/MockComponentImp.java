@@ -4,6 +4,9 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class MockComponentImp extends Component implements MockComponent {
     private Sprite sprite;  // this field is expected to be injected
     private boolean hasStarted = false;

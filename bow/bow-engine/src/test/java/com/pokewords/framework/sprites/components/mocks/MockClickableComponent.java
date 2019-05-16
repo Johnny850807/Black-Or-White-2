@@ -1,10 +1,12 @@
 package com.pokewords.framework.sprites.components.mocks;
 
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.ClickableComponent;
 import com.pokewords.framework.sprites.components.marks.Shareable;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class MockClickableComponent extends ClickableComponent implements Shareable, MockComponent {
     private Sprite sprite;
     private int clickCount = 0;

@@ -6,7 +6,6 @@ import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.ComponentMap;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Shareable;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.mocks.*;
 import org.junit.Test;
 
@@ -18,6 +17,9 @@ import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SimpleSpr
 import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SpriteWithOnlyMockComponent.*;
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class SpriteTest extends AbstractTest {
 
     @Test
@@ -71,15 +73,15 @@ public class SpriteTest extends AbstractTest {
     public void testGetRenderedFrames() {
         Sprite sprite = createSimpleSprite();
         MockRenderableComponent1 r1 = new MockRenderableComponent1();
-        MockFrame rf1 = new MockFrame("rf1");
+        MockEffectFrame rf1 = new MockEffectFrame("rf1");
         r1.addFrame(rf1);
 
         MockRenderableComponent2 r2 = new MockRenderableComponent2();
-        MockFrame rf2 = new MockFrame("rf2");
+        MockEffectFrame rf2 = new MockEffectFrame("rf2");
         r1.addFrame(rf2);
 
         MockRenderableComponent3 r3 = new MockRenderableComponent3();
-        MockFrame rf3 = new MockFrame("rf3");
+        MockEffectFrame rf3 = new MockEffectFrame("rf3");
         r1.addFrame(rf3);
 
         sprite.addComponent(r1);
