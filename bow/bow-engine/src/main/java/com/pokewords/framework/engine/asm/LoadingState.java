@@ -47,10 +47,7 @@ public class LoadingState extends AppState {
     private void configCenterLoadingText() {
         getSpriteInitializer().declare(CENTER_LOADING_TEXT)
                 .position(getGameWindowDefinition().center())
-                .with(new StringComponent(
-                        new StringFrame(0, 2, "Loading",
-                                new Font("Verdana", Font.PLAIN, 25), true)))
-                .with(new LoadingTextComponent())
+                .with("assets/scripts/loadingText.bow")
                 .commit();
     }
 
@@ -69,6 +66,7 @@ public class LoadingState extends AppState {
                         "assets/images/joanna.png")))
                 .commit();
     }
+
 
     @Override
     public void onAppStateEntering() {
@@ -98,29 +96,6 @@ public class LoadingState extends AppState {
         getGameWindowsConfigurator().gamePanelBackground(currentColor);
     }
 
-
-    private class LoadingTextComponent extends CloneableComponent implements Shareable {
-        private Sprite sprite;
-        private int time = 0;
-        private int frequency = 15;
-        private int dot = 0;
-        private int maxDot = 5;
-
-        @Override
-        public void onUpdate(int timePerFrame) {
-            StringComponent stringComponent = sprite.getComponent(StringComponent.class);
-            StringFrame stringFrame = stringComponent.getFrame();
-
-            if (time++ == frequency) {
-                time = 0;
-                if (dot++ == maxDot) {
-                    dot = 0;
-                    stringFrame.setText("Loading");
-                } else
-                    stringFrame.setText(stringFrame.getText() + ".");
-            }
-        }
-    }
 
     @Override
     protected void onAppStateExiting() {

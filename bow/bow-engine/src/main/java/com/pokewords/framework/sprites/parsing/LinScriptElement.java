@@ -36,8 +36,8 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public boolean containsKey(String key) {
-        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
+    public String getElementName() {
+        return getStringByKey(ScriptDefinitions.LinScript.Element.NAME);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public String getElementName() {
-        return getStringByKey(ScriptDefinitions.LinScript.Element.NAME);
+    public boolean containsKey(String key) {
+        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
     }
 
     @Override
@@ -72,16 +72,15 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public Segment getParentSegment() {
-        return parentSegment;
-    }
-
-    @Override
     public Element setParentSegment(Segment parentSegment) {
         this.parentSegment = (LinScriptSegment) parentSegment;
         return this;
     }
 
+    @Override
+    public Segment getParentSegment() {
+        return parentSegment;
+    }
 
     // Pretty print
     @Override
