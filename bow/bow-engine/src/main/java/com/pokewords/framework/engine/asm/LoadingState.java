@@ -3,6 +3,8 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.utils.Resources;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
+import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.StringComponent;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
@@ -12,6 +14,7 @@ import com.pokewords.framework.sprites.parsing.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import static com.pokewords.framework.engine.asm.LoadingState.SpriteName.*;

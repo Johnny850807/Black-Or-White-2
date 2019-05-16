@@ -85,22 +85,6 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         }
     }
 
-    /**
-     * Add the frame to the rendered layer.
-     * @param frame The Frame.
-     * @param layerIndex The index of the frame in rendered layer.
-     */
-    private void addFrameToRenderedLayer(Frame frame, int layerIndex) {
-        List<List<Frame>> layers = renderedLayers.getLayers();
-        expandLayersToFitTheIndex(layers, layerIndex);
-        layers.get(layerIndex).add(frame);
-    }
-
-    private void expandLayersToFitTheIndex(List<List<Frame>> layers, int layerIndex) {
-        IntStream.range(layers.size(), layerIndex+1)
-                .forEach(i -> layers.add(new ArrayList<>()));
-    }
-
     public RenderedLayers getRenderedLayers() {
         return renderedLayers;
     }
