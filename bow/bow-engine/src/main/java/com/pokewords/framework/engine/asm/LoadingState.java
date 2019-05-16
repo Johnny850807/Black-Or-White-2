@@ -5,8 +5,9 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.StringComponent;
+import com.pokewords.framework.sprites.components.frames.ImageFrame;
+import com.pokewords.framework.sprites.components.frames.StringFrame;
 import com.pokewords.framework.sprites.components.marks.Shareable;
-import jdk.nashorn.internal.scripts.JO;
 
 import java.awt.*;
 
@@ -25,19 +26,22 @@ public class LoadingState extends AppState {
 	public void onAppStateCreating(AppStateWorld appStateWorld) {
 		getSpriteInitializer().declare(JOANNA)
 				.position(173, 319)
-				.with(new ImageComponent("assets/images/joanna.png", 2, 254, 263))
+				.with(new ImageComponent(new ImageFrame(0, 2, 254, 263,
+								"assets/images/joanna.png")))
 				.commit();
 
 		getSpriteInitializer().declare(CENTER_LOADING_TEXT)
 							.position(getGameWindowDefinition().center())
-							.with(new StringComponent("Loading", true))
+							.with(new StringComponent(
+									new StringFrame(0, 2, "Loading",
+											new Font("Verdana", Font.PLAIN, 25), true)))
 							.with(new LoadingTextComponent())
 							.commit();
 
 		getSpriteInitializer().declare(TITLE_TEXT)
 				.position(300, 150)
-				.with(new StringComponent("Basic App Demo", Color.BLUE,
-						new Font("AR CENA", Font.BOLD, 40),  true))
+				.with(new StringComponent(new StringFrame(0, 2, "Bow Engine Demo",
+						Color.blue, new Font("AR CENA", Font.BOLD, 40), true)))
 				.commit();
 
 		getAppStateWorld().spawn(createSprite(CENTER_LOADING_TEXT));
@@ -85,6 +89,7 @@ public class LoadingState extends AppState {
 		@Override
 		public void onUpdate(int timePerFrame) {
 			StringComponent stringComponent = sprite.getComponent(StringComponent.class);
+			StringFrame stringFrame = stringComponent.getFrame();
 
 			if (time++ == frequency)
 			{
@@ -92,10 +97,10 @@ public class LoadingState extends AppState {
 				if (dot ++ == maxDot)
 				{
 					dot = 0;
-					stringComponent.setText("Loading");
+					stringFrame.setText("Loading");
 				}
 				else
-					stringComponent.setText(stringComponent.getText() + ".");
+					stringFrame.setText(stringFrame.getText() + ".");
 			}
 		}
 	}
