@@ -1,7 +1,6 @@
 package com.pokewords.framework.sprites.factories;
 
 import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.engine.GameEngineWeaverNode;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.parsing.Script;
 
@@ -31,6 +30,10 @@ public class SpriteWeaver {
 
     public void removeWeaverNode(SpriteWeaver.Node node) {
         weaverNodes.remove(node);
+    }
+
+    public void clear() {
+        weaverNodes.clear();
     }
 
     public void weave(Script script, Sprite sprite) {

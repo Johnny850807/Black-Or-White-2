@@ -244,9 +244,9 @@ public class SpriteInitializer {
         }
 
         protected void startInitializingSprite() {
-            setFrameStateMachineComponent();
             spriteBuilder.init();
             spriteBuilder.setPropertiesComponent(propertiesComponent);
+            setFrameStateMachineComponent();
             components.forEach(spriteBuilder::addComponent);
             weaverNodes.forEach(spriteBuilder::addWeaverNode);
             Sprite sprite = spriteBuilder.build();

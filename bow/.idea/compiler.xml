@@ -7,12 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="bow-core" />
+        <module name="bow-engine" />
+        <module name="bow-engine-demo" />
+        <module name="joagunna" />
         <module name="shotgunininder" />
         <module name="shotshotning" />
-        <module name="bow-engine-demo" />
         <module name="watershot" />
-        <module name="bow-engine" />
-        <module name="joagunna" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

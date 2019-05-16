@@ -1,18 +1,15 @@
 package com.pokewords.framework.engine.gameworlds;
 
-import com.pokewords.framework.engine.exceptions.GameEngineException;
-import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
-import sun.awt.util.IdentityArrayList;
-
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -243,7 +240,8 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         Point2D center = sprite.getCenter();
         int x = (int) center.getX() - w / 2;
         int y = (int) center.getY() - h / 2;
-        IdentityArrayList<Sprite> sprites = (IdentityArrayList<Sprite>) getSpritesCollidedWithinArea(new Rectangle(x, y, w, h));
+        Set<Sprite> sprites = Collections.newSetFromMap( new IdentityHashMap<>());
+        sprites.addAll(getSpritesCollidedWithinArea(new Rectangle(x, y, w, h)));
         sprites.remove(sprite);
         return sprites;
     }
@@ -259,7 +257,8 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the sprites collided with the given sprite
      */
     public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        IdentityArrayList<Sprite> sprites = (IdentityArrayList<Sprite>) getSpritesCollidedWithinArea(sprite.getBody());
+        Set<Sprite> sprites = Collections.newSetFromMap( new IdentityHashMap<>());
+        sprites.addAll(getSpritesCollidedWithinArea(sprite.getBody()));
         sprites.remove(sprite);
         return sprites;
     }
