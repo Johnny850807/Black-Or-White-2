@@ -3,7 +3,6 @@ package com.pokewords.framework.sprites.parsing;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  *  @author nyngwang
@@ -21,13 +20,13 @@ public interface Segment {
 
     Segment put(String key, String value);
     Segment put(String key, int value);
-    Optional<String> getStringByKeyOptional(String key);
-    OptionalInt getIntByKeyOptional(String key);
 
     String getSegmentName();
     String getSegmentDescription();
     int getId();
 
+    Optional<String> getStringByKeyOptional(String key);
+    OptionalInt getIntByKeyOptional(String key);
     boolean containsKey(String key);
     String getStringByKey(String key);
     Integer getIntByKey(String key);

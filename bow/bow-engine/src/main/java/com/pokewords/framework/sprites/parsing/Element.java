@@ -1,7 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -12,12 +10,12 @@ import java.util.OptionalInt;
 public interface Element {
     Element put(String key, String value);
     Element put(String key, int value);
-    boolean containsKey(String key);
+
+    String getElementName();
 
     Optional<String> getStringByKeyOptional(String key);
     OptionalInt getIntByKeyOptional(String key);
-
-    String getElementName();
+    boolean containsKey(String key);
     String getStringByKey(String key);
     Integer getIntByKey(String key);
 

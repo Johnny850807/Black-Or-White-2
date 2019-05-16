@@ -67,11 +67,6 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public boolean containsKey(String key) {
-        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
-    }
-
-    @Override
     public Optional<String> getStringByKeyOptional(String key) {
         return Optional.ofNullable(mappings.stringMap.get(key));
     }
@@ -94,6 +89,11 @@ public class LinScriptSegment implements Segment {
     @Override
     public int getId() {
         return getIntByKey(ScriptDefinitions.LinScript.Segment.ID);
+    }
+
+    @Override
+    public boolean containsKey(String key) {
+        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
     }
 
     @Override
