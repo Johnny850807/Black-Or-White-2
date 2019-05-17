@@ -23,7 +23,7 @@ public class GameEngine {
 	private AppStateMachine appStateMachine;
 	private ScheduledExecutorService looper = Executors.newScheduledThreadPool(3);
 	private boolean running = false;
-	private int timePerFrame = 15;  //ms
+	private int timePerFrame = 30;  //ms
 
 	public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator) {
 		this.iocFactory = iocFactory;
@@ -39,7 +39,7 @@ public class GameEngine {
 	public void launchEngine() {
 		gameView.onAppInit();
 		appStateMachine.trigger(AppStateMachine.EVENT_LOADING);
-		looper.scheduleAtFixedRate(this::gameLooping,0,timePerFrame, TimeUnit.MILLISECONDS);
+		looper.scheduleAtFixedRate(this::gameLooping,0, timePerFrame, TimeUnit.MILLISECONDS);
 		gameView.onAppLoading();
 
 		//Reveal below code will lead to errors, because AppStateWorld is not finished.

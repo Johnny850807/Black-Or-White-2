@@ -1,6 +1,6 @@
 package com.pokewords.framework.sprites.components.frames;
 
-import com.pokewords.framework.engine.utils.ImageUtility;
+import com.pokewords.framework.commons.utils.ImageUtility;
 import com.pokewords.framework.views.Canvas;
 
 import java.awt.*;

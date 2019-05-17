@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.AbstractTest;
-import com.pokewords.framework.engine.utils.StubFactory;
+import com.pokewords.framework.commons.utils.StubFactory;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.ComponentMap;
 import com.pokewords.framework.sprites.components.frames.Frame;
@@ -13,8 +13,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SimpleSprite.createSimpleSprite;
-import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SpriteWithOnlyMockComponent.*;
+import static com.pokewords.framework.commons.utils.StubFactory.Sprites.SimpleSprite.createSimpleSprite;
+import static com.pokewords.framework.commons.utils.StubFactory.Sprites.SpriteWithOnlyMockComponent.*;
 import static org.junit.Assert.*;
 
 /**

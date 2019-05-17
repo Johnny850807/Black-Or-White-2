@@ -46,7 +46,7 @@ public abstract class GameApplication implements AppView {
 
 
 	/**
-	 * This method is invoked during the LoadingState.
+	 * This method is invoked during the ProgressBarLoadingState.
 	 *
 	 * onAppLoading() will be executed asynchronously by the GameEngine,
 	 * at the moment executing this method, the GameEngine will render the loading-state.
