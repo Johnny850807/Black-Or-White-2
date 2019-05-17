@@ -41,19 +41,19 @@ public class LoadingState extends AppState {
 
         getAppStateWorld().spawn(createSprite(CENTER_LOADING_TEXT));
         getAppStateWorld().spawn(createSprite(TITLE_TEXT));
-        getAppStateWorld().spawn(createSprite(JOANNA));
+        //getAppStateWorld().spawn(createSprite(JOANNA));
     }
 
     private void configGameWindow() {
         getGameWindowsConfigurator().size(600, 600)
-                                .gamePanelBackground(Color.decode("#20053f"))
+                                .gamePanelBackground(Color.decode("#ABFFCD")) // R:171 G:255 B:205
                                 .atCenter();
     }
 
     private void configCenterLoadingText() {
         getSpriteInitializer().declare(CENTER_LOADING_TEXT)
-                .position(getGameWindowDefinition().center().x-75, getGameWindowDefinition().center().y-165)
-                .size(150, 150)
+                .position(getGameWindowDefinition().center().x-140, getGameWindowDefinition().center().y-140)
+                .size(280, 280)
                 .with(createScript())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .commit();
@@ -64,16 +64,16 @@ public class LoadingState extends AppState {
         Segment galleriesSegment = new LinScriptSegment("galleries", 0);
         Element sequenceElement = new LinScriptElement("sequence");
         sequenceElement.put("startPic", 0);
-        sequenceElement.put("endPic", 11);
-        sequenceElement.put("path", "assets/sequences/loadingProgressBar");
+        sequenceElement.put("endPic", 7);
+        sequenceElement.put("path", "assets/sequences/loadingProgressBar2");
         script.addSegment(galleriesSegment);
         galleriesSegment.addElement(sequenceElement);
 
-        for (int i = 0; i <= 11; i++) {
+        for (int i = 0; i <= 7; i++) {
             LinScriptSegment frameSegment = new LinScriptSegment("frame", i);
             frameSegment.put("pic", i);
-            frameSegment.put("duration", 60);
-            frameSegment.put("next", (i+1)%12);
+            frameSegment.put("duration", 79);
+            frameSegment.put("next", (i+1)%7);
             frameSegment.put("layer", 2);
             script.addSegment(frameSegment);
         }
@@ -118,16 +118,15 @@ public class LoadingState extends AppState {
     }
 
     private void updateBackgroundColor() {
-        int red = currentColor.getRed() + addOrMinute;
-        int green = currentColor.getGreen() + addOrMinute;
-        int blue = currentColor.getBlue() + addOrMinute;
+        int red = currentColor.getRed() + addOrMinute >= 255 ? 255 : currentColor.getRed() + addOrMinute;
+        int blue = currentColor.getBlue() + addOrMinute >= 255 ? 255 : currentColor.getBlue() + addOrMinute;
 
-        if (red == 255 || green == 255 || blue == 255)
+        if (red >= 255 ||  blue >= 255)
             addOrMinute = -1;
-        if (red == originalColor.getRed() || green == originalColor.getGreen() || blue == originalColor.getBlue())
+        else if (red == originalColor.getRed() || blue == originalColor.getBlue())
             addOrMinute = 1;
 
-        currentColor = new Color(red, green, blue);
+        currentColor = new Color(red, currentColor.getGreen(), blue);
 
         getGameWindowsConfigurator().gamePanelBackground(currentColor);
     }

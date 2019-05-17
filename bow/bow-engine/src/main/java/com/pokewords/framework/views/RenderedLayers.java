@@ -29,6 +29,10 @@ public class RenderedLayers {
 		this.layers = layers;
 	}
 
+	public void clearEachLayer() {
+		layers.forEach(List::clear);
+	}
+
     /**
      * Add the frame to the rendered layer.
      * @param frame The Frame.

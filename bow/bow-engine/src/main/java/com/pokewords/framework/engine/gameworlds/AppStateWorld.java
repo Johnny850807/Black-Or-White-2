@@ -144,6 +144,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     private void rejoinRenderedLayers() {
+        renderedLayers.clearEachLayer();
         for (Sprite sprite: sprites) {
             addFramesToRenderedLayer(sprite.getRenderedFrames());
         }

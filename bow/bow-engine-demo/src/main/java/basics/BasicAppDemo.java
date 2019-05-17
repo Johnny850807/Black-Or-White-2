@@ -24,7 +24,6 @@ public class  BasicAppDemo extends GameApplication {
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
         gameWindowsConfigurator.name("BasicAppDemo")
                             .size(600, 600)
-                            .gamePanelBackground(Color.decode("#2c1b40"))
                             .atCenter();
     }
 
