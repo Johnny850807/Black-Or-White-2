@@ -83,7 +83,7 @@ public class LoadingState extends AppState {
     private void configTitleText() {
         getSpriteInitializer().declare(TITLE_TEXT)
                 .position(300, 120)
-                .with(new StringComponent(new StringFrame(0, 2, "Bow Engine Demo",
+                .with(new StringComponent(new StringFrame(0, 2, "BOW Engine",
                         Color.blue, new Font("AR CENA", Font.BOLD, 40), true)))
                 .commit();
     }

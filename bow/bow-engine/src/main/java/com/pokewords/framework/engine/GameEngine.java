@@ -23,7 +23,7 @@ public class GameEngine {
 	private AppStateMachine appStateMachine;
 	private ScheduledExecutorService looper = Executors.newScheduledThreadPool(3);
 	private boolean running = false;
-	private int timePerFrame = 23;  //ms
+	private int timePerFrame = 15;  //ms
 
 	public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator) {
 		this.iocFactory = iocFactory;
