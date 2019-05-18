@@ -131,7 +131,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                 .addComponent(new CollidableComponent())
                 .buildScriptFromPath("path/to/script_text")
                 .addWeaverNode((script, sprite) -> {
-                    List<Element> bows = script.getSegmentById("frame").getElementsByName("bow");
+                    List<Element> bows = script.getSegmentByName("frame").getElementsByName("bow");
                 })
                 .build();
     }

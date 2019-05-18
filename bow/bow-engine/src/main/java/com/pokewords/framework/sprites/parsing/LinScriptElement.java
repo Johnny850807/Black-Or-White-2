@@ -2,23 +2,20 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ElementException;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-
-import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScript.Element.NAME;
 
 /**
  * @author nyngwang
  */
 public class LinScriptElement implements Element {
-    private Segment parentSegment;
+    private Segment parent;
     private Script.Mappings mappings;
-    private String elementName;
+    private String name;
 
-    public LinScriptElement(String elementName) {
+    public LinScriptElement(String name) {
         init();
-        this.elementName = elementName;
+        this.name = name;
     }
 
     private void init() {
@@ -38,8 +35,8 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public String getElementName() {
-        return elementName;
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -74,14 +71,14 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public Element setParentSegment(Segment parentSegment) {
-        this.parentSegment = parentSegment;
+    public Element setParent(Segment parent) {
+        this.parent = parent;
         return this;
     }
 
     @Override
-    public Segment getParentSegment() {
-        return parentSegment;
+    public Segment getParent() {
+        return parent;
     }
 
     // Pretty print
@@ -89,10 +86,10 @@ public class LinScriptElement implements Element {
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
-        resultBuilder.append(String.format("<%s>\n", elementName));
+        resultBuilder.append(String.format("<%s>\n", name));
         mappings.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
         mappings.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-        resultBuilder.append(String.format("</%s>\n", elementName));
+        resultBuilder.append(String.format("</%s>\n", name));
         return resultBuilder.toString();
     }
 

@@ -21,7 +21,7 @@ public class GalleryElement {
 
     public GalleryElement(Element galleryElement) {
         this.galleryElement = galleryElement;
-        this.galleryType = galleryElement.getElementName();
+        this.galleryType = galleryElement.getName();
         this.range = new Range(galleryElement.getIntByKey("startPic"), galleryElement.getIntByKey("endPic"));
     }
 

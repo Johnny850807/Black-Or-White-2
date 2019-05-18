@@ -5,9 +5,6 @@ import com.pokewords.framework.sprites.parsing.Segment;
 
 import java.util.Optional;
 
-import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScript.Segment.ID;
-import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScript.Segment.NAME;
-
 /**
  * @author johnny850807 (waterball)
  */
@@ -35,8 +32,8 @@ public class FrameSegment {
     }
 
     public FrameSegment(Segment frameSegment) {
-        this.id = frameSegment.getIntByKey(ID);
-        this.description = frameSegment.getStringByKey(NAME);
+        this.id = frameSegment.getId();
+        this.description = frameSegment.getName();
         this.pic = frameSegment.getIntByKey("pic");
         this.layer = frameSegment.getIntByKey("layer");
         this.duration = frameSegment.getIntByKey("duration");
