@@ -10,7 +10,7 @@ import java.util.OptionalInt;
  * @author nyngwang
  */
 public class LinScriptElement implements Element {
-    private LinScriptSegment parentSegment;
+    private Segment parentSegment;
     private Script.Mappings mappings;
 
     public LinScriptElement(String elementName) {
@@ -73,7 +73,7 @@ public class LinScriptElement implements Element {
 
     @Override
     public Element setParentSegment(Segment parentSegment) {
-        this.parentSegment = (LinScriptSegment) parentSegment;
+        this.parentSegment = parentSegment;
         return this;
     }
 
@@ -86,21 +86,13 @@ public class LinScriptElement implements Element {
     @Override
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
-        String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
-        resultBuilder
-                .append("<").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Element.NAME)).append(">").append('\n');
-        for (Map.Entry<String, String> entry : mappings.stringMap.entrySet()) {
-            resultBuilder
-                    .append(indent).append(entry.getKey())
-                    .append(" ").append(entry.getValue()).append('\n');
-        }
-        for (Map.Entry<String, Integer> entry : mappings.integerMap.entrySet()) {
-            resultBuilder
-                    .append(indent).append(entry.getKey())
-                    .append(" ").append(entry.getValue()).append('\n');
-        }
-        resultBuilder
-                .append("</").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Element.NAME)).append(">");
+        String indent = new String(new char[indentation]).replace("\0", " ");
+        resultBuilder.append(String.format("<%s>\n", ScriptDefinitions.LinScript.Element.NAME));
+        mappings.stringMap.entrySet().forEach(entry ->
+                resultBuilder.append(String.format(indent + "%s: %s\n", entry.getKey(), entry.getValue())));
+        mappings.integerMap.entrySet().forEach(entry ->
+                resultBuilder.append(String.format(indent + "%s: %s\n", entry.getKey(), entry.getValue())));
+        resultBuilder.append(String.format("</%s>", ScriptDefinitions.LinScript.Element.NAME));
         return resultBuilder.toString();
     }
 
