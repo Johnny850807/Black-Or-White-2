@@ -1,8 +1,8 @@
 package com.pokewords.framework.views.helpers.galleries;
 
 import com.pokewords.framework.commons.Range;
-import com.pokewords.framework.engine.utils.ImageUtility;
-import com.pokewords.framework.engine.utils.Resources;
+import com.pokewords.framework.commons.utils.ImageUtility;
+import com.pokewords.framework.commons.utils.Resources;
 
 import javax.swing.*;
 import java.awt.*;

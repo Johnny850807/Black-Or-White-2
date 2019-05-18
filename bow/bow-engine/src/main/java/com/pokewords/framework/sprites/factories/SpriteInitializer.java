@@ -1,19 +1,17 @@
 package com.pokewords.framework.sprites.factories;
 
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
-import com.pokewords.framework.engine.utils.Resources;
-import com.pokewords.framework.engine.utils.StringUtility;
+import com.pokewords.framework.commons.utils.Resources;
+import com.pokewords.framework.commons.utils.StringUtility;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.Script;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.*;
 
@@ -124,6 +122,10 @@ public class SpriteInitializer {
         public SpriteDeclarator position(@NotNull Point point) {
             declaration.propertiesComponent.setPosition(point);
             return this;
+        }
+
+        public SpriteDeclarator size(Point size) {
+            return size(size.x, size.y);
         }
 
         public SpriteDeclarator size(int w, int y) {

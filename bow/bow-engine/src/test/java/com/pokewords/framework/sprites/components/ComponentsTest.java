@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.AbstractTest;
-import com.pokewords.framework.engine.utils.StubFactory;
+import com.pokewords.framework.commons.utils.StubFactory;
 import com.pokewords.framework.sprites.components.mocks.MockEffectFrame;
 import org.junit.Test;
 

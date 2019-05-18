@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 
-import com.pokewords.framework.engine.utils.FileUtility;
+import com.pokewords.framework.commons.utils.FileUtility;
 
 import java.io.IOException;
 

@@ -12,7 +12,7 @@ import com.pokewords.framework.views.windows.GameWindowsConfigurator;
  * The AppStateMachine manages the finite game states.
  *
  * Built-in transitions:
- * EmptyState --(EVENT_LOADING)--> LoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
+ * EmptyState --(EVENT_LOADING)--> ProgressBarLoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
  *
  * Use AppStateMachine#createState(appStateType) to create your app state.
  * @author johnny850807 (waterball)
@@ -36,7 +36,7 @@ public class AppStateMachine implements GameLifecycleListener {
 
 	private void setupStates() {
 		AppState initialState = createState(EmptyAppState.class);
-		this.loadingState = createState(LoadingState.class);
+		this.loadingState = createState(BreakerIconLoadingState.class);
 		fsm.setCurrentState(initialState);
 		fsm.addTransition(initialState, EVENT_LOADING, loadingState);
 		initialState.onAppStateCreate();

@@ -29,14 +29,17 @@ public class RenderedLayers {
 		this.layers = layers;
 	}
 
+	public void clearEachLayer() {
+		layers.forEach(List::clear);
+	}
+
     /**
      * Add the frame to the rendered layer.
      * @param frame The Frame.
-     * @param layerIndex The index of the frame in rendered layer.
      */
-    public void addFrame(Frame frame, int layerIndex) {
-        expandLayersToFitTheIndex(layerIndex);
-        layers.get(layerIndex).add(frame);
+    public void addFrame(Frame frame) {
+        expandLayersToFitTheIndex(frame.getLayerIndex());
+        layers.get(frame.getLayerIndex()).add(frame);
     }
 
     private void expandLayersToFitTheIndex(int layerIndex) {

@@ -81,7 +81,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      */
     private void addFramesToRenderedLayer(Collection<? extends Frame> renderedFrames) {
         for (Frame frame: renderedFrames) {
-            renderedLayers.addFrame(frame, frame.getLayerIndex());
+            renderedLayers.addFrame(frame);
         }
     }
 
@@ -144,6 +144,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     private void rejoinRenderedLayers() {
+        renderedLayers.clearEachLayer();
         for (Sprite sprite: sprites) {
             addFramesToRenderedLayer(sprite.getRenderedFrames());
         }

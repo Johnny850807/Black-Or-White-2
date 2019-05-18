@@ -2,7 +2,7 @@ package com.pokewords.framework.sprites.factories;
 
 import com.pokewords.framework.engine.weaver.GameEngineWeaverNode;
 import com.pokewords.framework.engine.exceptions.SpriteBuilderException;
-import com.pokewords.framework.engine.utils.Resources;
+import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.*;

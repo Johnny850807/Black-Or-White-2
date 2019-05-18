@@ -1,6 +1,6 @@
 <galleries> 0
     <sequence>
-        startPic: 0 endPic: 11 path: assets\sequences\loadingProgressBar
+        startPic: 0 endPic: 11 path: assets\sequences\loadingProgressBar2
     </sequence>
 </galleries>
 
@@ -33,23 +33,7 @@
 </frame>
 
 <frame> 7
-   pic: 7  duration: 30  next: 8   layer: 2
-</frame>
-
-<frame> 8
-   pic: 8  duration: 30  next: 9   layer: 2
-</frame>
-
-<frame> 9
-   pic: 9  duration: 30  next: 10   layer: 2
-</frame>
-
-<frame> 10
-   pic: 10  duration: 30  next: 11  layer: 2
-</frame>
-
-<frame> 11
-   pic: 11  duration: 30  next: 0   layer: 2
+   pic: 7  duration: 30  next: 0   layer: 2
 </frame>
 
 
