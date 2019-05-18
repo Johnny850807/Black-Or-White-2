@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScript.Segment.*;
@@ -15,22 +16,24 @@ public class LinScriptSegment implements Segment {
     private LinScript parentScript;
     private List<Element> elements;
     private Script.Mappings mappings;
+    private String segmentName;
+    private int segmentId;
+    private String segmentDescription;
 
     public LinScriptSegment(String segmentName, int segmentId) {
         init();
-        mappings.stringMap.put(NAME, segmentName);
-        mappings.integerMap.put(ID, segmentId);
+        this.segmentName = segmentName;
+        this.segmentId = segmentId;
     }
 
     public LinScriptSegment(String segmentName, int segmentId, String segmentDescription) {
         init();
-        mappings.stringMap.put(NAME, segmentName);
-        mappings.integerMap.put(ID, segmentId);
-        mappings.stringMap.put(DESCRIPTION, segmentDescription);
+        this.segmentName = segmentName;
+        this.segmentId = segmentId;
+        this.segmentDescription = segmentDescription;
     }
 
     private void init() {
-        parentScript = null;
         elements = new ArrayList<>();
         mappings = new Script.Mappings();
     }
@@ -129,31 +132,29 @@ public class LinScriptSegment implements Segment {
     @Override
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
-        String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
-        resultBuilder
-                .append("<").append(getStringByKey(NAME)).append(">")
-                .append(" ").append(getIntByKey(ID))
-                .append(" ").append(getStringByKeyOptional(DESCRIPTION).orElse("")).append('\n');
-        for (Map.Entry<String, String> entry : mappings.stringMap.entrySet()) {
-            resultBuilder
-                    .append(indent).append(entry.getKey())
-                    .append(" ").append(entry.getValue()).append('\n');
-        }
-        for (Map.Entry<String, Integer> entry : mappings.integerMap.entrySet()) {
-            resultBuilder
-                    .append(indent).append(entry.getKey())
-                    .append(" ").append(entry.getValue()).append('\n');
-        }
-        for (Element element : elements) {
-            resultBuilder.append(indent).append(element.toString(indentation)).append('\n');
-        }
-        resultBuilder
-                .append("</").append(mappings.stringMap.get(NAME)).append(">").append('\n');
+        String indent = new String(new char[indentation]).replace("\0", " ");
+        resultBuilder.append(String.format("<%s> %s %s\n",
+                getStringByKey(NAME), getIntByKey(ID), getStringByKeyOptional(DESCRIPTION).orElse("")));
+        mappings.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        mappings.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        elements.forEach(element ->
+                resultBuilder.append(element
+                        .toString(indentation)
+                        .replaceAll("(.*?\n)", indent + "$1")));
+        resultBuilder.append(String.format("</%s>\n", getStringByKey(NAME)));
         return resultBuilder.toString();
     }
 
     @Override
     public String toString() {
         return toString(4);
+    }
+
+    public static void main(String[] args) {
+        Segment segment = new LinScriptSegment("frame", 1, "punch")
+                .addElement(new LinScriptElement("bow"))
+                .addElement(new LinScriptElement("cow"));
+        System.out.println(segment);
+
     }
 }

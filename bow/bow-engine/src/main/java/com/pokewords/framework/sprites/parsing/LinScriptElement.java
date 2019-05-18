@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 
+import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScript.Element.NAME;
+
 /**
  * @author nyngwang
  */
@@ -15,7 +17,7 @@ public class LinScriptElement implements Element {
 
     public LinScriptElement(String elementName) {
         init();
-        mappings.stringMap.put(ScriptDefinitions.LinScript.Element.NAME, elementName);
+        mappings.stringMap.put(NAME, elementName);
     }
 
     private void init() {
@@ -37,7 +39,7 @@ public class LinScriptElement implements Element {
 
     @Override
     public String getElementName() {
-        return getStringByKey(ScriptDefinitions.LinScript.Element.NAME);
+        return getStringByKey(NAME);
     }
 
     @Override
@@ -87,12 +89,10 @@ public class LinScriptElement implements Element {
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
-        resultBuilder.append(String.format("<%s>\n", ScriptDefinitions.LinScript.Element.NAME));
-        mappings.stringMap.entrySet().forEach(entry ->
-                resultBuilder.append(String.format(indent + "%s: %s\n", entry.getKey(), entry.getValue())));
-        mappings.integerMap.entrySet().forEach(entry ->
-                resultBuilder.append(String.format(indent + "%s: %s\n", entry.getKey(), entry.getValue())));
-        resultBuilder.append(String.format("</%s>", ScriptDefinitions.LinScript.Element.NAME));
+        resultBuilder.append(String.format("<%s>\n", getStringByKey(NAME)));
+        mappings.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        mappings.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        resultBuilder.append(String.format("</%s>\n", getStringByKey(NAME)));
         return resultBuilder.toString();
     }
 
