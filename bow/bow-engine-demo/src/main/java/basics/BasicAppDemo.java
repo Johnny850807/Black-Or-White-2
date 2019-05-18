@@ -22,7 +22,8 @@ public class  BasicAppDemo extends GameApplication {
 
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
-        gameWindowsConfigurator.name("Basic App Demo");
+        gameWindowsConfigurator.name("Basic App Demo")
+                            .atCenter();
     }
 
     @Override

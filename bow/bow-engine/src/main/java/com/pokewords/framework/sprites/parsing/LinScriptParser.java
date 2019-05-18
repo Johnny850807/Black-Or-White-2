@@ -1,8 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.engine.exceptions.LinScriptParserException;
-import com.pokewords.framework.engine.utils.Resources;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 
 import java.io.IOException;
 import java.nio.file.Files;

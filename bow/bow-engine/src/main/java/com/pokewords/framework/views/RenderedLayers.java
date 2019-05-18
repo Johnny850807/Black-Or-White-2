@@ -1,6 +1,7 @@
 package com.pokewords.framework.views;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -41,6 +42,10 @@ public class RenderedLayers {
         expandLayersToFitTheIndex(frame.getLayerIndex());
         layers.get(frame.getLayerIndex()).add(frame);
     }
+
+    public void addFrames(Collection<? extends Frame> frames) {
+    	frames.forEach(this::addFrame);
+	}
 
     private void expandLayersToFitTheIndex(int layerIndex) {
         IntStream.range(layers.size(), layerIndex+1)
