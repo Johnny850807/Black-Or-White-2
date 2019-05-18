@@ -11,7 +11,7 @@ import java.awt.*;
 public class BreakerIconLoadingState extends AppState {
 
     private enum Types {
-        BreakerIconLoadingState, AnimationSourceText
+        BreakerIconLoadingState, AnimationSourceText, WaterDropSoundEffect
     }
 
     @Override
@@ -21,9 +21,9 @@ public class BreakerIconLoadingState extends AppState {
 
         declareAndSpawnBreakerIconLoadingAnimation();
         declareAndSpawnAnimationSourceText();
-//191 535
-    }
 
+        getSoundPlayer().addSound(Types.WaterDropSoundEffect, "assets/sounds/WaterDropSound.wav");
+    }
 
     private void declareAndSpawnBreakerIconLoadingAnimation() {
         getAppStateWorld().spawn(
@@ -72,10 +72,14 @@ public class BreakerIconLoadingState extends AppState {
     }
 
     @Override
-    protected void onAppStateEntering() { }
+    protected void onAppStateEntering() {
+        getSoundPlayer().playSoundLoopingForever(Types.WaterDropSoundEffect);
+    }
 
     @Override
-    protected void onAppStateExiting() { }
+    protected void onAppStateExiting() {
+        getSoundPlayer().stop(Types.WaterDropSoundEffect);
+    }
 
     @Override
     protected void onAppStateDestroying() { }

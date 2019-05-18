@@ -4,6 +4,7 @@ import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.AppView;
 import com.pokewords.framework.engine.asm.AppStateMachine;
+import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 import com.pokewords.framework.views.inputs.InputManager;
 
@@ -25,11 +26,11 @@ public class GameEngine {
 	private ScheduledExecutorService scheduler;
 	private int timePerFrame = 16;  //ms
 
-	public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator) {
+	public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
 		this.iocFactory = iocFactory;
 		this.inputManager = inputManager;
 		this.spriteInitializer = new SpriteInitializer(iocFactory);
-		this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator);
+		this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator, soundPlayer);
 		this.scheduler = Executors.newScheduledThreadPool(3);
 		this.gameLoopingTask = this::gameLooping;
 	}

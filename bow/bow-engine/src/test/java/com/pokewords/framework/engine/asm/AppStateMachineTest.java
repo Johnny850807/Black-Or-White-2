@@ -3,6 +3,7 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.views.sound.MockSoundPlayer;
 import com.pokewords.framework.views.windows.GameFrameWindowsConfigurator;
 import com.pokewords.framework.views.windows.MockGameWindowsConfigurator;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class AppStateMachineTest extends AbstractTest {
     @Before
     public void setup() {
         appStateMachine = new AppStateMachine(release.inputManager(),
-                new SpriteInitializer(release), new MockGameWindowsConfigurator());
+                new SpriteInitializer(release), new MockGameWindowsConfigurator(), new MockSoundPlayer());
     }
 
     @Test
