@@ -10,6 +10,11 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
+/**
+ * A cool animated loading state scene with a breaker at the center and water drop sound effect.
+ * The background color is #191F26 which looks really great.
+ * @author johnny850807 (waterball)
+ */
 public class BreakerIconLoadingState extends AppState {
 
     private enum Types {
