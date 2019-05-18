@@ -18,15 +18,11 @@ public class GalleryElement {
     private Element galleryElement;
     private String galleryType;
     private Range range;
-    private int row;
-    private int column;
 
     public GalleryElement(Element galleryElement) {
         this.galleryElement = galleryElement;
         this.galleryType = galleryElement.getElementName();
         this.range = new Range(galleryElement.getIntByKey("startPic"), galleryElement.getIntByKey("endPic"));
-        this.row = galleryElement.getIntByKey("row");
-        this.column = galleryElement.getIntByKey("col");
     }
 
     public String getGalleryType() {
@@ -35,14 +31,6 @@ public class GalleryElement {
 
     public Range getRange() {
         return range;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public int getColumn() {
-        return column;
     }
 
     public Gallery toGallery() {
@@ -55,7 +43,8 @@ public class GalleryElement {
 
             switch (typeName) {
                 case sheet:
-                    return new SheetGallery(galleryElement.getStringByKey("path"), range, row, column,
+                    return new SheetGallery(galleryElement.getStringByKey("path"), range,
+                            galleryElement.getIntByKey("row"), galleryElement.getIntByKey("col"),
                             galleryElement.getIntByKeyOptional("padding").orElse(0));
                 case sequence:
                     return new SequenceGallery(galleryElement.getStringByKey("path"), range);

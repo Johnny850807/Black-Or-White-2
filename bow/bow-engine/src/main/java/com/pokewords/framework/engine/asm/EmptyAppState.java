@@ -16,5 +16,5 @@ public final class EmptyAppState extends AppState {
     protected void onAppStateDestroying() { }
 
     @Override
-    protected void onAppStateUpdating(int timePerFrame) { }
+    protected void onAppStateUpdating(double timePerFrame) { }
 }

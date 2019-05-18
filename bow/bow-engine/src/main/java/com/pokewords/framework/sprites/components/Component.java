@@ -31,7 +31,7 @@ public abstract class Component implements AppStateLifeCycleListener {
     }
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    public void onUpdate(double timePerFrame) {
         //hook
     }
 

@@ -1,12 +1,6 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.commons.Logger;
-import com.pokewords.framework.engine.utils.StringUtility;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
-
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**

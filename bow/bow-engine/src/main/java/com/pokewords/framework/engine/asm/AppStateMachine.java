@@ -3,7 +3,7 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
-import com.pokewords.framework.engine.listeners.GameLifecycleListener;
+import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
@@ -12,12 +12,12 @@ import com.pokewords.framework.views.windows.GameWindowsConfigurator;
  * The AppStateMachine manages the finite game states.
  *
  * Built-in transitions:
- * EmptyState --(EVENT_LOADING)--> LoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
+ * EmptyState --(EVENT_LOADING)--> ProgressBarLoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
  *
  * Use AppStateMachine#createState(appStateType) to create your app state.
  * @author johnny850807 (waterball)
  */
-public class AppStateMachine implements GameLifecycleListener {
+public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_LOADING = "Start Loading";
 	public static final String EVENT_GAME_STARTED = "Game Started";
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
@@ -36,7 +36,7 @@ public class AppStateMachine implements GameLifecycleListener {
 
 	private void setupStates() {
 		AppState initialState = createState(EmptyAppState.class);
-		this.loadingState = createState(LoadingState.class);
+		this.loadingState = createState(BreakerIconLoadingState.class);
 		fsm.setCurrentState(initialState);
 		fsm.addTransition(initialState, EVENT_LOADING, loadingState);
 		initialState.onAppStateCreate();
@@ -74,7 +74,7 @@ public class AppStateMachine implements GameLifecycleListener {
 
 
 	@Override
-	public void onUpdate(int timePerFrame) {
+	public void onUpdate(double timePerFrame) {
 		fsm.getCurrentState().onUpdate(timePerFrame);
 	}
 

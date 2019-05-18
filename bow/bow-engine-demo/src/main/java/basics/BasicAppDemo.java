@@ -22,10 +22,7 @@ public class  BasicAppDemo extends GameApplication {
 
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
-        gameWindowsConfigurator.name("BasicAppDemo")
-                            .size(600, 600)
-                            .gamePanelBackground(Color.decode("#1B4032"))
-                            .atCenter();
+        gameWindowsConfigurator.name("Basic App Demo");
     }
 
     @Override

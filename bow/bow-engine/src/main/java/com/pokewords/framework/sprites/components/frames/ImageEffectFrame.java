@@ -24,7 +24,7 @@ public class ImageEffectFrame extends DefaultEffectFrame {
 
 	@Override
 	public void renderItself(Canvas canvas) {
-		canvas.renderImage(sprite.getX(), sprite.getY(), image);
+		canvas.renderImage(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), image);
 	}
 
 	@Override

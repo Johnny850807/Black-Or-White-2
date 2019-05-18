@@ -4,8 +4,8 @@ import com.pokewords.framework.sprites.Sprite;
 
 
 public abstract class CollisionHandler {
-	public String s1Type;
-	public String s2Type;
+	public Object s1Type;
+	public Object s2Type;
 
 	public CollisionHandler(Object s1Type, Object s2Type) {
 		this(s1Type.toString(), s2Type.toString());
