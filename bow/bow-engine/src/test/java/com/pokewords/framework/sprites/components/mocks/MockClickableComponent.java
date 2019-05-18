@@ -47,7 +47,7 @@ public class MockClickableComponent extends ClickableComponent implements Sharea
     }
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    public void onUpdate(double timePerFrame) {
         assert isRunning : "onUpdate() should be triggered after onAppStateEnter().";
         updateCount++;
     }

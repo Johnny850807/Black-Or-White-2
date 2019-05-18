@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * @author Joanna
@@ -135,7 +134,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    public void onUpdate(double timePerFrame) {
         for (Sprite sprite: sprites) {
             sprite.onUpdate(timePerFrame);
         }

@@ -111,7 +111,7 @@ public class ProgressBarLoadingState extends AppState {
     private int addOrMinute = 1;
 
     @Override
-    public void onAppStateUpdating(int timePerFrame) {
+    public void onAppStateUpdating(double timePerFrame) {
         updateBackgroundColor();
     }
 

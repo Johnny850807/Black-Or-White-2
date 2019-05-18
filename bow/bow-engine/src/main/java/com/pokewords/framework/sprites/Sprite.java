@@ -30,7 +30,7 @@ import java.util.Set;
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	protected @Nullable AppStateWorld world;
 	protected ComponentMap components = new ComponentMap();
-	private int timePerFrame;
+	private double timePerFrame;
 
 
 	protected Sprite(String type) {
@@ -131,7 +131,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onUpdate(int timePerFrame) {
+	public void onUpdate(double timePerFrame) {
 		this.timePerFrame = timePerFrame;
         for (Component component : components.values())
             component.onUpdate(timePerFrame);
@@ -216,14 +216,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     }
 
     public void move(int velocityX, int velocityY) {
-		getPosition().translate(velocityX*timePerFrame, velocityY*timePerFrame);
+		getPosition().translate((int) (velocityX*timePerFrame), (int) (velocityY*timePerFrame));
 	}
     public void moveX(int velocityX) {
-		getPosition().translate(velocityX*timePerFrame, 0);
+		getPosition().translate((int) (velocityX*timePerFrame), 0);
 	}
 
 	public void moveY(int velocityY) {
-		getPosition().translate(0, velocityY*timePerFrame);
+		getPosition().translate(0, (int) (velocityY*timePerFrame));
 	}
 
 	public boolean isType(Object obj) {

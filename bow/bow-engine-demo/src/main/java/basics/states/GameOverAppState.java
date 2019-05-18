@@ -2,7 +2,6 @@ package basics.states;
 
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
-import com.pokewords.framework.ioc.IocFactory;
 
 public class GameOverAppState extends AppState {
 
@@ -28,7 +27,7 @@ public class GameOverAppState extends AppState {
     }
 
     @Override
-    protected void onAppStateUpdating(int timePerFrame) {
+    protected void onAppStateUpdating(double timePerFrame) {
 
     }
 

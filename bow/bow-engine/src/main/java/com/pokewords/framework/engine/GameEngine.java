@@ -9,6 +9,7 @@ import com.pokewords.framework.views.inputs.InputManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,17 +20,23 @@ public class GameEngine {
 	private AppView gameView;
 	private SpriteInitializer spriteInitializer;
 	private InputManager inputManager;
-	private UserConfig userConfig;
 	private AppStateMachine appStateMachine;
-	private ScheduledExecutorService looper = Executors.newScheduledThreadPool(3);
-	private boolean running = false;
-	private int timePerFrame = 30;  //ms
+	private final Runnable gameLoopingTask;
+	private ScheduledExecutorService scheduler;
+	private int timePerFrame = 16;  //ms
 
 	public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator) {
 		this.iocFactory = iocFactory;
 		this.inputManager = inputManager;
 		this.spriteInitializer = new SpriteInitializer(iocFactory);
 		this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator);
+		this.scheduler = Executors.newScheduledThreadPool(3);
+		this.gameLoopingTask = this::gameLooping;
+	}
+
+	private void gameLooping() {
+		appStateMachine.onUpdate(timePerFrame);
+		gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
 	}
 
 	public void setGameView(AppView gameView) {
@@ -39,7 +46,7 @@ public class GameEngine {
 	public void launchEngine() {
 		gameView.onAppInit();
 		appStateMachine.trigger(AppStateMachine.EVENT_LOADING);
-		looper.scheduleAtFixedRate(this::gameLooping,0, timePerFrame, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(gameLoopingTask, 0, timePerFrame, TimeUnit.MILLISECONDS);
 		gameView.onAppLoading();
 
 		//Reveal below code will lead to errors, because AppStateWorld is not finished.
@@ -47,10 +54,8 @@ public class GameEngine {
 //		gameView.onAppStarted();
 	}
 
-	private void gameLooping() {
-		appStateMachine.onUpdate(timePerFrame);
-		gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
-	}
+
+
 
 	public AppView getGameView() {
 		return gameView;

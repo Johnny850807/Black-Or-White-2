@@ -63,7 +63,7 @@ public class BreakerIconLoadingState extends AppState {
         for (int i = 0; i <= 249; i++) {
             LinScriptSegment frameSegment = new LinScriptSegment("frame", i);
             frameSegment.put("pic", i);
-            frameSegment.put("duration", 50);
+            frameSegment.put("duration", 30);
             frameSegment.put("next", (i+1)%250);
             frameSegment.put("layer", 0);
             script.addSegment(frameSegment);
@@ -81,5 +81,5 @@ public class BreakerIconLoadingState extends AppState {
     protected void onAppStateDestroying() { }
 
     @Override
-    protected void onAppStateUpdating(int timePerFrame) { }
+    protected void onAppStateUpdating(double timePerFrame) { }
 }

@@ -26,7 +26,7 @@ public class MockAppState extends AppState {
     }
 
     @Override
-    protected void onAppStateUpdating(int timePerFrame) {
+    protected void onAppStateUpdating(double timePerFrame) {
         onAppStateUpdating++;
     }
 

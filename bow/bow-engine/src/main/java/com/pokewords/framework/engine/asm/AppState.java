@@ -77,12 +77,12 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	protected abstract void onAppStateDestroying();
 
 	@Override
-	public final void onUpdate(int timePerFrame) {
+	public final void onUpdate(double timePerFrame) {
 		onAppStateUpdating(timePerFrame);
 		appStateWorld.onUpdate(timePerFrame);
 	}
 
-	protected abstract void onAppStateUpdating(int timePerFrame);
+	protected abstract void onAppStateUpdating(double timePerFrame);
 
 	protected Sprite createSprite(Object type) {
 		return spriteInitializer.createSprite(type);

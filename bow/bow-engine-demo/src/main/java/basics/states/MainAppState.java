@@ -70,7 +70,7 @@ public class MainAppState extends AppState {
 
 
     @Override
-    public void onAppStateUpdating(int timePerFrame) {
+    public void onAppStateUpdating(double timePerFrame) {
         if (getInputs().getButtonBeingHeld(KeyEvent.VK_W))
             moveUp();
         if (getInputs().getButtonBeingHeld(KeyEvent.VK_S))

@@ -3,7 +3,7 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
-import com.pokewords.framework.engine.listeners.GameLifecycleListener;
+import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
@@ -17,7 +17,7 @@ import com.pokewords.framework.views.windows.GameWindowsConfigurator;
  * Use AppStateMachine#createState(appStateType) to create your app state.
  * @author johnny850807 (waterball)
  */
-public class AppStateMachine implements GameLifecycleListener {
+public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_LOADING = "Start Loading";
 	public static final String EVENT_GAME_STARTED = "Game Started";
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
@@ -74,7 +74,7 @@ public class AppStateMachine implements GameLifecycleListener {
 
 
 	@Override
-	public void onUpdate(int timePerFrame) {
+	public void onUpdate(double timePerFrame) {
 		fsm.getCurrentState().onUpdate(timePerFrame);
 	}
 

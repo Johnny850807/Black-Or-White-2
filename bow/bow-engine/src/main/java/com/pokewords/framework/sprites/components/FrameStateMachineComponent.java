@@ -7,7 +7,6 @@ import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.marks.Renderable;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     }
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    public void onUpdate(double timePerFrame) {
         frameDurationCountdown -= System.currentTimeMillis() - latestUpdateTimestamp;
         if (frameDurationCountdown <= 0)
         {
