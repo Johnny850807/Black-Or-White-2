@@ -28,7 +28,7 @@ public class SheetGallery implements Gallery {
         this.pictureRange = pictureRange;
         this.row = row;
         this.col = col;
-        this.padding = padding;  //TODO effect padding
+        this.padding = padding;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SheetGallery implements Gallery {
         int gridWidth = imageWidth / this.col;
         int gridHeight = imageHeight / this.row;
         System.out.println(String.format("%d %d %d %d", gridWidth * col, gridHeight * row, gridWidth, gridHeight));
-        return new Rectangle(gridWidth * col, gridHeight * row, gridWidth, gridHeight);
+        return new Rectangle((gridWidth + padding) * col, (gridHeight + padding) * row, gridWidth, gridHeight);
     }
 
     public static void main(String[] args) {
