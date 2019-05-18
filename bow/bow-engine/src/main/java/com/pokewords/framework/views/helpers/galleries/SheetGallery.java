@@ -1,6 +1,7 @@
 package com.pokewords.framework.views.helpers.galleries;
 
 import com.pokewords.framework.commons.Range;
+import com.pokewords.framework.commons.utils.Resources;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -54,9 +55,8 @@ public class SheetGallery implements Gallery {
      * @return image
      */
     public Image getImage(int row, int col){
-        File f = new File(pathname);
         try {
-            BufferedImage bi = ImageIO.read(f);
+            BufferedImage bi = ImageIO.read(Resources.get(pathname));
             int imageWidth = bi.getWidth();
             int imageHeight = bi.getHeight();
             Rectangle rectangle = getSubimageRectangle(imageWidth, imageHeight, row, col);
@@ -68,17 +68,17 @@ public class SheetGallery implements Gallery {
     }
 
     private Rectangle getSubimageRectangle(int imageWidth, int imageHeight, int row, int col) {
-        int gridWidth = imageWidth / this.col;
-        int gridHeight = imageHeight / this.row;
+        int gridWidth = (imageWidth - padding * (this.col)) / this.col;
+        int gridHeight = (imageHeight - padding * (this.row)) / this.row;
         System.out.println(String.format("%d %d %d %d", gridWidth * col, gridHeight * row, gridWidth, gridHeight));
         return new Rectangle((gridWidth + padding) * col, (gridHeight + padding) * row, gridWidth, gridHeight);
     }
 
     public static void main(String[] args) {
-        String pathname = "D:/我的下載/bandit_0.bmp";
-        int imgrow = 7, imgcol = 10;
+        String pathname = "assets/sheets/loadingText.png";
+        int imgrow = 3, imgcol = 4;
 
-        Gallery gallery = new SheetGallery(pathname, new Range(0, 69), imgrow, imgcol, 0);
+        Gallery gallery = new SheetGallery(pathname, new Range(0, 11), imgrow, imgcol, 1);
 
         JFrame jf = new JFrame("");
         JLabel jLabel = new JLabel();
