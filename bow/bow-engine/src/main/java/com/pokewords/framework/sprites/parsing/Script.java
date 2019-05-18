@@ -23,8 +23,8 @@ public interface Script {
         return getSegmentsByName(name).get(0);
     }
 
-    boolean containsSegmentId(int id);
     boolean containsSegmentName(String name);
+    boolean containsSegmentId(int id);
     boolean containsSegmentDescription(String description);
     List<Segment> getSegmentsByName(String name);
     Segment getSegmentById(int id);

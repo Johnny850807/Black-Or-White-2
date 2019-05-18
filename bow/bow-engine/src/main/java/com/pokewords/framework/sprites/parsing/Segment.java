@@ -15,6 +15,9 @@ public interface Segment {
     }
 
     Segment addElement(Element element);
+
+    boolean containsElementName(String name);
+
     List<Element> getElementsByName(String name);
     List<Element> getElements();
 

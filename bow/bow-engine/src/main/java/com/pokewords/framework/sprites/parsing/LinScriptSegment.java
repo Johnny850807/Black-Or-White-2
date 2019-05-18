@@ -43,6 +43,14 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
+    public boolean containsElementName(String name) {
+        for (Element element : elements)
+            if (element.getName().equals(name))
+                return true;
+        return false;
+    }
+
+    @Override
     public List<Element> getElementsByName(String name) {
         return elements.stream()
                 .filter(element -> element.getName().equals(name))

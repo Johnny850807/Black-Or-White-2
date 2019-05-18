@@ -38,11 +38,12 @@ public class FrameSegment {
         this.layer = frameSegment.getIntByKey("layer");
         this.duration = frameSegment.getIntByKey("duration");
         this.next = frameSegment.getIntByKey("next");
-
-        Element propertiesElement = frameSegment.getElementByName("properties");
-        Element effectElement = frameSegment.getElementByName("effect");
-        this.propertiesElement = Optional.ofNullable(propertiesElement == null ? null : new PropertiesElement(propertiesElement));
-        this.effectElement = Optional.ofNullable(effectElement == null ? null : new EffectElement(effectElement));
+        this.propertiesElement = Optional.ofNullable(
+                frameSegment.containsElementName("properties")?
+                new PropertiesElement(frameSegment.getElementByName("properties")) : null);
+        this.effectElement = Optional.ofNullable(
+                frameSegment.containsElementName("effect")?
+                new EffectElement(frameSegment.getElementByName("effect")) : null);
     }
 
     public int getId() {
