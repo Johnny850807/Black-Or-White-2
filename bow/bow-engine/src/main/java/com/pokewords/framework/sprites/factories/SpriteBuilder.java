@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.factories;
 
+import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
@@ -17,7 +18,7 @@ public interface SpriteBuilder {
 
     SpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent);
 
-    SpriteBuilder addComponent(String name, Component component);
+    SpriteBuilder addComponent(Component component);
 
     SpriteBuilder buildScriptFromPath(String path);
 

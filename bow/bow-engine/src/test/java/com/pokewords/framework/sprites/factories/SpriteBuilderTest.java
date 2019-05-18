@@ -1,40 +1,82 @@
 package com.pokewords.framework.sprites.factories;
 
 import com.pokewords.framework.AbstractTest;
+import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.sprites.factories.DefaultSpriteBuilder;
+import com.pokewords.framework.sprites.parsing.LinScript;
+import com.pokewords.framework.sprites.parsing.LinScriptSegment;
+import com.pokewords.framework.sprites.parsing.Script;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class SpriteBuilderTest extends AbstractTest {
-    final String MOCK = "mock";
-    DefaultSpriteBuilder spriteBuilder;
+    private MockDefaultSpriteBuilder mockDefaultSpriteBuilder;
 
     @Before
     public void setup(){
-        spriteBuilder = new DefaultSpriteBuilder(mock);
+        mockDefaultSpriteBuilder = new MockDefaultSpriteBuilder(release);
+    }
+
+    @Test
+    public void testEmptySpriteBuilt() {
+        PropertiesComponent propertiesComponent = new PropertiesComponent("type");
+        Sprite sprite = mockDefaultSpriteBuilder.setPropertiesComponent(propertiesComponent).build();
+
+        assertEquals(1,sprite.getComponents().size());
+        assertSame(propertiesComponent,sprite.getPropertiesComponent());
     }
 
     @Test
     public void testAddComponent() {
         PropertiesComponent propertiesComponent = new PropertiesComponent("TYPE");
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
+        CollidableComponent collidableComponent = CollidableComponent.ignoreTypes("Ignored");
         MockComponentImp mockComponent = new MockComponentImp();
 
-        Sprite sprite = spriteBuilder.init()
+        Sprite sprite = mockDefaultSpriteBuilder.init()
                     .setPropertiesComponent(propertiesComponent)
+                    .addComponent(collidableComponent)
+                    .addComponent(mockComponent)
                     .setFSMComponent(fsmc)
-                    .addComponent(MOCK, mockComponent)
                     .build();
 
         assertSame(propertiesComponent, sprite.getPropertiesComponent());
+        assertSame(collidableComponent, sprite.getCollidableComponent());
         assertSame(fsmc, sprite.getFrameStateMachineComponent());
-        assertSame(mockComponent, sprite.getComponentByName(MOCK));
+        assertSame(mockComponent, sprite.getComponent(MockComponentImp.class));
     }
+
+    @Test
+    public void testWeavingFromLinScript() {
+        LinScript script = new LinScript();
+        MockSpriteWeaverNode mockSpriteWeaverNode = new MockSpriteWeaverNode();
+        PropertiesComponent propertiesComponent = new PropertiesComponent("type");
+        Sprite sprite = mockDefaultSpriteBuilder.addWeaverNode(mockSpriteWeaverNode)
+                                .setPropertiesComponent(propertiesComponent)
+                                .setScript(script)
+                                .build();
+
+        assertSame(propertiesComponent, sprite.getComponent(PropertiesComponent.class));
+        assertSame(mockSpriteWeaverNode.getWeavingScript(), script);
+        assertSame(mockSpriteWeaverNode.getWeavedSprite(), sprite);
+    }
+
+    @Test(expected = GameEngineException.class)
+    public void testShouldThrowExceptionIfNoSetPropertiesComponent() {
+        mockDefaultSpriteBuilder.addComponent(new CollidableComponent())
+                            .addComponent(new FrameStateMachineComponent())
+                            .addWeaverNode(new MockSpriteWeaverNode())
+                            .build();
+    }
+
 
 }

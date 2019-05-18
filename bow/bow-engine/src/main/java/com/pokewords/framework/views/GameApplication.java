@@ -5,6 +5,7 @@ import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.inputs.InputManager;
+import com.pokewords.framework.views.sound.SwingSoundPlayer;
 import com.pokewords.framework.views.windows.GameFrame;
 import com.pokewords.framework.views.windows.GameFrameWindowsConfigurator;
 import com.pokewords.framework.views.windows.GamePanel;
@@ -17,12 +18,14 @@ public abstract class GameApplication implements AppView {
 	private GameEngine gameEngine;
 	private GameFrame gameFrame;
 	private GameWindowsConfigurator gameWindowsConfigurator;
+	private SoundPlayer soundPlayer;
 
     public GameApplication(IocFactory iocFactory) {
     	InputManager inputManager = iocFactory.inputManager();
 		gameFrame = new GameFrame(new GamePanel(inputManager));
+		soundPlayer = new SwingSoundPlayer();
 		gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
-        gameEngine = new GameEngine(iocFactory, inputManager, gameWindowsConfigurator);
+        gameEngine = new GameEngine(iocFactory, inputManager, gameWindowsConfigurator, soundPlayer);
         gameEngine.setGameView(this);
     }
 
@@ -33,6 +36,9 @@ public abstract class GameApplication implements AppView {
 		gameEngine.launchEngine();
 	}
 
+	/**
+	 * This method is invoked during the app's initiation.
+	 */
 	@Override
 	public void onAppInit() {
 		gameFrame.onAppInit();
@@ -42,6 +48,14 @@ public abstract class GameApplication implements AppView {
 	protected abstract void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator);
 
 
+	/**
+	 * This method is invoked during the ProgressBarLoadingState.
+	 *
+	 * onAppLoading() will be executed asynchronously by the GameEngine,
+	 * at the moment executing this method, the GameEngine will render the loading-state.
+	 *
+	 * Hence, it's fine to put heavy tasks as many as possible within this method.
+	 */
 	@Override
 	public void onAppLoading() {
 		gameFrame.onAppLoading();

@@ -1,14 +1,23 @@
 package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
 
 public interface Frame extends Cloneable {
 	/**
-	 * @return get the layer index  (z-index)
+	 * @return get the id of frame's
+	 */
+	int getId();
+
+	/**
+	 * @return get the layer index
 	 */
 	int getLayerIndex();
+
+	/**
+	 * @param layerIndex the layer index
+	 */
+	void setLayerIndex(int layerIndex);
 
 
 	/**
@@ -16,5 +25,11 @@ public interface Frame extends Cloneable {
 	 * @param canvas The canvas which can be rendered some images.
 	 */
 	void renderItself(Canvas canvas);
+
+
+	/**
+	 * @param sprite owner of the frame
+	 */
+	void setSprite(Sprite sprite);
 
 }

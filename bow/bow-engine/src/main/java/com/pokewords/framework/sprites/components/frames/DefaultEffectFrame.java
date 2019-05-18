@@ -6,9 +6,15 @@ import javafx.scene.effect.Effect;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public abstract class DefaultEffectFrame implements EffectFrame {
-    public List<GameEffect> effects = new ArrayList<>();
+public abstract class DefaultEffectFrame extends AbstractFrame implements EffectFrame {
+    private List<GameEffect> effects = new ArrayList<>();
+
+    public DefaultEffectFrame(int id, int layerIndex) {
+        super(id, layerIndex);
+    }
+
 
     @Override
     public void apply(AppStateWorld gameWorld, Sprite sprite) {
@@ -22,5 +28,17 @@ public abstract class DefaultEffectFrame implements EffectFrame {
         effects.add(effect);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        DefaultEffectFrame that = (DefaultEffectFrame) o;
+        return effects.equals(that.effects);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), effects);
+    }
 }

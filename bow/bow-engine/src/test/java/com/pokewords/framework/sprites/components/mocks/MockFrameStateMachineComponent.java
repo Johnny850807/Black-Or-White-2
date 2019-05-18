@@ -1,9 +1,13 @@
 package com.pokewords.framework.sprites.components.mocks;
 
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class MockFrameStateMachineComponent extends FrameStateMachineComponent implements MockComponent{
+    private Sprite sprite;
     private boolean hasStarted = false;
     private boolean hasDestroyed = false;
     private boolean isRunning = false;
@@ -12,7 +16,7 @@ public class MockFrameStateMachineComponent extends FrameStateMachineComponent i
     private int updateCount = 0;
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
+    public void onAppStateCreate() {
         hasStarted = true;
     }
 
@@ -36,11 +40,16 @@ public class MockFrameStateMachineComponent extends FrameStateMachineComponent i
     }
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    public void onUpdate(double timePerFrame) {
         assert isRunning : "onUpdate() should be triggered after onAppStateEnter().";
         updateCount++;
     }
 
+
+    @Override
+    public Sprite getSprite() {
+        return sprite;
+    }
 
     @Override
     public boolean hasStarted() {

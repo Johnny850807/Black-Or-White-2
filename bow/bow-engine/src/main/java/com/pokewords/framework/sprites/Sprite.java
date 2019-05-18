@@ -1,20 +1,21 @@
 package com.pokewords.framework.sprites;
 
-import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
-import com.pokewords.framework.engine.exceptions.MandatoryComponentRequiredException;
 import com.pokewords.framework.engine.exceptions.SpriteException;
-import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
+import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.*;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
 import com.pokewords.framework.sprites.components.marks.Shareable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * A sprite is the fundamental unit in AppStateGameWorld.
@@ -24,19 +25,12 @@ import java.util.stream.Collectors;
  *  - FrameStateMachineComponent uses the Finite State Machine to represent the sprite's states, and decides
  *  what to be rendered in each state. use Sprite#trigger(event) to instruct the FrameStateMachineComponent.
  *
- * @see AppStateWorld
- * @see FrameStateMachineComponent
- * @see PropertiesComponent
  * @author johnny850807, nyngwang
  */
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
-	protected AppStateWorld world;
-	protected Map<String, Component> components = new HashMap<>();
-	private Collection<Renderable> renderableComponents = new HashSet<>();
-	private FrameStateMachineComponent frameStateMachineComponent;
-	private CollidableComponent collidableComponent;
-	private PropertiesComponent propertiesComponent;
-	private int timePerFrame;
+	protected @Nullable AppStateWorld world;
+	protected ComponentMap components = new ComponentMap();
+	private double timePerFrame;
 
 
 	protected Sprite(String type) {
@@ -44,8 +38,20 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	public Sprite(final PropertiesComponent propertiesComponent) {
-		this.propertiesComponent = propertiesComponent;
-		putComponent(Component.PROPERTIES, propertiesComponent);
+		addComponent(propertiesComponent);
+	}
+
+	public Sprite(final Collection<Component> components) {
+		components.forEach(this::addComponent);
+	}
+
+	public void setWorld(@Nullable AppStateWorld world) {
+		this.world = world;
+	}
+
+	@Nullable
+	public AppStateWorld getWorld() {
+		return world;
 	}
 
 	/**
@@ -56,97 +62,76 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	/**
-	 * trigger a event to the sprite's frameStateMachineComponent, if the sprite doesn't have
+	 * trigger an event to the sprite's frameStateMachineComponent, if the sprite doesn't have
 	 * the frameStateMachineComponent, SpriteException thrown
 	 */
 	public void trigger(Object event) throws SpriteException {
-		if (frameStateMachineComponent != null)
-			frameStateMachineComponent.trigger(event.toString());
+		if (hasComponent(FrameStateMachineComponent.class))
+			getComponent(FrameStateMachineComponent.class).trigger(event.toString());
 		else
 			throw new SpriteException("The sprite doesn't have the FrameStateMachineComponent, it cannot be triggered.");
 	}
 
-
-	/**
-	 * The getter of FrameStateMachineComponent.
-	 * @return The concrete FrameStateMachineComponent.
-	 */
 	public FrameStateMachineComponent getFrameStateMachineComponent() {
-		return frameStateMachineComponent;
+		return getComponent(FrameStateMachineComponent.class);
 	}
 
-	/**
-	 * The getter of PropertiesComponent.
-	 * @return The concrete PropertiesComponent.
-	 */
 	public PropertiesComponent getPropertiesComponent() {
-		return propertiesComponent;
+		return getComponent(PropertiesComponent.class);
 	}
 
+	public CollidableComponent getCollidableComponent() {
+		return getComponent(CollidableComponent.class);
+	}
 
-	public boolean hasComponent(String name) {
-		return components.containsKey(name);
+	public ClickableComponent getClickableComponent() {
+		return getComponent(ClickableComponent.class);
+	}
+
+	public boolean isCollidable() {
+		return hasComponent(CollidableComponent.class);
+	}
+
+	public boolean hasComponent(Class<? extends Component> type) {
+		return components.containsKey(type);
 	}
 
 	/**
-	 * Get the component by name.
-	 * @param name the name of the component to get.
-	 * @return the component to get if the name exist, null-object otherwise.
+	 * Get the component.
+	 * @param type the component's class
+	 * @return the component's instance if exists, otherwise null.
 	 */
-	public Component getComponentByName(String name) {
-		return components.get(name);
+	public <T extends Component> T getComponent(Class<T> type) {
+		return type.cast(components.get(type));
 	}
 
 	/**
-	 * Put new component with name. If the component you put is
-	 * PropertiesComponent or FrameStateMachineComponent then this method will detect it.
-	 * @param name the name of the component to be added.
-	 * @param component the component to be added.
+	 * Add a component by its name.
+	 * @param component the added component.
 	 */
-	public void putComponent(@NotNull String name, @NotNull Component component) {
-		if (component instanceof Renderable)
-			this.renderableComponents.add((Renderable) component);
-		if (component instanceof FrameStateMachineComponent)
-			this.frameStateMachineComponent = (FrameStateMachineComponent) component;
-		if (component instanceof CollidableComponent)
-			this.collidableComponent = (CollidableComponent) component;
-		else if (component instanceof PropertiesComponent)
-		{
-			if (hasComponent(Component.PROPERTIES))
-				throw new SpriteException("PropertiesComponent's already set during the sprite's initiation, " +
-						"you can't override it with another one.");
-			else
-				this.propertiesComponent = (PropertiesComponent) component;
-		}
-
-		components.put(name, component);
+	public <T extends Component> void addComponent(@NotNull Component component) {
+		components.put(component.getClass(), component);
+		component.onComponentAdded();
+		ComponentInjector.inject(this, component);
 	}
 
 	/**
 	 * Remove the component by name.
-	 * @param name the name of the component to be removed.
+	 * @param type the type of the component
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
-	public void removeComponentByName(String name) {
-		if (!hasComponent(name))
-			throw new SpriteException("The name does not exist.");
-
-		Component component = components.get(name);
-		if (component instanceof PropertiesComponent)
-			throw new MandatoryComponentRequiredException("PropertiesComponent cannot be removed.");
-
-		components.remove(name);
+	public <T extends Component> void removeComponent(Class<T> type) {
+		components.remove(type).onComponentRemoved();
 	}
 
 	@Override
-	public void onAppStateCreate(AppStateWorld world){
-		this.world = world;
+	public void onAppStateCreate(){
 		for (Component component : components.values())
-			component.onAppStateCreate(world);
+			component.onAppStateCreate();
 	}
 
 	@Override
-	public void onUpdate(int timePerFrame) {
+	public void onUpdate(double timePerFrame) {
 		this.timePerFrame = timePerFrame;
         for (Component component : components.values())
             component.onUpdate(timePerFrame);
@@ -202,11 +187,11 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         return (int) getPosition().getY();
     }
 
-    public int getW() {
+    public int getWidth() {
         return (int) getBody().getWidth();
     }
 
-    public int getH() {
+    public int getHeight() {
         return (int) getBody().getHeight();
     }
 
@@ -214,7 +199,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         getPropertiesComponent().setType(type);
     }
 
-    public String getType() {
+    public Object getType() {
         return getPropertiesComponent().getType();
     }
 
@@ -231,14 +216,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     }
 
     public void move(int velocityX, int velocityY) {
-		getPosition().translate(velocityX*timePerFrame, velocityY*timePerFrame);
+		getPosition().translate((int) (velocityX*timePerFrame), (int) (velocityY*timePerFrame));
 	}
     public void moveX(int velocityX) {
-		getPosition().translate(velocityX*timePerFrame, 0);
+		getPosition().translate((int) (velocityX*timePerFrame), 0);
 	}
 
 	public void moveY(int velocityY) {
-		getPosition().translate(0, velocityY*timePerFrame);
+		getPosition().translate(0, (int) (velocityY*timePerFrame));
 	}
 
 	public boolean isType(Object obj) {
@@ -248,7 +233,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	public Sprite clone(){
 		try {
 			Sprite clone = (Sprite) super.clone();
-			copyComponents(clone);
+			clone.components = this.components.clone();
 			clone.injectComponents();
 			return clone;
 		} catch (CloneNotSupportedException e) {
@@ -260,46 +245,24 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * Make the components injected.
 	 * @see ComponentInjector#inject(Sprite)
 	 */
-	public void injectComponents(){
+	protected void injectComponents(){
 		ComponentInjector.inject(this);
 	}
 
-	/**
-	 * This method will copy entirely the Sprite's component-map following rules:
-	 * If a component implements Shareable or it doesn't implement Cloneable,
-	 * the component should is shared in the new map.
-	 * Otherwise, the component should be invoked clone(), hence it's expected having a
-	 * different reference to the original component.
-	 * @return the copied components.
-	 */
-	private void copyComponents(Sprite clone){
-		clone.components = new HashMap<>();
-		for (String type : this.components.keySet())
-		{
-			Component component = this.components.get(type);
-			if (isComponentSharedOnly(component))
-				clone.putComponent(type, component);
-			else
-				clone.putComponent(type, ((CloneableComponent)component).clone());
-		}
-	}
 
-	private boolean isComponentSharedOnly(Component component) {
-		return !(component instanceof CloneableComponent) || component instanceof Shareable;
+	/**
+	 * @return all the frames that should be rendered during the present state.
+	 */
+	public Collection<? extends Frame> getRenderedFrames() {
+		return components.getRenderedFrames();
 	}
 
 	/**
-	 * @return all the frames that should be rendered in the present state.
+	 * @return all components marked by Renderable interface
+	 * @see Renderable
 	 */
-	public Collection<Frame> getRenderedFrames() {
-		Set<Frame> frames = new LinkedHashSet<>();
-		for (Renderable renderable : renderableComponents)
-			frames.addAll(renderable.getRenderedFrames());
-		return frames;
-	}
-
 	public Collection<Renderable> getRenderableComponents() {
-		return renderableComponents;
+		return components.getRenderableComponents();
 	}
 
 
@@ -308,9 +271,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @see Shareable
 	 */
 	public Set<Component> getNonshareableComponents(){
-		return components.values().stream()
-				.filter(c -> ! (c instanceof Shareable) )
-				.collect(Collectors.toSet());
+		return components.getNonshareableComponents();
 	}
 
 	/**
@@ -318,14 +279,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @see Shareable
 	 */
 	public Set<Component> getShareableComponents(){
-		return components.values().stream()
-					.filter(c ->c instanceof Shareable)
-					.collect(Collectors.toSet());
+		return components.getShareableComponents();
 	}
 
-	public boolean isCollidable() {
-        return hasComponent(Component.COLLIDABLE);
-    }
 
 	@Override
 	public boolean equals(Object o) {
@@ -342,10 +298,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	@Override
 	public String toString() {
-		StringBuilder stringBuilder = new StringBuilder("----- Sprite -----");
-		for (String componentName : components.keySet()) {
-			stringBuilder.append("\n== Component: ").append(componentName);
-			stringBuilder.append(" ==\n").append(components.get(componentName));
+		StringBuilder stringBuilder = new StringBuilder("----- Sprite(").append(getType()).append("-----");
+		for (Class componentType : components.keySet()) {
+			stringBuilder.append("\n== Component: ").append(componentType.getSimpleName());
+			stringBuilder.append(" ==\n").append(components.get(componentType));
 		}
 		return stringBuilder.toString();
 	}

@@ -1,41 +1,18 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.AbstractTest;
-import com.pokewords.framework.engine.utils.StubFactory;
-import com.pokewords.framework.sprites.components.mocks.MockFrame;
-import com.pokewords.framework.sprites.components.mocks.MockPositionListener;
+import com.pokewords.framework.commons.utils.StubFactory;
+import com.pokewords.framework.sprites.components.mocks.MockEffectFrame;
 import org.junit.Test;
 
 import java.awt.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class ComponentsTest extends AbstractTest {
-
-    @Test
-    public void testPropertiesComponentPositionListener() {
-        PropertiesComponent pc = new PropertiesComponent("Type");
-        MockPositionListener listener = new MockPositionListener();
-        pc.addPositionListener(listener);
-
-        pc.setPosition(50, 100);
-        assertMockPositionListenerTriggered(listener, 1, 50, 100);
-
-        pc.setBody(100, 200, 500, 500);
-        assertMockPositionListenerTriggered(listener, 2, 100, 200);
-
-        pc.setPosition(new Point(1, 2));
-        assertMockPositionListenerTriggered(listener, 3, 1, 2);
-
-        pc.setBody(new Rectangle(400, 500, 500, 500));
-        assertMockPositionListenerTriggered(listener, 4, 400, 500);
-    }
-
-    private void assertMockPositionListenerTriggered(MockPositionListener listener, int triggeredCount, int x, int y) {
-        assertEquals(triggeredCount, listener.getTriggerCount());
-        assertEquals(x, listener.getX());
-        assertEquals(y, listener.getY());
-    }
 
 
     @Test
@@ -89,20 +66,20 @@ public class ComponentsTest extends AbstractTest {
     public void testPropertiesComponentClone() {
         PropertiesComponent propertiesComponent = new PropertiesComponent("Type");
         PropertiesComponent clone = propertiesComponent.clone();
-        assertNotSame(propertiesComponent.getBody(), clone.getBody());
-        assertSame(propertiesComponent.getType(), clone.getType());
 
-        // listeners should be re-initialized
-        assertNotSame(propertiesComponent.getPositionListeners(), clone.getPositionListeners());
+        assertSame(propertiesComponent.getType(), clone.getType());
+        assertNotSameButEquals(propertiesComponent.getBody(), clone.getBody());
+        assertNotSameButEquals(propertiesComponent.getCenter(), clone.getCenter());
+        assertNotSameButEquals(propertiesComponent.getPosition(), clone.getPosition());
     }
 
     @Test
     public void testFrameStateMachineComponentGetCurrentFrames() {
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
-        MockFrame currentFrame = new MockFrame("A");
+        MockEffectFrame currentFrame = new MockEffectFrame("A");
         fsmc.addFrame(currentFrame);
-        fsmc.addFrame(new MockFrame("B"));
-        fsmc.addFrame(new MockFrame("C"));
+        fsmc.addFrame(new MockEffectFrame("B"));
+        fsmc.addFrame(new MockEffectFrame("C"));
         fsmc.setCurrentFrame(currentFrame);
 
         assertSame(currentFrame, fsmc.getCurrentFrame());
@@ -112,7 +89,9 @@ public class ComponentsTest extends AbstractTest {
     public void testFrameStateMachineComponentClone() {
         FrameStateMachineComponent fsmComponent = new FrameStateMachineComponent();
         FrameStateMachineComponent clone = fsmComponent.clone();
-        assertSame(fsmComponent.getFiniteStateMachine(), clone.getFiniteStateMachine());
+        assertNotSameButEquals(fsmComponent.getFiniteStateMachine(), clone.getFiniteStateMachine());
+        assertSame(fsmComponent.getCurrentFrame(), clone.getCurrentFrame());
+        assertNotSameButEquals(fsmComponent.renderedFrame, clone.renderedFrame);
         assertSame(fsmComponent.world, clone.world);
         assertSame(fsmComponent.sprite, clone.sprite);
     }
@@ -125,19 +104,13 @@ public class ComponentsTest extends AbstractTest {
         assertEquals(fscm1.hashCode(), fscm2.hashCode());
 
         // after fscm2's been changed, they should no longer be equal
-        fscm2.addFrame(new MockFrame("mock"));
+        fscm2.addFrame(new MockEffectFrame("mock"));
         assertNotEquals(fscm1, fscm2);
         assertNotEquals(fscm1.hashCode(), fscm2.hashCode());
     }
 
     private FrameStateMachineComponent givenFrameStateMachineComponent() {
-        return StubFactory.FSCM.createFrameStateMachineComponentStub();
+        return StubFactory.FrameStateMachineComponents.createFrameStateMachineComponentStub();
     }
 
-    @Test
-    public void testCollidableComponentEqualsAndHashcode() {
-        assertEquals(CollidableComponent.getInstance(), CollidableComponent.getInstance());
-        assertEquals(CollidableComponent.getInstance().hashCode(),
-                CollidableComponent.getInstance().hashCode());
-    }
 }

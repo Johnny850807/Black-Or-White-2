@@ -1,35 +1,33 @@
 package com.pokewords.framework.sprites.factories;
 
-import com.pokewords.framework.engine.exceptions.GameEngineException;
-import com.pokewords.framework.engine.exceptions.SpriteDeclaratorException;
-import com.pokewords.framework.engine.utils.StringUtility;
+import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
+import com.pokewords.framework.commons.utils.Resources;
+import com.pokewords.framework.commons.utils.StringUtility;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.Script;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.*;
 
 /**
- * This is the direct api to the client which is a convenient way to to declare and init the Sprites.
- * You can set different SpriteInitializer#InitializationMode to customize your init pattern.
+ * This is the direct api to the client which is a convenient way to declare and init the Sprites.
+ * You can set different SpriteInitializer#InitializationMode to customize the init pattern.
+ *
  * @author johnny850807 (waterball)
  */
 public class SpriteInitializer {
     private PrototypeFactory prototypeFactory;
     private SpriteBuilder spriteBuilder;
-    private InitializationMode initializationMode = InitializationMode.LAZY;
+    private InitializationMode initializationMode;
 
-    // <sprite's name, the sprite>
-    private Map<String, Declaration> declarationMap = new IdentityHashMap<>();
+    // <sprite's type, the sprite>
+    private final Map<Object, Declaration> declarationMap = new HashMap<>();
 
     public enum InitializationMode {
         /**
@@ -59,8 +57,7 @@ public class SpriteInitializer {
         CUSTOM_STRICT
     }
 
-    // <sprite's name, has the sprite been init>, this needn't be used under NON_LAZY mode.
-    private Map<String, Boolean> spriteHasBeenInitMap;
+    private final HashSet<Object> spriteTypesThatHaveBeenInit = new HashSet<>();
 
     public SpriteInitializer(IocFactory iocFactory) {
         this.prototypeFactory = iocFactory.prototypeFactory();
@@ -72,13 +69,10 @@ public class SpriteInitializer {
      */
     public void setInitializationMode(InitializationMode initializationMode) {
         this.initializationMode = initializationMode;
-
-        if (initializationMode != InitializationMode.NON_LAZY && spriteHasBeenInitMap == null)
-            spriteHasBeenInitMap = new HashMap<>();
     }
 
-    public boolean hasSpriteBeenInit(String type) {
-        return initializationMode == InitializationMode.NON_LAZY ? true : spriteHasBeenInitMap.get(type);
+    public boolean hasSpriteBeenInit(Object type) {
+        return initializationMode == InitializationMode.NON_LAZY || spriteTypesThatHaveBeenInit.contains(type);
     }
 
     public InitializationMode getInitializationMode() {
@@ -87,29 +81,26 @@ public class SpriteInitializer {
 
 
     public SpriteDeclarator declare(@NotNull Object type) {
-        return new SpriteDeclarator(type.toString());
-    }
-
-    public SpriteDeclarator declare(@NotNull String type) {
         return new SpriteDeclarator(type);
     }
 
+
     public class SpriteDeclarator {
-        private String type;
+        private Object type;
         private Declaration declaration;
 
-        protected SpriteDeclarator(String type) {
+        protected SpriteDeclarator(Object type) {
             this.type = type;
             this.declaration = new Declaration(type);
         }
 
-        public SpriteDeclarator with(@NotNull Object componentName, @NotNull Component component) {
-            declaration.componentMap.put(componentName.toString(), component);
+        public SpriteDeclarator with(@NotNull Component component) {
+            declaration.components.add(component);
             return this;
         }
 
-        public SpriteDeclarator with(@NotNull String componentName, @NotNull Component component) {
-            declaration.componentMap.put(componentName, component);
+        public SpriteDeclarator with(@NotNull Script script) {
+            declaration.script = script;
             return this;
         }
 
@@ -118,18 +109,8 @@ public class SpriteInitializer {
             return this;
         }
 
-        public SpriteDeclarator with(@NotNull FrameStateMachineComponent fsmComp) {
-            declaration.frameStateMachineComponent = fsmComp;
-            return this;
-        }
-
-        public SpriteDeclarator with(@NotNull PropertiesComponent propComp) {
-            declaration.propertiesComponent = propComp;
-            return this;
-        }
-
-        public SpriteDeclarator collidable() {
-            declaration.componentMap.put(Component.COLLIDABLE, CollidableComponent.getInstance());
+        public SpriteDeclarator with(@NotNull PropertiesComponent propertiesComponent) {
+            declaration.propertiesComponent = propertiesComponent;
             return this;
         }
 
@@ -143,8 +124,14 @@ public class SpriteInitializer {
             return this;
         }
 
-        public SpriteDeclarator with(@NotNull Script script) {
-            declaration.script = script;
+        public SpriteDeclarator size(Point size) {
+            return size(size.x, size.y);
+        }
+
+        public SpriteDeclarator size(int w, int y) {
+            Rectangle body = declaration.propertiesComponent.getBody();
+            declaration.propertiesComponent.setBody((int) body.getX(), (int) body.getY(),
+                    w, y);
             return this;
         }
 
@@ -153,7 +140,7 @@ public class SpriteInitializer {
             return this;
         }
 
-        public SpriteCreator commit() throws SpriteDeclaratorException {
+        public SpriteCreator commit() throws SpriteDeclarationException {
             validateDeclarations();
 
             if (initializationMode == InitializationMode.NON_LAZY)  //non-lazy mode needn't save the declarations, simply init it after declare it
@@ -170,119 +157,113 @@ public class SpriteInitializer {
             }
         }
 
-        private void validateDeclarations() throws SpriteDeclaratorException {
+        private void validateDeclarations() throws SpriteDeclarationException {
             validatePropertiesComponentSet();
             validateScriptPathIfNotNull();
         }
 
 
-        private void validatePropertiesComponentSet() throws SpriteDeclaratorException {
+        private void validatePropertiesComponentSet() throws SpriteDeclarationException {
             if (declaration.propertiesComponent == null)
-                throw new SpriteDeclaratorException(String.format("Error occurs during declaring the sprite '%s', " +
+                throw new SpriteDeclarationException(String.format("Error occurs during declaring the sprite '%s', " +
                         "'PropertiesComponent' should not be set (or it should not be null).", type));
 
             if (!declaration.propertiesComponent.getType().equals(type))
-                throw new SpriteDeclaratorException(String.format("Error occurs during declaring the sprite '%s', " +
-                        "your propertiesComponent's type given is %s, but your sprite's type is declared as %s.",
+                throw new SpriteDeclarationException(String.format("Error occurs during declaring the sprite '%s', " +
+                                "your propertiesComponent's type is '%s', but your sprite's type is declared '%s'.",
                         type, declaration.propertiesComponent.getType(), type));
         }
 
-        private void validateScriptPathIfNotNull() throws SpriteDeclaratorException {
+        private void validateScriptPathIfNotNull() throws SpriteDeclarationException {
             if (!StringUtility.isNullOrEmpty(declaration.scriptPath) &&
-                    Files.notExists(Paths.get(declaration.scriptPath)))
-                throw new SpriteDeclaratorException(String.format("Error occurs during declaring the sprite '%s', the scriptPath '%s' does not exist.", type, declaration.scriptPath));
+                    Files.notExists(Resources.get(declaration.scriptPath).toPath()))
+                throw new SpriteDeclarationException(String.format("Error occurs during declaring the sprite '%s', the scriptPath '%s' does not exist.", type, declaration.scriptPath));
         }
     }
 
-    /**
-     * Convenient createSprite(type) method for allowing you passing your own type enum in.
-     * @param type the created sprite's name (in the form of some of your enum)
-     * @return the sprite created
-     * @throws GameEngineException
-     */
-    public Sprite createSprite(Object type) throws GameEngineException {
-        return createSprite(type.toString());
-    }
 
     /**
      * @param type the created sprite's name
      * @return the sprite created
-     * @throws GameEngineException
+     * @throws SpriteDeclarationException
      */
-    public Sprite createSprite(String type) throws GameEngineException {
+    public Sprite createSprite(Object type) throws SpriteDeclarationException {
         validateSpriteHasBeenDeclared(type);
 
-        if (!hasSpriteBeenInit(type))
-        {
+        if (!hasSpriteBeenInit(type)) {
             validateUnderCustomStrictModeShouldInitByYourself(type);
             declarationMap.get(type).startInitializingSprite();
-            spriteHasBeenInitMap.put(type, true);
+            spriteTypesThatHaveBeenInit.add(type);
         }
 
         return prototypeFactory.cloneSprite(type);
     }
 
 
-    private void validateSpriteHasBeenDeclared(String spriteName) {
-        if (!declarationMap.containsKey(spriteName))
-            throw new SpriteDeclaratorException(String.format("You haven't declared the sprite '%s', " +
-                    "use declare(type) to start your declarations.", spriteName));
+    private void validateSpriteHasBeenDeclared(Object type) {
+        if (!declarationMap.containsKey(type)) {
+            System.out.println(StringUtility.toString(declarationMap));
+            throw new SpriteDeclarationException(String.format("You haven't declared the sprite '%s', " +
+                    "use declare(type) to start your declarations. (Did you commit your declaration?)", type));
+        }
     }
 
-    private void validateUnderCustomStrictModeShouldInitByYourself(String spriteName) {
+    private void validateUnderCustomStrictModeShouldInitByYourself(Object type) {
         if (initializationMode == InitializationMode.CUSTOM_STRICT)
-            throw new GameEngineException(String.format("You are under CUSTOM_STRICT init mode, so you should init all sprites on your own, " +
-                    "the sprite '%s' has not been init.", spriteName));
+            throw new SpriteDeclarationException(String.format("You are under CUSTOM_STRICT init mode, so you should init all sprites on your own, " +
+                    "the sprite '%s' has not been init.", type));
     }
 
 
     /**
      * This is the method only used under the CUSTOM (or CUSTOM_STRICT)init mode, under CUSTOM (or CUSTOM_STRICT) mode, use this method to init the sprite.
-     * @see SpriteInitializer#setInitializationMode(InitializationMode)
+     *
      * @param type the init sprite's name
+     * @see SpriteInitializer#setInitializationMode(InitializationMode)
      */
-    public void initSprite(String type) throws GameEngineException {
+    public void initSprite(String type) throws SpriteDeclarationException {
         validateOnlyCustomInitModeCanUseThisMethod();
         validateSpriteHasBeenDeclared(type);
 
-        if (!hasSpriteBeenInit(type))
+        if (!hasSpriteBeenInit(type)) {
             declarationMap.get(type).startInitializingSprite();
+            spriteTypesThatHaveBeenInit.add(type);
+        }
     }
 
     private void validateOnlyCustomInitModeCanUseThisMethod() {
         if (initializationMode != InitializationMode.CUSTOM && initializationMode != InitializationMode.CUSTOM_STRICT)
-            throw new GameEngineException(String.format("You are invoking initSprite(type) under %s mode, " +
+            throw new SpriteDeclarationException(String.format("You are invoking initSprite(type) under %s mode, " +
                     "you should set the initialization mode to the CUSTOM mode to enable this method.", initializationMode));
     }
 
     private class Declaration {
-        String type;
+        Object type;
         PropertiesComponent propertiesComponent;
-        Map<String, Component> componentMap = new HashMap<>();
+        HashSet<Component> components = new HashSet<>();
 
-        FrameStateMachineComponent frameStateMachineComponent;
         Script script;
-        String scriptPath = "";
+        String scriptPath;
 
         List<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
 
-        public Declaration(String type) {
+        public Declaration(Object type) {
             this.type = type;
             this.propertiesComponent = new PropertiesComponent(type);
         }
 
         protected void startInitializingSprite() {
-            setFrameStateMachineComponent();
+            spriteBuilder.init();
             spriteBuilder.setPropertiesComponent(propertiesComponent);
-            componentMap.forEach(spriteBuilder::addComponent);
+            setFrameStateMachineComponent();
+            components.forEach(spriteBuilder::addComponent);
             weaverNodes.forEach(spriteBuilder::addWeaverNode);
-            prototypeFactory.addPrototype(type, spriteBuilder.build());
+            Sprite sprite = spriteBuilder.build();
+            prototypeFactory.addPrototype(type, sprite);
         }
 
         private void setFrameStateMachineComponent() {
-            if (frameStateMachineComponent != null)
-                spriteBuilder.setFSMComponent(frameStateMachineComponent);
-            else if (script != null)
+            if (script != null)
                 spriteBuilder.setScript(script);
             else if (scriptPath != null)
                 spriteBuilder.buildScriptFromPath(scriptPath);

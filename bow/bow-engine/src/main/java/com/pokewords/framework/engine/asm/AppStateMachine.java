@@ -3,44 +3,60 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
-import com.pokewords.framework.engine.listeners.GameLifecycleListener;
+import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 /**
+ * The AppStateMachine manages the finite game states.
+ *
+ * Built-in transitions:
+ * EmptyState --(EVENT_LOADING)--> ProgressBarLoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
+ *
+ * Use AppStateMachine#createState(appStateType) to create your app state.
  * @author johnny850807 (waterball)
  */
-public class AppStateMachine implements GameLifecycleListener {
+public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_LOADING = "Start Loading";
 	public static final String EVENT_GAME_STARTED = "Game Started";
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
 	private SpriteInitializer spriteInitializer;
 	private GameWindowsConfigurator gameWindowsConfigurator;
+	private SoundPlayer soundPlayer;
 	private Inputs inputs;
 	private AppState loadingState;
 	private AppState gameInitialState;
 
-	public AppStateMachine(Inputs inputs, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
+	public AppStateMachine(Inputs inputs, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
 		this.inputs = inputs;
 		this.spriteInitializer = spriteInitializer;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
+		this.soundPlayer = soundPlayer;
 		setupStates();
 	}
 
 	private void setupStates() {
 		AppState initialState = createState(EmptyAppState.class);
-		this.loadingState = createState(LoadingState.class);
+		this.loadingState = createState(BreakerIconLoadingState.class);
 		fsm.setCurrentState(initialState);
 		fsm.addTransition(initialState, EVENT_LOADING, loadingState);
+		initialState.onAppStateCreate();
 	}
 
+	/**
+	 * Create the AppState of the given type, the AppStateMachine will add it into the machine.
+	 * @param appStateType the app state's type
+	 * @return the created AppState of the appStateType
+	 */
 	public <T extends AppState> T createState(Class<T> appStateType) {
 		T state;
 		try {
 			state = appStateType.newInstance();
-			state.inject(inputs, this, spriteInitializer, gameWindowsConfigurator);
+			state.inject(inputs, this, spriteInitializer, gameWindowsConfigurator, soundPlayer);
 			fsm.addState(state);
+			state.onAppStateCreate();
 			return state;
 		} catch (InstantiationException|IllegalAccessException e) {
 			throw new GameEngineException(String.format("Error occurs during createState(appStateType), " +
@@ -48,37 +64,29 @@ public class AppStateMachine implements GameLifecycleListener {
 		}
 	}
 
-	public AppState trigger(String event) {
+	public AppState trigger(Object event) {
 		AppState from = fsm.getCurrentState();
-		AppState to = fsm.trigger(event);
+		AppState to = fsm.trigger(event.toString());
 		if (from != to)
 		{
 			from.onAppStateExit();
-			if (!to.hasStarted())
-				to.onAppStateCreate(onCreateAppStateWorld());
 			to.onAppStateEnter();
 		}
 		return to;
 	}
 
-	/**
-	 * the hook method invoked whenever any AppState is started
-	 * , this then requires initializing a new AppStateWorld for that AppState.
-	 * For customizing your default init world, overwrite this method.
-	 * @return the init app state world
-	 */
-	public AppStateWorld onCreateAppStateWorld(){
-		return new AppStateWorld();
-	}
-
 
 	@Override
-	public void onUpdate(int timePerFrame) {
+	public void onUpdate(double timePerFrame) {
 		fsm.getCurrentState().onUpdate(timePerFrame);
 	}
 
 	public void setGameInitialState(AppState clientInitState) {
+		if (gameInitialState != null)
+			throw new GameEngineException("You can only set the GameInitialState once.");
 		this.gameInitialState = clientInitState;
+		this.fsm.addState(gameInitialState);
+		this.fsm.addTransition(loadingState, EVENT_GAME_STARTED, gameInitialState);
 	}
 
 	public AppState getCurrentState() {
@@ -89,6 +97,13 @@ public class AppStateMachine implements GameLifecycleListener {
 		return getCurrentState().getAppStateWorld();
 	}
 
+	public AppState getGameInitialState() {
+		return gameInitialState;
+	}
+
+	public AppState getLoadingState() {
+		return loadingState;
+	}
 
 	public void addTransition(AppState from, Object event, AppState to) {
 		fsm.addTransition(from, event, to);

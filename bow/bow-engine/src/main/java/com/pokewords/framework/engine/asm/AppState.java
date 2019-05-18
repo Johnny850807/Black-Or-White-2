@@ -4,6 +4,7 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowDefinition;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
@@ -18,8 +19,8 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	private SpriteInitializer spriteInitializer;
 	private Inputs inputs;
 	private AppStateWorld appStateWorld;
-	private boolean started = false;
 	private GameWindowsConfigurator gameWindowsConfigurator;
+	private SoundPlayer soundPlayer;
 
 	public AppState() { }
 
@@ -27,19 +28,65 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * this method is expected to be used by the AppStateMachine for initializing injection.
 	 * @see AppStateMachine#createState(Class)
 	 */
-	protected void inject(Inputs inputs, AppStateMachine asm, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator) {
+	protected void inject(Inputs inputs, AppStateMachine asm, SpriteInitializer spriteInitializer,
+						  GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
 		this.asm = asm;
 		this.spriteInitializer = spriteInitializer;
 		this.inputs = inputs;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
+		this.soundPlayer = soundPlayer;
 	}
 
 	@Override
-	public void onAppStateCreate(AppStateWorld world) {
-		this.started = true;
-		this.appStateWorld = world;
-		this.appStateWorld.onAppStateCreate(world);
+	public void onAppStateCreate() {
+		this.appStateWorld = onCreateAppStateWorld();
+		onAppStateCreating(appStateWorld);
+		this.appStateWorld.onAppStateCreate();
 	}
+
+	protected abstract void onAppStateCreating(AppStateWorld appStateWorld);
+
+	/**
+	 * the hook method invoked whenever any AppState is created
+	 * , this then requires initializing a new AppStateWorld for that AppState.
+	 * For customizing your AppStateWorld, overwrite this method.
+	 * @return the created app state world
+	 */
+	protected AppStateWorld onCreateAppStateWorld() {
+		return new AppStateWorld();
+	}
+
+	@Override
+	public final void onAppStateEnter() {
+		onAppStateEntering();
+		appStateWorld.onAppStateEnter();
+	}
+
+	protected abstract void onAppStateEntering();
+
+	@Override
+	public final void onAppStateExit() {
+		onAppStateExiting();
+		appStateWorld.onAppStateExit();
+	}
+
+	protected abstract void onAppStateExiting();
+
+	@Override
+	public final void onAppStateDestroy() {
+		onAppStateDestroying();
+		appStateWorld.onAppStateDestroy();
+	}
+
+	protected abstract void onAppStateDestroying();
+
+	@Override
+	public final void onUpdate(double timePerFrame) {
+		onAppStateUpdating(timePerFrame);
+		appStateWorld.onUpdate(timePerFrame);
+	}
+
+	protected abstract void onAppStateUpdating(double timePerFrame);
 
 	protected Sprite createSprite(Object type) {
 		return spriteInitializer.createSprite(type);
@@ -47,10 +94,6 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	public SpriteInitializer getSpriteInitializer() {
 		return spriteInitializer;
-	}
-
-	public boolean hasStarted() {
-		return started;
 	}
 
 	public Inputs getInputs() {
@@ -75,5 +118,9 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	public GameWindowDefinition getGameWindowDefinition() {
 		return gameWindowsConfigurator.getGameWindowDefinition();
+	}
+
+	public SoundPlayer getSoundPlayer() {
+		return soundPlayer;
 	}
 }

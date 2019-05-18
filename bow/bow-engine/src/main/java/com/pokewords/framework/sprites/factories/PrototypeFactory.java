@@ -4,9 +4,9 @@ import com.pokewords.framework.sprites.Sprite;
 
 public interface PrototypeFactory {
 
-	Sprite cloneSprite(String type);
+	Sprite cloneSprite(Object type);
 
-	void addPrototype(String type, Sprite prototype);
+	void addPrototype(Object type, Sprite prototype);
 
-	void removePrototype(String type);
+	void removePrototype(Object type);
 }

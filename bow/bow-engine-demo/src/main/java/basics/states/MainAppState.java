@@ -13,8 +13,7 @@ import java.util.Random;
 public class MainAppState extends AppState {
 
     @Override
-    public void onAppStateCreate(AppStateWorld world) {
-        super.onAppStateCreate(world);
+    protected void onAppStateCreating(AppStateWorld world) {
         world.addCollisionHandler(new HeroCollidedWithBulletHandler());
         world.addCollisionHandler(new HeroCollidedWithMonster());
     }
@@ -41,13 +40,15 @@ public class MainAppState extends AppState {
         }
     }
 
+
     @Override
-    public void onAppStateEnter() {
+    public void onAppStateEntering() {
         AppStateWorld world = getAppStateWorld();
         world.spawn(createSprite(SpriteType.HERO));
 
         for (int i = 0; i < 8; i++)
             world.spawn(createMonsterAtRandomPosition());
+
     }
 
     private Sprite createMonsterAtRandomPosition() {
@@ -58,14 +59,18 @@ public class MainAppState extends AppState {
     }
 
     @Override
-    public void onAppStateExit() {
+    public void onAppStateExiting() {
         getAppStateWorld().clearSprites();
     }
 
     @Override
-    public void onAppStateDestroy() { }
+    protected void onAppStateDestroying() {
 
-    public void onUpdate(int timePerFrame) {
+    }
+
+
+    @Override
+    public void onAppStateUpdating(double timePerFrame) {
         if (getInputs().getButtonBeingHeld(KeyEvent.VK_W))
             moveUp();
         if (getInputs().getButtonBeingHeld(KeyEvent.VK_S))

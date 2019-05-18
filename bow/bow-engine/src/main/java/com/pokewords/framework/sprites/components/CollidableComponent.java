@@ -3,44 +3,56 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.marks.Shareable;
 
+import java.awt.font.ImageGraphicAttribute;
+import java.util.*;
+
 /**
- * The singleton shareable CollidableComponent, its equals() method will always return true, and
- * its hashcode() will always return 0.
+ * Mark a sprite as Collidable, you can add ignoredTypes into this component, those ignoredType sprites are not collided with
+ * the sprite who owns this component.
  * @author johnny850807
  */
 public class CollidableComponent extends Component implements Shareable {
-	private static CollidableComponent instance = new CollidableComponent();
+	/**
+	 * sprite's types that are ignored during collision detection.
+	 */
+	private Set<Object> ignoredTypes;
 
-	private CollidableComponent() {}
-
-	public static CollidableComponent getInstance() {
-		return instance;
+	public CollidableComponent() {
+		this.ignoredTypes = new HashSet<>();
 	}
 
-	@Override
-	public void onAppStateCreate(AppStateWorld world) {
+	public static CollidableComponent ignoreTypes(Object ...ignoredTypes) {
+		return new CollidableComponent(ignoredTypes);
 	}
 
-	@Override
-	public void onUpdate(int timePerFrame) { }
+	protected CollidableComponent(Object ...ignoredTypes) {
+		this.ignoredTypes = new HashSet<>(Arrays.asList(ignoredTypes));
+	}
+
+	public Set<Object> getIgnoredTypes() {
+		return ignoredTypes;
+	}
+
+	/**
+	 * @param type the sprite's type
+	 * @return if the type is ignored during collision detection
+	 */
+	public boolean isIgnored(Object type) {
+		return ignoredTypes.contains(type);
+	}
+
 
 	@Override
-	public void onAppStateEnter() { }
-
-	@Override
-	public void onAppStateExit() { }
-
-    @Override
-    public void onAppStateDestroy() { }
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CollidableComponent that = (CollidableComponent) o;
+		return ignoredTypes.equals(that.ignoredTypes);
+	}
 
 	@Override
 	public int hashCode() {
-		return 0;
+		return Objects.hash(ignoredTypes);
 	}
-
-	@Override
-	@SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
-	public boolean equals(Object obj) {
-		return true;
-	}
+	
 }

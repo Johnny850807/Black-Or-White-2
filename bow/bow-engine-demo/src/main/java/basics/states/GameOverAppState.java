@@ -1,28 +1,34 @@
 package basics.states;
 
 import com.pokewords.framework.engine.asm.AppState;
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class GameOverAppState extends AppState {
 
 
     @Override
-    public void onAppStateEnter() {
+    protected void onAppStateCreating(AppStateWorld appStateWorld) {
 
     }
 
     @Override
-    public void onAppStateExit() {
+    protected void onAppStateEntering() {
 
     }
 
     @Override
-    public void onAppStateDestroy() {
+    protected void onAppStateExiting() {
 
     }
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    protected void onAppStateDestroying() {
 
     }
+
+    @Override
+    protected void onAppStateUpdating(double timePerFrame) {
+
+    }
+
 }

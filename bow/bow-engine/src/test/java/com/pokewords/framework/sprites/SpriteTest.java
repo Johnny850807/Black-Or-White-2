@@ -1,25 +1,25 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.AbstractTest;
-import com.pokewords.framework.engine.utils.StubFactory;
+import com.pokewords.framework.commons.utils.StubFactory;
 import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.ComponentMap;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Shareable;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
-import com.pokewords.framework.sprites.components.mocks.MockComponent;
-import com.pokewords.framework.sprites.components.mocks.MockFrame;
-import com.pokewords.framework.sprites.components.mocks.MockRenderableComponent;
+import com.pokewords.framework.sprites.components.mocks.*;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SimpleSprite.createSimpleSprite;
-import static com.pokewords.framework.engine.utils.StubFactory.Sprites.SpriteWithOnlyMockComponent.*;
+import static com.pokewords.framework.commons.utils.StubFactory.Sprites.SimpleSprite.createSimpleSprite;
+import static com.pokewords.framework.commons.utils.StubFactory.Sprites.SpriteWithOnlyMockComponent.*;
 import static org.junit.Assert.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class SpriteTest extends AbstractTest {
 
     @Test
@@ -51,17 +51,16 @@ public class SpriteTest extends AbstractTest {
         assertNotSameButEquals(spriteStub, clone);
         assertNotSameButEquals(spriteStub.components, clone.components);
         assertNotSameButEquals(spriteStub.getPropertiesComponent(), clone.getPropertiesComponent());
-
-        // all sprites of the same type must share the FSMC !
-        assertSame(spriteStub.getFrameStateMachineComponent(), clone.getFrameStateMachineComponent());
+        assertNotSameButEquals(spriteStub.getFrameStateMachineComponent(), clone.getFrameStateMachineComponent());
+        assertSame(spriteStub.getCollidableComponent(), clone.getCollidableComponent());
 
         testComponentsShareability(spriteStub.components, clone.components);
     }
 
-    private void testComponentsShareability(Map<String, Component> stubComponents, Map<String, Component> clonedComponents) {
-        for (String name : stubComponents.keySet()) {
-            Component stubComponent = stubComponents.get(name);
-            Component cloneComponent = clonedComponents.get(name);
+    private void testComponentsShareability(ComponentMap stubComponents, ComponentMap clonedComponents) {
+        for (Class<? extends Component> type : stubComponents.keySet()) {
+            Component stubComponent = stubComponents.get(type);
+            Component cloneComponent = clonedComponents.get(type);
             if (stubComponent instanceof Shareable)
                 assertSame(stubComponent, cloneComponent);
             else
@@ -72,24 +71,24 @@ public class SpriteTest extends AbstractTest {
     @Test
     public void testGetRenderedFrames() {
         Sprite sprite = createSimpleSprite();
-        MockRenderableComponent r1 = new MockRenderableComponent();
-        MockFrame rf1 = new MockFrame("rf1");
+        MockRenderableComponent1 r1 = new MockRenderableComponent1();
+        MockEffectFrame rf1 = new MockEffectFrame("rf1");
         r1.addFrame(rf1);
 
-        MockRenderableComponent r2 = new MockRenderableComponent();
-        MockFrame rf2 = new MockFrame("rf2");
+        MockRenderableComponent2 r2 = new MockRenderableComponent2();
+        MockEffectFrame rf2 = new MockEffectFrame("rf2");
         r1.addFrame(rf2);
 
-        MockRenderableComponent r3 = new MockRenderableComponent();
-        MockFrame rf3 = new MockFrame("rf3");
+        MockRenderableComponent3 r3 = new MockRenderableComponent3();
+        MockEffectFrame rf3 = new MockEffectFrame("rf3");
         r1.addFrame(rf3);
 
-        sprite.putComponent("r1", r1);
-        sprite.putComponent("r2", r2);
-        sprite.putComponent("r3", r3);
+        sprite.addComponent(r1);
+        sprite.addComponent(r2);
+        sprite.addComponent(r3);
 
-        Collection<Frame> currentFrames = sprite.getRenderedFrames();
-        assertTrue(currentFrames.contains(StubFactory.FSCM.FRAME_A));  //the initial state of the stub should be contained
+        Collection<? extends Frame> currentFrames = sprite.getRenderedFrames();
+        assertTrue(currentFrames.contains(StubFactory.FrameStateMachineComponents.FRAME_A));  //the initial state of the stub should be contained
         assertTrue(currentFrames.contains(rf1));
         assertTrue(currentFrames.contains(rf2));
         assertTrue(currentFrames.contains(rf3));
@@ -113,9 +112,9 @@ public class SpriteTest extends AbstractTest {
         Sprite sprite = createSpriteWithOnlyMockComponents();
 
         // when get components by their names, they should exist
-        assertTrue(sprite.hasComponent(MOCK1));
-        assertTrue(sprite.hasComponent(MOCK2));
-        assertTrue(sprite.hasComponent(MOCK3));
+        assertTrue(sprite.hasComponent(MockComponent1.class));
+        assertTrue(sprite.hasComponent(MockComponent2.class));
+        assertTrue(sprite.hasComponent(MockComponent3.class));
     }
 
     @Test
@@ -123,14 +122,14 @@ public class SpriteTest extends AbstractTest {
         Sprite sprite = createSpriteWithOnlyMockComponents();
 
         // when remove those mock components by their names
-        sprite.removeComponentByName(MOCK1);
-        sprite.removeComponentByName(MOCK2);
-        sprite.removeComponentByName(MOCK3);
+        sprite.removeComponent(MockComponent1.class);
+        sprite.removeComponent(MockComponent2.class);
+        sprite.removeComponent(MockComponent3.class);
 
         // then those components should be removed successfully
-        assertFalse(sprite.hasComponent(MOCK1));
-        assertFalse(sprite.hasComponent(MOCK2));
-        assertFalse(sprite.hasComponent(MOCK3));
+        assertFalse(sprite.hasComponent(MockComponent1.class));
+        assertFalse(sprite.hasComponent(MockComponent2.class));
+        assertFalse(sprite.hasComponent(MockComponent3.class));
     }
 
     @Test
@@ -140,7 +139,7 @@ public class SpriteTest extends AbstractTest {
         Sprite sprite = createSpriteWithOnlyMockComponents();
 
         //when the sprite got triggered app's life cycles
-        sprite.onAppStateCreate(new AppStateWorld());
+        sprite.onAppStateCreate();
 
         sprite.onAppStateEnter();
 

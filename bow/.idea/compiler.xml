@@ -6,16 +6,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="bow-core" />
         <module name="bow-engine" />
         <module name="bow-engine-demo" />
-        <module name="bow-core" />
+        <module name="joagunna" />
+        <module name="shotgunininder" />
+        <module name="shotshotning" />
+        <module name="watershot" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="bow" target="8" />
       <module name="bow-core" target="8" />
       <module name="bow-engine" target="8" />
       <module name="bow-engine-demo" target="8" />
+      <module name="joagunna" target="8" />
+      <module name="shotgunininder" target="8" />
+      <module name="shotshotning" target="8" />
+      <module name="watershot" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

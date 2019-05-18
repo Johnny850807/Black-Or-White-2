@@ -9,6 +9,7 @@ import com.pokewords.framework.views.inputs.InputManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -90,10 +91,11 @@ public class GamePanel extends JPanel implements AppView {
     }
 
     private void drawRenderedLayers(Graphics g) {
-        List<List<Frame>> layers = renderedLayers.layers;
-        for (List<Frame> layer : layers) {
-            for (Frame frames : layer) {
-                frames.renderItself(GraphicsCanvas.of(g));
+        List<List<Frame>> layers = renderedLayers.getLayers();
+        for (int i = 0; i < layers.size(); i++) {
+            List<Frame> layer = layers.get(i);
+            for (int j = 0; j < layer.size(); j++) {
+                layer.get(j).renderItself(GraphicsCanvas.of(g));
             }
         }
     }

@@ -1,10 +1,10 @@
 package com.pokewords.framework.sprites.factories;
 
 import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.sprites.parsing.GameEngineWeaverNode;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.parsing.Script;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class SpriteWeaver {
@@ -12,17 +12,28 @@ public class SpriteWeaver {
     private LinkedList<SpriteWeaver.Node> weaverNodes;
 
     public SpriteWeaver(IocFactory iocFactory) {
-        this.iocFactory = iocFactory;
         init();
+        this.iocFactory = iocFactory;
     }
 
     private void init() {
-        weaverNodes = new LinkedList<Node>();
-        weaverNodes.add(new GameEngineWeaverNode());
+        weaverNodes = new LinkedList<>();
     }
 
     public void addWeaverNode(SpriteWeaver.Node node) {
         weaverNodes.add(node);
+    }
+
+    public void addWeaverNodes(Collection<Node> nodes) {
+        weaverNodes.addAll(nodes);
+    }
+
+    public void removeWeaverNode(SpriteWeaver.Node node) {
+        weaverNodes.remove(node);
+    }
+
+    public void clear() {
+        weaverNodes.clear();
     }
 
     public void weave(Script script, Sprite sprite) {

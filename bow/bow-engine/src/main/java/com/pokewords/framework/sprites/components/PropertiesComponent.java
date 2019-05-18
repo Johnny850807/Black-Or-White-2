@@ -1,25 +1,20 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.commons.Logger;
-import com.pokewords.framework.engine.utils.StringUtility;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
-
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class PropertiesComponent extends CloneableComponent {
-	private Logger logger = Logger.of(PropertiesComponent.class);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private Point center = new Point();
-	private String type;
-	private List<PositionListener> positionListeners = new ArrayList<PositionListener>();
+	private Object type;
 
 	public PropertiesComponent() {
 	}
 
-	public PropertiesComponent(String type) {
+	public PropertiesComponent(Object type) {
 		this.type = type;
 	}
 
@@ -28,7 +23,6 @@ public class PropertiesComponent extends CloneableComponent {
 		PropertiesComponent clone = (PropertiesComponent) super.clone();
 		clone.body = (Rectangle) this.body.clone();
 		clone.center = (Point) this.center.clone();
-		clone.positionListeners = new ArrayList<>();
 		return clone;
 	}
 
@@ -38,12 +32,10 @@ public class PropertiesComponent extends CloneableComponent {
 
 	public void setBody(int x, int y, int w, int h){
 		this.body.setBounds(x, y, w, h);
-		notifyPositionListeners();
 	}
 
 	public void setBody(Rectangle body) {
 		this.body = body;
-		notifyPositionListeners();
 	}
 
 	public int getX(){
@@ -66,15 +58,13 @@ public class PropertiesComponent extends CloneableComponent {
 
 	public void setPosition(Point position) {
 		this.body.setLocation(position);
-		notifyPositionListeners();
 	}
 
 	public void setPosition(int x, int y) {
 		this.body.setLocation(x, y);
-		notifyPositionListeners();
 	}
 
-	public String getType() {
+	public Object getType() {
 		return type;
 	}
 
@@ -95,61 +85,8 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	@Override
-	public void onAppStateCreate(AppStateWorld world) {
-        validatePropertiesComponent();
-	}
-
-	private void validatePropertiesComponent() {
-		if (StringUtility.anyNullOrEmpty(type))
-			throw new RuntimeException("The type of a Sprite should be set before the app started..");
-	}
-
-	@Override
-	public void onUpdate(int timePerFrame) {
-
-	}
-
-	@Override
-	public void onAppStateEnter() {
-
-	}
-
-	@Override
-	public void onAppStateExit() {
-
-	}
-
-	@Override
-	public void onAppStateDestroy() {
-
-	}
-
-	public interface PositionListener{
-		void onPositionUpdated(int x, int y);
-	}
-
-	public interface StateListener{
-		void onStateUpdated(String state);
-	}
-
-
-	public void addPositionListener(PositionListener positionListener){
-		positionListeners.add(positionListener);
-	}
-
-	public void removePositionListener(PositionListener positionListener){
-		positionListeners.remove(positionListener);
-	}
-
-	public List<PositionListener> getPositionListeners() {
-		return positionListeners;
-	}
-
-	/**
-	 * Trigger all positionListener's onPositionUpdated() method
-	 */
-	protected void notifyPositionListeners(){
-		positionListeners.forEach(listener -> listener.onPositionUpdated(getX(), getY()));
+	public void onAppStateCreate() {
+		Objects.requireNonNull(type);
 	}
 
 	@Override

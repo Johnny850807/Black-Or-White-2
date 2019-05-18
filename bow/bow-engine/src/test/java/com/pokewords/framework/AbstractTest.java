@@ -1,15 +1,16 @@
 package com.pokewords.framework;
 
-import com.pokewords.framework.engine.ioc.MockIocFactory;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public abstract class AbstractTest {
     protected IocFactory release = new ReleaseIocFactory();
-    protected IocFactory mock = new MockIocFactory();
 
 
     /**
