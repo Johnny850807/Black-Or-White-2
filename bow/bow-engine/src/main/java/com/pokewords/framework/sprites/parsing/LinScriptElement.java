@@ -14,14 +14,14 @@ import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScrip
 public class LinScriptElement implements Element {
     private Segment parentSegment;
     private Script.Mappings mappings;
+    private String elementName;
 
     public LinScriptElement(String elementName) {
         init();
-        mappings.stringMap.put(NAME, elementName);
+        this.elementName = elementName;
     }
 
     private void init() {
-        parentSegment = null;
         mappings = new Script.Mappings();
     }
 
@@ -39,7 +39,7 @@ public class LinScriptElement implements Element {
 
     @Override
     public String getElementName() {
-        return getStringByKey(NAME);
+        return elementName;
     }
 
     @Override
@@ -89,10 +89,10 @@ public class LinScriptElement implements Element {
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
-        resultBuilder.append(String.format("<%s>\n", getStringByKey(NAME)));
+        resultBuilder.append(String.format("<%s>\n", elementName));
         mappings.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
         mappings.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-        resultBuilder.append(String.format("</%s>\n", getStringByKey(NAME)));
+        resultBuilder.append(String.format("</%s>\n", elementName));
         return resultBuilder.toString();
     }
 
