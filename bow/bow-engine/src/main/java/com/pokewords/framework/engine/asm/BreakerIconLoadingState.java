@@ -1,5 +1,6 @@
 package com.pokewords.framework.engine.asm;
 
+import com.pokewords.framework.commons.utils.ThreadUtility;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
 import com.pokewords.framework.sprites.components.StringComponent;
@@ -16,8 +17,7 @@ public class BreakerIconLoadingState extends AppState {
 
     @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) {
-        getGameWindowsConfigurator().size(800, 600)
-                                    .atCenter();
+        getGameWindowsConfigurator().size(800, 600);
 
         declareAndSpawnBreakerIconLoadingAnimation();
         declareAndSpawnAnimationSourceText();

@@ -1,5 +1,6 @@
 package com.pokewords.framework.views;
 
+import com.pokewords.framework.commons.utils.ThreadUtility;
 import com.pokewords.framework.engine.GameEngine;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocFactory;
@@ -59,6 +60,7 @@ public abstract class GameApplication implements AppView {
 	@Override
 	public void onAppLoading() {
 		gameFrame.onAppLoading();
+		ThreadUtility.delay(2500); //delay on purpose to show loading scene
 		onSpriteDeclaration(gameEngine.getSpriteInitializer());
 		onAppStatesConfiguration(gameEngine.getAppStateMachine());
 	}
