@@ -1,34 +1,42 @@
 package com.pokewords.framework.views.inputs;
 
+import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.engine.listeners.GameLoopingListener;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-//TODO Define sufficient methods
-public interface InputManager extends Inputs {
+public interface InputManager extends Inputs, GameLoopingListener {
+
+    /**
+     * Bind and enable an appState to listen to the input events.
+     * InputManager will save the input event listeners bound by each AppState,
+     * but it should only fire the events that the current AppState's interested.
+     * So this method is necessary to be invoked anytime the current AppState is changed, InputManager
+     * will only trigger the events relevant to the bound AppState.
+     * @param appState the entering appState
+     */
+    void bindAppState(AppState appState);
+
+
 
     /**
      * Add an event releasing the held button up
-     * @param key the button's key
+     * @param id the button's id
      */
-    void onButtonPressedDown(int key);
-
-    /**
-     * Add an event holding the button
-     * @param key the button's key
-     */
-    void onButtonBeingHeld(int key);
+    void onButtonPressedDown(int id);
 
     /**
      * Add an event releasing the held button up
-     * @param key the button's key
+     * @param id the button's id
      */
-    void onButtonReleasedUp(int key);
+    void onButtonReleasedUp(int id);
 
     /**
      * Add an event moving the mouse (updating the mouse's position)
      * @param point the point where the mouse move to
      */
-    void onMouseMoved(Point2D point);
+    void onMouseMoved(Point point);
 
     /**
      * Add an event hitting the mouse down
@@ -40,8 +48,4 @@ public interface InputManager extends Inputs {
      */
     void onMouseReleasedUp();
 
-    /**
-     * Add an event the mouse being held
-     */
-    void onMouseBeingHeld();
 }
