@@ -1,8 +1,10 @@
 package com.pokewords.framework.engine.gameworlds;
 
+import com.pokewords.framework.commons.Pair;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
+import com.pokewords.framework.sprites.parsing.ScriptRules;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,13 +26,13 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     private Map<Integer, Sprite> idSpriteMap;
     private Map<Sprite, Integer> spriteIdMap;
     private RenderedLayers renderedLayers;
-    private List<CollisionHandler> collisionHandlers;
+    private Map<CollisionHandler.Type, List<CollisionHandler>> collisionHandlerMap;
 
     public AppStateWorld() {
         sprites = new ArrayList<>();
         spriteCount = new AtomicInteger(0);
         renderedLayers = new RenderedLayers(new ArrayList<>());
-        collisionHandlers = new ArrayList<>();
+        collisionHandlerMap = new HashMap<>();
         idSpriteMap = new HashMap<>();
         spriteIdMap = new IdentityHashMap<>();
     }
@@ -78,10 +80,15 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public void addCollisionHandler(CollisionHandler collisionHandler) {
+        CollisionHandler.Type collisionHandlerType = new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType());
+        List<CollisionHandler> collisionHandlers = (collisionHandlerMap.containsKey(collisionHandlerType))?
+                collisionHandlerMap.get(collisionHandlerType) : new ArrayList<>();
         collisionHandlers.add(collisionHandler);
+        collisionHandlerMap.put(collisionHandlerType, collisionHandlers);
     }
 
     public void removeCollisionHandler(CollisionHandler collisionHandler) {
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType()));
         collisionHandlers.remove(collisionHandler);
     }
 
@@ -89,7 +96,11 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         return sprites;
     }
 
-    public List<CollisionHandler> getCollisionHandlers() {
+    public Collection<CollisionHandler> getCollisionHandlers() {
+        List<CollisionHandler> collisionHandlers = new ArrayList<>();
+        for (List<CollisionHandler> collisionHandlerList: collisionHandlerMap.values()) {
+            collisionHandlers.addAll(collisionHandlerList);
+        }
         return collisionHandlers;
     }
 
@@ -150,13 +161,11 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     /**
      * To notify sprites if they have collided
-     * //TODO O(1) collisionHandlers map
      */
     private void notifyCollisionHandlers(Sprite sprite1, Sprite sprite2) {
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(sprite1.getType(), sprite2.getType()));
         for (CollisionHandler collisionHandler: collisionHandlers) {
-            if ((collisionHandler.s1Type.equals(sprite1.getType()) && collisionHandler.s2Type.equals(sprite2.getType())) ||
-                    (collisionHandler.s1Type.equals(sprite2.getType()) && collisionHandler.s2Type.equals(sprite1.getType())))
-                collisionHandler.onCollision(sprite1, sprite2);
+            collisionHandler.onCollision(sprite1, sprite2);
         }
     }
 
@@ -244,7 +253,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the sprites collided with the given sprite
      */
     public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        Set<Sprite> sprites = Collections.newSetFromMap( new IdentityHashMap<>());
+        Set<Sprite> sprites = Collections.newSetFromMap(new IdentityHashMap<>());
         sprites.addAll(getSpritesCollidedWithinArea(sprite.getBody()));
         sprites.remove(sprite);
         return sprites;
@@ -269,6 +278,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public void clearCollisionHandlers() {
-        collisionHandlers.clear();
+        collisionHandlerMap.clear();
     }
+
 }
