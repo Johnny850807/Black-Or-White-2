@@ -10,7 +10,6 @@ import com.pokewords.framework.views.inputs.InputManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,6 +23,7 @@ public class GameEngine {
     private AppStateMachine appStateMachine;
     private final Runnable gameLoopingTask;
     private ScheduledExecutorService scheduler;
+    private int counter = 0;
     private int timePerFrame = 15;  //ms
 
     public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
@@ -37,9 +37,13 @@ public class GameEngine {
 
     private void gameLooping() {
         try {
+            counter = (counter +1) % 300;
             inputManager.onUpdate(timePerFrame);
             appStateMachine.onUpdate(timePerFrame);
             gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
+
+            if (counter == 0)
+                System.out.printf("Memory Used: %d\n" , Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
         } catch (Exception err) {
             err.printStackTrace();
         }
