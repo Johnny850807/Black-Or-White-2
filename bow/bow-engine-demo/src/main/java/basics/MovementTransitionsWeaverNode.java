@@ -1,4 +1,4 @@
-package basics.weaver;
+package basics;
 
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;

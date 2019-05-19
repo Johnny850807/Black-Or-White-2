@@ -7,10 +7,7 @@ import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.sound.SwingSoundPlayer;
-import com.pokewords.framework.views.windows.GameFrame;
-import com.pokewords.framework.views.windows.GameFrameWindowsConfigurator;
-import com.pokewords.framework.views.windows.GamePanel;
-import com.pokewords.framework.views.windows.GameWindowsConfigurator;
+import com.pokewords.framework.views.windows.*;
 
 /**
  * @author johnny850807 (waterball), shawn
@@ -23,7 +20,7 @@ public abstract class GameApplication implements AppView {
 
     public GameApplication(IocFactory iocFactory) {
     	InputManager inputManager = iocFactory.inputManager();
-		gameFrame = new GameFrame(new GamePanel(inputManager));
+		gameFrame = new GameFrame(new GamePanel(), inputManager);
 		soundPlayer = new SwingSoundPlayer();
 		gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
         gameEngine = new GameEngine(iocFactory, inputManager, gameWindowsConfigurator, soundPlayer);
@@ -67,6 +64,10 @@ public abstract class GameApplication implements AppView {
 
 	protected abstract void onSpriteDeclaration(SpriteInitializer spriteInitializer);
 	protected abstract void onAppStatesConfiguration(AppStateMachine asm);
+
+	public GameWindowDefinition getGameWindowDefinition() {
+		return gameWindowsConfigurator.getGameWindowDefinition();
+	}
 
 	@Override
 	public void onAppStarted() {

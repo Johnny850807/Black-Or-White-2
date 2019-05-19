@@ -1,5 +1,7 @@
 package com.pokewords.framework.views.inputs;
 
+import com.pokewords.framework.engine.asm.AppState;
+
 import java.awt.*;
 import java.util.function.Consumer;
 
@@ -9,7 +11,7 @@ public interface Inputs {
      * @param event the input event (button, mouse,... of some integer constants space)
      * @param keyListener the keyListener task will be triggered when the event occurs
      */
-    void bindKeyEvent(int event, Runnable keyListener);
+    void bindKeyEvent(AppState appState, int event, Runnable keyListener);
 
 
     /**
@@ -17,7 +19,7 @@ public interface Inputs {
      * @param event the input event (button, mouse,... of some integer constants space)
      * @param mouseListener the mouseListener task will be triggered given the mouse's position when the event occurs
      */
-    void bindMouseEvent(int event, Consumer<Point> mouseListener);
+    void bindMouseEvent(AppState appState, int event, Consumer<Point> mouseListener);
 
     /**
      * @param events a sequence of events happen together

@@ -1,4 +1,4 @@
-package basics.components;
+package basics;
 
 import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;

@@ -18,7 +18,11 @@ public interface InputManager extends Inputs, GameLoopingListener {
      */
     void bindAppState(AppState appState);
 
-
+    /**
+     * To disable all events listening until the next appState binding.
+     * This should be invoked during an AppState exiting.
+     */
+    void unbind();
 
     /**
      * Add an event releasing the held button up
@@ -46,6 +50,6 @@ public interface InputManager extends Inputs, GameLoopingListener {
     /**
      * Add an event releasing the mouse up
      */
-    void onMouseReleasedUp();
+    void onMouseReleasedUp(Point position);
 
 }
