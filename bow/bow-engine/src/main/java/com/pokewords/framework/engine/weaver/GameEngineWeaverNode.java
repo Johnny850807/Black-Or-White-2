@@ -1,6 +1,5 @@
 package com.pokewords.framework.engine.weaver;
 
-import com.pokewords.framework.commons.Range;
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.parsing.EffectElement;
 import com.pokewords.framework.engine.parsing.FrameSegment;
@@ -77,7 +76,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         @Override
         public EffectFrame createFrame(Segment segment) {
-            setupGalleryMapIfNotExists(segment.getParentScript());
+            setupGalleryMapIfNotExists(segment.getParent());
             FrameSegment frameSegment = new FrameSegment(segment);
             EffectFrame effectFrame = initEffectFrame(frameSegment, segment);
             parsePropertiesElement(frameSegment, effectFrame);

@@ -5,32 +5,32 @@ import com.pokewords.framework.engine.exceptions.SegmentException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScript.Segment.*;
-
 /**
  *  Each segment has a reference to its parent Script, possibly some Elements, and its key-value pairs.
  *  @author nyngwang
  */
 public class LinScriptSegment implements Segment {
-    private LinScript parentScript;
+    private Script parent;
     private List<Element> elements;
     private Script.Mappings mappings;
+    private String name;
+    private int id;
+    private String description;
 
-    public LinScriptSegment(String segmentName, int segmentId) {
+    public LinScriptSegment(String name, int id) {
         init();
-        mappings.stringMap.put(NAME, segmentName);
-        mappings.integerMap.put(ID, segmentId);
+        this.name = name;
+        this.id = id;
     }
 
-    public LinScriptSegment(String segmentName, int segmentId, String segmentDescription) {
+    public LinScriptSegment(String name, int id, String description) {
         init();
-        mappings.stringMap.put(NAME, segmentName);
-        mappings.integerMap.put(ID, segmentId);
-        mappings.stringMap.put(DESCRIPTION, segmentDescription);
+        this.name = name;
+        this.id = id;
+        this.description = description;
     }
 
     private void init() {
-        parentScript = null;
         elements = new ArrayList<>();
         mappings = new Script.Mappings();
     }
@@ -38,16 +38,22 @@ public class LinScriptSegment implements Segment {
     @Override
     public Segment addElement(Element element) {
         elements.add(element);
-        element.setParentSegment(this);
+        element.setParent(this);
         return this;
     }
 
     @Override
-    public List<Element> getElementsByName(String elementName) {
+    public boolean containsElementName(String name) {
+        for (Element element : elements)
+            if (element.getName().equals(name))
+                return true;
+        return false;
+    }
+
+    @Override
+    public List<Element> getElementsByName(String name) {
         return elements.stream()
-                .filter(element ->
-                        element.getStringByKey(ScriptDefinitions.LinScript.Element.NAME)
-                               .equals(elementName))
+                .filter(element -> element.getName().equals(name))
                 .collect(Collectors.toList());
     }
 
@@ -79,18 +85,18 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public String getSegmentName() {
-        return getStringByKey(NAME);
-    }
-
-    @Override
-    public String getSegmentDescription() {
-        return getStringByKey(DESCRIPTION);
+    public String getName() {
+        return name;
     }
 
     @Override
     public int getId() {
-        return getIntByKey(ID);
+        return id;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @Override
@@ -115,45 +121,42 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public Segment setParentScript(Script parentScript) {
-        this.parentScript = (LinScript) parentScript;
+    public Segment setParent(Script parent) {
+        this.parent = parent;
         return this;
     }
 
     @Override
-    public LinScript getParentScript() {
-        return parentScript;
+    public Script getParent() {
+        return parent;
     }
 
     @SuppressWarnings("Duplicates")
     @Override
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
-        String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
-        resultBuilder
-                .append("<").append(getStringByKey(NAME)).append(">")
-                .append(" ").append(getIntByKey(ID))
-                .append(" ").append(getStringByKeyOptional(DESCRIPTION).orElse("")).append('\n');
-        for (Map.Entry<String, String> entry : mappings.stringMap.entrySet()) {
-            resultBuilder
-                    .append(indent).append(entry.getKey())
-                    .append(" ").append(entry.getValue()).append('\n');
-        }
-        for (Map.Entry<String, Integer> entry : mappings.integerMap.entrySet()) {
-            resultBuilder
-                    .append(indent).append(entry.getKey())
-                    .append(" ").append(entry.getValue()).append('\n');
-        }
-        for (Element element : elements) {
-            resultBuilder.append(indent).append(element.toString(indentation)).append('\n');
-        }
-        resultBuilder
-                .append("</").append(mappings.stringMap.get(NAME)).append(">").append('\n');
+        String indent = new String(new char[indentation]).replace("\0", " ");
+        resultBuilder.append(String.format("<%s> %d %s\n", getName(), getId(), getDescription() == null? "" : getDescription()));
+        mappings.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        mappings.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        elements.forEach(element ->
+                resultBuilder.append(element
+                        .toString(indentation)
+                        .replaceAll("(.*?\n)", indent + "$1")));
+        resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
     }
 
     @Override
     public String toString() {
         return toString(4);
+    }
+
+    public static void main(String[] args) {
+        Segment segment = new LinScriptSegment("frame", 1, "punch")
+                .addElement(new LinScriptElement("bow"))
+                .addElement(new LinScriptElement("cow"));
+        System.out.println(segment);
+
     }
 }

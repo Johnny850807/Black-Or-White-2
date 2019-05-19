@@ -9,49 +9,9 @@ import java.io.IOException;
  * @author nyngwang
  */
 public interface ScriptDefinitions {
-    // Demo
-    static void main(String[] args) {
-        try {
-            ScriptParser linScriptParser = new LinScriptParser();
-            ScriptRulesParser linScriptRulesParser = new LinScriptRulesParser();
-            Script linScript = linScriptParser.parse(
-                    FileUtility.read("path/to/linscript.txt"),
-                    linScriptRulesParser.parse("path/to/linscript_rules.txt")
-            );
-
-            linScript.addSegment(
-                    new LinScriptSegment("frame", 1, "punch")
-                            .addElement(new LinScriptElement("bow"))
-                            .addElement(new LinScriptElement("cow")))
-                    .addSegment(
-                            new LinScriptSegment("frame", 2, "punch")
-                                    .addElement(new LinScriptElement("dow"))
-                                    .addElement(new LinScriptElement("fow"))
-                    );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Element element = new LinScriptElement("bow");
-        element.put("hey", 123);
-        element.put("hey2", 456);
-        element.put("yo", "yo");
-        element.put("yoho", "yoho");
-        System.out.println(element);
-    }
-
     interface LinScript {
-        String NAME = "LinScript";
         String SEGMENT = "Segment";
         String ELEMENT = "Element";
-        interface Segment {
-            String NAME = "segment-name";
-            String ID = "segment-id";
-            String DESCRIPTION = "segment-description";
-        }
-        interface Element {
-            String NAME = "element-name";
-        }
         interface Samples {
             String SCRIPT_RULES_TEXT =
                     "Segment\n" +

@@ -2,7 +2,6 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ElementException;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -10,16 +9,16 @@ import java.util.OptionalInt;
  * @author nyngwang
  */
 public class LinScriptElement implements Element {
-    private LinScriptSegment parentSegment;
+    private Segment parent;
     private Script.Mappings mappings;
+    private String name;
 
-    public LinScriptElement(String elementName) {
+    public LinScriptElement(String name) {
         init();
-        mappings.stringMap.put(ScriptDefinitions.LinScript.Element.NAME, elementName);
+        this.name = name;
     }
 
     private void init() {
-        parentSegment = null;
         mappings = new Script.Mappings();
     }
 
@@ -36,8 +35,8 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public String getElementName() {
-        return getStringByKey(ScriptDefinitions.LinScript.Element.NAME);
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -72,35 +71,25 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public Element setParentSegment(Segment parentSegment) {
-        this.parentSegment = (LinScriptSegment) parentSegment;
+    public Element setParent(Segment parent) {
+        this.parent = parent;
         return this;
     }
 
     @Override
-    public Segment getParentSegment() {
-        return parentSegment;
+    public Segment getParent() {
+        return parent;
     }
 
     // Pretty print
     @Override
     public String toString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
-        String indent = ""; for (int i = 1; i<=indentation; i++) indent += " ";
-        resultBuilder
-                .append("<").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Element.NAME)).append(">").append('\n');
-        for (Map.Entry<String, String> entry : mappings.stringMap.entrySet()) {
-            resultBuilder
-                    .append(indent).append(entry.getKey())
-                    .append(" ").append(entry.getValue()).append('\n');
-        }
-        for (Map.Entry<String, Integer> entry : mappings.integerMap.entrySet()) {
-            resultBuilder
-                    .append(indent).append(entry.getKey())
-                    .append(" ").append(entry.getValue()).append('\n');
-        }
-        resultBuilder
-                .append("</").append(mappings.stringMap.get(ScriptDefinitions.LinScript.Element.NAME)).append(">");
+        String indent = new String(new char[indentation]).replace("\0", " ");
+        resultBuilder.append(String.format("<%s>\n", name));
+        mappings.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        mappings.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        resultBuilder.append(String.format("</%s>\n", name));
         return resultBuilder.toString();
     }
 
