@@ -29,8 +29,13 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     }
 
     @Override
-    public void onComponentInjected() {
+    public void onComponentAttached(Sprite sprite) {
         fsm.getStates().forEach(frame -> frame.setSprite(sprite));
+    }
+
+    @Override
+    public void onComponentRemoved() {
+        fsm.getStates().forEach(frame -> frame.setSprite(null));
     }
 
     @Override

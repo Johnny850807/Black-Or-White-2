@@ -2,6 +2,7 @@ package com.pokewords.framework.sprites.components;
 
 
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
+import com.pokewords.framework.sprites.Sprite;
 
 public abstract class Component implements AppStateLifeCycleListener {
 
@@ -16,17 +17,7 @@ public abstract class Component implements AppStateLifeCycleListener {
         //hook
     }
 
-    public void onComponentAdded() {
-        //hook
-    }
-
-    /**
-     * invoked during the component injected, the injected instances are 'Sprite' and 'AppStateWorld'.
-     * Where the sprite is the component's owner, and the AppStateWorld is where the Sprite located.
-     *
-     * Init those objects that have the injected dependencies in this hook method.
-     */
-    public void onComponentInjected() {
+    public void onComponentAttached(Sprite sprite) {
         //hook
     }
 

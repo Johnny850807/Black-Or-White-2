@@ -111,8 +111,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public <T extends Component> void addComponent(@NotNull Component component) {
 		components.put(component.getClass(), component);
-		component.onComponentAdded();
-		ComponentInjector.inject(this, component);
+		component.onComponentAttached(this);
 	}
 
 	/**
@@ -234,7 +233,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		try {
 			Sprite clone = (Sprite) super.clone();
 			clone.components = this.components.clone();
-			clone.injectComponents();
+			clone.components.foreachComponent((c) -> c.onComponentAttached(clone));
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
@@ -244,6 +243,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	/**
 	 * Make the components injected.
 	 * @see ComponentInjector#inject(Sprite)
+	 * @deprecated
 	 */
 	protected void injectComponents(){
 		ComponentInjector.inject(this);

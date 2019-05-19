@@ -77,7 +77,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     @Override
     public DefaultSpriteBuilder buildScriptFromPath(String path) {
         try {
-            String scriptString = new String(Files.readAllBytes(Resources.get(path).toPath()));
+            String scriptString = new String(Files.readAllBytes(Resources.get(path).toPath())).trim();
             script = scriptParser.parse(scriptString, ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
             addComponent(new FrameStateMachineComponent());
         } catch (IOException e) {

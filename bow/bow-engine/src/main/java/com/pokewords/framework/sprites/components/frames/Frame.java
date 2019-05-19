@@ -2,6 +2,7 @@ package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.views.Canvas;
+import org.jetbrains.annotations.Nullable;
 
 public interface Frame extends Cloneable {
 	/**
@@ -30,6 +31,6 @@ public interface Frame extends Cloneable {
 	/**
 	 * @param sprite owner of the frame
 	 */
-	void setSprite(Sprite sprite);
+	void setSprite(@Nullable Sprite sprite);
 
 }

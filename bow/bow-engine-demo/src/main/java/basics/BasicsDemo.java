@@ -6,9 +6,9 @@ import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
-import inputsMovementDemo.MainAppState;
 
 import static com.pokewords.framework.sprites.factories.SpriteInitializer.InitializationMode.LAZY;
+import static com.pokewords.framework.sprites.factories.SpriteInitializer.InitializationMode.NON_LAZY;
 
 public class BasicsDemo extends GameApplication {
 
@@ -24,6 +24,7 @@ public class BasicsDemo extends GameApplication {
 
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
+        spriteInitializer.setInitializationMode(NON_LAZY);
         spriteInitializer.declare(basics.MainAppState.Sprites.CHARACTER)
                 .position(getGameWindowDefinition().center())
                 .with("scripts/character.bow")
