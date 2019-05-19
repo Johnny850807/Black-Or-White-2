@@ -1,8 +1,10 @@
 package com.pokewords.framework.engine.gameworlds;
 
+import com.pokewords.framework.commons.Pair;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
+import com.pokewords.framework.sprites.parsing.ScriptRules;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +26,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     private Map<Integer, Sprite> idSpriteMap;
     private Map<Sprite, Integer> spriteIdMap;
     private RenderedLayers renderedLayers;
-    private Map<CollisionHandlerType, List<CollisionHandler>> collisionHandlerMap;
+    private Map<CollisionHandler.Type, List<CollisionHandler>> collisionHandlerMap;
 
     public AppStateWorld() {
         sprites = new ArrayList<>();
@@ -78,7 +80,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public void addCollisionHandler(CollisionHandler collisionHandler) {
-        CollisionHandlerType collisionHandlerType = new CollisionHandlerType(collisionHandler.s1Type, collisionHandler.s2Type);
+        CollisionHandler.Type collisionHandlerType = new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType());
         List<CollisionHandler> collisionHandlers = (collisionHandlerMap.containsKey(collisionHandlerType))?
                 collisionHandlerMap.get(collisionHandlerType) : new ArrayList<>();
         collisionHandlers.add(collisionHandler);
@@ -86,7 +88,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public void removeCollisionHandler(CollisionHandler collisionHandler) {
-        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandlerType(collisionHandler.s1Type, collisionHandler.s2Type));
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType()));
         collisionHandlers.remove(collisionHandler);
     }
 
@@ -161,7 +163,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * To notify sprites if they have collided
      */
     private void notifyCollisionHandlers(Sprite sprite1, Sprite sprite2) {
-        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandlerType(sprite1.getType(), sprite2.getType()));
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(sprite1.getType(), sprite2.getType()));
         for (CollisionHandler collisionHandler: collisionHandlers) {
             collisionHandler.onCollision(sprite1, sprite2);
         }
@@ -251,7 +253,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the sprites collided with the given sprite
      */
     public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        Set<Sprite> sprites = Collections.newSetFromMap( new IdentityHashMap<>());
+        Set<Sprite> sprites = Collections.newSetFromMap(new IdentityHashMap<>());
         sprites.addAll(getSpritesCollidedWithinArea(sprite.getBody()));
         sprites.remove(sprite);
         return sprites;
@@ -279,28 +281,4 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         collisionHandlerMap.clear();
     }
 
-    private class CollisionHandlerType {
-        private Object type1;
-        private Object type2;
-
-        CollisionHandlerType(Object type1, Object type2) {
-            this.type1 = type1;
-            this.type2 = type2;
-        }
-
-        Object getType1() {
-            return type1;
-        }
-
-        Object getType2() {
-            return type2;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            CollisionHandlerType collisionHandlerType = (CollisionHandlerType) obj;
-            return collisionHandlerType.getType1().equals(type1) && collisionHandlerType.getType2().equals(type2) ||
-                    collisionHandlerType.getType1().equals(type2) && collisionHandlerType.getType2().equals(type1);
-        }
-    }
 }
