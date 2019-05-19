@@ -17,57 +17,59 @@ import java.util.concurrent.TimeUnit;
  * @author johnny850807 (waterball)
  */
 public class GameEngine {
-	private IocFactory iocFactory;
-	private AppView gameView;
-	private SpriteInitializer spriteInitializer;
-	private InputManager inputManager;
-	private AppStateMachine appStateMachine;
-	private final Runnable gameLoopingTask;
-	private ScheduledExecutorService scheduler;
-	private int timePerFrame = 16;  //ms
+    private IocFactory iocFactory;
+    private AppView gameView;
+    private SpriteInitializer spriteInitializer;
+    private InputManager inputManager;
+    private AppStateMachine appStateMachine;
+    private final Runnable gameLoopingTask;
+    private ScheduledExecutorService scheduler;
+    private int timePerFrame = 15;  //ms
 
-	public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
-		this.iocFactory = iocFactory;
-		this.inputManager = inputManager;
-		this.spriteInitializer = new SpriteInitializer(iocFactory);
-		this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator, soundPlayer);
-		this.scheduler = Executors.newScheduledThreadPool(3);
-		this.gameLoopingTask = this::gameLooping;
-	}
+    public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
+        this.iocFactory = iocFactory;
+        this.inputManager = inputManager;
+        this.spriteInitializer = new SpriteInitializer(iocFactory);
+        this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator, soundPlayer);
+        this.scheduler = Executors.newScheduledThreadPool(3);
+        this.gameLoopingTask = this::gameLooping;
+    }
 
-	private void gameLooping() {
-		inputManager.onUpdate(timePerFrame);
-		appStateMachine.onUpdate(timePerFrame);
-		gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
-	}
+    private void gameLooping() {
+        try {
+            inputManager.onUpdate(timePerFrame);
+            appStateMachine.onUpdate(timePerFrame);
+            gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+    }
 
-	public void setGameView(AppView gameView) {
-		this.gameView = gameView;
-	}
+    public void setGameView(AppView gameView) {
+        this.gameView = gameView;
+    }
 
-	public void launchEngine() {
-		gameView.onAppInit();
-		appStateMachine.trigger(AppStateMachine.EVENT_LOADING);
-		scheduler.scheduleAtFixedRate(gameLoopingTask, 0, timePerFrame, TimeUnit.MILLISECONDS);
-		gameView.onAppLoading();
+    public void launchEngine() {
+        gameView.onAppInit();
+        appStateMachine.trigger(AppStateMachine.EVENT_LOADING);
+        scheduler.scheduleAtFixedRate(gameLoopingTask, 0, timePerFrame, TimeUnit.MILLISECONDS);
+        gameView.onAppLoading();
 
 		appStateMachine.trigger(AppStateMachine.EVENT_GAME_STARTED);
 		gameView.onAppStarted();
-	}
+    }
 
 
+    public AppView getGameView() {
+        return gameView;
+    }
 
+    public AppStateMachine getAppStateMachine() {
+        return appStateMachine;
+    }
 
-	public AppView getGameView() {
-		return gameView;
-	}
-
-	public AppStateMachine getAppStateMachine() {
-		return appStateMachine;
-	}
-
-	public SpriteInitializer getSpriteInitializer() {
-		return spriteInitializer;
-	}
+    public SpriteInitializer getSpriteInitializer() {
+        return spriteInitializer;
+    }
 
 }

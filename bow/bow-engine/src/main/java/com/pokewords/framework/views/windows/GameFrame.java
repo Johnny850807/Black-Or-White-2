@@ -25,6 +25,7 @@ public class GameFrame extends JFrame implements AppView {
         setContentPane(gamePanel);
         addKeyListener(new GameFrame.KeyListener());
         addMouseListener(new GameFrame.MouseListener());
+        addMouseMotionListener(new GameFrame.MouseListener());
     }
     private class KeyListener extends KeyAdapter {
         @Override

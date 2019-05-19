@@ -1,4 +1,4 @@
-package basics.states;
+package inputsMovementDemo;
 
 
 import com.pokewords.framework.engine.asm.AppState;
@@ -36,6 +36,7 @@ public class MainAppState extends AppState {
         bindKeyPressedAction(KeyEvent.VK_S, () -> move(Direction.DOWN));
         bindKeyPressedAction(KeyEvent.VK_A, () -> move(Direction.LEFT));
         bindKeyPressedAction(KeyEvent.VK_D, () -> move(Direction.RIGHT));
+        bindMouseClickedAction((position) -> faceSprite.setPosition(position));
 
         bindKeyReleasedAction(KeyEvent.VK_W, this::clearMovement);
         bindKeyReleasedAction(KeyEvent.VK_S, this::clearMovement);

@@ -216,14 +216,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     }
 
     public void move(int velocityX, int velocityY) {
-		getPosition().translate((int) (velocityX*timePerFrame), (int) (velocityY*timePerFrame));
+		getPropertiesComponent().move(velocityX, velocityY);
 	}
     public void moveX(int velocityX) {
-		getPosition().translate((int) (velocityX*timePerFrame), 0);
+		getPropertiesComponent().moveX(velocityX);
 	}
 
 	public void moveY(int velocityY) {
-		getPosition().translate(0, (int) (velocityY*timePerFrame));
+		getPropertiesComponent().moveY(velocityY);
 	}
 
 	public boolean isType(Object obj) {
