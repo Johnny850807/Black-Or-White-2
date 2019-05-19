@@ -42,7 +42,6 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     public int spawn(Sprite sprite) {
         int id = spriteCount.incrementAndGet();
         addSpriteIntoWorld(id, sprite);
-        addFramesToRenderedLayer(sprite.getRenderedFrames());
         sprite.setWorld(this);
         return id;
     }
@@ -72,16 +71,6 @@ public class AppStateWorld implements AppStateLifeCycleListener {
                 e.printStackTrace();
             }
         }).start();
-    }
-
-    /**
-     * Add the frames to the rendered layer.
-     * @param renderedFrames The Frame will be add in the rendered layer.
-     */
-    private void addFramesToRenderedLayer(Collection<? extends Frame> renderedFrames) {
-        for (Frame frame: renderedFrames) {
-            renderedLayers.addFrame(frame);
-        }
     }
 
     public RenderedLayers getRenderedLayers() {

@@ -18,4 +18,12 @@ public class RectangleFrame extends AbstractFrame {
         rectangle.setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         canvas.renderRectangle(rectangle, color);
     }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 }

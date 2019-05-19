@@ -47,6 +47,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public void setWorld(@Nullable AppStateWorld world) {
 		this.world = world;
+		components.foreachComponent(c -> c.onComponentAttachedWorld(world));
 	}
 
 	@Nullable
@@ -111,7 +112,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public <T extends Component> void addComponent(@NotNull Component component) {
 		components.put(component.getClass(), component);
-		component.onComponentAttached(this);
+		component.onComponentAttachedSprite(this);
 	}
 
 	/**
@@ -233,7 +234,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		try {
 			Sprite clone = (Sprite) super.clone();
 			clone.components = this.components.clone();
-			clone.components.foreachComponent((c) -> c.onComponentAttached(clone));
+			clone.components.foreachComponent((c) -> c.onComponentAttachedSprite(clone));
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);

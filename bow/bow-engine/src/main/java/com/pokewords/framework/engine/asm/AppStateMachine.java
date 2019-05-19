@@ -1,14 +1,22 @@
 package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.commons.FiniteStateMachine;
+import com.pokewords.framework.commons.Pair;
+import com.pokewords.framework.commons.Triple;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.SoundPlayer;
+import com.pokewords.framework.views.effects.AppStateTransitionEffect;
+import com.pokewords.framework.views.effects.CrossFadingTransitionEffect;
+import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The AppStateMachine manages the finite game states.
@@ -22,6 +30,15 @@ import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_LOADING = "Start Loading";
 	public static final String EVENT_GAME_STARTED = "Game Started";
+
+	private Map<Transition, AppStateTransitionEffect> transitionEffectMap = new HashMap<>();
+
+	/**
+	 * We should use this currentState reference instead of finite state machine's,
+	 * because for handling the transition effect correctly,
+	 * the currentState can only be updated after the transition effect is completed.
+	 */
+	private AppState currentState;
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
 	private SpriteInitializer spriteInitializer;
 	private GameWindowsConfigurator gameWindowsConfigurator;
@@ -29,6 +46,7 @@ public class AppStateMachine implements GameLoopingListener {
 	private InputManager inputManager;
 	private AppState loadingState;
 	private AppState gameInitialState;
+
 
 	public AppStateMachine(InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
 		this.inputManager = inputManager;
@@ -40,9 +58,10 @@ public class AppStateMachine implements GameLoopingListener {
 
 	private void setupStates() {
 		AppState initialState = createState(EmptyAppState.class);
+		this.currentState = initialState;
 		this.loadingState = createState(BreakerIconLoadingState.class);
 		fsm.setCurrentState(initialState);
-		fsm.addTransition(initialState, EVENT_LOADING, loadingState);
+		addTransition(initialState, EVENT_LOADING, loadingState);
 		initialState.onAppStateCreate();
 	}
 
@@ -69,29 +88,41 @@ public class AppStateMachine implements GameLoopingListener {
 		AppState from = fsm.getCurrentState();
 		AppState to = fsm.trigger(event.toString());
 		if (from != to)
-		{
-			from.onAppStateExit();
-			to.onAppStateEnter();
-		}
+			handleTransition(from, event, to);
 		return to;
+	}
+
+	private void handleTransition(AppState from, Object event, AppState to) {
+		Transition transition = new Transition(from, event, to);
+
+		AppStateTransitionEffect transitionEffect = transitionEffectMap.getOrDefault(transition, new NoTransitionEffect());
+
+		transitionEffect.effect(from, to, new AppStateTransitionEffect.DefaultListener() {
+			@Override
+			public void onFromEffectEnd() {
+				from.onAppStateExit();
+				currentState = to;
+				to.onAppStateEnter();
+			}
+		});
 	}
 
 
 	@Override
 	public void onUpdate(double timePerFrame) {
-		fsm.getCurrentState().onUpdate(timePerFrame);
+		getCurrentState().onUpdate(timePerFrame);
 	}
 
-	public void setGameInitialState(AppState clientInitState) {
-		if (gameInitialState != null)
+	public void setGameInitialState(AppState gameInitialState) {
+		if (this.gameInitialState != null)
 			throw new GameEngineException("You can only set the GameInitialState once.");
-		this.gameInitialState = clientInitState;
-		this.fsm.addState(gameInitialState);
-		this.fsm.addTransition(loadingState, EVENT_GAME_STARTED, gameInitialState);
+		this.gameInitialState = gameInitialState;
+		this.fsm.addState(this.gameInitialState);
+		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState, new CrossFadingTransitionEffect());
 	}
 
 	public AppState getCurrentState() {
-		return fsm.getCurrentState();
+		return currentState;
 	}
 
 	public AppStateWorld getCurrentStateWorld(){
@@ -110,7 +141,22 @@ public class AppStateMachine implements GameLoopingListener {
 		fsm.addTransition(from, event, to);
 	}
 
+	public void addTransition(AppState from, Object event, AppState to, AppStateTransitionEffect transitionEffect) {
+		fsm.addTransition(from, event, to);
+		transitionEffectMap.put(new Transition(from, event, to), transitionEffect);
+	}
+
 	public void addTransitionFromAllStates(Object event, AppState targetState, AppState ...excepts) {
 		fsm.addTransitionFromAllStates(event, targetState, excepts);
+	}
+
+	/**
+	 * <from state, event type, to state>
+	 */
+	private class Transition extends Triple<AppState, Object, AppState> {
+
+		public Transition(AppState from, Object event, AppState to) {
+			super(from, event, to);
+		}
 	}
 }
