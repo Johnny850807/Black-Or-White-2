@@ -36,6 +36,7 @@ public class GameEngine {
 	}
 
 	private void gameLooping() {
+		inputManager.onUpdate(timePerFrame);
 		appStateMachine.onUpdate(timePerFrame);
 		gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
 	}

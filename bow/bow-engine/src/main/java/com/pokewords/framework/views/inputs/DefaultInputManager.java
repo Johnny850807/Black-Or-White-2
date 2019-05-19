@@ -45,11 +45,6 @@ public class DefaultInputManager implements InputManager {
     @Override
     public void bindAppState(AppState appState) {
         this.currentAppState = appState;
-
-        if (!keyListenersSpace.containsKey(appState))
-            keyListenersSpace.put(appState, new HashMap<>());
-        if (!mouseListenersSpace.containsKey(appState))
-            mouseListenersSpace.put(appState, new HashMap<>());
     }
 
     @Override
@@ -59,6 +54,7 @@ public class DefaultInputManager implements InputManager {
 
     @Override
     public void bindKeyEvent(AppState appState, int event, Runnable keyListener) {
+        initListenersOfAppStateIfNotExists(appState);
         if (keyListenersSpace.get(appState).containsKey(event))
             throw new IllegalArgumentException("The event has already been bound.");
         keyListenersSpace.get(appState).put(event, keyListener);
@@ -66,6 +62,7 @@ public class DefaultInputManager implements InputManager {
 
     @Override
     public void bindMouseEvent(AppState appState, int event, Consumer<Point> mouseListener) {
+        initListenersOfAppStateIfNotExists(appState);
         if (mouseListenersSpace.get(appState).containsKey(event))
             throw new IllegalArgumentException("The event has already been bound.");
         mouseListenersSpace.get(appState).put(event, mouseListener);
@@ -115,6 +112,12 @@ public class DefaultInputManager implements InputManager {
         }
     }
 
+    private void initListenersOfAppStateIfNotExists(AppState appState) {
+        if (!keyListenersSpace.containsKey(appState))
+            keyListenersSpace.put(appState, new HashMap<>());
+        if (!mouseListenersSpace.containsKey(appState))
+            mouseListenersSpace.put(appState, new HashMap<>());
+    }
 
     public abstract class Action {
         protected long timeStamp;
