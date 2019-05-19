@@ -51,9 +51,8 @@ public class GameEngine {
 		scheduler.scheduleAtFixedRate(gameLoopingTask, 0, timePerFrame, TimeUnit.MILLISECONDS);
 		gameView.onAppLoading();
 
-		//Reveal below code will lead to errors, because AppStateWorld is not finished.
-//		appStateMachine.trigger(AppStateMachine.EVENT_GAME_STARTED);
-//		gameView.onAppStarted();
+		appStateMachine.trigger(AppStateMachine.EVENT_GAME_STARTED);
+		gameView.onAppStarted();
 	}
 
 

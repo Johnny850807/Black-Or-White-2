@@ -167,10 +167,6 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		return spriteInitializer;
 	}
 
-	public Inputs getInputs() {
-		return inputManager;
-	}
-
 	public AppStateMachine getAppStateMachine() {
 		return asm;
 	}
