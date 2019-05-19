@@ -1,0 +1,63 @@
+
+<frame> 0 walkLeft
+    duration 80 next 1 pic 0 layer 2
+    <properties>
+        x: 16 y: 10 w: 49 h: 67
+    </properties>
+    <effect>
+        moveX: -5
+    </effect>
+</frame>
+
+<frame> 1 walkLeft
+    duration 80 next 2 pic 1 layer 2
+    <properties>
+        x: 16 y: 10 w: 49 h: 67
+    </properties>
+    <effect>
+        moveX: -5
+    </effect>
+</frame>
+
+<frame> 2 walkLeft
+    duration 80 next 0 pic 4 layer 2
+    <properties>
+        x: 16 y: 10 w: 49 h: 67
+    </properties>
+    <effect>
+        moveX: -5
+    </effect>
+</frame>
+
+
+<frame> 3 walkRight
+    duration 80 next 4 pic 2 layer 2
+    <properties>
+        x: 9 y: 11 w: 44 h: 64
+    </properties>
+    <effect>
+        moveX: 5
+    </effect>
+</frame>
+
+<frame> 4 walkRight
+    duration 80 next 5 pic 5 layer 2
+    <properties>
+        x: 9 y: 11 w: 44 h: 64
+    </properties>
+    <effect>
+        moveX: 5
+    </effect>
+</frame>
+
+<frame> 5 walkRight
+    duration 80 next 3 pic 6 layer 2
+    <properties>
+        x: 9 y: 11 w: 44 h: 64
+    </properties>
+    <effect>
+        moveX: 5
+    </effect>
+</frame>
+
+

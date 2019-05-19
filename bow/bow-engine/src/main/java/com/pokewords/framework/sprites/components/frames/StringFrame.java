@@ -9,7 +9,7 @@ import java.util.Objects;
  * A frame rendered as a text.
  * @author johnny850807 (waterball)
  */
-public class StringFrame extends AbstractFrame implements Frame {
+public class StringFrame extends AbstractFrame {
     protected String text;
     protected Color color;
     protected Font font;

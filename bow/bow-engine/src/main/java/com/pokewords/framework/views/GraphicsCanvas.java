@@ -44,4 +44,10 @@ public class GraphicsCanvas implements Canvas {
         canvas.graphics.drawString(text, x-width/2, y-height/2);
     }
 
+    @Override
+    public void renderRectangle(Rectangle rectangle, Color color) {
+        canvas.graphics.setColor(color);
+        canvas.graphics.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    }
+
 }

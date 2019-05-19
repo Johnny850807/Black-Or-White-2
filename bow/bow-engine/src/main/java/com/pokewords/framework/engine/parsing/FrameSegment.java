@@ -5,9 +5,6 @@ import com.pokewords.framework.sprites.parsing.Segment;
 
 import java.util.Optional;
 
-import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScript.Segment.ID;
-import static com.pokewords.framework.sprites.parsing.ScriptDefinitions.LinScript.Segment.NAME;
-
 /**
  * @author johnny850807 (waterball)
  */
@@ -35,17 +32,18 @@ public class FrameSegment {
     }
 
     public FrameSegment(Segment frameSegment) {
-        this.id = frameSegment.getIntByKey(ID);
-        this.description = frameSegment.getStringByKey(NAME);
+        this.id = frameSegment.getId();
+        this.description = frameSegment.getName();
         this.pic = frameSegment.getIntByKey("pic");
         this.layer = frameSegment.getIntByKey("layer");
         this.duration = frameSegment.getIntByKey("duration");
         this.next = frameSegment.getIntByKey("next");
-
-        Element propertiesElement = frameSegment.getElementByName("properties");
-        Element effectElement = frameSegment.getElementByName("effect");
-        this.propertiesElement = Optional.ofNullable(propertiesElement == null ? null : new PropertiesElement(propertiesElement));
-        this.effectElement = Optional.ofNullable(effectElement == null ? null : new EffectElement(effectElement));
+        this.propertiesElement = Optional.ofNullable(
+                frameSegment.containsElementName("properties")?
+                new PropertiesElement(frameSegment.getElementByName("properties")) : null);
+        this.effectElement = Optional.ofNullable(
+                frameSegment.containsElementName("effect")?
+                new EffectElement(frameSegment.getElementByName("effect")) : null);
     }
 
     public int getId() {

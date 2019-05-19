@@ -8,32 +8,36 @@ import com.pokewords.framework.sprites.parsing.*;
 
 import java.awt.*;
 
+/**
+ * A cool animated loading state scene with a breaker at the center and water drop sound effect.
+ * The background color is #191F26 which looks really great.
+ * @author johnny850807 (waterball)
+ */
 public class BreakerIconLoadingState extends AppState {
 
     private enum Types {
-        BreakerIconLoadingState, AnimationSourceText
+        BreakerIconLoadingState, AnimationSourceText, WaterDropSoundEffect
     }
 
     @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) {
-        getGameWindowsConfigurator().size(800, 600)
-                                    .atCenter();
+        getGameWindowsConfigurator().size(800, 600);
 
         declareAndSpawnBreakerIconLoadingAnimation();
         declareAndSpawnAnimationSourceText();
-//191 535
-    }
 
+        getSoundPlayer().addSound(Types.WaterDropSoundEffect, "assets/sounds/WaterDropSound.wav");
+    }
 
     private void declareAndSpawnBreakerIconLoadingAnimation() {
         getAppStateWorld().spawn(
                 getSpriteInitializer().declare(Types.BreakerIconLoadingState)
-                            .position(0, 0)
-                            .size(getGameWindowDefinition().size)
-                            .with(createScript())
-                            .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                            .commit()
-                            .create()
+                        .position(0, 0)
+                        .size(getGameWindowDefinition().size)
+                        .with(createScript())
+                        .weaver(new Set0FrameAsCurrentNodeWeaverNode())
+                        .commit()
+                        .create()
         );
     }
 
@@ -46,9 +50,9 @@ public class BreakerIconLoadingState extends AppState {
                                 Color.white, new Font("@Microsoft JhengHei UI", Font.PLAIN, 15), false)))
                         .commit()
                         .create()
-
         );
     }
+
     @SuppressWarnings("Duplicates")
     private Script createScript() {
         Script script = new LinScript();
@@ -63,8 +67,8 @@ public class BreakerIconLoadingState extends AppState {
         for (int i = 0; i <= 249; i++) {
             LinScriptSegment frameSegment = new LinScriptSegment("frame", i);
             frameSegment.put("pic", i);
-            frameSegment.put("duration", 50);
-            frameSegment.put("next", (i+1)%250);
+            frameSegment.put("duration", 30);
+            frameSegment.put("next", (i + 1) % 250);
             frameSegment.put("layer", 0);
             script.addSegment(frameSegment);
         }
@@ -72,14 +76,21 @@ public class BreakerIconLoadingState extends AppState {
     }
 
     @Override
-    protected void onAppStateEntering() { }
+    protected void onAppStateEntering() {
+        getSoundPlayer().playSoundLoopingForever(Types.WaterDropSoundEffect);
+    }
 
     @Override
-    protected void onAppStateExiting() { }
+    protected void onAppStateExiting() {
+        getSoundPlayer().stop(Types.WaterDropSoundEffect);
+    }
 
     @Override
-    protected void onAppStateDestroying() { }
+    protected void onAppStateDestroying() {
+    }
 
     @Override
-    protected void onAppStateUpdating(int timePerFrame) { }
+    protected void onAppStateUpdating(double timePerFrame) {
+    }
+
 }

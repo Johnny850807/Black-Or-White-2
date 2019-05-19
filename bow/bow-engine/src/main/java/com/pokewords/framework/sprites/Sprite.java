@@ -30,7 +30,7 @@ import java.util.Set;
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	protected @Nullable AppStateWorld world;
 	protected ComponentMap components = new ComponentMap();
-	private int timePerFrame;
+	private double timePerFrame;
 
 
 	protected Sprite(String type) {
@@ -47,6 +47,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public void setWorld(@Nullable AppStateWorld world) {
 		this.world = world;
+		components.foreachComponent(c -> c.onComponentAttachedWorld(world));
 	}
 
 	@Nullable
@@ -111,8 +112,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public <T extends Component> void addComponent(@NotNull Component component) {
 		components.put(component.getClass(), component);
-		component.onComponentAdded();
-		ComponentInjector.inject(this, component);
+		component.onComponentAttachedSprite(this);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onUpdate(int timePerFrame) {
+	public void onUpdate(double timePerFrame) {
 		this.timePerFrame = timePerFrame;
         for (Component component : components.values())
             component.onUpdate(timePerFrame);
@@ -216,14 +216,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     }
 
     public void move(int velocityX, int velocityY) {
-		getPosition().translate(velocityX*timePerFrame, velocityY*timePerFrame);
+		getPropertiesComponent().move(velocityX, velocityY);
 	}
     public void moveX(int velocityX) {
-		getPosition().translate(velocityX*timePerFrame, 0);
+		getPropertiesComponent().moveX(velocityX);
 	}
 
 	public void moveY(int velocityY) {
-		getPosition().translate(0, velocityY*timePerFrame);
+		getPropertiesComponent().moveY(velocityY);
 	}
 
 	public boolean isType(Object obj) {
@@ -234,7 +234,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		try {
 			Sprite clone = (Sprite) super.clone();
 			clone.components = this.components.clone();
-			clone.injectComponents();
+			clone.components.foreachComponent((c) -> c.onComponentAttachedSprite(clone));
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
@@ -244,6 +244,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	/**
 	 * Make the components injected.
 	 * @see ComponentInjector#inject(Sprite)
+	 * @deprecated
 	 */
 	protected void injectComponents(){
 		ComponentInjector.inject(this);

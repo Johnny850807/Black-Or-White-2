@@ -19,13 +19,16 @@ public interface Script {
     }
     Script addSegment(Segment segment);
 
-    default Segment getSegmentByName(String segmentName) {
-        return getSegmentsByName(segmentName).get(0);
+    default Segment getSegmentByName(String name) {
+        return getSegmentsByName(name).get(0);
     }
 
-    List<Segment> getSegmentsByName(String segmentName);
-    Segment getSegmentById(String segmentId);
-    List<Segment> getSegmentsByDescription(String segmentDescription);
+    boolean containsSegmentName(String name);
+    boolean containsSegmentId(int id);
+    boolean containsSegmentDescription(String description);
+    List<Segment> getSegmentsByName(String name);
+    Segment getSegmentById(int id);
+    List<Segment> getSegmentsByDescription(String description);
     List<Segment> getSegments();
 
     String toString(int indentation);

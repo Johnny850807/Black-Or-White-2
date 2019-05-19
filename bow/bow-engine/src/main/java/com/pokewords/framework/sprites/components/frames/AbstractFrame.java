@@ -1,11 +1,12 @@
 package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.sprites.Sprite;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public abstract class AbstractFrame implements Frame {
-    protected Sprite sprite;
+    protected @Nullable Sprite sprite;
     protected int id;
     protected int layerIndex;
 
@@ -29,12 +30,13 @@ public abstract class AbstractFrame implements Frame {
         this.layerIndex = layerIndex;
     }
 
+    @Nullable
     public Sprite getSprite() {
         return sprite;
     }
 
     @Override
-    public void setSprite(Sprite sprite) {
+    public void setSprite(@Nullable Sprite sprite) {
         this.sprite = sprite;
     }
 

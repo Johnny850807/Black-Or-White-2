@@ -9,21 +9,24 @@ import java.util.*;
  */
 public interface Segment {
 
-    default @Nullable Element getElementByName(String elementName) {
-        List<Element> elements = getElementsByName(elementName);
+    default @Nullable Element getElementByName(String name) {
+        List<Element> elements = getElementsByName(name);
         return elements.isEmpty() ? null : elements.get(0);
     }
 
     Segment addElement(Element element);
-    List<Element> getElementsByName(String elementName);
+
+    boolean containsElementName(String name);
+
+    List<Element> getElementsByName(String name);
     List<Element> getElements();
 
     Segment put(String key, String value);
     Segment put(String key, int value);
 
-    String getSegmentName();
-    String getSegmentDescription();
+    String getName();
     int getId();
+    String getDescription();
 
     Optional<String> getStringByKeyOptional(String key);
     OptionalInt getIntByKeyOptional(String key);
@@ -31,8 +34,8 @@ public interface Segment {
     String getStringByKey(String key);
     Integer getIntByKey(String key);
 
-    Segment setParentScript(Script parentScript);
-    Script getParentScript();
+    Segment setParent(Script parent);
+    Script getParent();
 
     String toString(int indentation);
 }

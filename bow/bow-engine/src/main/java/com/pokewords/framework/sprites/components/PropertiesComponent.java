@@ -7,6 +7,7 @@ import java.util.Objects;
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
+	private double timePerFrame;
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private Point center = new Point();
 	private Object type;
@@ -19,11 +20,28 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	@Override
+	public void onUpdate(double timePerFrame) {
+		this.timePerFrame = timePerFrame;
+	}
+
+	@Override
 	public PropertiesComponent clone() {
 		PropertiesComponent clone = (PropertiesComponent) super.clone();
 		clone.body = (Rectangle) this.body.clone();
 		clone.center = (Point) this.center.clone();
 		return clone;
+	}
+
+
+	public void move(int velocityX, int velocityY) {
+		getBody().translate((int) (velocityX*timePerFrame), (int) (velocityY*timePerFrame));
+	}
+	public void moveX(int velocityX) {
+		getBody().translate((int) (velocityX*timePerFrame), 0);
+	}
+
+	public void moveY(int velocityY) {
+		getBody().translate(0, (int) (velocityY*timePerFrame));
 	}
 
 	public Rectangle getBody() {

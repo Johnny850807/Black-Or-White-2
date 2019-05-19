@@ -1,7 +1,6 @@
 package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.sprites.components.PropertiesComponent;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 /**
  * @author johnny850807 (waterball)
@@ -42,7 +41,7 @@ public class MockSprite extends Sprite{
     }
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    public void onUpdate(double timePerFrame) {
         onUpdateCount ++;
     }
 }

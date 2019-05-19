@@ -7,7 +7,6 @@ import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.marks.Renderable;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 
 import java.util.*;
 
@@ -30,12 +29,23 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     }
 
     @Override
-    public void onComponentInjected() {
+    public void onComponentAttachedSprite(Sprite sprite) {
+        this.sprite = sprite;
         fsm.getStates().forEach(frame -> frame.setSprite(sprite));
     }
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
+        this.world = appStateWorld;
+    }
+
+    @Override
+    public void onComponentRemoved() {
+        fsm.getStates().forEach(frame -> frame.setSprite(null));
+    }
+
+    @Override
+    public void onUpdate(double timePerFrame) {
         frameDurationCountdown -= System.currentTimeMillis() - latestUpdateTimestamp;
         if (frameDurationCountdown <= 0)
         {
@@ -53,6 +63,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
 
     public void addFrame(EffectFrame frame){
         fsm.addState(frame);
+        frame.setSprite(sprite);
         this.effectFrameMap.put(frame.getId(), frame);
     }
 
