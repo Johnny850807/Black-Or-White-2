@@ -1,17 +1,33 @@
 package com.pokewords.framework.views.effects;
 
 import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameComponent;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
+import com.pokewords.framework.sprites.components.frames.GameEffect;
 import com.pokewords.framework.sprites.components.frames.RectangleFrame;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 
 import java.awt.*;
 
+/**
+ * A cross fading transition effect, the most normal transition effect.
+ * @author johnny850807 (waterball)
+ */
 public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
     private enum Types {
         FADED_IN_RECTANGLE, FADED_OUT_RECTANGLE
+    }
+
+    private Object soundType;
+
+    public CrossFadingTransitionEffect() {
+    }
+
+    public CrossFadingTransitionEffect(Object soundType) {
+        this.soundType = soundType;
     }
 
     @Override
@@ -44,20 +60,22 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
 
         rectangleEffectFrame.addEffect((world, sprite) -> {
             Color color = rectangleFrame.getColor();
+            if (color.getAlpha() == 0 && soundType != null)
+                from.getSoundPlayer().playSound(soundType);
             int alpha = color.getAlpha() + 5 > 255 ? 255 : color.getAlpha() + 5;
             rectangleFrame.setColor(new Color(255, 255, 255, alpha));
 
-            if (alpha == 255)
-            {
+            if (alpha == 255) {
                 from.getAppStateWorld().removeSprite(rectangleEffectFrame.getSprite());
                 transitionEffectListener.onFromEffectEnd();
             }
         });
 
-        frameStateMachineComponent.addFrame(rectangleEffectFrame);
+                frameStateMachineComponent.addFrame(rectangleEffectFrame);
         frameStateMachineComponent.setCurrentFrame(rectangleEffectFrame);
         return frameStateMachineComponent;
     }
+
 
     private void declareFadedOutRectangle(AppState to, SpriteInitializer spriteInitializer, Listener transitionEffectListener) {
         spriteInitializer.declare(Types.FADED_OUT_RECTANGLE)
@@ -75,7 +93,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
 
         rectangleEffectFrame.addEffect((world, sprite) -> {
             Color color = rectangleFrame.getColor();
-            int alpha = color.getAlpha() - 5 < 0 ? 0 : color.getAlpha() - 5;
+            int alpha = color.getAlpha() - 11 < 0 ? 0 : color.getAlpha() - 11;
             rectangleFrame.setColor(new Color(255, 255, 255, alpha));
 
             if (alpha == 0)

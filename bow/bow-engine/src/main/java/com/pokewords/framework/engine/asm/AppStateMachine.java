@@ -47,12 +47,16 @@ public class AppStateMachine implements GameLoopingListener {
 	private AppState loadingState;
 	private AppState gameInitialState;
 
+	private enum SoundTypes {
+		TRANSITION
+	}
 
 	public AppStateMachine(InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
 		this.inputManager = inputManager;
 		this.spriteInitializer = spriteInitializer;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
 		this.soundPlayer = soundPlayer;
+		soundPlayer.addSound(SoundTypes.TRANSITION, "assets/sounds/chimeTransitionSound.wav");
 		setupStates();
 	}
 
@@ -118,7 +122,7 @@ public class AppStateMachine implements GameLoopingListener {
 			throw new GameEngineException("You can only set the GameInitialState once.");
 		this.gameInitialState = gameInitialState;
 		this.fsm.addState(this.gameInitialState);
-		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState, new CrossFadingTransitionEffect());
+		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState, new CrossFadingTransitionEffect(SoundTypes.TRANSITION));
 	}
 
 	public AppState getCurrentState() {
