@@ -4,13 +4,12 @@ package inputsMovementDemo;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.ImageComponent;
-import com.pokewords.framework.sprites.components.frames.ImageFrame;
 
 import java.awt.event.KeyEvent;
 
 public class MainAppState extends AppState {
-    private Sprite faceSprite;
+    private Sprite face;
+    private Sprite dinosaur;
     private boolean buttonHolding = false;
     private Direction direction;
 
@@ -18,20 +17,24 @@ public class MainAppState extends AppState {
         UP, DOWN, LEFT, RIGHT
     }
 
-    enum Types {
-        SMILE
-    }
-
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
-        faceSprite = createSprite(Types.SMILE);
-        getAppStateWorld().spawn(faceSprite);
+        face = createSprite(Types.SMILE);
+        dinosaur = createSprite(Types.DINOSAUR);
+        getAppStateWorld().spawn(dinosaur);
+        getAppStateWorld().spawn(face);
 
         bindKeyPressedAction(KeyEvent.VK_W, () -> move(Direction.UP));
         bindKeyPressedAction(KeyEvent.VK_S, () -> move(Direction.DOWN));
         bindKeyPressedAction(KeyEvent.VK_A, () -> move(Direction.LEFT));
         bindKeyPressedAction(KeyEvent.VK_D, () -> move(Direction.RIGHT));
-        bindMouseClickedAction((position) -> faceSprite.setPosition(position));
+        bindMouseClickedAction((position) -> face.setPosition(position));
+        bindMouseDraggedAction((position) -> {
+            face.setPosition(position);
+            dinosaur.setPosition(-200, 0);
+        });
+        bindMouseReleasedAction((position) -> dinosaur.setPosition(position));
+        bindMouseMovedAction((position) -> dinosaur.setPosition(position));
 
         bindKeyReleasedAction(KeyEvent.VK_W, this::clearMovement);
         bindKeyReleasedAction(KeyEvent.VK_S, this::clearMovement);
@@ -56,16 +59,16 @@ public class MainAppState extends AppState {
             switch (direction)
             {
                 case UP:
-                    faceSprite.moveY(-1);
+                    face.moveY(-1);
                     break;
                 case DOWN:
-                    faceSprite.moveY(1);
+                    face.moveY(1);
                     break;
                 case LEFT:
-                    faceSprite.moveX(-1);
+                    face.moveX(-1);
                     break;
                 case RIGHT:
-                    faceSprite.moveX(1);
+                    face.moveX(1);
                     break;
             }
         }

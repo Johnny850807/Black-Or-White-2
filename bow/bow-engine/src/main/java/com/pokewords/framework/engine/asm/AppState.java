@@ -90,6 +90,14 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	}
 
 	/**
+	 * bind a listener (consumes the mouse position) to the mouse dragged event
+	 * @param listener mouse listener
+	 */
+	protected void bindMouseDraggedAction(Consumer<Point> listener) {
+		inputManager.bindMouseEvent(this, MouseEvent.MOUSE_DRAGGED, listener);
+	}
+
+	/**
 	 * bind a listener (consumes the mouse position) to the mouse pressed down event
 	 * @param listener mouse listener
 	 */

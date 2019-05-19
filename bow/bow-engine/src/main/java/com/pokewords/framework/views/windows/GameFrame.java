@@ -56,6 +56,11 @@ public class GameFrame extends JFrame implements AppView {
         public void mouseMoved(MouseEvent e) {
             inputManager.onMouseMoved(e.getPoint());
         }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            inputManager.onMouseDragged(e.getPoint());
+        }
     }
     @Override
     public void onAppInit() {

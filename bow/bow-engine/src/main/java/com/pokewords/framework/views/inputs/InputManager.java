@@ -52,4 +52,9 @@ public interface InputManager extends Inputs, GameLoopingListener {
      */
     void onMouseReleasedUp(Point position);
 
+    /**
+     * Add an event dragging the mouse
+     */
+    void onMouseDragged(Point position);
+
 }
