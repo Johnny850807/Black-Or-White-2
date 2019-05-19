@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -20,11 +21,26 @@ public class DefaultInputManager implements InputManager {
     // <current AppState, <mouse event's id, action (given mouse position)>>
     private IdentityHashMap<AppState, HashMap<Integer, Consumer<Point>>> mouseListenersSpace = new IdentityHashMap<>();
 
-    private LinkedList<Integer> keyActions = new LinkedList<>();
-    private LinkedList<Integer> mouseActions = new LinkedList<>();
+    private final Object keyLock = new Object();
+    private final Object mouseLock = new Object();
+    private List<KeyAction> keyActions = new LinkedList<>();
+    private List<MouseAction> mouseActions = new LinkedList<>();
 
     @Override
-    public void onUpdate(double timePerFrame) { }
+    public void onUpdate(double timePerFrame) {
+        if (currentAppState != null)
+        {
+            synchronized (keyLock) {
+                keyActions.forEach(KeyAction::fireAction);
+                keyActions.clear();
+            }
+
+            synchronized (mouseLock) {
+                mouseActions.forEach(MouseAction::fireAction);
+                mouseActions.clear();
+            }
+        }
+    }
 
     @Override
     public void bindAppState(AppState appState) {
@@ -37,17 +53,22 @@ public class DefaultInputManager implements InputManager {
     }
 
     @Override
-    public void bindKeyEvent(int event, Runnable keyListener) {
-        if (keyListenersSpace.get(currentAppState).containsKey(event))
-            throw new IllegalArgumentException("The event has already been bound.");
-        keyListenersSpace.get(currentAppState).put(event, keyListener);
+    public void unbind() {
+        this.currentAppState = null;
     }
 
     @Override
-    public void bindMouseEvent(int event, Consumer<Point> mouseListener) {
-        if (mouseListenersSpace.get(currentAppState).containsKey(event))
+    public void bindKeyEvent(AppState appState, int event, Runnable keyListener) {
+        if (keyListenersSpace.get(appState).containsKey(event))
             throw new IllegalArgumentException("The event has already been bound.");
-        mouseListenersSpace.get(currentAppState).put(event, mouseListener);
+        keyListenersSpace.get(appState).put(event, keyListener);
+    }
+
+    @Override
+    public void bindMouseEvent(AppState appState, int event, Consumer<Point> mouseListener) {
+        if (mouseListenersSpace.get(appState).containsKey(event))
+            throw new IllegalArgumentException("The event has already been bound.");
+        mouseListenersSpace.get(appState).put(event, mouseListener);
     }
 
     @Override
@@ -58,30 +79,40 @@ public class DefaultInputManager implements InputManager {
 
     @Override
     public void onButtonPressedDown(int id) {
-        keyActions.add(compositeCode(KeyEvent.KEY_PRESSED, id));
+        synchronized (keyLock) {
+            keyActions.add(new KeyAction(KeyEvent.KEY_PRESSED, id));
+        }
     }
 
     @Override
     public void onButtonReleasedUp(int id) {
-        keyActions.add(compositeCode(KeyEvent.KEY_RELEASED, id));
-        keyActions.add(compositeCode(KeyEvent.KEY_TYPED, id));
+        synchronized (keyLock) {
+            keyActions.add(new KeyAction(KeyEvent.KEY_RELEASED, id));
+            keyActions.add(new KeyAction(KeyEvent.KEY_TYPED, id));
+        }
     }
 
     @Override
     public void onMouseMoved(Point point) {
-        keyActions.add(MouseEvent.MOUSE_MOVED);
+        synchronized (mouseLock) {
+            mouseActions.add(new MouseAction(MouseEvent.MOUSE_MOVED, point));
+        }
     }
 
     @Override
     public void onMouseHitDown(Point position) {
-        keyActions.add(MouseEvent.MOUSE_PRESSED);
+        synchronized (mouseLock) {
+            mouseActions.add(new MouseAction(MouseEvent.MOUSE_PRESSED, position));
+        }
     }
 
 
     @Override
-    public void onMouseReleasedUp() {
-        keyActions.add(MouseEvent.MOUSE_RELEASED);
-        keyActions.add(MouseEvent.MOUSE_CLICKED);
+    public void onMouseReleasedUp(Point position) {
+        synchronized (mouseLock) {
+            mouseActions.add(new MouseAction(MouseEvent.MOUSE_RELEASED, position));
+            mouseActions.add(new MouseAction(MouseEvent.MOUSE_CLICKED, position));
+        }
     }
 
 
@@ -104,19 +135,21 @@ public class DefaultInputManager implements InputManager {
             return id;
         }
     }
+
     public class KeyAction extends Action {
         private int event;
         private int keyCode;
 
-        public KeyAction(int id, int event, int keyCode) {
-            super(id);
+        public KeyAction(int event, int keyCode) {
+            super(compositeCode(event, keyCode));
             this.event = event;
             this.keyCode = keyCode;
         }
 
         @Override
         protected void fireAction() {
-            keyListenersSpace.get(currentAppState).get(id).run();
+            if (keyListenersSpace.get(currentAppState).containsKey(id))
+                 keyListenersSpace.get(currentAppState).get(id).run();
         }
 
         public int getEvent() {
@@ -138,7 +171,8 @@ public class DefaultInputManager implements InputManager {
 
         @Override
         protected void fireAction() {
-            mouseListenersSpace.get(currentAppState).get(id).accept(mousePosition);
+            if (mouseListenersSpace.get(currentAppState).containsKey(id))
+                mouseListenersSpace.get(currentAppState).get(id).accept(mousePosition);
         }
 
         public Point getMousePosition() {

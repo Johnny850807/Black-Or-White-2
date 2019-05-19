@@ -11,6 +11,9 @@ import com.pokewords.framework.views.windows.GameWindowDefinition;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 /**
  * @author johnny850807 (waterball)
@@ -48,6 +51,71 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	protected abstract void onAppStateCreating(AppStateWorld appStateWorld);
 
 	/**
+	 * bind a listener to the key pressed down event
+	 * @param keyCode the pressed key code
+	 * @param listener key listener
+	 */
+	protected void bindKeyPressedAction(int keyCode, Runnable listener) {
+		inputManager.bindKeyEvent(this,
+				inputManager.compositeCode(KeyEvent.KEY_PRESSED, keyCode), listener);
+	}
+
+	/**
+	 * bind a listener to the key released up event
+	 * @param keyCode the released key code
+	 * @param listener key listener
+	 */
+	protected void bindKeyReleasedAction(int keyCode, Runnable listener) {
+		inputManager.bindKeyEvent(this,
+				inputManager.compositeCode(KeyEvent.KEY_RELEASED, keyCode), listener);
+	}
+
+	/**
+	 * bind a listener to the key clicked event, the key clicked event will occur when
+	 * a key pressed event followed by a key released event of the same keyCode.
+	 * @param keyCode the clicked key code
+	 * @param listener key listener
+	 */
+	protected void bindKeyClickedAction(int keyCode, Runnable listener) {
+		inputManager.bindKeyEvent(this,
+				inputManager.compositeCode(KeyEvent.KEY_TYPED, keyCode), listener);
+	}
+
+	/**
+	 * bind a listener (consumes the mouse position) to the mouse clicked event
+	 * @param listener mouse listener
+	 */
+	protected void bindMouseClickedAction(Consumer<Point> listener) {
+		inputManager.bindMouseEvent(this, MouseEvent.MOUSE_CLICKED, listener);
+	}
+
+	/**
+	 * bind a listener (consumes the mouse position) to the mouse pressed down event
+	 * @param listener mouse listener
+	 */
+	protected void bindMousePressedAction(Consumer<Point> listener) {
+		inputManager.bindMouseEvent(this, MouseEvent.MOUSE_PRESSED, listener);
+	}
+
+	/**
+	 * bind a listener (consumes the mouse position) to the mouse released up event
+	 * @param listener mouse listener
+	 */
+	protected void bindMouseReleasedAction(Consumer<Point> listener) {
+		inputManager.bindMouseEvent(this, MouseEvent.MOUSE_RELEASED, listener);
+	}
+
+	/**
+	 * bind a listener (consumes the mouse position) to the mouse clicked event,
+	 * the mouse clicked event will occur when a mouse pressed event followed by a mouse released
+	 * event.
+	 * @param listener mouse listener
+	 */
+	protected void bindMouseMovedAction(Consumer<Point> listener) {
+		inputManager.bindMouseEvent(this, MouseEvent.MOUSE_MOVED, listener);
+	}
+
+	/**
 	 * the hook method invoked whenever any AppState is created
 	 * , this then requires initializing a new AppStateWorld for that AppState.
 	 * For customizing your AppStateWorld, overwrite this method.
@@ -68,6 +136,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	@Override
 	public final void onAppStateExit() {
+		inputManager.unbind();
 		onAppStateExiting();
 		appStateWorld.onAppStateExit();
 	}

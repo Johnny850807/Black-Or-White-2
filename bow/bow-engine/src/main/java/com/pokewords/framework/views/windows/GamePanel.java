@@ -47,7 +47,7 @@ public class GamePanel extends JPanel implements AppView {
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            inputManager.onMouseReleasedUp();
+            inputManager.onMouseReleasedUp(e.getPoint());
         }
 
         @Override
