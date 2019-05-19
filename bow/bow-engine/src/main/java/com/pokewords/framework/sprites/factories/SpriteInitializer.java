@@ -201,11 +201,15 @@ public class SpriteInitializer {
 
 
     private void validateSpriteHasBeenDeclared(Object type) {
-        if (!declarationMap.containsKey(type)) {
+        if (!hasDeclared(type)) {
             System.out.println(StringUtility.toString(declarationMap));
             throw new SpriteDeclarationException(String.format("You haven't declared the sprite '%s', " +
                     "use declare(type) to start your declarations. (Did you commit your declaration?)", type));
         }
+    }
+
+    public boolean hasDeclared(Object type) {
+        return declarationMap.containsKey(type);
     }
 
     private void validateUnderCustomStrictModeShouldInitByYourself(Object type) {

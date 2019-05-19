@@ -29,8 +29,14 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     }
 
     @Override
-    public void onComponentAttached(Sprite sprite) {
+    public void onComponentAttachedSprite(Sprite sprite) {
+        this.sprite = sprite;
         fsm.getStates().forEach(frame -> frame.setSprite(sprite));
+    }
+
+    @Override
+    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
+        this.world = appStateWorld;
     }
 
     @Override
@@ -57,6 +63,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
 
     public void addFrame(EffectFrame frame){
         fsm.addState(frame);
+        frame.setSprite(sprite);
         this.effectFrameMap.put(frame.getId(), frame);
     }
 

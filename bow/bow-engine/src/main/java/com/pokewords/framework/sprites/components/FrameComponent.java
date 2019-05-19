@@ -26,7 +26,7 @@ public class FrameComponent<T extends Frame> extends CloneableComponent implemen
     }
 
     @Override
-    public void onComponentAttached(Sprite sprite) {
+    public void onComponentAttachedSprite(Sprite sprite) {
         frame.setSprite(sprite);
     }
 

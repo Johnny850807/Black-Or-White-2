@@ -27,7 +27,6 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     protected Sprite sprite;
     protected Set<Component> components;
     protected boolean hasPropertiesComponent;
-    protected PropertiesComponent propertiesComponent;
     protected Script script;
     protected SpriteWeaver spriteWeaver;
     protected ScriptParser scriptParser;
@@ -45,7 +44,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     @Override
     public DefaultSpriteBuilder init() {
         sprite = null;
-        script = new LinScript();
+        script = null;
         components.clear();
         hasPropertiesComponent = false;
         spriteWeaver.clear();
@@ -116,8 +115,11 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     }
 
     private void setupAndStartSpriteWeaving() {
-        spriteWeaver.addWeaverNodes(weaverNodes);
-        spriteWeaver.weave(script, sprite);
+        if (script != null)
+        {
+            spriteWeaver.addWeaverNodes(weaverNodes);
+            spriteWeaver.weave(script, sprite);
+        }
     }
 
 

@@ -33,4 +33,8 @@ public interface Frame extends Cloneable {
 	 */
 	void setSprite(@Nullable Sprite sprite);
 
+	/**
+	 * @return owner of the frame
+	 */
+	@Nullable Sprite getSprite();
 }
