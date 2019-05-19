@@ -1,4 +1,4 @@
-package basics.states;
+package basics;
 
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;

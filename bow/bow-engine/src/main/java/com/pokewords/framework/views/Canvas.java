@@ -7,7 +7,7 @@ public interface Canvas {
 	void renderImage(int x, int y, int width, int height, Image image);
 
 	default void renderImageWithCenterAdjusted(int x, int y, int width, int height, Image image) {
-		renderImage(x-width/2, y-height/2, image);
+		renderImage(x-width/2, y-height/2, width, height, image);
 	}
 
 	void renderText(int x, int y, String text, Color color, Font font);
