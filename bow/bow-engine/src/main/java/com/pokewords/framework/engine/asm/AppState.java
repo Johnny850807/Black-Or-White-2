@@ -127,7 +127,8 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	@Override
 	public final void onAppStateEnter() {
-		inputManager.bindAppState(this);
+		if (isListeningToInputEvents())
+			inputManager.bindAppState(this);
 		onAppStateEntering();
 		appStateWorld.onAppStateEnter();
 	}
@@ -157,6 +158,14 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		appStateWorld.onUpdate(timePerFrame);
 	}
 
+	/**
+	 * a hook method, overwrite this method to return false if an AppState is not
+	 * interested in any Input events to increase performance.
+	 */
+	protected boolean isListeningToInputEvents() {
+		return true;
+	}
+
 	protected abstract void onAppStateUpdating(double timePerFrame);
 
 	protected Sprite createSprite(Object type) {
@@ -165,10 +174,6 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	public SpriteInitializer getSpriteInitializer() {
 		return spriteInitializer;
-	}
-
-	public Inputs getInputs() {
-		return inputManager;
 	}
 
 	public AppStateMachine getAppStateMachine() {
