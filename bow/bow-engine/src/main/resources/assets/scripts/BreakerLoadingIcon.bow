@@ -2002,9 +2002,9 @@
     segment-name galleries
     segment-id 0
     <sequence>
-    path assets/sequences/BeakerLoadingIcon
-    element-name sequence
-    startPic 0
-    endPic 249
-</sequence>
+        path assets/sequences/BeakerLoadingIcon
+        element-name sequence
+        startPic 0
+        endPic 249
+    </sequence>
 </galleries>

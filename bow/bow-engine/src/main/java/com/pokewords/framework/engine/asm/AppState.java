@@ -5,6 +5,7 @@ import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.SoundPlayer;
+import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowDefinition;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
@@ -17,7 +18,7 @@ import java.awt.*;
 public abstract class AppState implements AppStateLifeCycleListener {
 	private AppStateMachine asm;
 	private SpriteInitializer spriteInitializer;
-	private Inputs inputs;
+	private InputManager inputManager;
 	private AppStateWorld appStateWorld;
 	private GameWindowsConfigurator gameWindowsConfigurator;
 	private SoundPlayer soundPlayer;
@@ -28,11 +29,11 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * this method is expected to be used by the AppStateMachine for initializing injection.
 	 * @see AppStateMachine#createState(Class)
 	 */
-	protected void inject(Inputs inputs, AppStateMachine asm, SpriteInitializer spriteInitializer,
+	protected void inject(InputManager inputManager, AppStateMachine asm, SpriteInitializer spriteInitializer,
 						  GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
 		this.asm = asm;
 		this.spriteInitializer = spriteInitializer;
-		this.inputs = inputs;
+		this.inputManager = inputManager;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
 		this.soundPlayer = soundPlayer;
 	}
@@ -58,6 +59,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	@Override
 	public final void onAppStateEnter() {
+		inputManager.bindAppState(this);
 		onAppStateEntering();
 		appStateWorld.onAppStateEnter();
 	}
@@ -97,7 +99,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	}
 
 	public Inputs getInputs() {
-		return inputs;
+		return inputManager;
 	}
 
 	public AppStateMachine getAppStateMachine() {

@@ -1,40 +1,27 @@
 package com.pokewords.framework.views.inputs;
 
-import java.awt.geom.Point2D;
+import java.awt.*;
+import java.util.function.Consumer;
 
 public interface Inputs {
     /**
-     * @return true Iff the button is pressed down
+     * Bind an specific input event a keyListener.
+     * @param event the input event (button, mouse,... of some integer constants space)
+     * @param keyListener the keyListener task will be triggered when the event occurs
      */
-    boolean getButtonPressedDown(int key);
+    void bindKeyEvent(int event, Runnable keyListener);
+
 
     /**
-     * @return true Iff the button is being held.
+     * Bind an specific input event a mouseListener (given mouse's position).
+     * @param event the input event (button, mouse,... of some integer constants space)
+     * @param mouseListener the mouseListener task will be triggered given the mouse's position when the event occurs
      */
-    boolean getButtonBeingHeld(int key);
+    void bindMouseEvent(int event, Consumer<Point> mouseListener);
 
     /**
-     * @return true Iff the button is released up from being held.
+     * @param events a sequence of events happen together
+     * @return the compositeCode event's id
      */
-    boolean getButtonReleasedUp(int key);
-
-    /**
-     * @return The position of the mouse currently.
-     */
-    Point2D getMousePosition();
-
-    /**
-     * @return true Iff the mouse is hit down.
-     */
-    boolean getMouseHitDown();
-
-    /**
-     * @return true Iff the mouse is released up from being held.
-     */
-    boolean getMouseReleasedUp();
-
-    /**
-     * @return true Iff the mouse is being held.
-     */
-    boolean getMouseBeingHeld();
+    int compositeCode(int ...events);
 }

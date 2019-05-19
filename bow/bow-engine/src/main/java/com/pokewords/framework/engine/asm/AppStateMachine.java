@@ -6,6 +6,7 @@ import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.SoundPlayer;
+import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
@@ -25,12 +26,12 @@ public class AppStateMachine implements GameLoopingListener {
 	private SpriteInitializer spriteInitializer;
 	private GameWindowsConfigurator gameWindowsConfigurator;
 	private SoundPlayer soundPlayer;
-	private Inputs inputs;
+	private InputManager inputManager;
 	private AppState loadingState;
 	private AppState gameInitialState;
 
-	public AppStateMachine(Inputs inputs, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
-		this.inputs = inputs;
+	public AppStateMachine(InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
+		this.inputManager = inputManager;
 		this.spriteInitializer = spriteInitializer;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
 		this.soundPlayer = soundPlayer;
@@ -54,7 +55,7 @@ public class AppStateMachine implements GameLoopingListener {
 		T state;
 		try {
 			state = appStateType.newInstance();
-			state.inject(inputs, this, spriteInitializer, gameWindowsConfigurator, soundPlayer);
+			state.inject(inputManager, this, spriteInitializer, gameWindowsConfigurator, soundPlayer);
 			fsm.addState(state);
 			state.onAppStateCreate();
 			return state;

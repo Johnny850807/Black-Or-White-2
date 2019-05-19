@@ -41,14 +41,17 @@ public class GamePanel extends JPanel implements AppView {
 
     private class MouseListener extends MouseAdapter {
         @Override
-        public void mouseClicked(MouseEvent e) {
-            super.mouseClicked(e);
+        public void mousePressed(MouseEvent e) {
             inputManager.onMouseHitDown(e.getPoint());
         }
 
         @Override
+        public void mouseReleased(MouseEvent e) {
+            inputManager.onMouseReleasedUp();
+        }
+
+        @Override
         public void mouseMoved(MouseEvent e) {
-            super.mouseMoved(e);
             inputManager.onMouseMoved(e.getPoint());
         }
     }

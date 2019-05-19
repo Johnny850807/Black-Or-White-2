@@ -1,6 +1,5 @@
 package basics;
 
-import basics.namespace.AppStateEvent;
 import basics.states.GameOverAppState;
 import basics.states.MainAppState;
 import com.pokewords.framework.engine.asm.AppStateMachine;
@@ -37,7 +36,7 @@ public class  BasicAppDemo extends GameApplication {
         MainAppState mainAppState = asm.createState(MainAppState.class);
         GameOverAppState gameOverAppState = asm.createState(GameOverAppState.class);
         asm.setGameInitialState(mainAppState);
-        asm.addTransition(mainAppState, AppStateEvent.OVER, gameOverAppState);
+        asm.addTransition(mainAppState, Events.OVER, gameOverAppState);
     }
 
 
