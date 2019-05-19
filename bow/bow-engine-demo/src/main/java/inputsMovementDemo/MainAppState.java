@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 public class MainAppState extends AppState {
     private Sprite face;
     private Sprite dinosaur;
-    private boolean buttonHolding = false;
+    private boolean moving = false;
     private Direction direction;
 
     enum Direction {
@@ -36,25 +36,27 @@ public class MainAppState extends AppState {
         bindMouseReleasedAction((position) -> dinosaur.setPosition(position));
         bindMouseMovedAction((position) -> dinosaur.setPosition(position));
 
-        bindKeyReleasedAction(KeyEvent.VK_W, this::clearMovement);
-        bindKeyReleasedAction(KeyEvent.VK_S, this::clearMovement);
-        bindKeyReleasedAction(KeyEvent.VK_A, this::clearMovement);
-        bindKeyReleasedAction(KeyEvent.VK_D, this::clearMovement);
+        bindKeyReleasedAction(KeyEvent.VK_W, () -> clearMovement(Direction.UP));
+        bindKeyReleasedAction(KeyEvent.VK_S, () -> clearMovement(Direction.DOWN));
+        bindKeyReleasedAction(KeyEvent.VK_A, () -> clearMovement(Direction.LEFT));
+        bindKeyReleasedAction(KeyEvent.VK_D, () -> clearMovement(Direction.RIGHT));
     }
 
-    private void clearMovement() {
-        buttonHolding = false;
-        direction = null;
+    private void clearMovement(Direction direction) {
+        if (this.direction == direction) {
+            moving = false;
+            this.direction = null;
+        }
     }
 
     private void move(Direction direction) {
-        buttonHolding = true;
+        moving = true;
         this.direction = direction;
     }
 
     @Override
     public void onAppStateUpdating(double timePerFrame) {
-        if (buttonHolding)
+        if (moving)
         {
             switch (direction)
             {
