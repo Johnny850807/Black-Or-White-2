@@ -30,6 +30,7 @@ public class InputsMovementDemo extends GameApplication {
 
         spriteInitializer.declare(Types.DINOSAUR)
                 .with(new ImageComponent(new ImageFrame(0, 2, 38, 38, "images/dinosaur.png", true)))
+                .position(-200, 0)
                 .commit();
     }
 

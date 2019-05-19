@@ -57,11 +57,14 @@ public abstract class GameApplication implements AppView {
 	@Override
 	public void onAppLoading() {
 		gameFrame.onAppLoading();
-		ThreadUtility.delay(3000); //delay on purpose to show loading scene
+		ThreadUtility.delay(getLoadingStateDelayTime()); //delay on purpose to show loading scene
 		onSpriteDeclaration(gameEngine.getSpriteInitializer());
 		onAppStatesConfiguration(gameEngine.getAppStateMachine());
 	}
 
+	protected int getLoadingStateDelayTime() {
+		return 3000;
+	}
 	protected abstract void onSpriteDeclaration(SpriteInitializer spriteInitializer);
 	protected abstract void onAppStatesConfiguration(AppStateMachine asm);
 

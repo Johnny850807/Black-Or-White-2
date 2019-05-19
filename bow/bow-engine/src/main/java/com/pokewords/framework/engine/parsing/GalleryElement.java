@@ -4,6 +4,7 @@ package com.pokewords.framework.engine.parsing;
 import com.pokewords.framework.commons.Range;
 import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.views.helpers.galleries.Gallery;
+import com.pokewords.framework.views.helpers.galleries.MockGallery;
 import com.pokewords.framework.views.helpers.galleries.SequenceGallery;
 import com.pokewords.framework.views.helpers.galleries.SheetGallery;
 
@@ -12,7 +13,7 @@ import com.pokewords.framework.views.helpers.galleries.SheetGallery;
  */
 public class GalleryElement {
     public enum GalleryType {
-        sheet, sequence
+        sheet, sequence, mock
     }
 
     private Element galleryElement;
@@ -48,6 +49,8 @@ public class GalleryElement {
                             galleryElement.getIntByKeyOptional("padding").orElse(0));
                 case sequence:
                     return new SequenceGallery(galleryElement.getStringByKey("path"), range);
+                case mock:
+                    return new MockGallery();
                 default:
                     throw new IllegalArgumentException(
                             String.format("The gallery of type %s does not exist.", typeName));
