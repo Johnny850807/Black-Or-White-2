@@ -13,4 +13,6 @@ public interface Canvas {
 	void renderText(int x, int y, String text, Color color, Font font);
 	void renderImageWithCenterAdjusted(int x, int y, Image image);
 	void renderTextWithCenterAdjusted(int x, int y, String text, Color color, Font font);
+
+	void renderRectangle(Rectangle rectangle, Color color);
 }

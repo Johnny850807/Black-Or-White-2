@@ -6,7 +6,7 @@ import com.pokewords.framework.views.Canvas;
 import java.awt.*;
 import java.util.Objects;
 
-public class ImageFrame extends AbstractFrame implements Frame {
+public class ImageFrame extends AbstractFrame {
    protected int width;
    protected int height;
    protected Image image;

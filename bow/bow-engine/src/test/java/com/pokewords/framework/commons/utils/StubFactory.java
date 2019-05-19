@@ -35,7 +35,6 @@ public interface StubFactory {
              *      @see FrameStateMachineComponents#createFrameStateMachineComponentStub()
              *
              * - CollidableComponent
-             * - MockClickableComponent
              */
             static Sprite createSimpleSprite(){
                 PropertiesComponent propertiesComponent = new PropertiesComponent();
