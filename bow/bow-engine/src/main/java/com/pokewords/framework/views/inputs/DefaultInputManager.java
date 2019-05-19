@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * TODO make memory-efficient (use action-pool)
- * TODO check synchronization issue
  * @author johnny850807 (waterball)
  */
 public class DefaultInputManager implements InputManager {
