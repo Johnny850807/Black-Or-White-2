@@ -70,6 +70,10 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 
+	public Dimension getSize() {
+		return getBody().getSize();
+	}
+
 	public Point getPosition(){
 		return body.getLocation();
 	}
@@ -130,4 +134,5 @@ public class PropertiesComponent extends CloneableComponent {
 				", type='" + type + '\'' +
 				'}';
 	}
+
 }

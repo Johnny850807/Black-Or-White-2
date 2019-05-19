@@ -14,8 +14,13 @@ public class MockDefaultSpriteBuilder extends DefaultSpriteBuilder {
 
     public MockDefaultSpriteBuilder(IocFactory iocFactory) {
         super(iocFactory);
+    }
 
+    @Override
+    public DefaultSpriteBuilder init() {
+        super.init();
         weaverNodes.clear();
+        return this;
     }
 
     @Override

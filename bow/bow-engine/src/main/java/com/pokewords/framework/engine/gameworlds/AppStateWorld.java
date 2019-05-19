@@ -1,6 +1,7 @@
 package com.pokewords.framework.engine.gameworlds;
 
 import com.pokewords.framework.commons.Pair;
+import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.Frame;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
  * @author Joanna
  */
 public class AppStateWorld implements AppStateLifeCycleListener {
+    private AppState appState;
     private List<Sprite> sprites;
     private AtomicInteger spriteCount;
     private Map<Integer, Sprite> idSpriteMap;
@@ -28,7 +30,8 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     private RenderedLayers renderedLayers;
     private Map<CollisionHandler.Type, List<CollisionHandler>> collisionHandlerMap;
 
-    public AppStateWorld() {
+    public AppStateWorld(AppState appState) {
+        this.appState = appState;
         sprites = new ArrayList<>();
         spriteCount = new AtomicInteger(0);
         renderedLayers = new RenderedLayers(new ArrayList<>());

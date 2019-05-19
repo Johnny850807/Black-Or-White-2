@@ -2,7 +2,7 @@ package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
-public final class EmptyAppState extends AppState {
+public class EmptyAppState extends AppState {
     @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) { }
 

@@ -1,7 +1,6 @@
 package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.commons.FiniteStateMachine;
-import com.pokewords.framework.commons.Pair;
 import com.pokewords.framework.commons.Triple;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
@@ -12,7 +11,6 @@ import com.pokewords.framework.views.effects.AppStateTransitionEffect;
 import com.pokewords.framework.views.effects.CrossFadingTransitionEffect;
 import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.inputs.InputManager;
-import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 import java.util.HashMap;
@@ -31,7 +29,7 @@ public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_LOADING = "Start Loading";
 	public static final String EVENT_GAME_STARTED = "Game Started";
 
-	private Map<Transition, AppStateTransitionEffect> transitionEffectMap = new HashMap<>();
+	private Map<Transition, TransitionEffectWrapper> transitionEffectMap = new HashMap<>();
 
 	/**
 	 * We should use this currentState reference instead of finite state machine's,
@@ -99,9 +97,10 @@ public class AppStateMachine implements GameLoopingListener {
 	private void handleTransition(AppState from, Object event, AppState to) {
 		Transition transition = new Transition(from, event, to);
 
-		AppStateTransitionEffect transitionEffect = transitionEffectMap.getOrDefault(transition, new NoTransitionEffect());
+		TransitionEffectWrapper transitionEffectWrapper = transitionEffectMap.getOrDefault(transition,
+				new TransitionEffectWrapper(new NoTransitionEffect()));
 
-		transitionEffect.effect(from, to, new AppStateTransitionEffect.DefaultListener() {
+		transitionEffectWrapper.effect(from, to, new AppStateTransitionEffect.DefaultListener() {
 			@Override
 			public void onFromEffectEnd() {
 				from.onAppStateExit();
@@ -117,12 +116,13 @@ public class AppStateMachine implements GameLoopingListener {
 		getCurrentState().onUpdate(timePerFrame);
 	}
 
-	public void setGameInitialState(AppState gameInitialState) {
+	public void setGameInitialState(AppState gameInitialState, AppStateTransitionEffect.Listener ...listeners) {
 		if (this.gameInitialState != null)
 			throw new GameEngineException("You can only set the GameInitialState once.");
 		this.gameInitialState = gameInitialState;
 		this.fsm.addState(this.gameInitialState);
-		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState, new CrossFadingTransitionEffect(SoundTypes.TRANSITION));
+		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState,
+				new CrossFadingTransitionEffect(SoundTypes.TRANSITION), listeners);
 	}
 
 	public AppState getCurrentState() {
@@ -145,10 +145,12 @@ public class AppStateMachine implements GameLoopingListener {
 		fsm.addTransition(from, event, to);
 	}
 
-	public void addTransition(AppState from, Object event, AppState to, AppStateTransitionEffect transitionEffect) {
+	public void addTransition(AppState from, Object event, AppState to, AppStateTransitionEffect transitionEffect
+							, AppStateTransitionEffect.Listener ...listeners) {
 		fsm.addTransition(from, event, to);
-		transitionEffectMap.put(new Transition(from, event, to), transitionEffect);
+		transitionEffectMap.put(new Transition(from, event, to), new TransitionEffectWrapper(transitionEffect, listeners));
 	}
+
 
 	public void addTransitionFromAllStates(Object event, AppState targetState, AppState ...excepts) {
 		fsm.addTransitionFromAllStates(event, targetState, excepts);
@@ -158,9 +160,39 @@ public class AppStateMachine implements GameLoopingListener {
 	 * <from state, event type, to state>
 	 */
 	private class Transition extends Triple<AppState, Object, AppState> {
-
 		public Transition(AppState from, Object event, AppState to) {
 			super(from, event, to);
+		}
+	}
+
+	private class TransitionEffectWrapper {
+		private AppStateTransitionEffect appStateTransitionEffect;
+		private AppStateTransitionEffect.Listener[] listeners;
+
+		public TransitionEffectWrapper(AppStateTransitionEffect appStateTransitionEffect,
+									   AppStateTransitionEffect.Listener ...listeners) {
+			this.appStateTransitionEffect = appStateTransitionEffect;
+			this.listeners = listeners;
+		}
+
+		public void effect(AppState from, AppState to, AppStateTransitionEffect.Listener transitionEffectListener) {
+			appStateTransitionEffect.effect(from, to, new AppStateTransitionEffect.Listener() {
+				@Override
+				public void onFromEffectEnd() {
+					for (AppStateTransitionEffect.Listener listener : listeners) {
+						listener.onFromEffectEnd();
+					}
+					transitionEffectListener.onFromEffectEnd();
+				}
+
+				@Override
+				public void onToEffectEnd() {
+					for (AppStateTransitionEffect.Listener listener : listeners) {
+						listener.onToEffectEnd();
+					}
+					transitionEffectListener.onToEffectEnd();
+				}
+			});
 		}
 	}
 }

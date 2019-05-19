@@ -59,13 +59,18 @@ public abstract class GameApplication implements AppView {
 		gameFrame.onAppLoading();
 		ThreadUtility.delay(getLoadingStateDelayTime()); //delay on purpose to show loading scene
 		onSpriteDeclaration(gameEngine.getSpriteInitializer());
+		onSoundPlayerConfiguration(soundPlayer);
 		onAppStatesConfiguration(gameEngine.getAppStateMachine());
 	}
 
 	protected int getLoadingStateDelayTime() {
-		return 3000;
+		return 10000;
 	}
 	protected abstract void onSpriteDeclaration(SpriteInitializer spriteInitializer);
+
+	protected void onSoundPlayerConfiguration(SoundPlayer soundPlayer) {
+		//hook
+	}
 	protected abstract void onAppStatesConfiguration(AppStateMachine asm);
 
 	public GameWindowDefinition getGameWindowDefinition() {
@@ -82,7 +87,11 @@ public abstract class GameApplication implements AppView {
 		gameFrame.onRender(renderedLayers);
 	}
 
+	public GameWindowsConfigurator getGameWindowsConfigurator() {
+		return gameWindowsConfigurator;
+	}
 
-
-
+	public SoundPlayer getSoundPlayer() {
+		return soundPlayer;
+	}
 }

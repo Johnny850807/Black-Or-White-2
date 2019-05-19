@@ -167,6 +167,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         return getPropertiesComponent().getBody();
     }
 
+    public Dimension getSize() {
+		return getPropertiesComponent().getSize();
+	}
+
     public void setPosition(Point position) {
         getPropertiesComponent().setPosition(position);
     }

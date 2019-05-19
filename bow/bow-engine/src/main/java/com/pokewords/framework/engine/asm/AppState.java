@@ -130,7 +130,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * @return the created app state world
 	 */
 	protected AppStateWorld onCreateAppStateWorld() {
-		return new AppStateWorld();
+		return new AppStateWorld(this);
 	}
 
 	@Override

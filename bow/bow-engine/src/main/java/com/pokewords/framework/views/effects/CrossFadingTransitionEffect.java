@@ -71,7 +71,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
             }
         });
 
-                frameStateMachineComponent.addFrame(rectangleEffectFrame);
+        frameStateMachineComponent.addFrame(rectangleEffectFrame);
         frameStateMachineComponent.setCurrentFrame(rectangleEffectFrame);
         return frameStateMachineComponent;
     }
@@ -93,7 +93,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
 
         rectangleEffectFrame.addEffect((world, sprite) -> {
             Color color = rectangleFrame.getColor();
-            int alpha = color.getAlpha() - 11 < 0 ? 0 : color.getAlpha() - 11;
+            int alpha = color.getAlpha() - 8 < 0 ? 0 : color.getAlpha() - 8;
             rectangleFrame.setColor(new Color(255, 255, 255, alpha));
 
             if (alpha == 0)

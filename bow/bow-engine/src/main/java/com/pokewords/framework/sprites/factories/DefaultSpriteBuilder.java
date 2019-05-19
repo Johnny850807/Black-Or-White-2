@@ -23,7 +23,6 @@ import java.util.*;
  * @author nyngwang
  */
 public class DefaultSpriteBuilder implements SpriteBuilder {
-    protected final List<SpriteWeaver.Node> DEFAULT_WEAVER_NODES = Collections.singletonList(new GameEngineWeaverNode());
     protected Sprite sprite;
     protected Set<Component> components;
     protected boolean hasPropertiesComponent;
@@ -31,7 +30,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     protected SpriteWeaver spriteWeaver;
     protected ScriptParser scriptParser;
     protected ScriptRulesParser scriptRulesParser;
-    protected List<SpriteWeaver.Node> weaverNodes = new LinkedList<>(DEFAULT_WEAVER_NODES);
+    protected List<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
 
     public DefaultSpriteBuilder(IocFactory iocFactory) {
         spriteWeaver = new SpriteWeaver(iocFactory);
@@ -48,7 +47,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         components.clear();
         hasPropertiesComponent = false;
         spriteWeaver.clear();
-        weaverNodes = new LinkedList<>(DEFAULT_WEAVER_NODES);
+        weaverNodes = new LinkedList<>(Collections.singletonList(new GameEngineWeaverNode()));
         return this;
     }
 
