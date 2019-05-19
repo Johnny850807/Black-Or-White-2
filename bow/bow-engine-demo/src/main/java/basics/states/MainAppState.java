@@ -1,13 +1,22 @@
 package basics.states;
 
 
+import basics.weaver.MovementTransitionsWeaverNode;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 public class MainAppState extends AppState {
 
+    enum Sprites {
+        CHARACTER
+    }
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
+        getSpriteInitializer().declare(Sprites.CHARACTER)
+                        .position(getGameWindowDefinition().center())
+                        .with("scripts/character.bow")
+                        .weaver(new MovementTransitionsWeaverNode())
+                        .commit();
     }
 
 

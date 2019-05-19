@@ -9,8 +9,6 @@ import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
-import java.awt.*;
-
 import static com.pokewords.framework.sprites.factories.SpriteInitializer.InitializationMode.LAZY;
 
 public class  BasicAppDemo extends GameApplication {
