@@ -32,8 +32,6 @@ public class DefaultInputManager implements InputManager {
     }
 
     private void fireAllActions() {
-        System.out.println("KeyActions:" + keyActions.size());
-        System.out.println("MouseActions:" + mouseActions.size());
         keyActions.forEach(KeyAction::fireAction);
         keyActions.clear();
         mouseActions.forEach(MouseAction::fireAction);
@@ -82,29 +80,33 @@ public class DefaultInputManager implements InputManager {
     @Override
     public void onButtonPressedDown(int id) {
         doubleCheckedSyncCurrentAppStateNotNullThenDo(
-                () -> keyActions.add(new KeyAction(KeyEvent.KEY_PRESSED, id))
+                () -> keyActions.add(keyAction(KeyEvent.KEY_PRESSED, id))
         );
     }
 
     @Override
     public void onButtonReleasedUp(int id) {
         doubleCheckedSyncCurrentAppStateNotNullThenDo(() -> {
-            keyActions.add(new KeyAction(KeyEvent.KEY_RELEASED, id));
-            keyActions.add(new KeyAction(KeyEvent.KEY_TYPED, id));
+            keyActions.add(keyAction(KeyEvent.KEY_RELEASED, id));
+            keyActions.add(keyAction(KeyEvent.KEY_TYPED, id));
         });
+    }
+
+    private KeyAction keyAction(int event, int keyCode) {
+        return new KeyAction(event, keyCode);
     }
 
     @Override
     public void onMouseMoved(Point position) {
         doubleCheckedSyncCurrentAppStateNotNullThenDo(
-                ()-> mouseActions.add(new MouseAction(MouseEvent.MOUSE_MOVED, position))
+                ()-> mouseActions.add(mouseAction(MouseEvent.MOUSE_MOVED, position))
         );
     }
 
     @Override
     public void onMouseHitDown(Point position) {
         doubleCheckedSyncCurrentAppStateNotNullThenDo(
-                ()-> mouseActions.add(new MouseAction(MouseEvent.MOUSE_PRESSED, position))
+                ()-> mouseActions.add(mouseAction(MouseEvent.MOUSE_PRESSED, position))
         );
     }
 
@@ -112,9 +114,20 @@ public class DefaultInputManager implements InputManager {
     @Override
     public void onMouseReleasedUp(Point position) {
         doubleCheckedSyncCurrentAppStateNotNullThenDo(() -> {
-            mouseActions.add(new MouseAction(MouseEvent.MOUSE_RELEASED, position));
-            mouseActions.add(new MouseAction(MouseEvent.MOUSE_CLICKED, position));
+            mouseActions.add(mouseAction(MouseEvent.MOUSE_RELEASED, position));
+            mouseActions.add(mouseAction(MouseEvent.MOUSE_CLICKED, position));
         });
+    }
+
+    @Override
+    public void onMouseDragged(Point position) {
+        doubleCheckedSyncCurrentAppStateNotNullThenDo(
+                () -> mouseActions.add(mouseAction(MouseEvent.MOUSE_DRAGGED, position))
+        );
+    }
+
+    private MouseAction mouseAction(int eventId, Point position) {
+        return new MouseAction(eventId, position);
     }
 
 
