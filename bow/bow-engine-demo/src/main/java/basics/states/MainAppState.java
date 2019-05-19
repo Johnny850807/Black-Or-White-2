@@ -3,10 +3,21 @@ package basics.states;
 
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
 
+import java.awt.event.KeyEvent;
+
 public class MainAppState extends AppState {
+    private Sprite faceSprite;
+    private boolean buttonHolding = false;
+    private Direction direction;
+
+    enum Direction {
+        UP, DOWN, LEFT, RIGHT
+    }
+
     enum Types {
         SMILE
     }
@@ -18,40 +29,60 @@ public class MainAppState extends AppState {
                 .position(getGameWindowDefinition().center())
                 .commit();
 
-        getAppStateWorld().spawn(createSprite(Types.SMILE));
+        faceSprite = createSprite(Types.SMILE);
+        getAppStateWorld().spawn(faceSprite);
 
+        bindKeyPressedAction(KeyEvent.VK_W, () -> move(Direction.UP));
+        bindKeyPressedAction(KeyEvent.VK_S, () -> move(Direction.DOWN));
+        bindKeyPressedAction(KeyEvent.VK_A, () -> move(Direction.LEFT));
+        bindKeyPressedAction(KeyEvent.VK_D, () -> move(Direction.RIGHT));
 
+        bindKeyReleasedAction(KeyEvent.VK_W, this::clearMovement);
+        bindKeyReleasedAction(KeyEvent.VK_S, this::clearMovement);
+        bindKeyReleasedAction(KeyEvent.VK_A, this::clearMovement);
+        bindKeyReleasedAction(KeyEvent.VK_D, this::clearMovement);
     }
 
-
-    @Override
-    public void onAppStateEntering() {
+    private void clearMovement() {
+        buttonHolding = false;
+        direction = null;
     }
 
-    @Override
-    public void onAppStateExiting() {
+    private void move(Direction direction) {
+        buttonHolding = true;
+        this.direction = direction;
     }
-
-    @Override
-    protected void onAppStateDestroying() {
-
-    }
-
 
     @Override
     public void onAppStateUpdating(double timePerFrame) {
+        if (buttonHolding)
+        {
+            switch (direction)
+            {
+                case UP:
+                    faceSprite.moveY(-1);
+                    break;
+                case DOWN:
+                    faceSprite.moveY(1);
+                    break;
+                case LEFT:
+                    faceSprite.moveX(-1);
+                    break;
+                case RIGHT:
+                    faceSprite.moveX(1);
+                    break;
+            }
+        }
     }
 
-    private void moveUp(){
+    @Override
+    public void onAppStateEntering() { }
 
-    }
-    private void moveLeft(){
+    @Override
+    public void onAppStateExiting() { }
 
+    @Override
+    protected void onAppStateDestroying() {
     }
-    private void moveDown(){
 
-    }
-    private void moveRight(){
-
-    }
 }
