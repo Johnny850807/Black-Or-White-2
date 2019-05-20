@@ -8,6 +8,7 @@ import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.effects.AppStateTransitionEffect;
+import com.pokewords.framework.views.effects.AppStateTransitionEffectListenersWrapper;
 import com.pokewords.framework.views.effects.CrossFadingTransitionEffect;
 import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.inputs.InputManager;
@@ -29,7 +30,7 @@ public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_LOADING = "Start Loading";
 	public static final String EVENT_GAME_STARTED = "Game Started";
 
-	private Map<Transition, TransitionEffectWrapper> transitionEffectMap = new HashMap<>();
+	private Map<Transition, AppStateTransitionEffect> transitionEffectMap = new HashMap<>();
 
 	/**
 	 * We should use this currentState reference instead of finite state machine's,
@@ -90,17 +91,24 @@ public class AppStateMachine implements GameLoopingListener {
 		AppState from = fsm.getCurrentState();
 		AppState to = fsm.trigger(event.toString());
 		if (from != to)
-			handleTransition(from, event, to);
+		{
+			AppStateTransitionEffect transitionEffect =
+					transitionEffectMap.getOrDefault(new Transition(from, event, to), NoTransitionEffect.getInstance());
+			handleTransition(from, to, transitionEffect);
+		}
 		return to;
 	}
 
-	private void handleTransition(AppState from, Object event, AppState to) {
-		Transition transition = new Transition(from, event, to);
+	public AppState trigger(Object event, AppStateTransitionEffect transitionEffect) {
+		AppState from = fsm.getCurrentState();
+		AppState to = fsm.trigger(event.toString());
+		if (from != to)
+			handleTransition(from, to, transitionEffect);
+		return to;
+	}
 
-		TransitionEffectWrapper transitionEffectWrapper = transitionEffectMap.getOrDefault(transition,
-				new TransitionEffectWrapper(new NoTransitionEffect()));
-
-		transitionEffectWrapper.effect(from, to, new AppStateTransitionEffect.DefaultListener() {
+	private void handleTransition(AppState from, AppState to, AppStateTransitionEffect transitionEffect) {
+		transitionEffect.effect(from, to, new AppStateTransitionEffect.DefaultListener() {
 			@Override
 			public void onExitingAppStateEffectEnd() {
 				from.onAppStateExit();
@@ -148,7 +156,7 @@ public class AppStateMachine implements GameLoopingListener {
 	public void addTransition(AppState from, Object event, AppState to, AppStateTransitionEffect transitionEffect
 							, AppStateTransitionEffect.Listener ...listeners) {
 		fsm.addTransition(from, event, to);
-		transitionEffectMap.put(new Transition(from, event, to), new TransitionEffectWrapper(transitionEffect, listeners));
+		transitionEffectMap.put(new Transition(from, event, to), new AppStateTransitionEffectListenersWrapper(transitionEffect, listeners));
 	}
 
 
@@ -156,43 +164,10 @@ public class AppStateMachine implements GameLoopingListener {
 		fsm.addTransitionFromAllStates(event, targetState, excepts);
 	}
 
-	/**
-	 * <from state, event type, to state>
-	 */
 	private class Transition extends Triple<AppState, Object, AppState> {
 		public Transition(AppState from, Object event, AppState to) {
 			super(from, event, to);
 		}
 	}
 
-	private class TransitionEffectWrapper {
-		private AppStateTransitionEffect appStateTransitionEffect;
-		private AppStateTransitionEffect.Listener[] listeners;
-
-		public TransitionEffectWrapper(AppStateTransitionEffect appStateTransitionEffect,
-									   AppStateTransitionEffect.Listener ...listeners) {
-			this.appStateTransitionEffect = appStateTransitionEffect;
-			this.listeners = listeners;
-		}
-
-		public void effect(AppState from, AppState to, AppStateTransitionEffect.Listener transitionEffectListener) {
-			appStateTransitionEffect.effect(from, to, new AppStateTransitionEffect.Listener() {
-				@Override
-				public void onExitingAppStateEffectEnd() {
-					for (AppStateTransitionEffect.Listener listener : listeners) {
-						listener.onExitingAppStateEffectEnd();
-					}
-					transitionEffectListener.onExitingAppStateEffectEnd();
-				}
-
-				@Override
-				public void onEnteringAppStateEffectEnd() {
-					for (AppStateTransitionEffect.Listener listener : listeners) {
-						listener.onEnteringAppStateEffectEnd();
-					}
-					transitionEffectListener.onEnteringAppStateEffectEnd();
-				}
-			});
-		}
-	}
 }

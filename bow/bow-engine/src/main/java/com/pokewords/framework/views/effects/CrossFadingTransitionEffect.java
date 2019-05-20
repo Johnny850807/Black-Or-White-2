@@ -19,7 +19,7 @@ import java.awt.*;
 public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
     private AppState from;
     private AppState to;
-    private Listener transitionEffectListener;
+    private Listener[] transitionEffectListeners;
     private SoundPlayer soundPlayer;
     private SpriteInitializer spriteInitializer;
 
@@ -36,10 +36,10 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
     }
 
     @Override
-    public synchronized void effect(AppState from, AppState to, Listener transitionEffectListener) {
+    public synchronized void effect(AppState from, AppState to, Listener... transitionEffectListeners) {
         this.from = from;
         this.to = to;
-        this.transitionEffectListener = transitionEffectListener;
+        this.transitionEffectListeners = transitionEffectListeners;
         this.soundPlayer = from.getSoundPlayer();
         this.spriteInitializer = from.getSpriteInitializer();
 
@@ -67,7 +67,6 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
                 .size(from.getGameWindowDefinition().size)
                 .with(createFrameStateMachineComponentWithFadingEffect(rectangleEffectFrame))
                 .commit();
-
     }
 
 
@@ -106,7 +105,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
             if (latestColor.getAlpha() == 255)
             {
                 from.getAppStateWorld().removeSprite(rectangleEffectFrame.getSprite());
-                transitionEffectListener.onExitingAppStateEffectEnd();
+                notifyOnExitingAppStateEffectEnd(transitionEffectListeners);
             }
         }
     }
@@ -168,7 +167,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
             if (latestColor.getAlpha() == 0)
             {
                 to.getAppStateWorld().removeSprite(rectangleEffectFrame.getSprite());
-                transitionEffectListener.onEnteringAppStateEffectEnd();
+                notifyOnEnteringAppStateEffectEnd(transitionEffectListeners);
             }
         }
     }
