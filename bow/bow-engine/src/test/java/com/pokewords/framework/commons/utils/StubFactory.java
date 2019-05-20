@@ -78,9 +78,9 @@ public interface StubFactory {
     }
 
     interface FrameStateMachineComponents {
-        MockEffectFrame FRAME_A = new MockEffectFrame("A");
-        MockEffectFrame FRAME_B = new MockEffectFrame("B");
-        MockEffectFrame FRAME_C = new MockEffectFrame("C");
+        MockEffectFrame FRAME_A = new MockEffectFrame(0, "A");
+        MockEffectFrame FRAME_B = new MockEffectFrame(1, "B");
+        MockEffectFrame FRAME_C = new MockEffectFrame(2, "C");
 
         /**
          * @return see visualization at "/specs/FSM-Stub.jpg"

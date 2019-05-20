@@ -88,7 +88,7 @@ public class AppStateMachine implements GameLoopingListener {
 	}
 
 	public AppState trigger(Object event) {
-		AppState from = fsm.getCurrentState();
+		AppState from = currentState;
 		AppState to = fsm.trigger(event.toString());
 		if (from != to)
 		{

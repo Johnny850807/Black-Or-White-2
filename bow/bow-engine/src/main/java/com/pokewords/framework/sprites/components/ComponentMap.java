@@ -32,6 +32,8 @@ public class ComponentMap extends HashMap<Class<? extends Component>, Component>
 
     @Override
     public Component put(Class<? extends Component> type, Component component) {
+        if (component == null)
+            throw new IllegalArgumentException(String.format("The put component (%s) is given a null reference.",type.getSimpleName()));
         if (component instanceof Renderable)
             this.renderableComponents.add((Renderable) component);
 

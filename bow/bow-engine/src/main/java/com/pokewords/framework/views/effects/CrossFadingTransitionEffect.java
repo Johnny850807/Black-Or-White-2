@@ -122,7 +122,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
     }
 
     private EffectFrame createFadingEffectRectangleFrame(Color startedColor, boolean fadeIn) {
-        RectangleFrame rectangleFrame = new RectangleFrame(0, 10, startedColor);
+        RectangleFrame rectangleFrame = new RectangleFrame(0, Integer.MAX_VALUE, startedColor);
         EffectFrame rectangleEffectFrame = EffectFrame.wrap(rectangleFrame, 15);
 
         GameEffect fadingEffect = fadeIn ? new FadedInEffect(rectangleFrame, rectangleEffectFrame)

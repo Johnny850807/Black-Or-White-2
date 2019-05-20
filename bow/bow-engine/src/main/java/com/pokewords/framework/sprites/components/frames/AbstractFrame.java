@@ -53,4 +53,13 @@ public abstract class AbstractFrame implements Frame {
     public int hashCode() {
         return Objects.hash(id, layerIndex);
     }
+
+    @Override
+    public Frame clone() {
+        try {
+            return (Frame) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new Error(e);
+        }
+    }
 }

@@ -22,8 +22,10 @@ public class ImageEffectFrame extends DefaultEffectFrame {
 		return duration;
 	}
 
+
 	@Override
 	public void renderItself(Canvas canvas) {
+		assert sprite != null;
 		canvas.renderImage(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), image);
 	}
 

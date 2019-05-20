@@ -303,10 +303,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	@Override
 	public String toString() {
-		StringBuilder stringBuilder = new StringBuilder("----- Sprite(").append(getType()).append("-----");
+		StringBuilder stringBuilder = new StringBuilder("** Sprite (").append(getType()).append(") @").append(super.toString());
 		for (Class componentType : components.keySet()) {
-			stringBuilder.append("\n== Component: ").append(componentType.getSimpleName());
-			stringBuilder.append(" ==\n").append(components.get(componentType));
+			stringBuilder.append("\n**** ").append(componentType.getSimpleName()).append(" :\n");
+			stringBuilder.append(components.get(componentType));
 		}
 		return stringBuilder.toString();
 	}

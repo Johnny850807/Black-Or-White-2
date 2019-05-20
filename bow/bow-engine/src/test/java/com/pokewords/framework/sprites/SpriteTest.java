@@ -72,15 +72,15 @@ public class SpriteTest extends AbstractTest {
     public void testGetRenderedFrames() {
         Sprite sprite = createSimpleSprite();
         MockRenderableComponent1 r1 = new MockRenderableComponent1();
-        MockEffectFrame rf1 = new MockEffectFrame("rf1");
+        MockEffectFrame rf1 = new MockEffectFrame(0, "rf1");
         r1.addFrame(rf1);
 
         MockRenderableComponent2 r2 = new MockRenderableComponent2();
-        MockEffectFrame rf2 = new MockEffectFrame("rf2");
+        MockEffectFrame rf2 = new MockEffectFrame(0, "rf2");
         r1.addFrame(rf2);
 
         MockRenderableComponent3 r3 = new MockRenderableComponent3();
-        MockEffectFrame rf3 = new MockEffectFrame("rf3");
+        MockEffectFrame rf3 = new MockEffectFrame(0, "rf3");
         r1.addFrame(rf3);
 
         sprite.addComponent(r1);

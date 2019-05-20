@@ -3,6 +3,7 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.sound.MockSoundPlayer;
 import com.pokewords.framework.views.windows.GameFrameWindowsConfigurator;
 import com.pokewords.framework.views.windows.MockGameWindowsConfigurator;
@@ -30,7 +31,7 @@ public class AppStateMachineTest extends AbstractTest {
         MockAppState B = appStateMachine.createState(MockAppState.class);
         MockAppState C = appStateMachine.createState(MockAppState.class);
 
-        appStateMachine.setGameInitialState(A);
+        appStateMachine.setGameInitialState(A, NoTransitionEffect.getInstance());
         appStateMachine.addTransition(A, EVENT_NEXT, B);
         appStateMachine.addTransition(B, EVENT_NEXT, C);
         appStateMachine.addTransition(C, EVENT_NEXT, A);
@@ -38,7 +39,6 @@ public class AppStateMachineTest extends AbstractTest {
         assertEquals(1, A.getOnAppStateCreatingCount());
         assertEquals(1, B.getOnAppStateCreatingCount());
         assertEquals(1, C.getOnAppStateCreatingCount());
-
 
         assertSame(appStateMachine.getLoadingState(), appStateMachine.trigger(AppStateMachine.EVENT_LOADING));
         assertSame(appStateMachine.getGameInitialState(), appStateMachine.trigger(AppStateMachine.EVENT_GAME_STARTED));

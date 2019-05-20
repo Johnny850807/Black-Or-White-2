@@ -41,4 +41,9 @@ public abstract class DefaultEffectFrame extends AbstractFrame implements Effect
     public int hashCode() {
         return Objects.hash(super.hashCode(), effects);
     }
+
+    @Override
+    public EffectFrame clone() {
+        return (EffectFrame) super.clone();
+    }
 }

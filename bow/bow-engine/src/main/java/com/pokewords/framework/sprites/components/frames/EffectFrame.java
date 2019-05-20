@@ -31,4 +31,7 @@ public interface EffectFrame extends Frame {
     static EffectFrame wrap(Frame frame, int duration) {
         return new EffectWrappedFrame(frame, duration);
     }
+
+    @Override
+    EffectFrame clone();
 }

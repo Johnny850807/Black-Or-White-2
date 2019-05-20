@@ -37,4 +37,7 @@ public interface Frame extends Cloneable {
 	 * @return owner of the frame
 	 */
 	@Nullable Sprite getSprite();
+
+
+	Frame clone();
 }

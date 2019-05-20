@@ -2,6 +2,11 @@ package com.pokewords.framework.commons.utils;
 
 import com.pokewords.framework.sprites.parsing.*;
 
+/**
+ * A utility to create the script that animates a GIF frame state machine component.
+ * The picture and frame number should be sequential and the first GIF picture should have frame id 0
+ * @author johnny850807 (waterball)
+ */
 public class GifScriptMaker {
     public static Script createScript(String galleryType, String galleryPath, int duration,
                                        int frameTotalNumber, int layer) {

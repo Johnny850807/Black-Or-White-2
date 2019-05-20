@@ -11,7 +11,6 @@ import java.util.function.Supplier;
  * @author johnny850807
  */
 public class ReusableReferencePool<T> {
-    private Object lock = new Object();
     private Set<T> instances = Collections.newSetFromMap(new IdentityHashMap<>());
     private Supplier<T> referenceSupplier;
 

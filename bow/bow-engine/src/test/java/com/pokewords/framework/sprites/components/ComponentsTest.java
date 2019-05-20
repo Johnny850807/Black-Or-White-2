@@ -76,10 +76,10 @@ public class ComponentsTest extends AbstractTest {
     @Test
     public void testFrameStateMachineComponentGetCurrentFrames() {
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
-        MockEffectFrame currentFrame = new MockEffectFrame("A");
+        MockEffectFrame currentFrame = new MockEffectFrame(0, "A");
         fsmc.addFrame(currentFrame);
-        fsmc.addFrame(new MockEffectFrame("B"));
-        fsmc.addFrame(new MockEffectFrame("C"));
+        fsmc.addFrame(new MockEffectFrame(1, "B"));
+        fsmc.addFrame(new MockEffectFrame(2, "C"));
         fsmc.setCurrentFrame(currentFrame);
 
         assertSame(currentFrame, fsmc.getCurrentFrame());
@@ -88,10 +88,16 @@ public class ComponentsTest extends AbstractTest {
     @Test
     public void testFrameStateMachineComponentClone() {
         FrameStateMachineComponent fsmComponent = new FrameStateMachineComponent();
+        MockEffectFrame mockEffectFrame = new MockEffectFrame(0, "Mock");
+        fsmComponent.addFrame(mockEffectFrame);
+        fsmComponent.setCurrentFrame(mockEffectFrame);
+
         FrameStateMachineComponent clone = fsmComponent.clone();
+
         assertNotSameButEquals(fsmComponent.getFiniteStateMachine(), clone.getFiniteStateMachine());
         assertSame(fsmComponent.getCurrentFrame(), clone.getCurrentFrame());
-        assertNotSameButEquals(fsmComponent.renderedFrame, clone.renderedFrame);
+        assertDeepNotSameButEquals(fsmComponent.renderedFrameCollection, clone.renderedFrameCollection);
+        assertDeepNotSameButEquals(fsmComponent.effectFrameMap, clone.effectFrameMap);
         assertSame(fsmComponent.world, clone.world);
         assertSame(fsmComponent.sprite, clone.sprite);
     }
@@ -104,7 +110,7 @@ public class ComponentsTest extends AbstractTest {
         assertEquals(fscm1.hashCode(), fscm2.hashCode());
 
         // after fscm2's been changed, they should no longer be equal
-        fscm2.addFrame(new MockEffectFrame("mock"));
+        fscm2.addFrame(new MockEffectFrame(0, "mock"));
         assertNotEquals(fscm1, fscm2);
         assertNotEquals(fscm1.hashCode(), fscm2.hashCode());
     }
