@@ -1,16 +1,15 @@
-package inputsMovementDemo;
+package homework;
 
-
-import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.engine.asm.EmptyAppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 @SuppressWarnings("Duplicates")
-public class MainAppState extends AppState {
-    private Sprite face;
-    private Sprite dinosaur;
+public class MainAppState extends EmptyAppState {
+    private Sprite player;
     private boolean moving = false;
     private Direction direction;
 
@@ -18,25 +17,29 @@ public class MainAppState extends AppState {
         UP, DOWN, LEFT, RIGHT
     }
 
-    @SuppressWarnings("Duplicates")
     @Override
-    protected void onAppStateCreating(AppStateWorld world) {
-        face = createSprite(Types.SMILE);
-        dinosaur = createSprite(Types.DINOSAUR);
-        getAppStateWorld().spawn(dinosaur);
-        getAppStateWorld().spawn(face);
+    protected void onAppStateCreating(AppStateWorld appStateWorld) {
+        getGameWindowsConfigurator().size(800, 600);
+        Random random = new Random();
+        Sprite ai = createSprite(Types.AI1);
+        ai.setPosition(random.nextInt(400)+280, random.nextInt(380));
+        Sprite ai2 = createSprite(Types.AI2);
+        ai2.setPosition(random.nextInt(400)+300, random.nextInt(380));
+        Sprite ai3 = createSprite(Types.AI3);
+        ai3.setPosition(random.nextInt(400)+325, random.nextInt(380));
+
+        player = createSprite(Types.PLAYER);
+        player.setPosition(400, 480);
+
+        appStateWorld.spawn(ai);
+        appStateWorld.spawn(ai2);
+        appStateWorld.spawn(ai3);
+        appStateWorld.spawn(player);
 
         bindKeyPressedAction(KeyEvent.VK_W, () -> move(Direction.UP));
         bindKeyPressedAction(KeyEvent.VK_S, () -> move(Direction.DOWN));
         bindKeyPressedAction(KeyEvent.VK_A, () -> move(Direction.LEFT));
         bindKeyPressedAction(KeyEvent.VK_D, () -> move(Direction.RIGHT));
-        bindMouseClickedAction((position) -> face.setPosition(position));
-        bindMouseDraggedAction((position) -> {
-            face.setPosition(position);
-            dinosaur.setPosition(-200, 0);
-        });
-        bindMouseReleasedAction((position) -> dinosaur.setPosition(position));
-        bindMouseMovedAction((position) -> dinosaur.setPosition(position));
 
         bindKeyReleasedAction(KeyEvent.VK_W, () -> clearMovement(Direction.UP));
         bindKeyReleasedAction(KeyEvent.VK_S, () -> clearMovement(Direction.DOWN));
@@ -58,34 +61,22 @@ public class MainAppState extends AppState {
 
     @Override
     public void onAppStateUpdating(double timePerFrame) {
-        if (moving)
-        {
-            switch (direction)
-            {
+        if (moving) {
+            switch (direction) {
                 case UP:
-                    face.moveY(-8);
+                    player.moveY(-8);
                     break;
                 case DOWN:
-                    face.moveY(8);
+                    player.moveY(8);
                     break;
                 case LEFT:
-                    face.moveX(-8);
+                    player.moveX(-8);
                     break;
                 case RIGHT:
-                    face.moveX(8);
+                    player.moveX(8);
                     break;
             }
         }
-    }
-
-    @Override
-    public void onAppStateEntering() { }
-
-    @Override
-    public void onAppStateExiting() { }
-
-    @Override
-    protected void onAppStateDestroying() {
     }
 
 }
