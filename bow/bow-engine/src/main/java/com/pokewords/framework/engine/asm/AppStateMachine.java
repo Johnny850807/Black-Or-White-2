@@ -124,13 +124,17 @@ public class AppStateMachine implements GameLoopingListener {
 		getCurrentState().onUpdate(timePerFrame);
 	}
 
-	public void setGameInitialState(AppState gameInitialState, AppStateTransitionEffect.Listener ...listeners) {
+	public void setGameInitialState(AppState gameInitialState, AppStateTransitionEffect transitionEffect, AppStateTransitionEffect.Listener ...listeners) {
 		if (this.gameInitialState != null)
 			throw new GameEngineException("You can only set the GameInitialState once.");
 		this.gameInitialState = gameInitialState;
 		this.fsm.addState(this.gameInitialState);
 		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState,
-				new CrossFadingTransitionEffect(SoundTypes.TRANSITION), listeners);
+				transitionEffect, listeners);
+	}
+
+	public void setGameInitialState(AppState gameInitialState, AppStateTransitionEffect.Listener ...listeners) {
+		setGameInitialState(gameInitialState, new CrossFadingTransitionEffect(SoundTypes.TRANSITION), listeners);
 	}
 
 	public AppState getCurrentState() {

@@ -61,16 +61,16 @@ public class MainAppState extends AppState {
             switch (direction)
             {
                 case UP:
-                    face.moveY(-1);
+                    face.moveY(-15);
                     break;
                 case DOWN:
-                    face.moveY(1);
+                    face.moveY(15);
                     break;
                 case LEFT:
-                    face.moveX(-1);
+                    face.moveX(-15);
                     break;
                 case RIGHT:
-                    face.moveX(1);
+                    face.moveX(15);
                     break;
             }
         }

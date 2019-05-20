@@ -34,7 +34,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         this.appState = appState;
         sprites = new ArrayList<>();
         spriteCount = new AtomicInteger(0);
-        renderedLayers = new RenderedLayers(new ArrayList<>());
+        renderedLayers = new RenderedLayers();
         collisionHandlerMap = new HashMap<>();
         idSpriteMap = new HashMap<>();
         spriteIdMap = new IdentityHashMap<>();
@@ -269,7 +269,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     public void clearSprites() {
         sprites.forEach(this::removeSprite);
         spriteCount = new AtomicInteger(0);
-        renderedLayers.setLayers(new ArrayList<>());
+        renderedLayers.clear();
         idSpriteMap.clear();
         spriteIdMap.clear();
         System.gc();

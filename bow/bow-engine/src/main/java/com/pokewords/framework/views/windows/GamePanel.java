@@ -58,12 +58,8 @@ public class GamePanel extends JPanel implements AppView {
     }
 
     private void drawRenderedLayers(Graphics g) {
-        List<List<Frame>> layers = renderedLayers.getLayers();
-        for (int i = 0; i < layers.size(); i++) {
-            List<Frame> layer = layers.get(i);
-            for (int j = 0; j < layer.size(); j++) {
-                layer.get(j).renderItself(GraphicsCanvas.of(g));
-            }
+        for (Frame frame : renderedLayers) {
+            frame.renderItself(GraphicsCanvas.of(g));
         }
     }
 }

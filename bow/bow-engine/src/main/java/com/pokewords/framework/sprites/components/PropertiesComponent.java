@@ -34,14 +34,14 @@ public class PropertiesComponent extends CloneableComponent {
 
 
 	public void move(int velocityX, int velocityY) {
-		getBody().translate((int) (velocityX*timePerFrame), (int) (velocityY*timePerFrame));
+		getBody().translate(velocityX, velocityY);
 	}
 	public void moveX(int velocityX) {
-		getBody().translate((int) (velocityX*timePerFrame), 0);
+		getBody().translate( velocityX, 0);
 	}
 
 	public void moveY(int velocityY) {
-		getBody().translate(0, (int) (velocityY*timePerFrame));
+		getBody().translate(0, velocityY);
 	}
 
 	public Rectangle getBody() {
