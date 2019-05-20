@@ -9,7 +9,7 @@ import java.util.*;
  */
 public interface Segment {
 
-    default @Nullable Element getElementByName(String name) {
+    default Element getElementByName(String name) {
         List<Element> elements = getElementsByName(name);
         return elements.isEmpty() ? null : elements.get(0);
     }

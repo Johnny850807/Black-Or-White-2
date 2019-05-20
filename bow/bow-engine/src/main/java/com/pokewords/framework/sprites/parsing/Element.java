@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -18,6 +19,8 @@ public interface Element {
     boolean containsKey(String key);
     String getStringByKey(String key);
     Integer getIntByKey(String key);
+
+    Collection<String> getKeys();
 
     Element setParent(Segment parentSegment);
     Segment getParent();

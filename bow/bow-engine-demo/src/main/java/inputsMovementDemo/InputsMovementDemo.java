@@ -28,14 +28,15 @@ public class InputsMovementDemo extends GameApplication {
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.declare(Types.SMILE)
-                .with(new ImageComponent(new ImageFrame(0, 2, 50, 50, "images/smile.png", true)))
+                .with(new ImageComponent(new ImageFrame(0, 2, "images/smile.png", true)))
+                .size(50, 50)
                 .position(getGameWindowDefinition().center())
                 .commit();
 
         spriteInitializer.declare(Types.DINOSAUR)
-                .with(new ImageComponent(new ImageFrame(0, 2, 38, 38, "images/dinosaur.png", true)))
+                .with(new ImageComponent(new ImageFrame(0, 2, "images/dinosaur.png", true)))
+                .size(38, 38)
                 .position(-200, 0)
-                .size(50, 50)
                 .commit();
     }
 

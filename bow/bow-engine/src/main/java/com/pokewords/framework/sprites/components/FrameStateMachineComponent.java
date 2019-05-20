@@ -68,16 +68,16 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
         this.effectFrameMap.put(frame.getId(), frame);
     }
 
-    public void addTransition(EffectFrame from, String event, EffectFrame to){
+    public void addTransition(EffectFrame from, Object event, EffectFrame to){
         fsm.addTransition(from, event, to);
     }
 
-    public void addTransitionFromAllFrames(String event, EffectFrame targetFrame){
+    public void addTransitionFromAllFrames(Object event, EffectFrame targetFrame){
         fsm.addTransitionFromAllStates(event, targetFrame);
     }
 
-    public EffectFrame trigger(String event){
-        return fsm.trigger(event);
+    public EffectFrame trigger(Object event){
+        return fsm.trigger(event.toString());
     }
 
     public EffectFrame getCurrentFrame(){

@@ -2,8 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ElementException;
 
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.*;
 
 /**
  * @author nyngwang
@@ -68,6 +67,13 @@ public class LinScriptElement implements Element {
         if (result == null)
             throw new ElementException(String.format("LinScriptElement: attribute %s does not exist", key));
         return result;
+    }
+
+    @Override
+    public Collection<String> getKeys() {
+        Set<String> keys =  new HashSet<>(mappings.integerMap.keySet());
+        keys.addAll(mappings.stringMap.keySet());
+        return keys;
     }
 
     @Override

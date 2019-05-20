@@ -18,18 +18,7 @@ public class FrameSegment {
     private int next;
     private Optional<PropertiesElement> propertiesElement;
     private Optional<EffectElement> effectElement;
-
-    public FrameSegment(int id, String description, int pic, int layer, int duration, int next,
-                        Element propertiesElement, Element effectElement) {
-        this.id = id;
-        this.description = description;
-        this.pic = pic;
-        this.layer = layer;
-        this.duration = duration;
-        this.next = next;
-        this.propertiesElement = Optional.of(new PropertiesElement(propertiesElement));
-        this.effectElement = Optional.of(new EffectElement(effectElement));
-    }
+    private Optional<TransitionsElement> transitionsElement;
 
     public FrameSegment(Segment frameSegment) {
         this.id = frameSegment.getId();
@@ -44,6 +33,10 @@ public class FrameSegment {
         this.effectElement = Optional.ofNullable(
                 frameSegment.containsElementName("effect")?
                 new EffectElement(frameSegment.getElementByName("effect")) : null);
+        this.transitionsElement = Optional.ofNullable(
+                frameSegment.containsElementName("transitions") ?
+                        new TransitionsElement(frameSegment.getElementByName("transitions")) : null
+        );
     }
 
     public int getId() {
@@ -77,5 +70,9 @@ public class FrameSegment {
 
     public Optional<EffectElement> getEffectElement() {
         return effectElement;
+    }
+
+    public Optional<TransitionsElement> getTransitionsElement() {
+        return transitionsElement;
     }
 }
