@@ -9,7 +9,11 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/joagunna/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/shotgunininder/pom.xml" />
+        <option value="$PROJECT_DIR$/shotshotning/pom.xml" />
+        <option value="$PROJECT_DIR$/watershot/pom.xml" />
       </set>
     </option>
   </component>
