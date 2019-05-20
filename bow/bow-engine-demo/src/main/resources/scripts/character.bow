@@ -14,9 +14,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
         moveX: -8
     </effect>
@@ -31,9 +31,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
         moveX: -8
     </effect>
@@ -48,9 +48,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
         moveX: -8
     </effect>
@@ -66,9 +66,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveX: 8
     </effect>
@@ -83,9 +83,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveX: 8
     </effect>
@@ -100,9 +100,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveX: 8
     </effect>
@@ -118,9 +118,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
         moveY: -7
     </effect>
@@ -135,9 +135,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
 		moveY: -7
     </effect>
@@ -152,9 +152,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
         moveY: -7
     </effect>
@@ -170,9 +170,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
         moveY: 7
     </effect>
@@ -187,9 +187,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
         moveY: 7
     </effect>
@@ -204,9 +204,9 @@
 		walkUp: 6
 		walkDown: 9
 	</transitions>
-    <properties>
+    <body>
         x: 16 y: 10 w: 49 h: 67
-    </properties>
+    </body>
     <effect>
         moveY: 7
     </effect>
@@ -221,9 +221,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveY: -7
     </effect>
@@ -238,9 +238,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveY: -7
     </effect>
@@ -255,9 +255,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveY: -7
     </effect>
@@ -272,9 +272,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveY: 7
     </effect>
@@ -289,9 +289,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveY: 7
     </effect>
@@ -306,9 +306,9 @@
 		walkUp: 12
 		walkDown: 15
 	</transitions>
-    <properties>
+    <body>
         x: 9 y: 11 w: 44 h: 64
-    </properties>
+    </body>
     <effect>
         moveY: 7
     </effect>

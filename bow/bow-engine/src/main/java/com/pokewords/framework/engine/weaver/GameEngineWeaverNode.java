@@ -24,7 +24,7 @@ import java.util.*;
  * into the FrameStateMachineComponent of the sprite.
  * (2) Add the 'update' transitions from all frames corresponding to their 'next' attributes.
  * (3) Parse and effect the elements :
- *      i. <properties>
+ *      i. <body>
  *      ii. <effect>
  *      iii. <transitions>
  * @author johnny850807 (waterball)
@@ -44,7 +44,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
     }
 
     @Override
-    public void onWeaving(Script script, Sprite sprite) {
+    public synchronized void onWeaving(Script script, Sprite sprite) {
         if (sprite.hasComponent(FrameStateMachineComponent.class))
         {
             this.sprite = sprite;
@@ -107,7 +107,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
             setupGalleryMapIfNotExists(segment.getParent());
             FrameSegment frameSegment = new FrameSegment(segment);
             EffectFrame effectFrame = initEffectFrame(frameSegment, segment);
-            parsePropertiesElement(frameSegment, effectFrame);
+            parseBodyElement(frameSegment, effectFrame);
             parseEffectElement(frameSegment, effectFrame);
             return effectFrame;
         }
@@ -147,12 +147,12 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
     }
 
-    private void parsePropertiesElement(FrameSegment frameSegment, EffectFrame effectFrame) {
-        frameSegment.getPropertiesElement()
-                .ifPresent(p -> effectPropertiesElement(p, effectFrame));
+    private void parseBodyElement(FrameSegment frameSegment, EffectFrame effectFrame) {
+        frameSegment.getBodyElement()
+                .ifPresent(p -> effectBodyElement(p, effectFrame));
     }
 
-    private void effectPropertiesElement(PropertiesElement element, EffectFrame effectFrame) {
+    private void effectBodyElement(BodyElement element, EffectFrame effectFrame) {
         effectFrame.addEffect((world, sprite) -> {
             int x = element.getX().orElse(sprite.getX());
             int y = element.getY().orElse(sprite.getY());

@@ -9,7 +9,7 @@ import java.util.OptionalInt;
  * @author johnny850807 (waterball)
  */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-public class PropertiesElement {
+public class BodyElement {
     private OptionalInt x;
     private OptionalInt y;
     private OptionalInt w;
@@ -17,7 +17,7 @@ public class PropertiesElement {
     private OptionalInt centerX;
     private OptionalInt centerY;
 
-    public PropertiesElement(int x, int y, int w, int h, int centerX, int centerY) {
+    public BodyElement(int x, int y, int w, int h, int centerX, int centerY) {
         this.x = OptionalInt.of(x);
         this.y = OptionalInt.of(y);
         this.w = OptionalInt.of(w);
@@ -26,7 +26,7 @@ public class PropertiesElement {
         this.centerY = OptionalInt.of(centerY);
     }
 
-    public PropertiesElement(@NotNull Element element) {
+    public BodyElement(@NotNull Element element) {
         this.x = element.getIntByKeyOptional("x");
         this.y = element.getIntByKeyOptional("y");
         this.w = element.getIntByKeyOptional("w");

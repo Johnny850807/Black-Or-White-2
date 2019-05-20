@@ -1,6 +1,5 @@
 package com.pokewords.framework.engine.parsing;
 
-import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Segment;
 
 import java.util.Optional;
@@ -16,7 +15,7 @@ public class FrameSegment {
     private int layer;
     private int duration;
     private int next;
-    private Optional<PropertiesElement> propertiesElement;
+    private Optional<BodyElement> bodyElement;
     private Optional<EffectElement> effectElement;
     private Optional<TransitionsElement> transitionsElement;
 
@@ -27,9 +26,9 @@ public class FrameSegment {
         this.layer = frameSegment.getIntByKey("layer");
         this.duration = frameSegment.getIntByKey("duration");
         this.next = frameSegment.getIntByKey("next");
-        this.propertiesElement = Optional.ofNullable(
-                frameSegment.containsElementName("properties")?
-                new PropertiesElement(frameSegment.getElementByName("properties")) : null);
+        this.bodyElement = Optional.ofNullable(
+                frameSegment.containsElementName("body")?
+                new BodyElement(frameSegment.getElementByName("body")) : null);
         this.effectElement = Optional.ofNullable(
                 frameSegment.containsElementName("effect")?
                 new EffectElement(frameSegment.getElementByName("effect")) : null);
@@ -64,8 +63,8 @@ public class FrameSegment {
     }
 
 
-    public Optional<PropertiesElement> getPropertiesElement() {
-        return propertiesElement;
+    public Optional<BodyElement> getBodyElement() {
+        return bodyElement;
     }
 
     public Optional<EffectElement> getEffectElement() {

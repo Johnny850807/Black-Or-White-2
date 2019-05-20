@@ -3,6 +3,8 @@ package basics;
 
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
+import com.pokewords.framework.sprites.parsing.*;
 
 public class MainAppState extends AppState {
 
@@ -11,8 +13,12 @@ public class MainAppState extends AppState {
     }
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
-
+        getSpriteInitializer().declare(Sprites.CHARACTER)
+                .with("scripts/character.bow")
+                .commit();
     }
+
+
 
 
     @Override
