@@ -1,6 +1,5 @@
 package com.pokewords.appstates;
 
-import com.pokewords.constants.SoundTypes;
 import com.pokewords.constants.SpriteTypes;
 import com.pokewords.constants.Theme;
 import com.pokewords.framework.engine.asm.AppState;

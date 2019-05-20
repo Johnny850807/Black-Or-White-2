@@ -8,6 +8,7 @@ import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.marks.Renderable;
 
+import java.io.Console;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     public EffectFrame getFrame(int id) {
         return effectFrameMap.get(id);
     }
+
 
     @Override
     public void onComponentAttachedSprite(Sprite sprite) {
