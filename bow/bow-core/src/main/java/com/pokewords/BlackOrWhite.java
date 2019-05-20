@@ -49,7 +49,7 @@ public class BlackOrWhite extends GameApplication {
         MenuAppState menuAppState = asm.createState(MenuAppState.class);
         asm.setGameInitialState(menuAppState, new AppStateTransitionEffect.DefaultListener() {
             @Override
-            public void onToEffectEnd() {
+            public void onEnteringAppStateEffectEnd() {
                 getSoundPlayer().playSound(SoundTypes.OPENING);
             }
         });

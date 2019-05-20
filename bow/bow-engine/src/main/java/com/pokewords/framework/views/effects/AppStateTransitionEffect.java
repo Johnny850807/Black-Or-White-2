@@ -10,14 +10,14 @@ public interface AppStateTransitionEffect {
 
     class DefaultListener implements Listener {
         @Override
-        public void onFromEffectEnd() { }
+        public void onExitingAppStateEffectEnd() { }
 
         @Override
-        public void onToEffectEnd() { }
+        public void onEnteringAppStateEffectEnd() { }
     }
 
     interface Listener {
-        void onFromEffectEnd();
-        void onToEffectEnd();
+        void onExitingAppStateEffectEnd();
+        void onEnteringAppStateEffectEnd();
     }
 }

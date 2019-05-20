@@ -24,7 +24,7 @@ public class GameEngine {
     private final Runnable gameLoopingTask;
     private ScheduledExecutorService scheduler;
     private int counter = 0;
-    private int timePerFrame = 15;  //ms
+    private double timePerFrame = 1 / 60.0;  // 60 fps
 
     public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
         this.iocFactory = iocFactory;
@@ -56,7 +56,7 @@ public class GameEngine {
     public void launchEngine() {
         gameView.onAppInit();
         appStateMachine.trigger(AppStateMachine.EVENT_LOADING);
-        scheduler.scheduleAtFixedRate(gameLoopingTask, 0, timePerFrame, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(gameLoopingTask, 0, (long) (timePerFrame*1000), TimeUnit.MILLISECONDS);
         gameView.onAppLoading();
 
 		appStateMachine.trigger(AppStateMachine.EVENT_GAME_STARTED);

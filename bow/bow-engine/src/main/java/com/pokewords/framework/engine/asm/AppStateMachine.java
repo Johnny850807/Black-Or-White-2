@@ -102,7 +102,7 @@ public class AppStateMachine implements GameLoopingListener {
 
 		transitionEffectWrapper.effect(from, to, new AppStateTransitionEffect.DefaultListener() {
 			@Override
-			public void onFromEffectEnd() {
+			public void onExitingAppStateEffectEnd() {
 				from.onAppStateExit();
 				currentState = to;
 				to.onAppStateEnter();
@@ -178,19 +178,19 @@ public class AppStateMachine implements GameLoopingListener {
 		public void effect(AppState from, AppState to, AppStateTransitionEffect.Listener transitionEffectListener) {
 			appStateTransitionEffect.effect(from, to, new AppStateTransitionEffect.Listener() {
 				@Override
-				public void onFromEffectEnd() {
+				public void onExitingAppStateEffectEnd() {
 					for (AppStateTransitionEffect.Listener listener : listeners) {
-						listener.onFromEffectEnd();
+						listener.onExitingAppStateEffectEnd();
 					}
-					transitionEffectListener.onFromEffectEnd();
+					transitionEffectListener.onExitingAppStateEffectEnd();
 				}
 
 				@Override
-				public void onToEffectEnd() {
+				public void onEnteringAppStateEffectEnd() {
 					for (AppStateTransitionEffect.Listener listener : listeners) {
-						listener.onToEffectEnd();
+						listener.onEnteringAppStateEffectEnd();
 					}
-					transitionEffectListener.onToEffectEnd();
+					transitionEffectListener.onEnteringAppStateEffectEnd();
 				}
 			});
 		}

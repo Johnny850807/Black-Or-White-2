@@ -64,7 +64,7 @@ public abstract class GameApplication implements AppView {
 	}
 
 	protected int getLoadingStateDelayTime() {
-		return 10000;
+		return 3000;
 	}
 	protected abstract void onSpriteDeclaration(SpriteInitializer spriteInitializer);
 
