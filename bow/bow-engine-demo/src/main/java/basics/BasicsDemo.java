@@ -28,7 +28,6 @@ public class BasicsDemo extends GameApplication {
         spriteInitializer.declare(basics.MainAppState.Sprites.CHARACTER)
                 .position(getGameWindowDefinition().center())
                 .with("scripts/character.bow")
-                .weaver(new MovementTransitionsWeaverNode())
                 .commit();
     }
 

@@ -145,8 +145,8 @@ public class SpriteInitializer {
 
             if (initializationMode == InitializationMode.NON_LAZY)  //non-lazy mode needn't save the declarations, simply init it after declare it
                 declaration.startInitializingSprite();
-            else
-                declarationMap.put(type, declaration);
+
+            declarationMap.put(type, declaration);
 
             return new SpriteCreator();
         }

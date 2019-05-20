@@ -13,9 +13,6 @@ public class MainAppState extends AppState {
     }
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
-        getSpriteInitializer().declare(Sprites.CHARACTER)
-                .with("scripts/character.bow")
-                .commit();
     }
 
 

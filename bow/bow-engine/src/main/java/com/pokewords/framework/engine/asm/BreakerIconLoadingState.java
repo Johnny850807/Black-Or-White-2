@@ -22,6 +22,11 @@ public class BreakerIconLoadingState extends AppState {
     }
 
     @Override
+    protected boolean isListeningToInputEvents() {
+        return false;
+    }
+
+    @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) {
         getGameWindowsConfigurator().size(800, 600);
 

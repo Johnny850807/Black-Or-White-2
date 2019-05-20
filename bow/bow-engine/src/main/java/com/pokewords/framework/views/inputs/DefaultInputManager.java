@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
+ * TODO composite key action, how to do?
  * @author johnny850807 (waterball)
  */
 public class DefaultInputManager implements InputManager {
