@@ -93,7 +93,8 @@ public class ProgressBarLoadingState extends AppState {
             int height = getWindowSize().y / 2;
             getSpriteInitializer().declare(JOANNA)
                     .position((getWindowSize().x - width) / 2, getWindowSize().y - height)
-                    .with(new ImageComponent(new ImageFrame(0, 2, width, height, image)))
+                    .size(width, height)
+                    .with(new ImageComponent(new ImageFrame(0, 2, image)))
                     .commit();
         } catch (IOException e) {
             e.printStackTrace();

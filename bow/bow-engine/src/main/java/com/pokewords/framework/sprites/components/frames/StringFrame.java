@@ -7,6 +7,9 @@ import java.util.Objects;
 
 /**
  * A frame rendered as a text.
+ *
+ * Note that The width, and height of the text are determined by the font-size at runtime rather than by sprite.
+ * So you cannot get its width and height.
  * @author johnny850807 (waterball)
  */
 public class StringFrame extends AbstractFrame {
@@ -37,6 +40,8 @@ public class StringFrame extends AbstractFrame {
 
     @Override
     public void renderItself(Canvas canvas) {
+        Objects.requireNonNull(sprite);
+
         if (renderByCenter)
             canvas.renderTextWithCenterAdjusted(sprite.getX(), sprite.getY(), text, color, font);
         else

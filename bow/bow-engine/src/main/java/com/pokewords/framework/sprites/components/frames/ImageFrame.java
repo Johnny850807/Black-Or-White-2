@@ -6,30 +6,23 @@ import com.pokewords.framework.views.Canvas;
 import java.awt.*;
 import java.util.Objects;
 
+/**
+ * A frame rendered as an image.
+ *
+ * The width and the height are determined by the sprite at runtime.
+ * @author johnny850807 (waterball)
+ */
 public class ImageFrame extends AbstractFrame {
-   protected int width;
-   protected int height;
    protected Image image;
    protected boolean renderWithCenterAdjusted;
 
-    public ImageFrame(int id, int layerIndex, int width, int height, String imagePath) {
-        this(id, layerIndex, width, height, ImageUtility.readImageFromResources(imagePath), false);
-    }
-
-    public ImageFrame(int id, int layerIndex, int width, int height, Image image) {
-        this(id, layerIndex, width, height, image, false);
-    }
 
     public ImageFrame(int id, int layerIndex, String imagePath) {
         this(id, layerIndex, ImageUtility.readImageFromResources(imagePath), false);
     }
 
     public ImageFrame(int id, int layerIndex, Image image) {
-        this(id, layerIndex, image.getWidth(null), image.getHeight(null), image, false);
-    }
-
-    public ImageFrame(int id, int layerIndex, int width, int height, String imagePath, boolean renderWithCenterAdjusted) {
-        this(id, layerIndex, width, height, ImageUtility.readImageFromResources(imagePath), renderWithCenterAdjusted);
+        this(id, layerIndex, image, false);
     }
 
     public ImageFrame(int id, int layerIndex, String imagePath, boolean renderWithCenterAdjusted) {
@@ -37,40 +30,22 @@ public class ImageFrame extends AbstractFrame {
     }
 
     public ImageFrame(int id, int layerIndex, Image image, boolean renderWithCenterAdjusted) {
-        this(id, layerIndex, image.getWidth(null), image.getHeight(null), image, renderWithCenterAdjusted);
-    }
-
-    public ImageFrame(int id, int layerIndex, int width, int height, Image image, boolean renderWithCenterAdjusted) {
         super(id, layerIndex);
-        this.width = width;
-        this.height = height;
         this.image = image;
         this.renderWithCenterAdjusted = renderWithCenterAdjusted;
     }
 
     @Override
     public void renderItself(Canvas canvas) {
+        Objects.requireNonNull(sprite);
+
         if (renderWithCenterAdjusted)
-            canvas.renderImageWithCenterAdjusted(sprite.getX(), sprite.getY(), width, height, image);
+            canvas.renderImageWithCenterAdjusted(sprite.getX(), sprite.getY(),
+                    sprite.getWidth(), sprite.getHeight(), image);
         else
-            canvas.renderImage(sprite.getX(), sprite.getY(), width, height, image);
+            canvas.renderImage(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), image);
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
 
     public Image getImage() {
         return image;
@@ -86,14 +61,12 @@ public class ImageFrame extends AbstractFrame {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ImageFrame that = (ImageFrame) o;
-        return width == that.width &&
-                height == that.height &&
-                renderWithCenterAdjusted == that.renderWithCenterAdjusted &&
+        return renderWithCenterAdjusted == that.renderWithCenterAdjusted &&
                 image.equals(that.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), width, height, image, renderWithCenterAdjusted);
+        return Objects.hash(super.hashCode(), image, renderWithCenterAdjusted);
     }
 }
