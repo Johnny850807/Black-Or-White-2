@@ -17,6 +17,7 @@ import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
@@ -80,14 +81,64 @@ public class AppStateMachine implements GameLoopingListener {
 				getCurrentStateWorld().getKeyListenerComponents()
 						.forEach(c -> c.getListener().onKeyClicked(c.getSprite(), keyCode)));
 
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_MOVED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> {
+							Sprite sprite = c.getSprite();
+							Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+							c.getListener().onMouseEnter(sprite, mousePosition, positionInArea);
+						})
+		);
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_EXITED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getLatestMousePositionInArea() != null)
+						.filter(c -> !c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> c.getListener().onMouseExit(c.getSprite(), mousePosition))
+		);
+
+
 		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_PRESSED, mousePosition ->
-			getCurrentStateWorld().getMouseListenerComponents()
+			getCurrentStateWorld().getMouseListenerComponents().stream()
+					.filter(c -> c.getSprite().getArea().contains(mousePosition))
 					.forEach(c -> {
 						Sprite sprite = c.getSprite();
-						mousePosition.translate(-1*sprite.getX(), -1*sprite.getY());
-						c.getListener().onMousePressed(sprite, mousePosition);
+						Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+						c.getListener().onMousePressed(sprite, mousePosition, positionInArea);
 					})
 		);
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_RELEASED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> {
+							Sprite sprite = c.getSprite();
+							Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+							c.getListener().onMouseReleased(sprite, mousePosition, positionInArea);
+						})
+		);
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_CLICKED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> {
+							Sprite sprite = c.getSprite();
+							Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+							c.getListener().onMouseClicked(sprite, mousePosition, positionInArea);
+						})
+		);
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_DRAGGED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> {
+							Sprite sprite = c.getSprite();
+							Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+							c.getListener().onMouseDragged(sprite, mousePosition, positionInArea);
+						})
+		);
+
 
 	}
 

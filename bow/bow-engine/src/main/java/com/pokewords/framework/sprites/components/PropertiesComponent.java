@@ -96,6 +96,13 @@ public class PropertiesComponent extends CloneableComponent {
 		this.area.setBounds(x, y, w, h);
 	}
 
+	public void setAreaSize(int w, int h) {
+		area.setSize(w, h);
+	}
+	public void setAreaSize(Dimension area) {
+		area.setSize(area);
+	}
+
 	public Dimension getAreaSize() {
 		return getArea().getSize();
 	}

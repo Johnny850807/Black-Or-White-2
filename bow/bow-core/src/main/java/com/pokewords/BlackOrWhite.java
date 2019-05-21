@@ -35,8 +35,7 @@ public class BlackOrWhite extends GameApplication {
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.declare(SpriteTypes.MENU)
-                .position(0, 0)
-                .areaSize(800, 600)
+                .area(0, 0, 800, 600)
                 .with(GifScriptMaker.createSequenceScript("assets/sequences/menu",
                         new Range(0, 57), 0, 57, 30, 58))
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())

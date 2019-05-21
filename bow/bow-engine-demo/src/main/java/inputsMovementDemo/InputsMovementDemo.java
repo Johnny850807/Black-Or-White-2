@@ -25,14 +25,12 @@ public class InputsMovementDemo extends GameApplication {
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.declare(Types.SMILE)
                 .with(new ImageComponent(new ImageFrame(0, 2, "images/smile.png", true)))
-                .areaSize(50, 50)
-                .position(getGameWindowDefinition().center())
+                .area(getGameWindowDefinition().center(), 50, 50)
                 .commit();
 
         spriteInitializer.declare(Types.DINOSAUR)
                 .with(new ImageComponent(new ImageFrame(0, 2, "images/dinosaur.png", true)))
-                .areaSize(38, 38)
-                .position(-200, 0)
+                .area(-200, 0, 38, 38)
                 .commit();
     }
 

@@ -137,6 +137,25 @@ public class SpriteInitializer {
             return this;
         }
 
+        public SpriteDeclarator area(Point position, int w, int h) {
+            declaration.propertiesComponent.setPosition(position);
+            declaration.propertiesComponent.setAreaSize( w, h);
+            return this;
+        }
+
+        public SpriteDeclarator area(Point position, Dimension size) {
+            declaration.propertiesComponent.setPosition(position);
+            declaration.propertiesComponent.setAreaSize(size);
+            return this;
+        }
+
+        public SpriteDeclarator area(int x, int y, Dimension size) {
+            declaration.propertiesComponent.setPosition(x, y);
+            declaration.propertiesComponent.setAreaSize(size);
+            return this;
+        }
+
+
         public SpriteDeclarator area(int x, int y, int w, int h) {
             declaration.propertiesComponent.setArea(x, y, w, h);
             return this;
