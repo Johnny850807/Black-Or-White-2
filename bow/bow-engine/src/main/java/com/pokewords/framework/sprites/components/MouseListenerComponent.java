@@ -9,7 +9,7 @@ import java.awt.*;
  * The component that allows the sprite to listen to the mouse event related to this sprite's area.
  * @author johnny850807 (waterball)
  */
-public abstract class MouseListenerComponent extends CloneableComponent {
+public class MouseListenerComponent extends CloneableComponent {
     protected @Nullable Point latestMousePositionInArea;
     protected Sprite sprite;
     public Listener listener;

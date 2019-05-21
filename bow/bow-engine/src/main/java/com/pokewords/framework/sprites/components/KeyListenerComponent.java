@@ -15,7 +15,13 @@ public class KeyListenerComponent extends CloneableComponent {
         this.sprite = sprite;
     }
 
+    @Override
+    public void onUpdate(double timePerFrame) {
+        listener.onUpdate(sprite);
+    }
+
     public interface Listener {
+        default void onUpdate(Sprite sprite) {}
         default void onKeyPressed(Sprite sprite, int keyCode) {}
         default void onKeyReleased(Sprite sprite, int keyCode) {}
         default void onKeyClicked(Sprite sprite, int keyCode) {}
