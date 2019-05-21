@@ -4,6 +4,8 @@ import com.pokewords.framework.commons.Pair;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.KeyListenerComponent;
+import com.pokewords.framework.sprites.components.MouseListenerComponent;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.parsing.ScriptRules;
 import com.pokewords.framework.views.RenderedLayers;
@@ -42,7 +44,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     /**
      * @param sprite the spawned sprite to be added into the world
-     * @return the Sprite's unique id
+     * @return the Sprite's unique event
      */
     public int spawn(Sprite sprite) {
         int id = spriteCount.incrementAndGet();
@@ -62,7 +64,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @param sprite the spawned sprite to be added into the world
      * @param time the time-delay to spawn
      * @param timeUnit the time unit of
-     * @param callback the callback receives the spawned sprite's id when the sprite is actually spawned
+     * @param callback the callback receives the spawned sprite's event when the sprite is actually spawned
      */
     public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, @Nullable Consumer<Integer> callback) {
         new Thread(() -> {
@@ -195,21 +197,21 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     /**
-     * @return if the sprite who owns the id is in the world
+     * @return if the sprite who owns the event is in the world
      */
     public boolean contains(int spriteId) {
         return idSpriteMap.containsKey(spriteId);
     }
 
     /**
-     * @return the sprite's id
+     * @return the sprite's event
      */
     public int getId(Sprite sprite) {
         return spriteIdMap.get(sprite);
     }
 
     /**
-     * @return the sprite who owns the id
+     * @return the sprite who owns the event
      */
     public Sprite getSprite(int spriteId) {
         return idSpriteMap.get(spriteId);
@@ -284,4 +286,15 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         collisionHandlerMap.clear();
     }
 
+    public Collection<MouseListenerComponent> getMouseListenerComponents() {
+        return sprites.stream().filter(s -> s.hasComponent(MouseListenerComponent.class))
+                        .map(s -> s.getComponent(MouseListenerComponent.class))
+                        .collect(Collectors.toList());
+    }
+
+    public Collection<KeyListenerComponent> getKeyListenerComponents() {
+        return sprites.stream().filter(s -> s.hasComponent(KeyListenerComponent.class))
+                .map(s -> s.getComponent(KeyListenerComponent.class))
+                .collect(Collectors.toList());
+    }
 }

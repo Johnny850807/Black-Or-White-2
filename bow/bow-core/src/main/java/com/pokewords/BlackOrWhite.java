@@ -1,7 +1,6 @@
 package com.pokewords;
 
 import com.pokewords.appstates.MenuAppState;
-import com.pokewords.constants.Events;
 import com.pokewords.constants.SoundTypes;
 import com.pokewords.constants.SpriteTypes;
 import com.pokewords.framework.commons.Range;
@@ -14,7 +13,6 @@ import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.effects.AppStateTransitionEffect;
-import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 public class BlackOrWhite extends GameApplication {
@@ -38,7 +36,7 @@ public class BlackOrWhite extends GameApplication {
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.declare(SpriteTypes.MENU)
                 .position(0, 0)
-                .size(800, 600)
+                .areaSize(800, 600)
                 .with(GifScriptMaker.createSequenceScript("assets/sequences/menu",
                         new Range(0, 57), 0, 57, 30, 58))
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())

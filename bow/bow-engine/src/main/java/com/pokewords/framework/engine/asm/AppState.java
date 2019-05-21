@@ -6,7 +6,6 @@ import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.inputs.InputManager;
-import com.pokewords.framework.views.inputs.Inputs;
 import com.pokewords.framework.views.windows.GameWindowDefinition;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
@@ -52,33 +51,27 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	/**
 	 * bind a listener to the key pressed down event
-	 * @param keyCode the pressed key code
 	 * @param listener key listener
 	 */
-	protected void bindKeyPressedAction(int keyCode, Runnable listener) {
-		inputManager.bindKeyEvent(this,
-				inputManager.compositeCode(KeyEvent.KEY_PRESSED, keyCode), listener);
+	protected void bindKeyPressedAction(Consumer<Integer> listener) {
+		inputManager.bindKeyEvent(this, KeyEvent.KEY_PRESSED, listener);
 	}
 
 	/**
 	 * bind a listener to the key released up event
-	 * @param keyCode the released key code
 	 * @param listener key listener
 	 */
-	protected void bindKeyReleasedAction(int keyCode, Runnable listener) {
-		inputManager.bindKeyEvent(this,
-				inputManager.compositeCode(KeyEvent.KEY_RELEASED, keyCode), listener);
+	protected void bindKeyReleasedAction(Consumer<Integer> listener) {
+		inputManager.bindKeyEvent(this, KeyEvent.KEY_RELEASED, listener);
 	}
 
 	/**
 	 * bind a listener to the key clicked event, the key clicked event will occur when
 	 * a key pressed event followed by a key released event of the same keyCode.
-	 * @param keyCode the clicked key code
 	 * @param listener key listener
 	 */
-	protected void bindKeyClickedAction(int keyCode, Runnable listener) {
-		inputManager.bindKeyEvent(this,
-				inputManager.compositeCode(KeyEvent.KEY_TYPED, keyCode), listener);
+	protected void bindKeyClickedAction(Consumer<Integer> listener) {
+		inputManager.bindKeyEvent(this, KeyEvent.KEY_TYPED, listener);
 	}
 
 	/**
@@ -192,7 +185,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		return appStateWorld;
 	}
 
-	public Point getWindowSize() {
+	public Dimension getWindowSize() {
 		return gameWindowsConfigurator.getGameWindowDefinition().size;
 	}
 

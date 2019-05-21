@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class FrameStateMachineComponent extends CloneableComponent implements Renderable {
     protected Sprite sprite;
     protected AppStateWorld world;
-    protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>(); // <Frame's id, Frame>
+    protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>(); // <Frame's event, Frame>
     protected long latestUpdateTimestamp = System.currentTimeMillis();
     protected int frameDurationCountdown = 0;
 

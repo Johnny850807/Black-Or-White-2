@@ -16,7 +16,7 @@ public class MockGameWindowsConfigurator implements GameWindowsConfigurator {
 
     @Override
     public GameWindowsConfigurator size(int width, int height) {
-        gameWindowDefinition.size = new Point(width, height);
+        gameWindowDefinition.size = new Dimension(width, height);
         return this;
     }
 

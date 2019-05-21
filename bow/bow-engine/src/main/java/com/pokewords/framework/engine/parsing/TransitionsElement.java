@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class TransitionsElement {
     private Class<?> enumType;
-    private Map<Object, Integer> transitionMap = new HashMap<>();  // <event type, to frame's id>
+    private Map<Object, Integer> transitionMap = new HashMap<>();  // <event type, to frame's event>
 
     public TransitionsElement(Element element) {
         parseAndValidateEnumType(element);

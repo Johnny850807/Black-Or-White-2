@@ -5,8 +5,49 @@ import com.pokewords.framework.engine.listeners.GameLoopingListener;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.function.Consumer;
 
-public interface InputManager extends Inputs, GameLoopingListener {
+public interface InputManager extends GameLoopingListener {
+
+    /**
+     * Bind an specific key event a keyListener.
+     * The listener will be triggered regardless of what appState is currently bound.
+     * @param event the input event (button, mouse,... of some integer constants space)
+     * @param keyListener the keyListener task will be triggered when the event occurs
+     */
+    void bindKeyEventForRoot(int event, Consumer<Integer> keyListener);
+
+
+    /**
+     * Bind an specific mouse event a mouseListener.
+     * The listener will be triggered regardless of what appState is currently bound.
+     * @param event the input event (button, mouse,... of some integer constants space)
+     * @param mouseListener the mouseListener task will be triggered given the mouse's position when the event occurs
+     */
+    void bindMouseEventForRoot(int event, Consumer<Point> mouseListener);
+
+    /**
+     * Bind an specific key event a keyListener (given key code) for an AppState.
+     * The listener will be triggered only when the given appState is bound using #bindAppState(appState).
+     * @param event the key event
+     * @param keyListener the keyListener task will be triggered when the event occurs
+     */
+    void bindKeyEvent(AppState appState, int event, Consumer<Integer> keyListener);
+
+
+    /**
+     * Bind an specific mouse event a mouseListener (given mouse's position) for an AppState.
+     * The listener will be triggered only when the given appState is bound using #bindAppState(appState).
+     * @param event the mouse event
+     * @param mouseListener the mouseListener task will be triggered given the mouse's position when the event occurs
+     */
+    void bindMouseEvent(AppState appState, int event, Consumer<Point> mouseListener);
+
+    /**
+     * @param events a sequence of events happen together
+     * @return the compositeCode event's event
+     */
+    int compositeCode(int ...events);
 
     /**
      * Bind and enable an appState to listen to the input events.
@@ -26,15 +67,15 @@ public interface InputManager extends Inputs, GameLoopingListener {
 
     /**
      * Add an event releasing the held button up
-     * @param id the button's id
+     * @param keyCode the button's event
      */
-    void onButtonPressedDown(int id);
+    void onButtonPressedDown(int keyCode);
 
     /**
      * Add an event releasing the held button up
-     * @param id the button's id
+     * @param keyCode the button's event
      */
-    void onButtonReleasedUp(int id);
+    void onButtonReleasedUp(int keyCode);
 
     /**
      * Add an event moving the mouse (updating the mouse's position)

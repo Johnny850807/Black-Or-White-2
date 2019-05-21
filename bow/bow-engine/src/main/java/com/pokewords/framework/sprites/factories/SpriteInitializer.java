@@ -124,14 +124,31 @@ public class SpriteInitializer {
             return this;
         }
 
-        public SpriteDeclarator size(Point size) {
-            return size(size.x, size.y);
+        public SpriteDeclarator areaSize(Dimension size) {
+            return areaSize((int) size.getWidth(), (int) size.getHeight());
         }
 
-        public SpriteDeclarator size(int w, int y) {
-            Rectangle body = declaration.propertiesComponent.getBody();
-            declaration.propertiesComponent.setBody((int) body.getX(), (int) body.getY(),
-                    w, y);
+        public SpriteDeclarator areaSize(int w, int h) {
+            declaration.propertiesComponent.getArea().setSize(w, h);
+            return this;
+        }
+        public SpriteDeclarator area(Rectangle area) {
+            declaration.propertiesComponent.setArea(area);
+            return this;
+        }
+
+        public SpriteDeclarator area(int x, int y, int w, int h) {
+            declaration.propertiesComponent.setArea(x, y, w, h);
+            return this;
+        }
+
+        public SpriteDeclarator body(Rectangle body) {
+            declaration.propertiesComponent.setBody(body);
+            return this;
+        }
+
+        public SpriteDeclarator body(int x, int y, int w, int h) {
+            declaration.propertiesComponent.setBody(x, y, w, h);
             return this;
         }
 

@@ -24,8 +24,8 @@ public class ComponentsTest extends AbstractTest {
         assertEquals("Type", pc.getType());
         assertEquals(50, pc.getX());
         assertEquals(50, pc.getY());
-        assertEquals(50, pc.getW());
-        assertEquals(50, pc.getH());
+        assertEquals(50, pc.getWidth());
+        assertEquals(50, pc.getHeight());
         assertEquals(new Rectangle(50, 50, 50, 50), pc.getBody());
         assertEquals(new Point(200, 200), pc.getCenter());
 

@@ -23,7 +23,8 @@ public class GameEngine {
     private AppStateMachine appStateMachine;
     private final Runnable gameLoopingTask;
     private ScheduledExecutorService scheduler;
-    private int counter = 0;
+    private FpsCounter fpsCounter = new FpsCounter();
+    private int loopingCounter = 0;
     private double timePerFrame = 1 / 60.0;  // 60 fps
 
     public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
@@ -35,19 +36,6 @@ public class GameEngine {
         this.gameLoopingTask = this::gameLooping;
     }
 
-    private void gameLooping() {
-        try {
-            counter = (counter +1) % 300;
-            inputManager.onUpdate(timePerFrame);
-            appStateMachine.onUpdate(timePerFrame);
-            gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
-
-            if (counter == 0)
-                System.out.printf("Memory Used: %d\n" , Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
-        } catch (Exception err) {
-            err.printStackTrace();
-        }
-    }
 
     public void setGameView(AppView gameView) {
         this.gameView = gameView;
@@ -56,13 +44,34 @@ public class GameEngine {
     public void launchEngine() {
         gameView.onAppInit();
         appStateMachine.trigger(AppStateMachine.EVENT_LOADING);
-        scheduler.scheduleAtFixedRate(gameLoopingTask, 0, (long) (timePerFrame*1000), TimeUnit.MILLISECONDS);
+        scheduler.schedule(gameLoopingTask,  (long) (timePerFrame*1000), TimeUnit.MILLISECONDS);
         gameView.onAppLoading();
 
 		appStateMachine.trigger(AppStateMachine.EVENT_GAME_STARTED);
 		gameView.onAppStarted();
     }
 
+    private void gameLooping() {
+        try {
+            loopingCounter = (loopingCounter +1) % Integer.MAX_VALUE;
+            inputManager.onUpdate(timePerFrame);
+            appStateMachine.onUpdate(timePerFrame);
+            gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
+            printProfileEveryCertainLoops();
+        } catch (Exception err) {
+            err.printStackTrace();
+        } finally {
+            scheduler.schedule(gameLoopingTask,  (long) (timePerFrame*1000), TimeUnit.MILLISECONDS);
+        }
+    }
+
+    private void printProfileEveryCertainLoops() {
+        if (loopingCounter % 300 == 0)
+        {
+            System.out.printf("Memory Used: %d\n" , Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+            System.out.printf("FPS: %f\n", fpsCounter.getAverageFramesPerSecond());
+        }
+    }
 
     public AppView getGameView() {
         return gameView;

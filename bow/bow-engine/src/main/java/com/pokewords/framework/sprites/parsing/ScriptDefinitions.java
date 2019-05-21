@@ -17,7 +17,7 @@ public interface ScriptDefinitions {
                     "Segment\n" +
                     "    galleries\n" +
                     "    frame\n" +
-                    "        segment-id ([1-9][0-9]+)|([0-9]) Integer\n" +
+                    "        segment-event ([1-9][0-9]+)|([0-9]) Integer\n" +
                     "        segment-description \\S+.*?\\S+ String\n" +
                     "        pic ([1-9][0-9]+)|([0-9]) Integer\n" +
                     "        duration ([1-9][0-9]+)|([0-9]) Integer\n" +
