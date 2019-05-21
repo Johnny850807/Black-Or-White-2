@@ -16,9 +16,13 @@ import java.util.function.Supplier;
  * Because the object might have different input listening interface, so we do adapting in this class.
  * @author johnny850807 (waterball)
  */
-public class InputEventsDelegatingAdapter {
+public class InputEventsDelegator {
 
-    public static void delegateToAppStateWorld(InputManager inputManager, Supplier<AppStateWorld> currentWorldSupplier) {
+    /**
+     * @param inputManager the inputManager's instance
+     * @param currentWorldSupplier factory returning the current AppStateWorld
+     */
+    public static void delegateToInputEventsListenerComponents(InputManager inputManager, Supplier<AppStateWorld> currentWorldSupplier) {
         inputManager.bindKeyEventForRoot(KeyEvent.KEY_PRESSED, keyCode ->
                 currentWorldSupplier.get().getKeyListenerComponents()
                         .forEach(c -> c.getListener().onKeyPressed(c.getSprite(), keyCode)));

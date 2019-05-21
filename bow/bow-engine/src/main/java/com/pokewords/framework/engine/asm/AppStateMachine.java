@@ -56,7 +56,7 @@ public class AppStateMachine implements GameLoopingListener {
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
 		this.soundPlayer = soundPlayer;
 		soundPlayer.addSound(SoundTypes.TRANSITION, "assets/sounds/chimeTransitionSound.wav");
-		InputEventsDelegatingAdapter.delegateToAppStateWorld(inputManager, this::getCurrentStateWorld);
+		InputEventsDelegator.delegateToInputEventsListenerComponents(inputManager, this::getCurrentStateWorld);
 		setupStates();
 	}
 
