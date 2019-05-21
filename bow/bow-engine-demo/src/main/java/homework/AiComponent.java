@@ -2,7 +2,6 @@ package homework;
 
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.CloneableComponent;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.util.Random;
 

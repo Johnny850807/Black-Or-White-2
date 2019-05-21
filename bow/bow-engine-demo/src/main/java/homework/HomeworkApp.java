@@ -7,6 +7,8 @@ import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.ImageComponent;
+import com.pokewords.framework.sprites.components.KeyListenerComponent;
+import com.pokewords.framework.sprites.components.MouseListenerComponent;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.sprites.parsing.Script;
@@ -37,7 +39,7 @@ public class HomeworkApp extends GameApplication {
                         8, 8, 22, 23, 120, 1 ))
                 .with(new AiComponent())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .size(35, 35)
+                .areaSize(35, 35)
                 .commit();
 
         spriteInitializer.declare(Types.AI2)
@@ -45,7 +47,7 @@ public class HomeworkApp extends GameApplication {
                         8, 8, 30, 31, 120, 1 ))
                 .with(new AiComponent())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .size(35, 35)
+                .areaSize(35, 35)
                 .commit();
 
         spriteInitializer.declare(Types.AI3)
@@ -53,12 +55,14 @@ public class HomeworkApp extends GameApplication {
                         8, 8, 38, 39, 120, 1 ))
                 .with(new AiComponent())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .size(35, 35)
+                .areaSize(35, 35)
                 .commit();
 
         spriteInitializer.declare(Types.PLAYER)
                 .with(new ImageComponent(new ImageFrame(0, 1, "images/smile.png")))
-                .size(50, 50)
+                .with(new KeyListenerComponent(new PlayerKeyListener()))
+                .with(new MouseListenerComponent(new PlayerMouseListener()))
+                .areaSize(50, 50)
                 .commit();
 
     }
