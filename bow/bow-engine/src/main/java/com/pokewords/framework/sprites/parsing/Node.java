@@ -1,6 +1,9 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.commons.KeyValuePairs;
+import com.pokewords.framework.commons.Pair;
+import com.pokewords.framework.commons.Triple;
+import com.pokewords.framework.engine.exceptions.NodeException;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -87,8 +90,7 @@ public abstract class Node {
     public String keyValuePairsToString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
-        keyValuePairs.getMap()
-                .forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        keyValuePairs.getMap().forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
         return resultBuilder.toString();
     }
 
@@ -96,10 +98,29 @@ public abstract class Node {
         return keyValuePairsToString(0);
     }
 
+    protected void parseNameIdDescription(Context context) {
+        name = Context.deTag(context.getTag());
+
+        fetchAndCheck(context);
+        if (context.getSingle() == null) return;
+        id = Integer.parseInt(context.getSingle());
+
+        fetchAndCheck(context);
+        if (context.getSingle() == null) return;
+        description = context.getSingle();
+    }
+
+    private boolean fetchAndCheck(Context context) {
+        if (!context.fetchNextToken())
+            throw new NodeException(String.format("Tag <%s> is not closed", name));
+        return true;
+    }
+
     protected void parseKeyValuePairs(Context context) {
+        if (context.getKey() == null) return;
         do {
-            String token;
-        } while (true);
+            put(context.getKey(), context.getValue());
+        } while (fetchAndCheck(context) && context.getKey() != null);
     }
 
     public abstract void parse(Context context);
@@ -107,7 +128,7 @@ public abstract class Node {
     static void main(String[] args) {
         Segment script = new LinScriptSegment("name", 1);
         // 1
-        script.parse(new Context("path/to/lin_script_text"));
+        script.parse(Context.fromFile("path/to/lin_script_text"));
         // 2
         System.out.println(script);
     }

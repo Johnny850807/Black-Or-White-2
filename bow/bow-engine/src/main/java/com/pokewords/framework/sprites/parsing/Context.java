@@ -70,8 +70,8 @@ public class Context {
 
     private void consumeToken(Triple<String, Pair<String, String>, String> token) {
         tag = token.getFirst();
-        key = token.getSecond().getFirst();
-        value = token.getSecond().getSecond();
+        key = token.getSecond() != null? token.getSecond().getFirst() : null;
+        value = token.getSecond() != null? token.getSecond().getSecond() : null;
         single = token.getThird();
     }
 
@@ -91,6 +91,12 @@ public class Context {
         return single;
     }
 
+    public Triple<String, Pair<String, String>, String> peekNextToken() {
+        if (tokens.isEmpty())
+            return new Triple<>(null, null, null);
+        return tokens.get(0);
+    }
+
     public static void main(String[] args) {
         Context context = Context.fromText(SCRIPT_TEXT);
         while (context.fetchNextToken()) {
@@ -98,7 +104,7 @@ public class Context {
             String key = context.getKey();
             String value = context.getValue();
             String single = context.getSingle();
-            
+
             String tagName = Context.deTag(tag);
         }
     }
