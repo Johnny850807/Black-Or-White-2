@@ -6,7 +6,7 @@ import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import java.awt.event.KeyEvent;
 
 @SuppressWarnings("Duplicates")
-public class PlayerKeyListener implements KeyListenerComponent.Listener {
+public class PlayerKeyListener extends KeyListenerComponent.Listener {
     private boolean moving = false;
     private Direction direction;
 

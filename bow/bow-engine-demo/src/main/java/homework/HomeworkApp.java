@@ -68,8 +68,9 @@ public class HomeworkApp extends GameApplication {
                 .commit();
 
         spriteInitializer.declare(Types.MOUSE_POSITION)
-                .with(new StringComponent(new StringFrame(0, 5, "456456",
-                        new Font("微軟正黑體", Font.PLAIN, 15), false)))
+                .with(new StringComponent(new StringFrame(0, 5, "",
+                        new Font("微軟正黑體", Font.PLAIN, 25), false).stickSpriteSize()))
+                .with(MouseListenerComponent.ofListener(new TextMouseListener()))
                 .position(0, 0)
                 .commit();
     }

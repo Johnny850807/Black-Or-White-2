@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 @SuppressWarnings("Duplicates")
-public class PlayerMouseListener implements MouseListenerComponent.Listener {
+public class PlayerMouseListener extends MouseListenerComponent.Listener {
     @Override
     public void onMousePressed(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
         System.out.println("press");
@@ -23,11 +23,6 @@ public class PlayerMouseListener implements MouseListenerComponent.Listener {
     @Override
     public void onMouseClicked(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
         System.out.println("clicked");
-    }
-
-    @Override
-    public void onMouseDragged(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
-        System.out.println("dragged");
     }
 
     @Override
