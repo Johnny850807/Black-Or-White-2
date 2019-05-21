@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Frame extends Cloneable {
 	/**
-	 * @return get the id of frame's
+	 * @return get the event of frame's
 	 */
 	int getId();
 

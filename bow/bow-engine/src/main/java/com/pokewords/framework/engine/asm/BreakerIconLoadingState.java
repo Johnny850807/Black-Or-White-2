@@ -39,8 +39,8 @@ public class BreakerIconLoadingState extends AppState {
         getAppStateWorld().spawn(
                 getSpriteInitializer().declare(Types.BreakerIconLoadingState)
                         .position(0, 0)
-                        .size(getGameWindowDefinition().size)
-                        .with(GifScriptMaker.createSequenceScript("assets/sequences/BreakerLoadingIcon",
+                        .areaSize(getGameWindowDefinition().size)
+                        .with(GifScriptMaker.createSequenceScript( "assets/sequences/BreakerLoadingIcon",
                                 new Range(0, 249), 0, 249, 30, 0))
                         .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                         .commit()

@@ -3,6 +3,9 @@ package com.pokewords.framework.engine.asm;
 import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.commons.Triple;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
+import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.KeyListenerComponent;
+import com.pokewords.framework.sprites.components.MouseListenerComponent;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
@@ -14,6 +17,10 @@ import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +28,7 @@ import java.util.Map;
  * The AppStateMachine manages the finite game states.
  *
  * Built-in transitions:
- * EmptyState --(EVENT_LOADING)--> ProgressBarLoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
+ * EmptyState --(EVENT_LOADING)--> LoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
  *
  * Use AppStateMachine#createState(appStateType) to create your app state.
  * @author johnny850807 (waterball)
@@ -56,8 +63,85 @@ public class AppStateMachine implements GameLoopingListener {
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
 		this.soundPlayer = soundPlayer;
 		soundPlayer.addSound(SoundTypes.TRANSITION, "assets/sounds/chimeTransitionSound.wav");
+		bindRootInputListeners();
 		setupStates();
 	}
+
+	private void bindRootInputListeners() {
+
+		inputManager.bindKeyEventForRoot(KeyEvent.KEY_PRESSED, keyCode ->
+						getCurrentStateWorld().getKeyListenerComponents()
+							.forEach(c -> c.getListener().onKeyPressed(c.getSprite(), keyCode)));
+
+		inputManager.bindKeyEventForRoot(KeyEvent.KEY_RELEASED, keyCode ->
+				getCurrentStateWorld().getKeyListenerComponents()
+						.forEach(c -> c.getListener().onKeyReleased(c.getSprite(), keyCode)));
+
+		inputManager.bindKeyEventForRoot(KeyEvent.KEY_TYPED, keyCode ->
+				getCurrentStateWorld().getKeyListenerComponents()
+						.forEach(c -> c.getListener().onKeyClicked(c.getSprite(), keyCode)));
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_MOVED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> {
+							Sprite sprite = c.getSprite();
+							Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+							c.getListener().onMouseEnter(sprite, mousePosition, positionInArea);
+						})
+		);
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_EXITED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getLatestMousePositionInArea() != null)
+						.filter(c -> !c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> c.getListener().onMouseExit(c.getSprite(), mousePosition))
+		);
+
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_PRESSED, mousePosition ->
+			getCurrentStateWorld().getMouseListenerComponents().stream()
+					.filter(c -> c.getSprite().getArea().contains(mousePosition))
+					.forEach(c -> {
+						Sprite sprite = c.getSprite();
+						Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+						c.getListener().onMousePressed(sprite, mousePosition, positionInArea);
+					})
+		);
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_RELEASED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> {
+							Sprite sprite = c.getSprite();
+							Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+							c.getListener().onMouseReleased(sprite, mousePosition, positionInArea);
+						})
+		);
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_CLICKED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> {
+							Sprite sprite = c.getSprite();
+							Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+							c.getListener().onMouseClicked(sprite, mousePosition, positionInArea);
+						})
+		);
+
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_DRAGGED, mousePosition ->
+				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> c.getSprite().getArea().contains(mousePosition))
+						.forEach(c -> {
+							Sprite sprite = c.getSprite();
+							Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
+							c.getListener().onMouseDragged(sprite, mousePosition, positionInArea);
+						})
+		);
+
+
+	}
+
 
 	private void setupStates() {
 		AppState initialState = createState(EmptyAppState.class);

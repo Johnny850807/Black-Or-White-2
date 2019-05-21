@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -85,9 +86,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return getComponent(CollidableComponent.class);
 	}
 
-	public ClickableComponent getClickableComponent() {
-		return getComponent(ClickableComponent.class);
-	}
 
 	public boolean isCollidable() {
 		return hasComponent(CollidableComponent.class);
@@ -95,6 +93,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public boolean hasComponent(Class<? extends Component> type) {
 		return components.containsKey(type);
+	}
+
+	public <T extends Component> Optional<T> getComponentOptional(Class<T> type) {
+		return Optional.ofNullable(getComponent(type));
 	}
 
 	/**
@@ -167,8 +169,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         return getPropertiesComponent().getBody();
     }
 
-    public Dimension getSize() {
-		return getPropertiesComponent().getSize();
+    public Dimension getBodySize() {
+		return getPropertiesComponent().getBodySize();
 	}
 
     public void setPosition(Point position) {
@@ -184,19 +186,30 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     }
 
     public int getX() {
-        return (int) getPosition().getX();
+        return getPropertiesComponent().getX();
     }
 
     public int getY() {
-        return (int) getPosition().getY();
+        return getPropertiesComponent().getY();
     }
 
+    public void setArea(Rectangle area) {
+		getPropertiesComponent().setArea(area);
+	}
+
+    public Rectangle getArea() {
+		return getPropertiesComponent().getArea();
+	}
+
+	public void setAreaSize(Dimension size) {
+		getPropertiesComponent().setAreaSize(size);
+	}
     public int getWidth() {
-        return (int) getBody().getWidth();
+        return getPropertiesComponent().getWidth();
     }
 
     public int getHeight() {
-        return (int) getBody().getHeight();
+        return getPropertiesComponent().getHeight();
     }
 
     public void setType(String type) {
@@ -231,7 +244,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	public boolean isType(Object obj) {
-		return getType().equals(obj.toString());
+		return  getPropertiesComponent().isType(obj);
 	}
 
 	public Sprite clone(){

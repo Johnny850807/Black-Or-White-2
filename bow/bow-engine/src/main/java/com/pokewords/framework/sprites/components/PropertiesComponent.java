@@ -8,6 +8,7 @@ import java.util.Objects;
  */
 public class PropertiesComponent extends CloneableComponent {
 	private double timePerFrame;
+	private Rectangle area = new Rectangle(0, 0, 0, 0);
 	private Rectangle body = new Rectangle(0, 0, 0, 0);
 	private Point center = new Point();
 	private Object type;
@@ -33,17 +34,6 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 
-	public void move(int velocityX, int velocityY) {
-		getBody().translate(velocityX, velocityY);
-	}
-	public void moveX(int velocityX) {
-		getBody().translate( velocityX, 0);
-	}
-
-	public void moveY(int velocityY) {
-		getBody().translate(0, velocityY);
-	}
-
 	public Rectangle getBody() {
 		return body;
 	}
@@ -53,8 +43,21 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	public void setBody(Rectangle body) {
-		this.body = body;
+		this.body.setBounds(body);
 	}
+
+	public void move(int velocityX, int velocityY) {
+		getArea().translate(velocityX, velocityY);
+	}
+
+	public void moveX(int velocityX) {
+		getArea().translate( velocityX, 0);
+	}
+
+	public void moveY(int velocityY) {
+		getArea().translate(0, velocityY);
+	}
+
 
 	public int getX(){
 		return (int) getPosition().getX();
@@ -62,35 +65,61 @@ public class PropertiesComponent extends CloneableComponent {
 	public int getY(){
 		return (int) getPosition().getY();
 	}
-	public int getW(){
-		return (int) getBody().getWidth();
+	public int getWidth(){
+		return (int) getArea().getWidth();
 	}
-	public int getH(){
-		return (int) getBody().getHeight();
-	}
-
-
-	public Dimension getSize() {
-		return getBody().getSize();
+	public int getHeight(){
+		return (int) getArea().getHeight();
 	}
 
 	public Point getPosition(){
-		return body.getLocation();
+		return area.getLocation();
 	}
 
 	public void setPosition(Point position) {
-		this.body.setLocation(position);
+		this.area.setLocation(position);
 	}
 
 	public void setPosition(int x, int y) {
-		this.body.setLocation(x, y);
+		this.area.setLocation(x, y);
+	}
+
+	public Rectangle getArea() {
+		return area;
+	}
+
+	public void setArea(Rectangle area) {
+		this.area.setBounds(area);
+	}
+
+	public void setArea(int x, int y, int w, int h) {
+		this.area.setBounds(x, y, w, h);
+	}
+
+	public void setAreaSize(int w, int h) {
+		area.setSize(w, h);
+	}
+	public void setAreaSize(Dimension area) {
+		area.setSize(area);
+	}
+
+	public Dimension getAreaSize() {
+		return getArea().getSize();
+	}
+
+	public Dimension getBodySize() {
+		return getBody().getSize();
+	}
+
+	public boolean isType(Object type) {
+		return getType() == type;
 	}
 
 	public Object getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Object type) {
 		this.type = type;
 	}
 
@@ -99,7 +128,7 @@ public class PropertiesComponent extends CloneableComponent {
 	}
 
 	public void setCenter(Point center) {
-		this.center = center;
+		this.center.setLocation(center);
 	}
 
 	public Point getCenter() {
@@ -116,23 +145,24 @@ public class PropertiesComponent extends CloneableComponent {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		PropertiesComponent that = (PropertiesComponent) o;
-		return body.equals(that.body) &&
+		return area.equals(that.area) &&
+				body.equals(that.body) &&
 				center.equals(that.center) &&
 				type.equals(that.type);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(body, center, type);
+		return Objects.hash(area, body, center, type);
 	}
 
 	@Override
 	public String toString() {
 		return "PropertiesComponent{" +
-				"body=" + body +
+				"area=" + area +
+				", body=" + body +
 				", center=" + center +
-				", type='" + type + '\'' +
+				", type=" + type +
 				'}';
 	}
-
 }

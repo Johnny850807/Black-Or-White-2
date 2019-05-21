@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * A frame rendered as a text.
  *
- * Note that The width, and height of the text are determined by the font-size at runtime rather than by sprite.
+ * Note that The width, and height of the text are determined by the font-areaSize at runtime rather than by sprite.
  * So you cannot get its width and height.
  * @author johnny850807 (waterball)
  */

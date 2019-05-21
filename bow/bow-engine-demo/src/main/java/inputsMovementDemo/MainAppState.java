@@ -26,10 +26,9 @@ public class MainAppState extends AppState {
         getAppStateWorld().spawn(dinosaur);
         getAppStateWorld().spawn(face);
 
-        bindKeyPressedAction(KeyEvent.VK_W, () -> move(Direction.UP));
-        bindKeyPressedAction(KeyEvent.VK_S, () -> move(Direction.DOWN));
-        bindKeyPressedAction(KeyEvent.VK_A, () -> move(Direction.LEFT));
-        bindKeyPressedAction(KeyEvent.VK_D, () -> move(Direction.RIGHT));
+        bindKeyPressedAction(this::onKeyPressed);
+        bindKeyReleasedAction(this::onKeyReleased);
+
         bindMouseClickedAction((position) -> face.setPosition(position));
         bindMouseDraggedAction((position) -> {
             face.setPosition(position);
@@ -37,11 +36,42 @@ public class MainAppState extends AppState {
         });
         bindMouseReleasedAction((position) -> dinosaur.setPosition(position));
         bindMouseMovedAction((position) -> dinosaur.setPosition(position));
+    }
 
-        bindKeyReleasedAction(KeyEvent.VK_W, () -> clearMovement(Direction.UP));
-        bindKeyReleasedAction(KeyEvent.VK_S, () -> clearMovement(Direction.DOWN));
-        bindKeyReleasedAction(KeyEvent.VK_A, () -> clearMovement(Direction.LEFT));
-        bindKeyReleasedAction(KeyEvent.VK_D, () -> clearMovement(Direction.RIGHT));
+    private void onKeyPressed(int keyCode) {
+        switch (keyCode)
+        {
+            case KeyEvent.VK_W:
+                move(Direction.UP);
+                break;
+            case KeyEvent.VK_S:
+                move(Direction.DOWN);
+                break;
+            case KeyEvent.VK_A:
+                move(Direction.LEFT);
+                break;
+            case KeyEvent.VK_D:
+                move(Direction.RIGHT);
+                break;
+        }
+    }
+
+    private void onKeyReleased(int keyCode) {
+        switch (keyCode)
+        {
+            case KeyEvent.VK_W:
+                clearMovement(Direction.UP);
+                break;
+            case KeyEvent.VK_S:
+                clearMovement(Direction.DOWN);
+                break;
+            case KeyEvent.VK_A:
+                clearMovement(Direction.LEFT);
+                break;
+            case KeyEvent.VK_D:
+                clearMovement(Direction.RIGHT);
+                break;
+        }
     }
 
     private void clearMovement(Direction direction) {

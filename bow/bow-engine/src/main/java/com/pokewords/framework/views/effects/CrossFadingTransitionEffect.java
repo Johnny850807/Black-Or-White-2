@@ -64,7 +64,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
 
         spriteInitializer.declare(Types.FADED_IN_RECTANGLE)
                 .position(0, 0)
-                .size(from.getGameWindowDefinition().size)
+                .areaSize(from.getGameWindowDefinition().size)
                 .with(createFrameStateMachineComponentWithFadingEffect(rectangleEffectFrame))
                 .commit();
     }
@@ -115,7 +115,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
         EffectFrame rectangleEffectFrame = createFadingEffectRectangleFrame(Color.white, false);
         spriteInitializer.declare(Types.FADED_OUT_RECTANGLE)
                 .position(0, 0)
-                .size(to.getGameWindowDefinition().size)
+                .areaSize(to.getGameWindowDefinition().size)
                 .with(createFrameStateMachineComponentWithFadingEffect(rectangleEffectFrame))
                 .commit();
 

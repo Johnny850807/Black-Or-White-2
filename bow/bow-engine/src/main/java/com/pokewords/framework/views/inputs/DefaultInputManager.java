@@ -15,17 +15,23 @@ import java.util.function.Consumer;
  * @author johnny850807 (waterball)
  */
 public class DefaultInputManager implements InputManager {
-    private final ReusableReferencePool<KeyAction> keyActionPool =
+    private final ReusableReferencePool<KeyAction> keyActionReusablePool =
             new ReusableReferencePool<>(8, KeyAction::new);
-    private final ReusableReferencePool<MouseAction> mouseActionPool =
+    private final ReusableReferencePool<MouseAction> mouseActionReusablePool =
             new ReusableReferencePool<>(10, MouseAction::new);
 
     private AppState currentAppState;
 
-    // <current AppState, <key's id, action>>
-    private Map<AppState, HashMap<Integer, Runnable>> keyListenersSpace = Collections.synchronizedMap(new IdentityHashMap<>());
+    // <key event's event, listener (given key code)>
+    private Map<Integer, Consumer<Integer>> rootKeyListeners = Collections.synchronizedMap(new HashMap<>());
 
-    // <current AppState, <mouse event's id, action (given mouse position)>>
+    //<mouse event's event, listener (given mouse position)>>
+    private Map<Integer, Consumer<Point>> rootMouseListeners = Collections.synchronizedMap(new HashMap<>());
+
+    // <current AppState, <key's event, listener (given key code)>>
+    private Map<AppState, HashMap<Integer, Consumer<Integer>>> keyListenersSpace = Collections.synchronizedMap(new IdentityHashMap<>());
+
+    // <current AppState, <mouse event's event, listener (given mouse position)>>
     private Map<AppState, HashMap<Integer, Consumer<Point>>> mouseListenersSpace = Collections.synchronizedMap(new IdentityHashMap<>());
 
     private List<KeyAction> currentKeyActionList = new LinkedList<>();
@@ -38,11 +44,11 @@ public class DefaultInputManager implements InputManager {
 
     private void fireAllActions() {
         currentKeyActionList.forEach(KeyAction::fireAction);
-        keyActionPool.put(currentKeyActionList);
+        keyActionReusablePool.put(currentKeyActionList);
         currentKeyActionList.clear();
 
         currentMouseActionList.forEach(MouseAction::fireAction);
-        mouseActionPool.put(currentMouseActionList);
+        mouseActionReusablePool.put(currentMouseActionList);
         currentMouseActionList.clear();
     }
 
@@ -58,7 +64,17 @@ public class DefaultInputManager implements InputManager {
     }
 
     @Override
-    public void bindKeyEvent(AppState appState, int eventId, Runnable keyListener) {
+    public void bindKeyEventForRoot(int event, Consumer<Integer> keyListener) {
+        rootKeyListeners.put(event, keyListener);
+    }
+
+    @Override
+    public void bindMouseEventForRoot(int event, Consumer<Point> mouseListener) {
+        rootMouseListeners.put(event, mouseListener);
+    }
+
+    @Override
+    public void bindKeyEvent(AppState appState, int eventId, Consumer<Integer> keyListener) {
         initListenersOfAppStateIfNotExists(appState);
         if (keyListenersSpace.get(appState).containsKey(eventId))
             throw new IllegalArgumentException("The eventId has already been bound.");
@@ -86,22 +102,22 @@ public class DefaultInputManager implements InputManager {
     }
 
     @Override
-    public void onButtonPressedDown(int id) {
+    public void onButtonPressedDown(int keyCode) {
         doubleCheckedSyncCurrentAppStateNotNullThenDo(
-                () -> currentKeyActionList.add(keyAction(KeyEvent.KEY_PRESSED, id))
+                () -> currentKeyActionList.add(keyAction(KeyEvent.KEY_PRESSED, keyCode))
         );
     }
 
     @Override
-    public void onButtonReleasedUp(int id) {
+    public void onButtonReleasedUp(int keyCode) {
         doubleCheckedSyncCurrentAppStateNotNullThenDo(() -> {
-            currentKeyActionList.add(keyAction(KeyEvent.KEY_RELEASED, id));
-            currentKeyActionList.add(keyAction(KeyEvent.KEY_TYPED, id));
+            currentKeyActionList.add(keyAction(KeyEvent.KEY_RELEASED, keyCode));
+            currentKeyActionList.add(keyAction(KeyEvent.KEY_TYPED, keyCode));
         });
     }
 
     private KeyAction keyAction(int event, int keyCode) {
-        return keyActionPool.get().init(event, keyCode);
+        return keyActionReusablePool.get().init(event, keyCode);
     }
 
     @Override
@@ -135,16 +151,16 @@ public class DefaultInputManager implements InputManager {
     }
 
     private MouseAction mouseAction(int eventId, Point position) {
-        return mouseActionPool.get().init(eventId, position);
+        return mouseActionReusablePool.get().init(eventId, position);
     }
 
 
     public abstract class Action {
         protected long timeStamp;
-        protected int id;
+        protected int event;
 
-        public void init(int id) {
-            this.id = id;
+        public void init(int event) {
+            this.event = event;
             this.timeStamp = System.currentTimeMillis();
         }
 
@@ -154,24 +170,34 @@ public class DefaultInputManager implements InputManager {
             return timeStamp;
         }
 
-        public int getId() {
-            return id;
+        public int getEvent() {
+            return event;
         }
     }
 
     public class KeyAction extends Action {
+        private int keyCode;
 
         public KeyAction init(int event, int keyCode) {
-            super.init(compositeCode(event, keyCode));
+            super.init(event);
+            this.keyCode = keyCode;
             return this;
         }
 
         @Override
+        @SuppressWarnings("Duplicates")
         protected void fireAction() {
+            if (rootKeyListeners.containsKey(event))
+                rootKeyListeners.get(event).accept(keyCode);
+
             doubleCheckedSyncCurrentAppStateNotNullThenDo(()-> {
-                if (keyListenersSpace.get(currentAppState).containsKey(id))
-                    keyListenersSpace.get(currentAppState).get(id).run();
+                if (keyListenersSpace.get(currentAppState).containsKey(event))
+                    keyListenersSpace.get(currentAppState).get(event).accept(keyCode);
             });
+        }
+
+        public int getKeyCode() {
+            return keyCode;
         }
     }
 
@@ -185,10 +211,14 @@ public class DefaultInputManager implements InputManager {
         }
 
         @Override
+        @SuppressWarnings("Duplicates")
         protected void fireAction() {
+            if (rootMouseListeners.containsKey(event))
+                rootMouseListeners.get(event).accept(mousePosition);
+
             doubleCheckedSyncCurrentAppStateNotNullThenDo(()-> {
-                if (mouseListenersSpace.get(currentAppState).containsKey(id))
-                    mouseListenersSpace.get(currentAppState).get(id).accept(mousePosition);
+                if (mouseListenersSpace.get(currentAppState).containsKey(event))
+                    mouseListenersSpace.get(currentAppState).get(event).accept(mousePosition);
             });
         }
 
