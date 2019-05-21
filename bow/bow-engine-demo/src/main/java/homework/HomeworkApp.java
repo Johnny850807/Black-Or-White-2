@@ -9,7 +9,9 @@ import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
+import com.pokewords.framework.sprites.components.StringComponent;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
+import com.pokewords.framework.sprites.components.frames.StringFrame;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.views.GameApplication;
@@ -61,10 +63,15 @@ public class HomeworkApp extends GameApplication {
         spriteInitializer.declare(Types.PLAYER)
                 .with(new ImageComponent(new ImageFrame(0, 1, "images/smile.png")))
                 .with(new KeyListenerComponent(new PlayerKeyListener()))
-                .with(new MouseListenerComponent(new PlayerMouseListener()))
+                .with(MouseListenerComponent.ofListener(new PlayerMouseListener()))
                 .areaSize(50, 50)
                 .commit();
 
+        spriteInitializer.declare(Types.MOUSE_POSITION)
+                .with(new StringComponent(new StringFrame(0, 5, "456456",
+                        new Font("微軟正黑體", Font.PLAIN, 15), false)))
+                .position(0, 0)
+                .commit();
     }
 
     @Override
