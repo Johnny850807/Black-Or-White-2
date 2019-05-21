@@ -9,14 +9,6 @@ import java.util.Map;
  * @author nyngwang
  */
 public interface Script {
-    class Mappings {
-        public Map<String, String> stringMap;
-        public Map<String, Integer> integerMap;
-        public Mappings() {
-            stringMap = new HashMap<>();
-            integerMap = new HashMap<>();
-        }
-    }
     Script addSegment(Segment segment);
 
     default Segment getSegmentByName(String name) {
