@@ -23,50 +23,15 @@ public class GameFrame extends JFrame implements AppView {
         this.gamePanel = gamePanel;
         this.inputManager = inputManager;
         setContentPane(gamePanel);
-        addKeyListener(new GameFrame.KeyListener());
-        addMouseListener(new GameFrame.MouseListener());
-        addMouseMotionListener(new GameFrame.MouseListener());
-    }
-    private class KeyListener extends KeyAdapter {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            inputManager.onButtonPressedDown(e.getKeyCode());
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            inputManager.onButtonReleasedUp(e.getKeyCode());
-        }
+        pack();
     }
 
-
-    private class MouseListener extends MouseAdapter {
-        @Override
-        public void mousePressed(MouseEvent e) {
-            inputManager.onMouseHitDown(e.getPoint());
-        }
-
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            inputManager.onMouseReleasedUp(e.getPoint());
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent e) {
-            inputManager.onMouseMoved(e.getPoint());
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent e) {
-            inputManager.onMouseDragged(e.getPoint());
-        }
-    }
     @Override
     public void onAppInit() {
         gamePanel.onAppInit();
         setVisible(true);
     }
+
 
     @Override
     public void onAppLoading() {
@@ -89,5 +54,13 @@ public class GameFrame extends JFrame implements AppView {
 
     public GameWindowDefinition getGameWindowDefinition() {
         return gameWindowDefinition;
+    }
+
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
+
+    public int getTitleBarHeight() {
+        return getInsets().top;
     }
 }

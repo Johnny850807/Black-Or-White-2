@@ -17,7 +17,7 @@ public class MenuAppState extends AppState {
     }
 
     private void configGameWindow() {
-        getGameWindowsConfigurator().size(menu.getBodySize())
+        getGameWindowsConfigurator().gameSize(menu.getBodySize())
                                 .gamePanelBackground(Theme.mainColor)
                                 .atCenter();
     }

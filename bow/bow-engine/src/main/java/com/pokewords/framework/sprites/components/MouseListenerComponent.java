@@ -1,7 +1,6 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.sprites.Sprite;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -14,9 +13,46 @@ public class MouseListenerComponent extends CloneableComponent {
     protected Sprite sprite;
     public Listener listener;
 
-    public MouseListenerComponent(Listener listener) {
-        this.listener = listener;
+    public static MouseListenerComponent ofListener(Listener listener) {
+        MouseListenerComponent mouseListenerComponent = new MouseListenerComponent();
+        mouseListenerComponent.listener = new Listener() {
+            @Override
+            public void onMousePressed(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
+                listener.onMousePressed(sprite, mousePositionInWorld, mousePositionInArea);
+            }
+
+            @Override
+            public void onMouseReleased(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
+                listener.onMouseReleased(sprite, mousePositionInWorld, mousePositionInArea);
+            }
+
+            @Override
+            public void onMouseClicked(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
+                listener.onMouseClicked(sprite, mousePositionInWorld, mousePositionInArea);
+            }
+
+            @Override
+            public void onMouseDragged(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
+                listener.onMouseDragged(sprite, mousePositionInWorld, mousePositionInArea);
+            }
+
+            @Override
+            public void onMouseEnter(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
+                mouseListenerComponent.mouseEntered = true;
+                listener.onMouseEnter(sprite, mousePositionInWorld, mousePositionInArea);
+            }
+
+            @Override
+            public void onMouseExit(Sprite sprite, Point mousePositionInWorld) {
+                mouseListenerComponent.mouseEntered = false;
+                listener.onMouseExit(sprite, mousePositionInWorld);
+            }
+        };
+
+        return mouseListenerComponent;
     }
+
+    private MouseListenerComponent() { }
 
     @Override
     public void onComponentAttachedSprite(Sprite sprite) {
@@ -27,17 +63,13 @@ public class MouseListenerComponent extends CloneableComponent {
         return listener;
     }
 
-    public abstract static class Listener {
-        public void onMousePressed(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        public void onMouseReleased(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        public void onMouseClicked(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        public void onMouseDragged(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        public void onMouseEnter(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
-            sprite.getComponent(MouseListenerComponent.class).mouseEntered = true;
-        }
-        public void onMouseExit(Sprite sprite, Point mousePositionInWorld) {
-            sprite.getComponent(MouseListenerComponent.class).mouseEntered = false;
-        }
+    public interface Listener {
+        default void onMousePressed(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        default void onMouseReleased(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        default void onMouseClicked(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        default void onMouseDragged(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        default void onMouseEnter(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        default void onMouseExit(Sprite sprite, Point mousePositionInWorld) {}
     }
 
     public Sprite getSprite() {

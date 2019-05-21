@@ -25,7 +25,8 @@ public class GraphicsCanvas implements Canvas {
     public void renderText(int x, int y, String text, Color color, Font font) {
         canvas.graphics.setColor(color);
         canvas.graphics.setFont(font);
-        canvas.graphics.drawString(text, x, y);
+        FontMetrics metrics = canvas.graphics.getFontMetrics(font);
+        canvas.graphics.drawString(text, x, y + metrics.getAscent());
     }
 
     @Override

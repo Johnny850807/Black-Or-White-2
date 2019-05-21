@@ -46,6 +46,13 @@ public class ImageFrame extends AbstractFrame {
             canvas.renderImage(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), image);
     }
 
+    public void setImage(String imagePath) {
+        this.image = ImageUtility.readImageFromResources(imagePath);
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
     public Image getImage() {
         return image;

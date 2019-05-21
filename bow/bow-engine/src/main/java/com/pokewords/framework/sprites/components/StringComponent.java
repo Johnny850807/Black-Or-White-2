@@ -6,4 +6,8 @@ public class StringComponent extends FrameComponent<StringFrame> {
     public StringComponent(StringFrame frame) {
         super(frame);
     }
+
+    public void setText(String text) {
+        getFrame().setText(text);
+    }
 }
