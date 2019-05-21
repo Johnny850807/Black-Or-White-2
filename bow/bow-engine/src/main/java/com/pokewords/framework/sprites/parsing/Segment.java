@@ -1,41 +1,38 @@
 package com.pokewords.framework.sprites.parsing;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 
 /**
- *  @author nyngwang
+ * Each segment is a composite Node.
+ * @author nyngwang
  */
-public interface Segment {
+public abstract class Segment extends Node {
+    private List<Element> elements;
+    private List<Segment> segments;
 
-    default Element getElementByName(String name) {
-        List<Element> elements = getElementsByName(name);
-        return elements.isEmpty() ? null : elements.get(0);
+    void addElement(Element element) {
+
     }
 
-    Segment addElement(Element element);
+    boolean containsElement(String name) {
 
-    boolean containsElementName(String name);
+    }
 
-    List<Element> getElementsByName(String name);
+    boolean containsElementId(int id) {
+
+    }
+
+    boolean containsElementDescription() {
+
+    }
+
+    List<Element> getElements(String name);
+
     List<Element> getElements();
 
-    Segment put(String key, String value);
-    Segment put(String key, int value);
-
-    String getName();
-    int getId();
-    String getDescription();
-
-    Optional<String> getStringByKeyOptional(String key);
-    OptionalInt getIntByKeyOptional(String key);
-    boolean containsKey(String key);
-    String getStringByKey(String key);
-    Integer getIntByKey(String key);
-
-    Segment setParent(Script parent);
-    Script getParent();
+    default Element getElement(String name) {
+        return containsElement(name)? getElements(name).get(0) : null;
+    }
 
     String toString(int indentation);
 }

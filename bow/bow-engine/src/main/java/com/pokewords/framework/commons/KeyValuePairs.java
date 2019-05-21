@@ -29,4 +29,8 @@ public class KeyValuePairs {
     public int getInt(String key) {
         return Integer.parseInt(map.get(key));
     }
+
+    public Map<String, String> getMap() {
+        return map;
+    }
 }

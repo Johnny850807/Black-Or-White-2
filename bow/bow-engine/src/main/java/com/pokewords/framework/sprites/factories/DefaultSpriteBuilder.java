@@ -17,7 +17,7 @@ import java.util.*;
 /**
  *
  *   1. 先做出 Sprite
- *   2. 再 LinScript.Parser.parse() 得出 LinScript
+ *   2. 再 LinScript.Context.parse() 得出 LinScript
  *   3. SpriteWeaver用(LinScript, Sprite)完成Sprite
  *
  * @author nyngwang
@@ -132,7 +132,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                 .addComponent(new CollidableComponent())
                 .buildScriptFromPath("path/to/script_text")
                 .addWeaverNode((script, sprite) -> {
-                    List<Element> bows = script.getSegmentByName("frame").getElementsByName("bow");
+                    List<Element> bows = script.getSegmentByName("frame").getElements("bow");
                 })
                 .build();
     }

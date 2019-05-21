@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.commons.KeyValuePairs;
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
 import java.util.*;
@@ -9,10 +10,10 @@ import java.util.stream.Collectors;
  *  Each segment has a reference to its parent Script, possibly some Elements, and its key-value pairs.
  *  @author nyngwang
  */
-public class LinScriptSegment implements Segment {
-    private Script parent;
+public class LinScriptSegment extends Segment {
+
     private List<Element> elements;
-    private Script.Mappings mappings;
+    private KeyValuePairs keyValuePairs;
     private String name;
     private int id;
     private String description;
@@ -32,7 +33,7 @@ public class LinScriptSegment implements Segment {
 
     private void init() {
         elements = new ArrayList<>();
-        mappings = new Script.Mappings();
+        keyValuePairs = new KeyValuePairs();
     }
 
     @Override
@@ -43,7 +44,7 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public boolean containsElementName(String name) {
+    public boolean containsElement(String name) {
         for (Element element : elements)
             if (element.getName().equals(name))
                 return true;
@@ -51,7 +52,7 @@ public class LinScriptSegment implements Segment {
     }
 
     @Override
-    public List<Element> getElementsByName(String name) {
+    public List<Element> getElements(String name) {
         return elements.stream()
                 .filter(element -> element.getName().equals(name))
                 .collect(Collectors.toList());
@@ -64,24 +65,24 @@ public class LinScriptSegment implements Segment {
 
     @Override
     public Segment put(String key, String value) {
-        mappings.stringMap.put(key, value);
+        keyValuePairs.stringMap.put(key, value);
         return this;
     }
 
     @Override
     public Segment put(String key, int value) {
-        mappings.integerMap.put(key, value);
+        keyValuePairs.integerMap.put(key, value);
         return this;
     }
 
     @Override
-    public Optional<String> getStringByKeyOptional(String key) {
-        return Optional.ofNullable(mappings.stringMap.get(key));
+    public Optional<String> getStringOptional(String key) {
+        return Optional.ofNullable(keyValuePairs.stringMap.get(key));
     }
 
     @Override
-    public OptionalInt getIntByKeyOptional(String key) {
-        return mappings.integerMap.containsKey(key) ? OptionalInt.of(mappings.integerMap.get(key)) : OptionalInt.empty();
+    public OptionalInt getIntOptional(String key) {
+        return keyValuePairs.integerMap.containsKey(key) ? OptionalInt.of(keyValuePairs.integerMap.get(key)) : OptionalInt.empty();
     }
 
     @Override
@@ -101,20 +102,20 @@ public class LinScriptSegment implements Segment {
 
     @Override
     public boolean containsKey(String key) {
-        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
+        return keyValuePairs.integerMap.containsKey(key) || keyValuePairs.stringMap.containsKey(key);
     }
 
     @Override
-    public String getStringByKey(String key) {
-        String result = mappings.stringMap.get(key);
+    public String getString(String key) {
+        String result = keyValuePairs.stringMap.get(key);
         if (result == null)
             throw new SegmentException(String.format("LinScriptElement: attribute %s does not exist", key));
         return result;
     }
 
     @Override
-    public Integer getIntByKey(String key) {
-        Integer result = mappings.integerMap.get(key);
+    public Integer getInt(String key) {
+        Integer result = keyValuePairs.integerMap.get(key);
         if (result == null)
             throw new SegmentException(String.format("LinScriptElement: attribute %s does not exist", key));
         return result;
@@ -137,8 +138,8 @@ public class LinScriptSegment implements Segment {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
         resultBuilder.append(String.format("<%s> %d %s\n", getName(), getId(), getDescription() == null? "" : getDescription()));
-        mappings.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-        mappings.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        keyValuePairs.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        keyValuePairs.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
         elements.forEach(element ->
                 resultBuilder.append(element
                         .toString(indentation)

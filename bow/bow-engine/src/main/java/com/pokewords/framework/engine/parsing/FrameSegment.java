@@ -22,19 +22,19 @@ public class FrameSegment {
     public FrameSegment(Segment frameSegment) {
         this.id = frameSegment.getId();
         this.description = frameSegment.getName();
-        this.pic = frameSegment.getIntByKey("pic");
-        this.layer = frameSegment.getIntByKey("layer");
-        this.duration = frameSegment.getIntByKey("duration");
-        this.next = frameSegment.getIntByKey("next");
+        this.pic = frameSegment.getInt("pic");
+        this.layer = frameSegment.getInt("layer");
+        this.duration = frameSegment.getInt("duration");
+        this.next = frameSegment.getInt("next");
         this.bodyElement = Optional.ofNullable(
-                frameSegment.containsElementName("body")?
-                new BodyElement(frameSegment.getElementByName("body")) : null);
+                frameSegment.containsElement("body")?
+                new BodyElement(frameSegment.getElement("body")) : null);
         this.effectElement = Optional.ofNullable(
-                frameSegment.containsElementName("effect")?
-                new EffectElement(frameSegment.getElementByName("effect")) : null);
+                frameSegment.containsElement("effect")?
+                new EffectElement(frameSegment.getElement("effect")) : null);
         this.transitionsElement = Optional.ofNullable(
-                frameSegment.containsElementName("transitions") ?
-                        new TransitionsElement(frameSegment.getElementByName("transitions")) : null
+                frameSegment.containsElement("transitions") ?
+                        new TransitionsElement(frameSegment.getElement("transitions")) : null
         );
     }
 

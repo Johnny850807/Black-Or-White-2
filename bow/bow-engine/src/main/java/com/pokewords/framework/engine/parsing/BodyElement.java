@@ -27,12 +27,12 @@ public class BodyElement {
     }
 
     public BodyElement(@NotNull Element element) {
-        this.x = element.getIntByKeyOptional("x");
-        this.y = element.getIntByKeyOptional("y");
-        this.w = element.getIntByKeyOptional("w");
-        this.h = element.getIntByKeyOptional("h");
-        this.centerX = element.getIntByKeyOptional("centerX");
-        this.centerY = element.getIntByKeyOptional("centerY");
+        this.x = element.getIntOptional("x");
+        this.y = element.getIntOptional("y");
+        this.w = element.getIntOptional("w");
+        this.h = element.getIntOptional("h");
+        this.centerX = element.getIntOptional("centerX");
+        this.centerY = element.getIntOptional("centerY");
     }
 
     public OptionalInt getX() {

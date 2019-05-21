@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.commons.KeyValuePairs;
 import com.pokewords.framework.engine.exceptions.ElementException;
 
 import java.util.*;
@@ -9,7 +10,7 @@ import java.util.*;
  */
 public class LinScriptElement implements Element {
     private Segment parent;
-    private Script.Mappings mappings;
+    private KeyValuePairs mapping;
     private String name;
 
     public LinScriptElement(String name) {
@@ -18,18 +19,18 @@ public class LinScriptElement implements Element {
     }
 
     private void init() {
-        mappings = new Script.Mappings();
+        mapping = new KeyValuePairs();
     }
 
     @Override
     public Element put(String key, String value) {
-        mappings.stringMap.put(key, value);
+        mapping.put(key, value);
         return this;
     }
 
     @Override
     public Element put(String key, int value) {
-        mappings.integerMap.put(key, value);
+        mapping.put(key, value);
         return this;
     }
 
@@ -39,31 +40,31 @@ public class LinScriptElement implements Element {
     }
 
     @Override
-    public Optional<String> getStringByKeyOptional(String key) {
-        return Optional.ofNullable(mappings.stringMap.get(key));
+    public Optional<String> getStringOptional(String key) {
+        return Optional.ofNullable(mapping.stringMap.get(key));
     }
 
     @Override
-    public OptionalInt getIntByKeyOptional(String key) {
-        return mappings.integerMap.containsKey(key) ? OptionalInt.of(mappings.integerMap.get(key)) : OptionalInt.empty();
+    public OptionalInt getIntOptional(String key) {
+        return mapping.integerMap.containsKey(key) ? OptionalInt.of(mapping.integerMap.get(key)) : OptionalInt.empty();
     }
 
     @Override
     public boolean containsKey(String key) {
-        return mappings.integerMap.containsKey(key) || mappings.stringMap.containsKey(key);
+        return mapping.integerMap.containsKey(key) || mapping.stringMap.containsKey(key);
     }
 
     @Override
-    public String getStringByKey(String key) {
-        String result = mappings.stringMap.get(key);
+    public String getString(String key) {
+        String result = mapping.stringMap.get(key);
         if (result == null)
             throw new ElementException(String.format("LinScriptElement: attribute %s does not exist", key));
         return result;
     }
 
     @Override
-    public Integer getIntByKey(String key) {
-        Integer result = mappings.integerMap.get(key);
+    public Integer getInt(String key) {
+        Integer result = mapping.integerMap.get(key);
         if (result == null)
             throw new ElementException(String.format("LinScriptElement: attribute %s does not exist", key));
         return result;
@@ -71,8 +72,8 @@ public class LinScriptElement implements Element {
 
     @Override
     public Collection<String> getKeys() {
-        Set<String> keys =  new HashSet<>(mappings.integerMap.keySet());
-        keys.addAll(mappings.stringMap.keySet());
+        Set<String> keys = new HashSet<>(mapping.integerMap.keySet());
+        keys.addAll(mapping.stringMap.keySet());
         return keys;
     }
 
@@ -93,8 +94,7 @@ public class LinScriptElement implements Element {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
         resultBuilder.append(String.format("<%s>\n", name));
-        mappings.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-        mappings.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+        mapping.getMap().forEach((k, v) -> resultBuilder.append(String.format(indent + "%s: %s\n", k, v)));
         resultBuilder.append(String.format("</%s>\n", name));
         return resultBuilder.toString();
     }

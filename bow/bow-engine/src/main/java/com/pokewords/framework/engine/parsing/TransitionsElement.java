@@ -20,13 +20,13 @@ public class TransitionsElement {
         Collection<String> keys = element.getKeys();
 
         for (String event : keys) {
-            transitionMap.put(EnumUtility.evalEnum(enumType, event), element.getIntByKey(event));
+            transitionMap.put(EnumUtility.evalEnum(enumType, event), element.getInt(event));
         }
     }
 
     private void parseAndValidateEnumType(Element element) {
         try {
-            this.enumType = Class.forName(element.getStringByKey("classType"));
+            this.enumType = Class.forName(element.getString("classType"));
             if (!enumType.isEnum())
                 throw new IllegalArgumentException(
                         String.format("The classType attribute within Transitions element should be of Enum type. " +

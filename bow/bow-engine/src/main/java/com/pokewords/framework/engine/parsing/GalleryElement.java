@@ -23,7 +23,7 @@ public class GalleryElement {
     public GalleryElement(Element galleryElement) {
         this.galleryElement = galleryElement;
         this.galleryType = galleryElement.getName();
-        this.range = new Range(galleryElement.getIntByKey("startPic"), galleryElement.getIntByKey("endPic"));
+        this.range = new Range(galleryElement.getInt("startPic"), galleryElement.getInt("endPic"));
     }
 
     public String getGalleryType() {
@@ -44,11 +44,11 @@ public class GalleryElement {
 
             switch (typeName) {
                 case sheet:
-                    return new SheetGallery(galleryElement.getStringByKey("path"), range,
-                            galleryElement.getIntByKey("row"), galleryElement.getIntByKey("col"),
-                            galleryElement.getIntByKeyOptional("padding").orElse(0));
+                    return new SheetGallery(galleryElement.getString("path"), range,
+                            galleryElement.getInt("row"), galleryElement.getInt("col"),
+                            galleryElement.getIntOptional("padding").orElse(0));
                 case sequence:
-                    return new SequenceGallery(galleryElement.getStringByKey("path"), range);
+                    return new SequenceGallery(galleryElement.getString("path"), range);
                 case mock:
                     return new MockGallery();
                 default:
