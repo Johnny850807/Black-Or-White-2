@@ -83,6 +83,7 @@ public class AppStateMachine implements GameLoopingListener {
 
 		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_MOVED, mousePosition ->
 				getCurrentStateWorld().getMouseListenerComponents().stream()
+						.filter(c -> !c.isMouseEntered())
 						.filter(c -> c.getSprite().getArea().contains(mousePosition))
 						.forEach(c -> {
 							Sprite sprite = c.getSprite();
@@ -91,9 +92,9 @@ public class AppStateMachine implements GameLoopingListener {
 						})
 		);
 
-		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_EXITED, mousePosition ->
+		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_MOVED, mousePosition ->
 				getCurrentStateWorld().getMouseListenerComponents().stream()
-						.filter(c -> c.getLatestMousePositionInArea() != null)
+						.filter(MouseListenerComponent::isMouseEntered)
 						.filter(c -> !c.getSprite().getArea().contains(mousePosition))
 						.forEach(c -> c.getListener().onMouseExit(c.getSprite(), mousePosition))
 		);

@@ -10,7 +10,7 @@ import java.awt.*;
  * @author johnny850807 (waterball)
  */
 public class MouseListenerComponent extends CloneableComponent {
-    protected @Nullable Point latestMousePositionInArea;
+    protected boolean mouseEntered = false;
     protected Sprite sprite;
     public Listener listener;
 
@@ -27,16 +27,16 @@ public class MouseListenerComponent extends CloneableComponent {
         return listener;
     }
 
-    public interface Listener {
-        default void onMousePressed(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        default void onMouseReleased(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        default void onMouseClicked(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        default void onMouseDragged(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        default void onMouseEnter(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
-            sprite.getComponent(MouseListenerComponent.class).latestMousePositionInArea = mousePositionInArea;
+    public abstract static class Listener {
+        public void onMousePressed(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        public void onMouseReleased(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        public void onMouseClicked(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        public void onMouseDragged(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
+        public void onMouseEnter(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {
+            sprite.getComponent(MouseListenerComponent.class).mouseEntered = true;
         }
-        default void onMouseExit(Sprite sprite, Point mousePositionInWorld) {
-            sprite.getComponent(MouseListenerComponent.class).latestMousePositionInArea = null;
+        public void onMouseExit(Sprite sprite, Point mousePositionInWorld) {
+            sprite.getComponent(MouseListenerComponent.class).mouseEntered = false;
         }
     }
 
@@ -44,8 +44,7 @@ public class MouseListenerComponent extends CloneableComponent {
         return sprite;
     }
 
-    @Nullable
-    public Point getLatestMousePositionInArea() {
-        return latestMousePositionInArea;
+    public boolean isMouseEntered() {
+        return mouseEntered;
     }
 }
