@@ -22,11 +22,22 @@ public class GraphicsCanvas implements Canvas {
     }
 
     @Override
-    public void renderText(int x, int y, String text, Color color, Font font) {
+    public Dimension renderText(int x, int y, String text, Color color, Font font) {
         canvas.graphics.setColor(color);
         canvas.graphics.setFont(font);
-        FontMetrics metrics = canvas.graphics.getFontMetrics(font);
+        FontMetrics metrics = canvas.graphics.getFontMetrics();
         canvas.graphics.drawString(text, x, y + metrics.getAscent());
+        return new Dimension(metrics.stringWidth(text), metrics.getHeight());
+    }
+
+    @Override
+    public Dimension renderTextWithCenterAdjusted(int x, int y, String text, Color color, Font font) {
+        canvas.graphics.setColor(color);
+        canvas.graphics.setFont(font);
+        int width = canvas.graphics.getFontMetrics().stringWidth(text);
+        int height = canvas.graphics.getFontMetrics().getHeight();
+        canvas.graphics.drawString(text, x-width/2, y-height/2);
+        return new Dimension(width, height);
     }
 
     @Override
@@ -36,14 +47,6 @@ public class GraphicsCanvas implements Canvas {
         canvas.graphics.drawImage(image, x-imageWidth/2, y-imageHeight/2, null);
     }
 
-    @Override
-    public void renderTextWithCenterAdjusted(int x, int y, String text, Color color, Font font) {
-        canvas.graphics.setColor(color);
-        canvas.graphics.setFont(font);
-        int width = canvas.graphics.getFontMetrics().stringWidth(text);
-        int height = canvas.graphics.getFontMetrics().getHeight();
-        canvas.graphics.drawString(text, x-width/2, y-height/2);
-    }
 
     @Override
     public void renderRectangle(Rectangle rectangle, Color color) {

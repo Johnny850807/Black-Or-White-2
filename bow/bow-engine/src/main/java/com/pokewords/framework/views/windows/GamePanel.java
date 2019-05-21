@@ -51,7 +51,6 @@ public class GamePanel extends JPanel implements AppView {
             inputManager.onMouseHitDown(e.getPoint());
         }
 
-
         @Override
         public void mouseReleased(MouseEvent e) {
             inputManager.onMouseReleasedUp(e.getPoint());

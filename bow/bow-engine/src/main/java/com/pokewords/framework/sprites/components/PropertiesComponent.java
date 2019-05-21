@@ -87,11 +87,11 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void setPosition(Point position) {
-        this.area.setLocation(position);
+        getArea().setLocation(position);
     }
 
     public void setPosition(int x, int y) {
-        this.area.setLocation(x, y);
+        getArea().setLocation(x, y);
     }
 
     public Rectangle getArea() {
@@ -99,19 +99,19 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void setArea(Rectangle area) {
-        this.area.setBounds(area);
+        getArea().setBounds(area);
     }
 
     public void setArea(int x, int y, int w, int h) {
-        this.area.setBounds(x, y, w, h);
+        getArea().setBounds(x, y, w, h);
     }
 
     public void setAreaSize(int w, int h) {
-        area.setSize(w, h);
+        getArea().setSize(w, h);
     }
 
     public void setAreaSize(Dimension area) {
-        area.setSize(area);
+        getArea().setSize(area);
     }
 
     public Dimension getAreaSize() {
@@ -147,7 +147,11 @@ public class PropertiesComponent extends CloneableComponent {
 
     public Point getCenter() {
         if (center == null)
-            center = new Point((int) getBody().getWidth() / 2, (int) getBody().getHeight() / 2);
+        {
+            int bodyX = (int) getBody().getX();
+            int bodyY = (int) getBody().getY();
+            center = new Point(bodyX + (int) getBody().getWidth() / 2, bodyY + (int) getBody().getHeight() / 2);
+        }
         return center;
     }
 

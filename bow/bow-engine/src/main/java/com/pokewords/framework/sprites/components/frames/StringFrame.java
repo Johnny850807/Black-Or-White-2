@@ -7,9 +7,10 @@ import java.util.Objects;
 
 /**
  * A frame rendered as a text.
- *
+ * <p>
  * Note that The width, and height of the text are determined by the font-areaSize at runtime rather than by sprite.
  * So you cannot get its width and height.
+ *
  * @author johnny850807 (waterball)
  */
 public class StringFrame extends AbstractFrame {
@@ -17,6 +18,12 @@ public class StringFrame extends AbstractFrame {
     protected Color color;
     protected Font font;
     protected boolean renderByCenter;
+
+    /**
+     * if this is true, then the stringFrame will update the sprite's
+     * area size fitting to the text every time its rendered.
+     */
+    protected boolean stickSpriteArea;
 
     public StringFrame(int id, int layerIndex, String text, boolean renderByCenter) {
         this(id, layerIndex, text, Color.black, new Font("微軟正黑體", Font.PLAIN, 15), renderByCenter);
@@ -41,11 +48,23 @@ public class StringFrame extends AbstractFrame {
     @Override
     public void renderItself(Canvas canvas) {
         Objects.requireNonNull(sprite);
+        Dimension textDimension;
 
         if (renderByCenter)
-            canvas.renderTextWithCenterAdjusted(sprite.getX(), sprite.getY(), text, color, font);
+            textDimension = canvas.renderTextWithCenterAdjusted(sprite.getX(), sprite.getY(), text, color, font);
         else
-            canvas.renderText(sprite.getX(), sprite.getY(), text, color, font);
+            textDimension = canvas.renderText(sprite.getX(), sprite.getY(), text, color, font);
+
+        if (stickSpriteArea)
+            sprite.setAreaSize(textDimension);
+    }
+
+    /**
+     * update the sprite's area size fitting to the text every time its rendered.
+     */
+    public StringFrame stickSpriteSize() {
+        stickSpriteArea = true;
+        return this;
     }
 
     public void setText(String text) {
@@ -79,6 +98,7 @@ public class StringFrame extends AbstractFrame {
     public boolean isRenderByCenter() {
         return renderByCenter;
     }
+
 
     @Override
     public boolean equals(Object o) {

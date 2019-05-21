@@ -65,11 +65,15 @@ public class DefaultInputManager implements InputManager {
 
     @Override
     public void bindKeyEventForRoot(int event, Consumer<Integer> keyListener) {
+        if (rootKeyListeners.containsKey(event))
+            throw new IllegalArgumentException("The event has already been bound.");
         rootKeyListeners.put(event, keyListener);
     }
 
     @Override
     public void bindMouseEventForRoot(int event, Consumer<Point> mouseListener) {
+        if (rootMouseListeners.containsKey(event))
+            throw new IllegalArgumentException("The event has already been bound.");
         rootMouseListeners.put(event, mouseListener);
     }
 
@@ -77,7 +81,7 @@ public class DefaultInputManager implements InputManager {
     public void bindKeyEvent(AppState appState, int eventId, Consumer<Integer> keyListener) {
         initListenersOfAppStateIfNotExists(appState);
         if (keyListenersSpace.get(appState).containsKey(eventId))
-            throw new IllegalArgumentException("The eventId has already been bound.");
+            throw new IllegalArgumentException("The event has already been bound.");
         keyListenersSpace.get(appState).put(eventId, keyListener);
     }
 
@@ -85,7 +89,7 @@ public class DefaultInputManager implements InputManager {
     public void bindMouseEvent(AppState appState, int eventId, Consumer<Point> mouseListener) {
         initListenersOfAppStateIfNotExists(appState);
         if (mouseListenersSpace.get(appState).containsKey(eventId))
-            throw new IllegalArgumentException("The eventId has already been bound.");
+            throw new IllegalArgumentException("The event has already been bound.");
         mouseListenersSpace.get(appState).put(eventId, mouseListener);
     }
 
