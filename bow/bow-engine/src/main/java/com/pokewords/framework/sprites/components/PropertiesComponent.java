@@ -53,6 +53,10 @@ public class PropertiesComponent extends CloneableComponent {
             this.body.setBounds(body);
     }
 
+    public void move(Point point) {
+        move(point.x, point.y);
+    }
+
     public void move(int velocityX, int velocityY) {
         getArea().translate(velocityX, velocityY);
     }
@@ -185,4 +189,5 @@ public class PropertiesComponent extends CloneableComponent {
                 ", type=" + getType() +
                 '}';
     }
+
 }

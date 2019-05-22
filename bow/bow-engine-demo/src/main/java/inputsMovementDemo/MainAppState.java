@@ -1,6 +1,7 @@
 package inputsMovementDemo;
 
 
+import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
@@ -13,10 +14,6 @@ public class MainAppState extends AppState {
     private Sprite face;
     private Sprite dinosaur;
     private Set<Direction> directions = new HashSet<>();
-
-    enum Direction {
-        UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN
-    }
 
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
@@ -56,14 +53,7 @@ public class MainAppState extends AppState {
     }
 
     private void move(Direction direction) {
-        if (direction == Direction.UP)
-            directions.remove(Direction.DOWN);
-        else if (direction == Direction.DOWN)
-            directions.remove(Direction.UP);
-        else if (direction == Direction.RIGHT)
-            directions.remove(Direction.LEFT);
-        else
-            directions.remove(Direction.RIGHT);
+        directions.remove(direction.getOppositeDirection());
         directions.add(direction);
     }
 
@@ -87,23 +77,8 @@ public class MainAppState extends AppState {
 
     @Override
     public void onAppStateUpdating(double timePerFrame) {
-        for (Direction direction : directions) {
-            switch (direction)
-            {
-                case UP:
-                    face.moveY(-8);
-                    break;
-                case DOWN:
-                    face.moveY(8);
-                    break;
-                case LEFT:
-                    face.moveX(-8);
-                    break;
-                case RIGHT:
-                    face.moveX(8);
-                    break;
-            }
-        }
+        for (Direction direction : directions)
+            face.move(direction.move(8));
     }
 
     @Override
