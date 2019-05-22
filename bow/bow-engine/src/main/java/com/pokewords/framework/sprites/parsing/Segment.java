@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * A Segment can contain Elements or Segments.
+ * A Segment contains: id, description, parent(Script), and elements.
  * @author nyngwang
  */
 public abstract class Segment extends Node {
@@ -13,8 +13,12 @@ public abstract class Segment extends Node {
     protected List<Element> elements;
     protected Script parent;
 
-    public Segment(String name) {
+    public Segment(String name, int id, String description, Script parent) {
         super(name);
+        this.id = id;
+        this.description = description;
+        this.elements = new ArrayList<>();
+        this.parent = parent;
     }
 
     public int getId() {
@@ -23,6 +27,10 @@ public abstract class Segment extends Node {
 
     public String getDescription() {
         return description;
+    }
+
+    public Script getParent() {
+        return parent;
     }
 
     // Elements
