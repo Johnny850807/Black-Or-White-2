@@ -21,7 +21,7 @@ public class GraphicsCanvas implements Canvas {
 
     @Override
     public Dimension render(StringFrame stringFrame) {
-        FontMetrics metrics = canvas.graphics.getFontMetrics();
+        FontMetrics metrics = canvas.graphics.getFontMetrics(stringFrame.getFont());
         int width = metrics.stringWidth(stringFrame.getText());
         int height = metrics.getHeight();
 
@@ -31,7 +31,8 @@ public class GraphicsCanvas implements Canvas {
             canvas.graphics.drawString(stringFrame.getText(), stringFrame.getX() - width / 2, stringFrame.getY() - height / 2);
         else
             canvas.graphics.drawString(stringFrame.getText(), stringFrame.getX(), stringFrame.getY() + metrics.getAscent());
-        return null;
+
+        return new Dimension(width, height);
     }
 
 

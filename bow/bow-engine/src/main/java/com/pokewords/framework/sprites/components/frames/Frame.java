@@ -48,7 +48,8 @@ public interface Frame extends Cloneable {
 	 * @return if the frame has been config for this flags
 	 */
 	default boolean hasFlag(int flag) {
-		return (getFlags() & flag) == 1;
+		int and = getFlags() & flag;
+		return and != 0;
 	}
 
 
