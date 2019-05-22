@@ -9,10 +9,19 @@ import java.util.stream.Collectors;
  */
 public abstract class Segment extends Node {
     protected List<Element> elements;
-    protected List<Segment> segments;
+    protected int id;
+    protected String description;
 
     protected Segment(String name, int id, String description) {
         super(name, id, description);
+    }
+
+    protected int getId() {
+        return id;
+    }
+
+    protected String getDescription() {
+        return description;
     }
 
     // Elements
@@ -95,6 +104,8 @@ public abstract class Segment extends Node {
                 .collect(Collectors.toList());
     }
 
+    // Override for Fluent interface
+
     @Override
     public Segment put(String key, String value) {
         super.put(key, value);
@@ -105,5 +116,25 @@ public abstract class Segment extends Node {
     public Segment put(String key, int value) {
         super.put(key, value);
         return this;
+    }
+
+    @Override
+    protected Segment setParent(Segment parent) {
+        super.setParent(parent);
+        return this;
+    }
+
+    protected boolean parseId(Context context) {
+        if (context.getSingle() == null)
+            return false;
+        id = Integer.parseInt(context.getSingle());
+        return true;
+    }
+
+    protected boolean parseDescription(Context context) {
+        if (context.getSingle() == null)
+            return false;
+        description = context.getSingle();
+        return true;
     }
 }

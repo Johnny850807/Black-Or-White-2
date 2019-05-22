@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.commons.KeyValuePairs;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Collection;
 import java.util.Map;
@@ -13,42 +14,15 @@ import java.util.OptionalInt;
  */
 public abstract class Node {
     protected String name;
-    protected int id;
-    protected String description;
     protected KeyValuePairs keyValuePairs;
-    protected Segment parent;
 
-    protected Node(String name, int id, String description) {
-        init();
+    protected Node(String name) {
         this.name = name;
-        this.id = id;
-        this.description = description;
-    }
-
-    private void init() {
         keyValuePairs = new KeyValuePairs();
     }
 
     public String getName() {
         return name;
-    }
-
-    protected int getId() {
-        return id;
-    }
-
-    protected String getDescription() {
-        return description;
-    }
-
-    protected Node put(String key, String value) {
-        keyValuePairs.put(key, value);
-        return this;
-    }
-
-    protected Node put(String key, int value) {
-        keyValuePairs.put(key, value);
-        return this;
     }
 
     public boolean containsKey(String key) {
@@ -75,33 +49,10 @@ public abstract class Node {
         return keyValuePairs.getMap().keySet();
     }
 
-    protected Node setParent(Segment parent) {
-        this.parent = parent;
-        return this;
-    }
-
-    public Segment getParent() {
-        return parent;
-    }
-
     protected boolean parseTag(Context context) {
         if (context.getTag() == null)
             return false;
         name = Context.deTag(context.getTag());
-        return true;
-    }
-
-    protected boolean parseId(Context context) {
-        if (context.getSingle() == null)
-            return false;
-        id = Integer.parseInt(context.getSingle());
-        return true;
-    }
-
-    protected boolean parseDescription(Context context) {
-        if (context.getSingle() == null)
-            return false;
-        description = context.getSingle();
         return true;
     }
 
@@ -115,9 +66,7 @@ public abstract class Node {
     protected boolean parseClosedTag(Context context) {
         if (context.getTag() == null)
             return false;
-        if (!name.equals(Context.deTag(context.getTag())))
-            return false;
-        return true;
+        return name.equals(Context.deTag(context.getTag()));
     }
 
     public abstract void parse(Context context);
@@ -143,7 +92,7 @@ public abstract class Node {
         return resultBuilder.toString();
     }
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         Segment script = new DefaultSegment();
         // 1
         script.parse(Context.fromFile("path/to/lin_script_text"));

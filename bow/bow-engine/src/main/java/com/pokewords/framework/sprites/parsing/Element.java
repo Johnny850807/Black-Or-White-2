@@ -14,6 +14,8 @@ public abstract class Element extends Node {
         super(name, id, description);
     }
 
+    // Fluent
+
     @Override
     public Element put(String key, String value) {
         super.put(key, value);
@@ -25,6 +27,8 @@ public abstract class Element extends Node {
         super.put(key, value);
         return this;
     }
+
+    // Change to public
 
     @Override
     public Element setParent(Segment parent) {

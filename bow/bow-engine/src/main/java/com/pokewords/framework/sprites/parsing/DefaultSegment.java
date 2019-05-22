@@ -3,8 +3,8 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
 /**
- *  Default segment: parsing format = LinScript.
- *  @author nyngwang
+ * Default segment: parsing format = LinScript.
+ * @author nyngwang
  */
 public class DefaultSegment extends Segment {
     public DefaultSegment() {

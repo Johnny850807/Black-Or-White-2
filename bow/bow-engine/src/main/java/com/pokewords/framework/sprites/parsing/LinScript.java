@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class LinScript extends Script {
+    protected LinScript(String name, int id, String description) {
+        super(name, id, description);
+    }
+
     @Override
     public void parse(Context context) {
         while (context.fetchNextToken()) {
@@ -46,12 +50,8 @@ public class LinScript extends Script {
         LinScript script = new LinScript()
                 .addSegment(new DefaultSegment("frame", 1, "punch")
                         .put("next", 2).put("duration", 10)
-                        .addElement(new DefaultElement("bow")
-                                .put("x", 1)
-                                .put("y", 2))
-                        .addElement(new DefaultElement("bow2")
-                                .put("a", 1)
-                                .put("b", 2)))
+                        .addElement(new DefaultElement("bow").put("x", 1).put("y", 2))
+                        .addElement(new DefaultElement("bow2").put("a", 1).put("b", 2)))
                 .addSegment(new DefaultSegment("galleries", 1)
                         .put("length", 2)
                         .addElement(new DefaultElement("gallery")
