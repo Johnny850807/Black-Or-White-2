@@ -122,11 +122,11 @@ public abstract class Node {
 
     public abstract void parse(Context context);
 
-    public abstract String toString(int indentation);
+    public abstract String toString(int indentation, int width);
 
     @Override
     public String toString() {
-        return toString(4);
+        return toString(0, 4);
     }
 
     protected String keyValuePairsToString(int indentation, int width) {
