@@ -11,46 +11,49 @@ import java.util.stream.Collectors;
  *  @author nyngwang
  */
 public class LinScriptSegment extends Segment {
+    public LinScriptSegment(String name, int id, String description) {
+        super(name, id, description);
+    }
 
     public LinScriptSegment() {
-        super(null, Integer.MIN_VALUE, null);
+        this(null, Integer.MIN_VALUE, null);
     }
 
     @Override
     public void parse(Context context) {
-        parseNameIdDescription(context);
+        if (context.currentTokenIsEmpty()) // if hasn't fetch
+            context.fetchNextToken();
+        if (!parseTag(context))
+            throw new SegmentException(String.format("Token %s is not a tag", context.getCurrentToken()));
+        context.fetchNextToken();
+        if (!parseId(context))
+            throw new SegmentException(String.format("Token %s is not an ID", context.getCurrentToken()));
+        context.fetchNextToken();
+        if (parseDescription(context))
+            context.fetchNextToken();
         do {
 
-        } while (fetchAndCheck(context));
+        } while (context.fetchNextToken());
 
-    }
-
-    @SuppressWarnings("Duplicates")
-    @Override
-    public String toString(int indentation) {
-        StringBuilder resultBuilder = new StringBuilder();
-        String indent = new String(new char[indentation]).replace("\0", " ");
-        resultBuilder.append(String.format("<%s> %d %s\n", getName(), getId(), getDescription() == null? "" : getDescription()));
-        keyValuePairs.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-        keyValuePairs.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-        elements.forEach(element ->
-                resultBuilder.append(element
-                        .toString(indentation)
-                        .replaceAll("(.*?\n)", indent + "$1")));
-        resultBuilder.append(String.format("</%s>\n", getName()));
-        return resultBuilder.toString();
     }
 
     @Override
-    public String toString() {
-        return toString(4);
+    public String toString(int indentation, int width) {
+        return null;
     }
 
-    public static void main(String[] args) {
-        Segment segment = new LinScriptSegment("frame", 1, "punch")
-                .addElement(new LinScriptElement("bow"))
-                .addElement(new LinScriptElement("cow"));
-        System.out.println(segment);
-
-    }
+//    @Override
+//    public String toString(int indentation) {
+//        StringBuilder resultBuilder = new StringBuilder();
+//        String indent = new String(new char[indentation]).replace("\0", " ");
+//        resultBuilder.append(String.format("<%s> %d %s\n", getName(), getId(), getDescription() == null? "" : getDescription()));
+//        keyValuePairs.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+//        keyValuePairs.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
+//        elements.forEach(element ->
+//                resultBuilder.append(element
+//                        .toString(indentation)
+//                        .replaceAll("(.*?\n)", indent + "$1")));
+//        resultBuilder.append(String.format("</%s>\n", getName()));
+//        return resultBuilder.toString();
+//    }
 }

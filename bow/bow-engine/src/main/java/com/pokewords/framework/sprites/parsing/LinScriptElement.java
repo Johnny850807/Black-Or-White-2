@@ -24,12 +24,16 @@ public class LinScriptElement extends Element {
             context.fetchNextToken();
         if (!parseTag(context))
             throw new ElementException(String.format("Token %s is not a tag", context.getCurrentToken()));
-        while (context.fetchNextToken())
+
+        while (context.fetchNextToken()) {
+            if (parseClosedTag(context)) {
+                context.fetchNextToken();
+                return;
+            }
             if (!parseKeyValuePair(context))
-                break;
-        if (!parseClosedTag(context))
-            throw new ElementException(String.format("Tag <%s> is not closed", name));
-        context.fetchNextToken();
+                throw new ElementException(String.format("In <%s>: token \"%s\" is not allowed here", name, context.getCurrentToken()));
+        }
+        throw new ElementException(String.format("Tag <%s> is not closed", name));
     }
 
     @Override

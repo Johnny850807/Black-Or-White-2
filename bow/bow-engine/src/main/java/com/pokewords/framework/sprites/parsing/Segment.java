@@ -15,6 +15,8 @@ public abstract class Segment extends Node {
         super(name, id, description);
     }
 
+    // Elements
+
     public Segment addElement(Element element) {
         elements.add(element);
         element.setParent(this);
@@ -38,7 +40,6 @@ public abstract class Segment extends Node {
                 .collect(Collectors.toList());
     }
 
-    // When you're sure about that it contains only one element.
     public Element getElement(String name) {
         return containsElement(name)? getElements(name).get(0) : null;
     }
@@ -94,10 +95,7 @@ public abstract class Segment extends Node {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+    //
 
     @Override
     public int getId() {

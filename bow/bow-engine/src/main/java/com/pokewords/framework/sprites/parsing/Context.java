@@ -94,8 +94,7 @@ public class Context {
 
     public String getCurrentToken() {
         return tag != null? tag
-                : key != null? key
-                : value != null? value
+                : key != null && value != null? key + ": " + value
                 : single;
     }
 
