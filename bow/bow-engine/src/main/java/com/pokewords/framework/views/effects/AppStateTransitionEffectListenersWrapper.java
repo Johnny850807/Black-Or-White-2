@@ -1,6 +1,7 @@
 package com.pokewords.framework.views.effects;
 
 import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.sprites.factories.SpriteBuilder;
 
 /**
  * This transition effect is used for wrapping an AppStateTransitionEffect with the known listeners.
@@ -17,13 +18,13 @@ public class AppStateTransitionEffectListenersWrapper implements AppStateTransit
         this.clientListeners = clientListeners;
     }
 
-    public void effect(AppState from, AppState to) {
-        appStateTransitionEffect.effect(from, to, clientListeners);
+    public void effect(SpriteBuilder spriteBuilder, AppState from, AppState to) {
+        appStateTransitionEffect.effect(spriteBuilder, from, to, clientListeners);
     }
 
     @Override
-    public void effect(AppState from, AppState to, AppStateTransitionEffect.Listener... moreListeners) {
-        appStateTransitionEffect.effect(from, to, new AppStateTransitionEffect.Listener() {
+    public void effect(SpriteBuilder spriteBuilder, AppState from, AppState to, AppStateTransitionEffect.Listener... moreListeners) {
+        appStateTransitionEffect.effect(spriteBuilder, from, to, new AppStateTransitionEffect.Listener() {
             @Override
             public void onExitingAppStateEffectEnd() {
                 notifyOnExitingAppStateEffectEnd(clientListeners);
@@ -38,4 +39,8 @@ public class AppStateTransitionEffectListenersWrapper implements AppStateTransit
         });
     }
 
+    @Override
+    public String toString() {
+        return String.format("Wrapped<%s>", appStateTransitionEffect);
+    }
 }

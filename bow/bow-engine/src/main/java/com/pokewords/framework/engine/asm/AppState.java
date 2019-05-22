@@ -126,6 +126,17 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		return new AppStateWorld(this);
 	}
 
+	/**
+	 * This method will be triggered before #onAppStateEntering.
+	 * If there is no bundle for the transition, the EmptyReadOnlyBundle will be passed in.
+	 * In the normal situation, you should not operate on the EmptyReadOnlyBundle,
+	 * hence only override this method only if you know there will be certain bundle.
+	 * @param bundle
+	 */
+	public void onReceiveMessageBundle(Bundle bundle) {
+		// hook
+	}
+
 	@Override
 	public final void onAppStateEnter() {
 		if (isListeningToInputEvents())
@@ -199,5 +210,10 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	public SoundPlayer getSoundPlayer() {
 		return soundPlayer;
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 }

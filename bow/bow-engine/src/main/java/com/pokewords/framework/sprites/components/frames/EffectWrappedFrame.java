@@ -32,9 +32,9 @@ public class EffectWrappedFrame extends DefaultEffectFrame {
     }
 
     @Override
-    public void setSprite(@Nullable Sprite sprite) {
-        super.setSprite(sprite);
-        frame.setSprite(sprite);
+    public void boundToSprite(@Nullable Sprite sprite) {
+        super.boundToSprite(sprite);
+        frame.boundToSprite(sprite);
     }
 
     @Override
@@ -55,5 +55,16 @@ public class EffectWrappedFrame extends DefaultEffectFrame {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), duration, frame);
+    }
+
+    @Override
+    public EffectWrappedFrame clone() {
+        EffectWrappedFrame clone = (EffectWrappedFrame) super.clone();
+        clone.frame = this.frame.clone();
+        return clone;
+    }
+
+    public Frame getWrappedFrame() {
+        return frame;
     }
 }

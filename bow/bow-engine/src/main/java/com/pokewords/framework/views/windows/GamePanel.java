@@ -1,5 +1,6 @@
 package com.pokewords.framework.views.windows;
 
+import com.pokewords.framework.commons.utils.StringUtility;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.views.AppView;
 import com.pokewords.framework.views.GraphicsCanvas;

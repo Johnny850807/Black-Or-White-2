@@ -3,13 +3,16 @@ package com.pokewords.framework.sprites.components.frames;
 import com.pokewords.framework.sprites.Sprite;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.Objects;
 
 public abstract class AbstractFrame implements Frame {
+    private Rectangle area = new Rectangle();
     protected @Nullable Sprite sprite;
     protected int id;
     protected int layerIndex;
     protected int flags;
+
 
     public AbstractFrame(int id, int layerIndex) {
         this.id = id;
@@ -43,7 +46,7 @@ public abstract class AbstractFrame implements Frame {
     }
 
     @Override
-    public void setSprite(@Nullable Sprite sprite) {
+    public void boundToSprite(@Nullable Sprite sprite) {
         this.sprite = sprite;
     }
 
@@ -57,6 +60,44 @@ public abstract class AbstractFrame implements Frame {
         return flags;
     }
 
+    public void setPosition(Point position) {
+        if (getSprite() != null)
+            throw new IllegalStateException("The frame is bound to a Sprite, you should set that sprite's position instead.");
+        area.setLocation(position);
+    }
+
+    public void setSize(Dimension dimension) {
+        if (getSprite() != null)
+            throw new IllegalStateException("The frame is bound to a Sprite, you should set that sprite's size instead.");
+        area.setSize(dimension);
+    }
+
+    @Override
+    public int getX() {
+        if (getSprite() != null)
+            return getSprite().getX();
+        return (int) area.getX();
+    }
+
+    @Override
+    public int getY() {
+        if (getSprite() != null)
+            return getSprite().getY();
+        return (int) area.getY();
+    }
+
+    @Override
+    public int getWidth() {
+        if (getSprite() != null)
+            return getSprite().getWidth();
+        return (int) area.getWidth();
+    }
+
+    public int getHeight() {
+        if (getSprite() != null)
+            return getSprite().getHeight();
+        return (int) area.getHeight();
+    }
 
     @Override
     public boolean equals(Object o) {

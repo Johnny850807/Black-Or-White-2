@@ -61,7 +61,6 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
     public GameWindowsConfigurator gamePanelBackground(Color color){
         gameWindowDefinition.gamePanelBackground = color;
         gameFrame.setGamePanelBackground(color);
-        gameFrame.repaint();
         return this;
     }
 

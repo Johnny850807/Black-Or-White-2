@@ -30,4 +30,11 @@ public class RectangleFrame extends AbstractFrame {
     public void setColor(Color color) {
         this.color = color;
     }
+
+    @Override
+    public RectangleFrame clone() {
+        RectangleFrame clone = (RectangleFrame) super.clone();
+        clone.color = new Color(color.getRGB());
+        return clone;
+    }
 }

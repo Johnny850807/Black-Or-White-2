@@ -6,9 +6,9 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.components.frames.GameEffect;
 import com.pokewords.framework.sprites.components.marks.Renderable;
 
-import java.io.Console;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +26,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     protected LinkedList<EffectFrame> renderedFrameCollection = new LinkedList<>();
 
 
+
     public EffectFrame getFrame(int id) {
         return effectFrameMap.get(id);
     }
@@ -34,7 +35,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     @Override
     public void onComponentAttachedSprite(Sprite sprite) {
         this.sprite = sprite;
-        fsm.getStates().forEach(frame -> frame.setSprite(sprite));
+        fsm.getStates().forEach(frame -> frame.boundToSprite(sprite));
     }
 
     @Override
@@ -44,7 +45,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
 
     @Override
     public void onComponentRemoved() {
-        fsm.getStates().forEach(frame -> frame.setSprite(null));
+        fsm.getStates().forEach(frame -> frame.boundToSprite(null));
     }
 
     @Override
@@ -66,7 +67,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
 
     public void addFrame(EffectFrame frame){
         fsm.addState(frame);
-        frame.setSprite(sprite);
+        frame.boundToSprite(sprite);
         this.effectFrameMap.put(frame.getId(), frame);
     }
 

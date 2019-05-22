@@ -28,7 +28,7 @@ public class StringFrame extends AbstractFrame {
     protected String text;
     protected Color color = Color.black;
     protected Font font = new Font("微軟正黑體", Font.PLAIN, 15);
-
+    protected Dimension size;
 
     public StringFrame(int id, int layerIndex, String text) {
         super(id, layerIndex);
@@ -38,10 +38,10 @@ public class StringFrame extends AbstractFrame {
     @Override
     public void renderItself(Canvas canvas) {
         Objects.requireNonNull(sprite);
-        Dimension textDimension = canvas.render(this);
+        this.size = canvas.render(this);
 
         if (hasFlag(FLAG_STICK_SPRITE_AREA))
-            sprite.setAreaSize(textDimension);
+            sprite.setAreaSize(size);
     }
 
     public StringFrame text(String text) {
@@ -85,6 +85,28 @@ public class StringFrame extends AbstractFrame {
         return font;
     }
 
+    public Dimension getSize() {
+        validateSizeNotNull();
+        return size;
+    }
+
+    @Override
+    public int getWidth() {
+        validateSizeNotNull();
+        return (int) getSize().getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        validateSizeNotNull();
+        return (int) getSize().getHeight();
+    }
+
+    private void validateSizeNotNull() {
+        if (size == null)
+            throw new IllegalStateException("The StringFrame can only know its size after it's been rendered.");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,5 +121,14 @@ public class StringFrame extends AbstractFrame {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), text, color, font);
+    }
+
+    @Override
+    public StringFrame clone() {
+        StringFrame clone = (StringFrame) super.clone();
+        clone.color = new Color(color.getRGB());
+        clone.font = new Font(font.getName(), font.getStyle(), font.getSize());
+        clone.size = (Dimension) size.clone();
+        return clone;
     }
 }
