@@ -9,10 +9,17 @@ public abstract class AbstractFrame implements Frame {
     protected @Nullable Sprite sprite;
     protected int id;
     protected int layerIndex;
+    protected int flags;
 
     public AbstractFrame(int id, int layerIndex) {
         this.id = id;
         this.layerIndex = layerIndex;
+    }
+
+    public AbstractFrame(int id, int layerIndex, int flags) {
+        this.id = id;
+        this.layerIndex = layerIndex;
+        this.flags = flags;
     }
 
     @Override
@@ -41,17 +48,29 @@ public abstract class AbstractFrame implements Frame {
     }
 
     @Override
+    public void setFlags(int flags) {
+        this.flags = flags;
+    }
+
+    @Override
+    public int getFlags() {
+        return flags;
+    }
+
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AbstractFrame that = (AbstractFrame) o;
         return id == that.id &&
-                layerIndex == that.layerIndex;
+                layerIndex == that.layerIndex &&
+                flags == that.flags;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, layerIndex);
+        return Objects.hash(id, layerIndex, flags);
     }
 
     @Override
@@ -62,4 +81,5 @@ public abstract class AbstractFrame implements Frame {
             throw new Error(e);
         }
     }
+
 }

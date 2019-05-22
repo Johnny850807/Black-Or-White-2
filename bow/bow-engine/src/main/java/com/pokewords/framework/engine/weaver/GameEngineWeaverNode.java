@@ -6,7 +6,7 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.EffectFrameFactory;
-import com.pokewords.framework.sprites.components.frames.ImageEffectFrame;
+import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
 import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
@@ -134,8 +134,8 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         private EffectFrame initEffectFrame(FrameSegment frameSegment, Segment segment) {
             frameSegmentMap.put(frameSegment.getId(), frameSegment);
-            return new ImageEffectFrame(frameSegment.getId(), frameSegment.getLayer(), frameSegment.getDuration(),
-                    getImage(frameSegment.getPic()));
+            return EffectFrame.wrap(new ImageFrame(frameSegment.getId(), frameSegment.getLayer(),
+                    getImage(frameSegment.getPic())), frameSegment.getDuration());
         }
 
         private synchronized Image getImage(int pic) {

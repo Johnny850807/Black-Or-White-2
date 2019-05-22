@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class RectangleFrame extends AbstractFrame {
     private Color color;
-    private Rectangle rectangle = new Rectangle();
+
     public RectangleFrame(int id, int layerIndex, Color color) {
         super(id, layerIndex);
         this.color = color;
@@ -14,9 +14,7 @@ public class RectangleFrame extends AbstractFrame {
 
     @Override
     public void renderItself(Canvas canvas) {
-        assert sprite != null : "The sprite is not set.";
-        rectangle.setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-        canvas.renderRectangle(rectangle, color);
+        canvas.render(this);
     }
 
     public Color getColor() {
