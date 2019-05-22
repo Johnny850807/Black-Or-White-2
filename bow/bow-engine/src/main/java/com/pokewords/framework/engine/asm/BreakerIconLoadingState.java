@@ -51,7 +51,7 @@ public class BreakerIconLoadingState extends AppState {
     private void declareAndSpawnAnimationSourceText() {
         getAppStateWorld().spawn(
                 getSpriteInitializer().declare(Types.AnimationSourceText)
-                        .position(155, 575)
+                        .position(165, 575)
                         .with(new StringComponent(new StringFrame(0, 1,
                                 "Animation Source: https://www.reddit.com/r/loadingicon/comments/7cwyib/beaker_loading_icon/",
                                 Color.white, new Font("@Microsoft JhengHei UI", Font.PLAIN, 15), false)))
