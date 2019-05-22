@@ -82,7 +82,8 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
         }
 
         @Override
-        public void accept(AppStateWorld appStateWorld, Sprite sprite) {
+        public void apply.
+            (AppStateWorld appStateWorld, Sprite sprite) {
             this.latestColor = rectangleFrame.getColor();
             playSoundIfJustStarted();
             fadeInTheColor();
@@ -150,7 +151,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
         }
 
         @Override
-        public void accept(AppStateWorld appStateWorld, Sprite sprite) {
+        public void apply(AppStateWorld appStateWorld, Sprite sprite) {
             this.latestColor = rectangleFrame.getColor();
 
             fadeOutTheColor();

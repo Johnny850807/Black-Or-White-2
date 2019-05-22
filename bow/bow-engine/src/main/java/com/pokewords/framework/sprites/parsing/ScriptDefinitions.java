@@ -1,10 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
 
-import com.pokewords.framework.commons.utils.FileUtility;
-
-import java.io.IOException;
-
 /**
  * @author nyngwang
  */

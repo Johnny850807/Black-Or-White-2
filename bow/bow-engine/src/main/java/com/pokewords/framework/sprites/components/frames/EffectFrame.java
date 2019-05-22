@@ -28,8 +28,18 @@ public interface EffectFrame extends Frame {
      */
     int getDuration();
 
+    /**
+     * Wrap a frame with EffectFrame interface.
+     */
     static EffectFrame wrap(Frame frame, int duration) {
         return new EffectWrappedFrame(frame, duration);
+    }
+
+    /**
+     * Wrap a frame with EffectFrame interface.
+     */
+    static EffectFrame wrap(Frame frame) {
+        return new EffectWrappedFrame(frame, 0);
     }
 
     @Override
