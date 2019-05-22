@@ -37,12 +37,12 @@ public class LinScriptElement extends Element {
     }
 
     @Override
-    public String toString(int indentation, int width) {
+    public String toString(int offset, int indentation, int width) {
         StringBuilder resultBuilder = new StringBuilder();
-        String indent = new String(new char[indentation]).replace("\0", " ");
-        resultBuilder.append(String.format(indent + "<%s>\n", getName()));
+        String offsetString = new String(new char[offset]).replace("\0", " ");
+        resultBuilder.append(String.format(offsetString + "<%s>\n", getName()));
         resultBuilder.append(keyValuePairsToString(indentation * 2, width));
-        resultBuilder.append(String.format(indent + "</%s>\n", getName()));
+        resultBuilder.append(String.format(offsetString + "</%s>\n", getName()));
         return resultBuilder.toString();
     }
 }

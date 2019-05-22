@@ -50,7 +50,15 @@ public class LinScriptSegment extends Segment {
 
     @Override
     public String toString(int indentation, int width) {
-        return null;
+        StringBuilder resultBuilder = new StringBuilder();
+        String indent = new String(new char[indentation]).replace("\0", " ");
+        resultBuilder.append(String.format(
+                indent + "<%s>%s%s\n",
+                name, id == Integer.MIN_VALUE? "" : " " + String.valueOf(id), description == null? "" : description));
+        keyValuePairsToString(indentation * 2, width);
+        getElements().forEach(element -> resultBuilder.append(element.toString(indentation * 2, width)));
+        resultBuilder.append(String.format(indent + "</%s>", name));
+        return resultBuilder.toString();
     }
 
 //    @Override

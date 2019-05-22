@@ -126,20 +126,20 @@ public abstract class Node {
 
     @Override
     public String toString() {
-        return toString(0, 4);
+        return toString(2, 4);
     }
 
-    protected String keyValuePairsToString(int indentation, int width) {
+    protected String keyValuePairsToString(int width) {
         StringBuilder resultBuilder = new StringBuilder();
-        String indent = new String(new char[indentation]).replace("\0", " ");
         int counter = 0;
         for (Map.Entry entry: keyValuePairs.getMap().entrySet()) {
-            resultBuilder.append(String.format(indent + "%s%s: %s%s",
-                    counter > 1? " ": "",
-                    entry.getKey(), entry.getValue(),
-                    counter == width? "\n": ""));
             counter = counter % width + 1;
+            resultBuilder.append(String.format(
+                    "%s%s: %s%s",
+                    counter > 1? " ": "", entry.getKey(), entry.getValue(), counter == width? "\n": ""));
         }
+        if (counter != width)
+            resultBuilder.append('\n');
         return resultBuilder.toString();
     }
 
