@@ -15,21 +15,11 @@ public class MainAppState extends EmptyAppState {
     @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) {
         getGameWindowsConfigurator().gameSize(800, 600);
-        Random random = new Random();
-        Sprite ai = createSprite(Types.AI1);
-        ai.setPosition(random.nextInt(400)+280, random.nextInt(380));
-        Sprite ai2 = createSprite(Types.AI2);
-        ai2.setPosition(random.nextInt(400)+300, random.nextInt(380));
-        Sprite ai3 = createSprite(Types.AI3);
-        ai3.setPosition(random.nextInt(400)+325, random.nextInt(380));
 
-        Sprite player = createSprite(Types.PLAYER);
-        player.setPosition(400, 480);
-
-        appStateWorld.spawn(ai);
-        appStateWorld.spawn(ai2);
-        appStateWorld.spawn(ai3);
-        appStateWorld.spawn(player);
+        appStateWorld.spawn(createSprite(Types.AI1));
+        appStateWorld.spawn(createSprite(Types.AI2));
+        appStateWorld.spawn(createSprite(Types.AI3));
+        appStateWorld.spawn(createSprite(Types.PLAYER));
         appStateWorld.spawn(mousePositionText = createSprite(Types.MOUSE_POSITION));
 
         bindMouseMovedAction(this::updateMousePositionText);

@@ -41,7 +41,7 @@ public class HomeworkApp extends GameApplication {
                         8, 8, 22, 23, 120, 1 ))
                 .with(new AiComponent())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .areaSize(35, 35)
+                .area(597, 130, 35, 35)
                 .commit();
 
         spriteInitializer.declare(Types.AI2)
@@ -49,7 +49,7 @@ public class HomeworkApp extends GameApplication {
                         8, 8, 30, 31, 120, 1 ))
                 .with(new AiComponent())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .areaSize(35, 35)
+                .area(339, 145, 35, 35)
                 .commit();
 
         spriteInitializer.declare(Types.AI3)
@@ -57,23 +57,24 @@ public class HomeworkApp extends GameApplication {
                         8, 8, 38, 39, 120, 1 ))
                 .with(new AiComponent())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .areaSize(35, 35)
+                .area(98, 127, 35, 35)
                 .commit();
 
         spriteInitializer.declare(Types.PLAYER)
                 .with(new ImageComponent(new ImageFrame(0, 1, "images/smile.png")))
                 .with(new KeyListenerComponent(new PlayerKeyListener()))
                 .with(MouseListenerComponent.ofListener(new PlayerMouseListener()))
-                .areaSize(50, 50)
+                .area(346, 453, 50, 50)
                 .commit();
 
         spriteInitializer.declare(Types.MOUSE_POSITION)
                 .with(new StringComponent(
                         new StringFrame(0, 5, "")
                             .font(new Font("微軟正黑體", Font.PLAIN, 25))
+                                .color(Color.black)
                             .flags(StringFrame.FLAG_STICK_SPRITE_AREA)))
                 .with(MouseListenerComponent.ofListener(new TextMouseListener()))
-                .position(0, 20)
+                .position(0, 0)
                 .commit();
     }
 
