@@ -52,7 +52,7 @@ public class LinScriptParser implements ScriptParser {
     private void setupSegment(String segmentName, String segmentId,
                               String segmentDescription, String segmentText) {
         validateNameOfWhom(segmentName, ScriptDefinitions.LinScript.SEGMENT);
-        segment = new LinScriptSegment(segmentName, Integer.parseInt(segmentId), segmentDescription);
+        segment = new DefaultSegment(segmentName, Integer.parseInt(segmentId), segmentDescription);
         setupSegmentKVPairsAndElementsIfExist(segmentText);
         linScript.addSegment(segment);
         segment.setParent(linScript);
@@ -157,7 +157,7 @@ public class LinScriptParser implements ScriptParser {
             String elementName = matcher.group(1);
             String elementKVPairsText = matcher.group(2);
             validateNameOfWhom(elementName, ScriptDefinitions.LinScript.ELEMENT);
-            element = new LinScriptElement(elementName);
+            element = new DefaultElement(elementName);
             setupKVPairsOfWhom(elementKVPairsText, ScriptDefinitions.LinScript.ELEMENT);
             segment.addElement(element);
             element.setParent(segment);

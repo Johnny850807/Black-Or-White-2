@@ -1,21 +1,17 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.KeyValuePairs;
 import com.pokewords.framework.engine.exceptions.SegmentException;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  *  Each segment has a reference to its parent Script, possibly some Elements, and its key-value pairs.
  *  @author nyngwang
  */
-public class LinScriptSegment extends Segment {
-    public LinScriptSegment(String name, int id, String description) {
+public class DefaultSegment extends Segment {
+    public DefaultSegment(String name, int id, String description) {
         super(name, id, description);
     }
 
-    public LinScriptSegment() {
+    public DefaultSegment() {
         this(null, Integer.MIN_VALUE, null);
     }
 
@@ -38,7 +34,7 @@ public class LinScriptSegment extends Segment {
             }
             if (parseKeyValuePair(context)) continue;
             if (parseTag(context)) {
-                Element element = new LinScriptElement();
+                Element element = new DefaultElement();
                 element.parse(context);
                 addElement(element);
                 continue;

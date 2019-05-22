@@ -13,8 +13,8 @@ public class GifScriptMaker {
     public static Script createSequenceScript(String galleryPath,  Range galleryPicRange,
                                               int gifStartPic, int gifEndPic, int duration, int layer) {
         Script script = new LinScript();
-        Segment galleriesSegment = new LinScriptSegment("galleries", 0);
-        Element sequenceElement = new LinScriptElement("sequence");
+        Segment galleriesSegment = new DefaultSegment("galleries", 0);
+        Element sequenceElement = new DefaultElement("sequence");
         galleriesSegment.addElement(sequenceElement);
         script.addSegment(galleriesSegment);
         return makeSequentialFrames(galleryPath, galleryPicRange, gifStartPic, gifEndPic, duration, layer, script, sequenceElement);
@@ -23,8 +23,8 @@ public class GifScriptMaker {
     public static Script createSheetScript(String galleryPath, int sheetRow, int sheetCol,
                                            int gifStartPic, int gifEndPic, int duration, int layer) {
         Script script = new LinScript();
-        Segment galleriesSegment = new LinScriptSegment("galleries", 0);
-        Element sheetElement = new LinScriptElement("sheet");
+        Segment galleriesSegment = new DefaultSegment("galleries", 0);
+        Element sheetElement = new DefaultElement("sheet");
         galleriesSegment.addElement(sheetElement);
         script.addSegment(galleriesSegment);
         sheetElement.put("row", sheetRow);
@@ -40,7 +40,7 @@ public class GifScriptMaker {
 
         int frameTotalNumber = gifEndPic - gifStartPic + 1;
         for (int i = 0; i < frameTotalNumber; i++) {
-            LinScriptSegment frameSegment = new LinScriptSegment("frame", i);
+            DefaultSegment frameSegment = new DefaultSegment("frame", i);
             frameSegment.put("pic", i+gifStartPic);
             frameSegment.put("duration", duration);
             frameSegment.put("next", (i + 1) % frameTotalNumber);

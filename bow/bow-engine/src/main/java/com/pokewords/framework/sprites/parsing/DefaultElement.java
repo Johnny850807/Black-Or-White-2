@@ -1,20 +1,17 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.KeyValuePairs;
 import com.pokewords.framework.engine.exceptions.ElementException;
-
-import java.util.*;
 
 /**
  * @author nyngwang
  */
-public class LinScriptElement extends Element {
+public class DefaultElement extends Element {
 
-    public LinScriptElement(String name) {
+    public DefaultElement(String name) {
         super(name, Integer.MIN_VALUE, null);
     }
 
-    public LinScriptElement() {
+    public DefaultElement() {
         this(null);
     }
 

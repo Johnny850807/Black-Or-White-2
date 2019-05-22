@@ -1,13 +1,18 @@
 package com.pokewords.framework.sprites.parsing;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.pokewords.framework.engine.exceptions.SegmentException;
 
 /**
  * @author nyngwang
  */
 public class LinScript extends Segment {
+    private LinScript(String name, int id, String description) {
+        super(name, id, description);
+    }
 
+    public LinScript() {
+        this(null, Integer.MIN_VALUE, null);
+    }
 
 //    public String toString(int indentation) {
 //        StringBuilder resultBuilder = new StringBuilder();
@@ -25,10 +30,18 @@ public class LinScript extends Segment {
 //        return resultBuilder.toString();
 //    }
 
-
     @Override
     public void parse(Context context) {
-
+        while (context.fetchNextToken()) {
+            if (parseTag(context)) {
+                Segment segment = new DefaultSegment();
+                segment.parse(context);
+                addSegment(segment);
+                continue;
+            }
+            throw new SegmentException(String.format(
+                    "LinScript format error: \"%s\" is not allowed here", context.getCurrentToken()));
+        }
     }
 
     @Override
@@ -38,19 +51,19 @@ public class LinScript extends Segment {
 
     public static void main(String[] args) {
         Script script = new LinScript()
-                .addSegment(new LinScriptSegment("frame", 1, "punch")
+                .addSegment(new DefaultSegment("frame", 1, "punch")
                         .put("next", 2).put("duration", 10)
-                        .addElement(new LinScriptElement("bow")
+                        .addElement(new DefaultElement("bow")
                                 .put("x", 1)
                                 .put("y", 2))
-                        .addElement(new LinScriptElement("bow2")
+                        .addElement(new DefaultElement("bow2")
                                 .put("a", 1)
                                 .put("b", 2)))
-                .addSegment(new LinScriptSegment("galleries", 1)
+                .addSegment(new DefaultSegment("galleries", 1)
                         .put("length", 2)
-                        .addElement(new LinScriptElement("gallery")
+                        .addElement(new DefaultElement("gallery")
                                 .put("path", "path/to/gallery1"))
-                        .addElement(new LinScriptElement("gallery")
+                        .addElement(new DefaultElement("gallery")
                                 .put("path", "path/to/gallery2")));
         System.out.println(script);
     }

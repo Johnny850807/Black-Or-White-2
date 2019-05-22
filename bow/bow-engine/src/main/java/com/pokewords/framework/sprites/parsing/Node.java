@@ -1,10 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.commons.KeyValuePairs;
-import com.pokewords.framework.commons.Pair;
-import com.pokewords.framework.commons.Triple;
-import com.pokewords.framework.engine.exceptions.ContextException;
-import com.pokewords.framework.engine.exceptions.NodeException;
 
 import java.util.Collection;
 import java.util.Map;
@@ -144,7 +140,7 @@ public abstract class Node {
     }
 
     static void main(String[] args) {
-        Segment script = new LinScriptSegment();
+        Segment script = new DefaultSegment();
         // 1
         script.parse(Context.fromFile("path/to/lin_script_text"));
         // 2
