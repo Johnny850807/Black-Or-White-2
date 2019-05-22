@@ -6,7 +6,7 @@ import java.util.OptionalInt;
 
 
 /**
- * An Element can contain: name, key-value pairs, parent.
+ * An Element doesn't contain other Nodes.
  * @author nyngwang
  */
 public abstract class Element extends Node {

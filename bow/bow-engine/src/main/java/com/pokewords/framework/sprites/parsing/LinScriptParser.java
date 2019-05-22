@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 /**
  * for function includes setup- prefix: includes validation and creation.
  * @author nyngwang
+ * @deprecated Not mandatory.
  */
 public class LinScriptParser implements ScriptParser {
     private LinScript linScript;

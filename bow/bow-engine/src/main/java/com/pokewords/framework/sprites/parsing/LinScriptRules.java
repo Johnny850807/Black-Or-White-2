@@ -7,6 +7,7 @@ import java.util.Set;
 
 /**
  * @author nyngwang
+ * @deprecated true;
  */
 public class LinScriptRules implements ScriptRules {
 

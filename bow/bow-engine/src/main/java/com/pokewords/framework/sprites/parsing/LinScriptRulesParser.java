@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author nyngwang
+ * @deprecated Not mandatory.
  */
 public class LinScriptRulesParser implements ScriptRulesParser {
     private ScriptRules linScriptRules;

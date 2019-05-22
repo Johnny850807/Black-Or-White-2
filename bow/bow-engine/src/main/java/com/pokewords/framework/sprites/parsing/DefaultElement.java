@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.ElementException;
 
 /**
+ * Default element:
  * @author nyngwang
  */
 public class DefaultElement extends Element {

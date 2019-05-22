@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 
+/**
+ * @author nyngwang
+ */
 public abstract class Node {
     protected String name;
     protected int id;
