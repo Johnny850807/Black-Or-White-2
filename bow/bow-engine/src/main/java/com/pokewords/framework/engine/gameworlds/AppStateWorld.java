@@ -34,7 +34,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     public AppStateWorld(AppState appState) {
         this.appState = appState;
-        sprites = new ArrayList<>();
+        sprites = new ArrayList<>(30);
         spriteCount = new AtomicInteger(0);
         renderedLayers = new RenderedLayers();
         collisionHandlerMap = new HashMap<>();
@@ -111,28 +111,28 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     @Override
     public void onAppStateCreate() {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onAppStateCreate();
         }
     }
 
     @Override
     public void onAppStateEnter() {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onAppStateEnter();
         }
     }
 
     @Override
     public void onAppStateExit() {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onAppStateExit();
         }
     }
 
     @Override
     public void onAppStateDestroy() {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onAppStateDestroy();
         }
     }
@@ -140,7 +140,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     @Override
     public void onUpdate(double timePerFrame) {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onUpdate(timePerFrame);
         }
         rejoinRenderedLayers();
@@ -280,6 +280,13 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     public void removeSprite(Sprite sprite) {
         sprites.remove(sprite);
         sprite.setWorld(null);
+    }
+
+    /**
+     * use this method to iterate the sprites can avoid ConcurrentModificationException
+     */
+    public List<Sprite> spriteIterates() {
+        return new ArrayList<>(sprites);
     }
 
     public void clearCollisionHandlers() {
