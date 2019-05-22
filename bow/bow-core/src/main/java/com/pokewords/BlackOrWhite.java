@@ -1,11 +1,13 @@
 package com.pokewords;
 
 import com.pokewords.appstates.MenuAppState;
+import com.pokewords.constants.Events;
 import com.pokewords.constants.SoundTypes;
 import com.pokewords.constants.SpriteTypes;
 import com.pokewords.framework.commons.Range;
 import com.pokewords.framework.commons.utils.GifScriptMaker;
 import com.pokewords.framework.engine.asm.AppStateMachine;
+import com.pokewords.framework.engine.asm.states.multiplayer.MultiplayerRoomState;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
 import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
@@ -13,6 +15,7 @@ import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.effects.AppStateTransitionEffect;
+import com.pokewords.framework.views.effects.CrossFadingTransitionEffect;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 public class BlackOrWhite extends GameApplication {
@@ -51,6 +54,9 @@ public class BlackOrWhite extends GameApplication {
                 getSoundPlayer().playSound(SoundTypes.OPENING);
             }
         });
+
+        MultiplayerRoomState multiplayerRoomState = asm.createState(MultiplayerRoomState.class);
+        asm.addTransition(menuAppState, Events.TO_MULTIPLAYER, multiplayerRoomState, new CrossFadingTransitionEffect());
     }
 
 

@@ -4,12 +4,11 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import javafx.scene.effect.Effect;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public abstract class DefaultEffectFrame extends AbstractFrame implements EffectFrame {
     private List<GameEffect> effects = new ArrayList<>();
+    protected Set<GameEffect> appliedGameEffects = Collections.newSetFromMap(new IdentityHashMap<>());
 
     public DefaultEffectFrame(int id, int layerIndex) {
         super(id, layerIndex);
@@ -19,6 +18,11 @@ public abstract class DefaultEffectFrame extends AbstractFrame implements Effect
     @Override
     public void apply(AppStateWorld gameWorld, Sprite sprite) {
         for (GameEffect effect : effects) {
+            if (!appliedGameEffects.contains(effect))
+            {
+                effect.onFirstApply(gameWorld, sprite);
+                appliedGameEffects.add(effect);
+            }
             effect.apply(gameWorld, sprite);
         }
     }
@@ -43,7 +47,9 @@ public abstract class DefaultEffectFrame extends AbstractFrame implements Effect
     }
 
     @Override
-    public EffectFrame clone() {
-        return (EffectFrame) super.clone();
+    public DefaultEffectFrame clone() {
+        DefaultEffectFrame clone = (DefaultEffectFrame) super.clone();
+        clone.appliedGameEffects = Collections.newSetFromMap(new IdentityHashMap<>());
+        return clone;
     }
 }

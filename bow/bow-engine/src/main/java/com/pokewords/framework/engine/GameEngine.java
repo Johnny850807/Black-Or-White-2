@@ -31,7 +31,7 @@ public class GameEngine {
         this.iocFactory = iocFactory;
         this.inputManager = inputManager;
         this.spriteInitializer = new SpriteInitializer(iocFactory);
-        this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator, soundPlayer);
+        this.appStateMachine = new AppStateMachine(iocFactory, inputManager, spriteInitializer, gameWindowsConfigurator, soundPlayer);
         this.scheduler = Executors.newScheduledThreadPool(8);
         this.gameLoopingTask = this::gameLooping;
     }

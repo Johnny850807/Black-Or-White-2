@@ -15,7 +15,7 @@ public class RoundedRectangleFrame extends RectangleFrame {
         this.arcHeight = arcHeight;
     }
 
-    public RectangleFrame flags(int flags) {
+    public RoundedRectangleFrame flags(int flags) {
         this.flags = flags;
         return this;
     }
@@ -32,4 +32,5 @@ public class RoundedRectangleFrame extends RectangleFrame {
     public int getArcHeight() {
         return arcHeight;
     }
+
 }

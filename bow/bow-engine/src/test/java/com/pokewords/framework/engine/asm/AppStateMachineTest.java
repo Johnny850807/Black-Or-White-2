@@ -21,7 +21,7 @@ public class AppStateMachineTest extends AbstractTest {
 
     @Before
     public void setup() {
-        appStateMachine = new AppStateMachine(release.inputManager(),
+        appStateMachine = new AppStateMachine(release, release.inputManager(),
                 new SpriteInitializer(release), new MockGameWindowsConfigurator(), new MockSoundPlayer());
     }
 

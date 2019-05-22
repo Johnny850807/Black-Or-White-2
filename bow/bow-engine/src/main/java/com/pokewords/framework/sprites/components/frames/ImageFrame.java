@@ -67,4 +67,5 @@ public class ImageFrame extends AbstractFrame {
     public int hashCode() {
         return Objects.hash(super.hashCode(), image);
     }
+
 }

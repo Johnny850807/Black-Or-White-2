@@ -31,7 +31,7 @@ public interface Frame extends Cloneable {
 	/**
 	 * @param sprite owner of the frame
 	 */
-	void setSprite(@Nullable Sprite sprite);
+	void boundToSprite(@Nullable Sprite sprite);
 
 	/**
 	 * @return the flags config for the frame
@@ -52,41 +52,30 @@ public interface Frame extends Cloneable {
 		return and != 0;
 	}
 
-
-	default void assertSpriteNonNull() {
-		if (getSprite() == null)
-			throw new IllegalStateException("The sprite is null, so the method is not supposed to use now.");
-	}
-
-
 	/**
-	 * @return owner of the frame
+	 * @return get the sprite bound to the frame, return null if the frame is not bound to any sprite
 	 */
 	@Nullable Sprite getSprite();
 
-	@SuppressWarnings("ConstantConditions")
-	default int getX() {
-		assertSpriteNonNull();
-		return getSprite().getX();
-	}
+	/**
+	 * @return get the x position of the frame, if the frame is bound to a Sprite, then this will return sprite's x
+	 */
+	int getX();
 
-	@SuppressWarnings("ConstantConditions")
-	default int getY() {
-		assertSpriteNonNull();
-		return getSprite().getY();
-	}
+	/**
+	 * @return get the y position of the frame, if the frame is bound to a Sprite, then it will return sprite's y
+	 */
+	int getY();
 
-	@SuppressWarnings("ConstantConditions")
-	default int getWidth() {
-		assertSpriteNonNull();
-		return getSprite().getWidth();
-	}
+	/**
+	 * @return get the width of the frame, if the frame is bound to a Sprite, then it will return sprite's width
+	 */
+	int getWidth();
 
-	@SuppressWarnings("ConstantConditions")
-	default int getHeight() {
-		assertSpriteNonNull();
-		return getSprite().getHeight();
-	}
+	/**
+	 * @return get the height of the frame, if the frame is bound to a Sprite, then it will return sprite's height
+	 */
+	int getHeight();
 
 
 	Frame clone();
