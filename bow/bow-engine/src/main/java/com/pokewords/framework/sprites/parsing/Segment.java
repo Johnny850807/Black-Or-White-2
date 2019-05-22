@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Each segment is a composite Node.
+ * A Segment can contain Elements or Segments.
  * @author nyngwang
  */
 public abstract class Segment extends Node {
