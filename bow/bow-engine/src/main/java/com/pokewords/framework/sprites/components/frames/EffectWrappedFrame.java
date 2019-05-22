@@ -4,6 +4,8 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.views.Canvas;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * An EffectFrame created by wrapping a frame.
  * @author johnny850807 (waterball)
@@ -38,5 +40,20 @@ public class EffectWrappedFrame extends DefaultEffectFrame {
     @Override
     public void renderItself(Canvas canvas) {
         frame.renderItself(canvas);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        EffectWrappedFrame that = (EffectWrappedFrame) o;
+        return duration == that.duration &&
+                frame.equals(that.frame);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), duration, frame);
     }
 }

@@ -26,8 +26,8 @@ public class StringFrame extends AbstractFrame {
     public final static int FLAG_STICK_SPRITE_AREA = 1 << 1;
 
     protected String text;
-    protected Color color;
-    protected Font font;
+    protected Color color = Color.black;
+    protected Font font = new Font("微軟正黑體", Font.PLAIN, 15);
 
 
     public StringFrame(int id, int layerIndex, String text) {
