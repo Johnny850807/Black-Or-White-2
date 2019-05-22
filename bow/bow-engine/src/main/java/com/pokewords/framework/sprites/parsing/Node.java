@@ -3,14 +3,16 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.commons.KeyValuePairs;
 import com.pokewords.framework.commons.Pair;
 import com.pokewords.framework.commons.Triple;
+import com.pokewords.framework.engine.exceptions.ContextException;
 import com.pokewords.framework.engine.exceptions.NodeException;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 
 public abstract class Node {
-    private String name;
+    protected String name;
     protected int id;
     protected String description;
     protected KeyValuePairs keyValuePairs;
@@ -27,7 +29,7 @@ public abstract class Node {
         keyValuePairs = new KeyValuePairs();
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
@@ -82,51 +84,62 @@ public abstract class Node {
         return parent;
     }
 
-    protected String keyValuePairsToString(int indentation) {
-        StringBuilder resultBuilder = new StringBuilder();
-        String indent = new String(new char[indentation]).replace("\0", " ");
-        keyValuePairs.getMap().forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-        return resultBuilder.toString();
-    }
-
-    protected String keyValuePairsToString() {
-        return keyValuePairsToString(0);
-    }
-
-    protected void parseNameIdDescription(Context context) {
-        name = Context.deTag(context.getTag());
-
-        fetchAndCheck(context);
-        if (context.getSingle() == null) return;
-        id = Integer.parseInt(context.getSingle());
-
-        fetchAndCheck(context);
-        if (context.getSingle() == null) return;
-        description = context.getSingle();
-    }
-
-    private boolean fetchAndCheck(Context context) {
+    protected boolean fetchAndCheck(Context context) {
         if (!context.fetchNextToken())
             throw new NodeException(String.format("Tag <%s> is not closed", name));
         return true;
     }
 
-    protected void parseKeyValuePairs(Context context) {
-        do {
-            if (context.getKey() == null) return;
-            put(context.getKey(), context.getValue());
-        } while (fetchAndCheck(context));
+    protected boolean parseName(Context context) {
+        if (context.getTag() == null)
+            return false;
+        name = Context.deTag(context.getTag());
+        return true;
+    }
+
+    protected boolean parseId(Context context) {
+        if (context.getSingle() == null)
+            return false;
+        id = Integer.parseInt(context.getSingle());
+        return true;
+    }
+
+    protected boolean parseDescription(Context context) {
+        if (context.getSingle() == null)
+            return false;
+        description = context.getSingle();
+        return true;
     }
 
     public abstract void parse(Context context);
+
     public abstract String toString(int indentation);
+
     @Override
     public String toString() {
         return toString(4);
     }
 
+    protected String keyValuePairsToString(int indentation, int width) {
+        StringBuilder resultBuilder = new StringBuilder();
+        String indent = new String(new char[indentation]).replace("\0", " ");
+        int counter = 0;
+        for (Map.Entry entry: keyValuePairs.getMap().entrySet()) {
+            resultBuilder.append(String.format(indent + "%s%s: %s%s",
+                    counter > 1? " ": "",
+                    entry.getKey(), entry.getValue(),
+                    counter == width? "\n": ""));
+            counter = counter % width + 1;
+        }
+        return resultBuilder.toString();
+    }
+
+    protected String keyValuePairsToString() {
+        return keyValuePairsToString(0, 4);
+    }
+
     static void main(String[] args) {
-        Segment script = new LinScriptSegment("name", 1);
+        Segment script = new LinScriptSegment();
         // 1
         script.parse(Context.fromFile("path/to/lin_script_text"));
         // 2

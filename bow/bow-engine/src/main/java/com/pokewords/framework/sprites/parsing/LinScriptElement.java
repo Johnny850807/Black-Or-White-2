@@ -10,14 +10,20 @@ import java.util.*;
  */
 public class LinScriptElement extends Element {
 
+    public LinScriptElement(String name) {
+        super(name, Integer.MIN_VALUE, null);
+    }
+
     public LinScriptElement() {
-        super(null, Integer.MIN_VALUE, null);
+        this(null);
     }
 
     @Override
     public void parse(Context context) {
-        parseNameIdDescription(context);
-        parseKeyValuePairs(context);
+        // hasn't fetch
+        if (context.isEmpty())
+            context.fetchNextToken();
+        c
     }
 
     @Override

@@ -91,10 +91,15 @@ public class Context {
         return single;
     }
 
-    public Triple<String, Pair<String, String>, String> peekNextToken() {
-        if (tokens.isEmpty())
-            return new Triple<>(null, null, null);
-        return tokens.get(0);
+    public String getCurrentToken() {
+        return tag != null? tag
+                : key != null? key
+                : value != null? value
+                : single;
+    }
+
+    public boolean currentTokenIsEmpty() {
+        return getCurrentToken() == null;
     }
 
     public static void main(String[] args) {

@@ -6,18 +6,13 @@ import java.util.OptionalInt;
 
 
 /**
- * An Element can contain: key-value pairs, name, parent.
+ * An Element can contain: name, key-value pairs, parent.
  * @author nyngwang
  */
 public abstract class Element extends Node {
 
     protected Element(String name, int id, String description) {
         super(name, id, description);
-    }
-
-    @Override
-    public String getName() {
-        return super.getName();
     }
 
     @Override
