@@ -8,19 +8,54 @@ import java.util.Map;
 /**
  * @author nyngwang
  */
-public interface Script extends Segment {
-    Script addSegment(Segment segment);
-
-    default Segment getSegmentByName(String name) {
-        return getSegmentsByName(name).get(0);
+public abstract class Script extends Segment {
+    public Script() {
+        super(null, Integer.MIN_VALUE, null);
     }
 
-    boolean containsSegmentId(int id);
-    boolean containsSegmentDescription(String description);
-    List<Segment> getSegmentsByName(String name);
-    Segment getSegmentById(int id);
-    List<Segment> getSegmentsByDescription(String description);
-    List<Segment> getSegments();
+    // Segments
 
-    String toString(int indentation);
+    @Override
+    public LinScript addSegment(Segment segment) {
+        super.addSegment(segment);
+        return this;
+    }
+
+    @Override
+    public List<Segment> getSegments() {
+        return super.getSegments();
+    }
+
+    @Override
+    public boolean containsSegment(String name) {
+        return super.containsSegment(name);
+    }
+
+    @Override
+    public boolean containsSegmentId(int id) {
+        return super.containsSegmentId(id);
+    }
+
+    @Override
+    public boolean containsSegmentDescription(String description) {
+        return super.containsSegmentDescription(description);
+    }
+
+    @Override
+    public List<Segment> getSegments(String name) {
+        return super.getSegments(name);
+    }
+
+    @Override
+    public List<Segment> getSegmentsById(int id) {
+        return super.getSegmentsById(id);
+    }
+
+    @Override
+    public List<Segment> getSegmentsByDescription(String description) {
+        return super.getSegmentsByDescription(description);
+    }
+
+    //
+
 }

@@ -10,7 +10,6 @@ import java.util.OptionalInt;
  * @author nyngwang
  */
 public abstract class Element extends Node {
-
     protected Element(String name, int id, String description) {
         super(name, id, description);
     }

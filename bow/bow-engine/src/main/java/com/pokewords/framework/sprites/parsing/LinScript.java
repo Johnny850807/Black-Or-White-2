@@ -9,60 +9,7 @@ import java.util.stream.Collectors;
  * LinScript is a special segment which only contains other segments.
  * @author nyngwang
  */
-public class LinScript extends Segment {
-    private LinScript(String name, int id, String description) {
-        super(name, id, description);
-    }
-
-    public LinScript() {
-        this(null, Integer.MIN_VALUE, null);
-    }
-
-    // Segments
-
-    @Override
-    public LinScript addSegment(Segment segment) {
-        super.addSegment(segment);
-        return this;
-    }
-
-    @Override
-    public List<Segment> getSegments() {
-        return super.getSegments();
-    }
-
-    @Override
-    public boolean containsSegment(String name) {
-        return super.containsSegment(name);
-    }
-
-    @Override
-    public boolean containsSegmentId(int id) {
-        return super.containsSegmentId(id);
-    }
-
-    @Override
-    public boolean containsSegmentDescription(String description) {
-        return super.containsSegmentDescription(description);
-    }
-
-    @Override
-    public List<Segment> getSegments(String name) {
-        return super.getSegments(name);
-    }
-
-    @Override
-    public List<Segment> getSegmentsById(int id) {
-        return super.getSegmentsById(id);
-    }
-
-    @Override
-    public List<Segment> getSegmentsByDescription(String description) {
-        return super.getSegmentsByDescription(description);
-    }
-
-    //
-
+public class LinScript extends Script {
     @Override
     public void parse(Context context) {
         while (context.fetchNextToken()) {

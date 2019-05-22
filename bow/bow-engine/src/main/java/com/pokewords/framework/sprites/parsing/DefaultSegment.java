@@ -7,16 +7,22 @@ import com.pokewords.framework.engine.exceptions.SegmentException;
  *  @author nyngwang
  */
 public class DefaultSegment extends Segment {
-    public DefaultSegment(String name, int id, String description) {
-        super(name, id, description);
-    }
-
     public DefaultSegment() {
         this(null, Integer.MIN_VALUE, null);
     }
 
     public DefaultSegment(String name, int id) {
         this(name, id, null);
+    }
+
+    public DefaultSegment(String name, int id, String description) {
+        super(name, id, description);
+    }
+
+    @Override
+    public DefaultSegment setParent(Segment parent) {
+        super.setParent(parent);
+        return this;
     }
 
     @Override

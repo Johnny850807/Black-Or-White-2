@@ -95,18 +95,6 @@ public abstract class Segment extends Node {
                 .collect(Collectors.toList());
     }
 
-    //
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
     @Override
     public Segment put(String key, String value) {
         super.put(key, value);
@@ -116,12 +104,6 @@ public abstract class Segment extends Node {
     @Override
     public Segment put(String key, int value) {
         super.put(key, value);
-        return this;
-    }
-
-    @Override
-    public Segment setParent(Segment parent) {
-        super.setParent(parent);
         return this;
     }
 }

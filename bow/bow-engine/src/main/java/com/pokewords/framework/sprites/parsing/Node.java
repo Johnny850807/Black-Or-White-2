@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 /**
+ * A Node provides some basic data structures / data.
  * @author nyngwang
  */
 public abstract class Node {
