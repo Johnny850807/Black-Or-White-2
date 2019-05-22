@@ -1,19 +1,16 @@
 package homework;
 
+import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 
 import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("Duplicates")
 public class PlayerKeyListener extends KeyListenerComponent.Listener {
-    private boolean moving = false;
-    private Direction direction;
-
-    enum Direction {
-        UP, DOWN, LEFT, RIGHT
-    }
-
+    private Set<Direction> directions = new HashSet<>();
     @Override
     public void onKeyPressed(Sprite sprite, int keyCode) {
         switch (keyCode)
@@ -53,34 +50,18 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
     }
 
     private void clearMovement(Direction direction) {
-        if (this.direction == direction) {
-            moving = false;
-            this.direction = null;
-        }
+        directions.remove(direction);
     }
 
     private void move(Direction direction) {
-        moving = true;
-        this.direction = direction;
+        directions.add(direction);
+        directions.remove(direction.getOppositeDirection());
     }
 
     @Override
     public void onUpdate(Sprite sprite) {
-        if (moving) {
-            switch (direction) {
-                case UP:
-                    sprite.moveY(-8);
-                    break;
-                case DOWN:
-                    sprite.moveY(8);
-                    break;
-                case LEFT:
-                    sprite.moveX(-8);
-                    break;
-                case RIGHT:
-                    sprite.moveX(8);
-                    break;
-            }
+        for (Direction direction : directions) {
+            sprite.move(direction.move(12));
         }
     }
 }
