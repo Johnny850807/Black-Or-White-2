@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public abstract class Segment extends Node {
-    private List<Element> elements;
-    private List<Segment> segments;
+    protected List<Element> elements;
+    protected List<Segment> segments;
 
     protected Segment(String name, int id, String description) {
         super(name, id, description);

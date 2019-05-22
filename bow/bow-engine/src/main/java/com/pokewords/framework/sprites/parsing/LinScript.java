@@ -2,6 +2,9 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author nyngwang
  */
@@ -14,21 +17,50 @@ public class LinScript extends Segment {
         this(null, Integer.MIN_VALUE, null);
     }
 
-//    public String toString(int indentation) {
-//        StringBuilder resultBuilder = new StringBuilder();
-//
-//        segments.sort((o1, o2) -> {
-//            String leftName = o1.getName();
-//            String rightName = o2.getName();
-//            int leftId = o1.getId();
-//            int rightId = o2.getId();
-//            return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
-//                    : leftName.compareTo(rightName);
-//        });
-//        for (Segment segment : segments)
-//            resultBuilder.append(segment.toString(indentation));
-//        return resultBuilder.toString();
-//    }
+    // Segments
+
+    @Override
+    public LinScript addSegment(Segment segment) {
+        super.addSegment(segment);
+        return this;
+    }
+
+    @Override
+    public List<Segment> getSegments() {
+        return super.getSegments();
+    }
+
+    @Override
+    public boolean containsSegment(String name) {
+        return super.containsSegment(name);
+    }
+
+    @Override
+    public boolean containsSegmentId(int id) {
+        return super.containsSegmentId(id);
+    }
+
+    @Override
+    public boolean containsSegmentDescription(String description) {
+        return super.containsSegmentDescription(description);
+    }
+
+    @Override
+    public List<Segment> getSegments(String name) {
+        return super.getSegments(name);
+    }
+
+    @Override
+    public List<Segment> getSegmentsById(int id) {
+        return super.getSegmentsById(id);
+    }
+
+    @Override
+    public List<Segment> getSegmentsByDescription(String description) {
+        return super.getSegmentsByDescription(description);
+    }
+
+    //
 
     @Override
     public void parse(Context context) {
@@ -46,11 +78,24 @@ public class LinScript extends Segment {
 
     @Override
     public String toString(int indentation, int width) {
-        return null;
+        StringBuilder resultBuilder = new StringBuilder();
+        String indent = new String(new char[indentation]).replace("\0", " ");
+        getSegments().sort((o1, o2) -> {
+            String leftName = o1.getName();
+            String rightName = o2.getName();
+            int leftId = o1.getId();
+            int rightId = o2.getId();
+            return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
+                    : leftName.compareTo(rightName);
+        });
+        getSegments().forEach(segment ->
+                resultBuilder.append(segment.toString(indentation, width)
+                        .replaceAll("([^\n]*\n)", indent + "$1")));
+        return resultBuilder.toString();
     }
 
     public static void main(String[] args) {
-        Script script = new LinScript()
+        LinScript script = new LinScript()
                 .addSegment(new DefaultSegment("frame", 1, "punch")
                         .put("next", 2).put("duration", 10)
                         .addElement(new DefaultElement("bow")

@@ -15,6 +15,10 @@ public class DefaultSegment extends Segment {
         this(null, Integer.MIN_VALUE, null);
     }
 
+    public DefaultSegment(String name, int id) {
+        this(name, id, null);
+    }
+
     @Override
     public void parse(Context context) {
         if (context.currentTokenIsEmpty()) // if hasn't fetch
