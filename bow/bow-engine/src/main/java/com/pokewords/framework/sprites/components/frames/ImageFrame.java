@@ -12,7 +12,6 @@ import java.util.Objects;
  * The width and the height are determined by the sprite at runtime.
  * @author johnny850807 (waterball)
  */
-@SuppressWarnings("ConstantConditions")
 public class ImageFrame extends AbstractFrame {
     /**
      * the stringFrame's rendered point will be seen as its center point.
@@ -20,25 +19,19 @@ public class ImageFrame extends AbstractFrame {
     public final static int CANVAS_FLAG_RENDER_BY_CENTER = 1;
 
    protected Image image;
-   protected boolean renderWithCenterAdjusted;
-
 
     public ImageFrame(int id, int layerIndex, String imagePath) {
-        this(id, layerIndex, ImageUtility.readImageFromResources(imagePath), false);
+        this(id, layerIndex, ImageUtility.readImageFromResources(imagePath));
     }
 
     public ImageFrame(int id, int layerIndex, Image image) {
-        this(id, layerIndex, image, false);
-    }
-
-    public ImageFrame(int id, int layerIndex, String imagePath, boolean renderWithCenterAdjusted) {
-        this(id, layerIndex, ImageUtility.readImageFromResources(imagePath), renderWithCenterAdjusted);
-    }
-
-    public ImageFrame(int id, int layerIndex, Image image, boolean renderWithCenterAdjusted) {
         super(id, layerIndex);
         this.image = image;
-        this.renderWithCenterAdjusted = renderWithCenterAdjusted;
+    }
+
+    public ImageFrame flags(int flags) {
+        this.flags = flags;
+        return this;
     }
 
     @Override
@@ -60,9 +53,6 @@ public class ImageFrame extends AbstractFrame {
         return image;
     }
 
-    public boolean isRenderWithCenterAdjusted() {
-        return renderWithCenterAdjusted;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -70,12 +60,11 @@ public class ImageFrame extends AbstractFrame {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ImageFrame that = (ImageFrame) o;
-        return renderWithCenterAdjusted == that.renderWithCenterAdjusted &&
-                image.equals(that.image);
+        return image.equals(that.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), image, renderWithCenterAdjusted);
+        return Objects.hash(super.hashCode(), image);
     }
 }

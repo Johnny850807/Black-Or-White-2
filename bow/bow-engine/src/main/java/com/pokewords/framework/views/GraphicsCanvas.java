@@ -2,6 +2,7 @@ package com.pokewords.framework.views;
 
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.components.frames.RectangleFrame;
+import com.pokewords.framework.sprites.components.frames.RoundedRectangleFrame;
 import com.pokewords.framework.sprites.components.frames.StringFrame;
 
 import java.awt.*;
@@ -49,6 +50,25 @@ public class GraphicsCanvas implements Canvas {
     @Override
     public void render(RectangleFrame rectangleFrame) {
         canvas.graphics.setColor(rectangleFrame.getColor());
-        canvas.graphics.fillRect(rectangleFrame.getX(), rectangleFrame.getY(), rectangleFrame.getWidth(), rectangleFrame.getHeight());
+
+        if (rectangleFrame.hasFlag(RectangleFrame.CANVAS_FLAG_FILLED))
+            canvas.graphics.fillRect(rectangleFrame.getX(), rectangleFrame.getY(), rectangleFrame.getWidth(), rectangleFrame.getHeight());
+        else
+            canvas.graphics.drawRect(rectangleFrame.getX(), rectangleFrame.getY(), rectangleFrame.getWidth(), rectangleFrame.getHeight());
+
+    }
+
+    @Override
+    public void render(RoundedRectangleFrame roundedRectangleFrame) {
+        canvas.graphics.setColor(roundedRectangleFrame.getColor());
+
+        if (roundedRectangleFrame.hasFlag(RoundedRectangleFrame.CANVAS_FLAG_FILLED))
+            canvas.graphics.fillRoundRect(roundedRectangleFrame.getX(), roundedRectangleFrame.getY(),
+                    roundedRectangleFrame.getWidth(), roundedRectangleFrame.getHeight(),
+                    roundedRectangleFrame.getArcWidth(), roundedRectangleFrame.getArcHeight());
+        else
+            canvas.graphics.drawRoundRect(roundedRectangleFrame.getX(), roundedRectangleFrame.getY(),
+                    roundedRectangleFrame.getWidth(), roundedRectangleFrame.getHeight(),
+                    roundedRectangleFrame.getArcWidth(), roundedRectangleFrame.getArcHeight());
     }
 }

@@ -32,11 +32,15 @@ public class RenderedLayers implements Iterable<Frame> {
     public void addFrame(Frame frame) {
     	if (!layers.containsKey(frame.getLayerIndex()))
     		layers.put(frame.getLayerIndex(), new LinkedList<>());
-        layers.get(frame.getLayerIndex()).add(frame);
+		layers.get(frame.getLayerIndex()).add(frame);
     }
 
     public void addFrames(Collection<? extends Frame> frames) {
     	frames.forEach(this::addFrame);
+	}
+
+	public Collection<Frame> getLayer(int layerIndex) {
+    	return layers.get(layerIndex);
 	}
 
 	@NotNull

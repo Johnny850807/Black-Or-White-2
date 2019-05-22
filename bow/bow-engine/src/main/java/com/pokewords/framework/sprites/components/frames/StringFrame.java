@@ -35,11 +35,6 @@ public class StringFrame extends AbstractFrame {
         this.text = text;
     }
 
-    public StringFrame(int id, int layerIndex, String text, int flags) {
-        super(id, layerIndex, flags);
-        this.text = text;
-    }
-
     @Override
     public void renderItself(Canvas canvas) {
         Objects.requireNonNull(sprite);
@@ -53,7 +48,6 @@ public class StringFrame extends AbstractFrame {
         this.text = text;
         return this;
     }
-
     public StringFrame flags(int flags) {
         this.flags = flags;
         return this;
