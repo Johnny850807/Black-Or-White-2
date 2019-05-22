@@ -84,13 +84,7 @@ public abstract class Node {
         return parent;
     }
 
-    protected boolean fetchAndCheck(Context context) {
-        if (!context.fetchNextToken())
-            throw new NodeException(String.format("Tag <%s> is not closed", name));
-        return true;
-    }
-
-    protected boolean parseName(Context context) {
+    protected boolean parseTag(Context context) {
         if (context.getTag() == null)
             return false;
         name = Context.deTag(context.getTag());
@@ -108,6 +102,21 @@ public abstract class Node {
         if (context.getSingle() == null)
             return false;
         description = context.getSingle();
+        return true;
+    }
+
+    protected boolean parseKeyValuePair(Context context) {
+        if (context.getKey() == null || context.getValue() == null)
+            return false;
+        keyValuePairs.put(context.getKey(), context.getValue());
+        return true;
+    }
+
+    protected boolean parseClosedTag(Context context) {
+        if (context.getTag() == null)
+            return false;
+        if (!name.equals(Context.deTag(context.getTag())))
+            return false;
         return true;
     }
 
@@ -132,10 +141,6 @@ public abstract class Node {
             counter = counter % width + 1;
         }
         return resultBuilder.toString();
-    }
-
-    protected String keyValuePairsToString() {
-        return keyValuePairsToString(0, 4);
     }
 
     static void main(String[] args) {

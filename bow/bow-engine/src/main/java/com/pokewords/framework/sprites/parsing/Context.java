@@ -65,6 +65,7 @@ public class Context {
             consumeToken(tokens.remove(0));
             return true;
         }
+        tag = key = value = single = null;
         return false;
     }
 

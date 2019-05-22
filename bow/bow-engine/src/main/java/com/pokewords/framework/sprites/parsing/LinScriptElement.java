@@ -20,10 +20,16 @@ public class LinScriptElement extends Element {
 
     @Override
     public void parse(Context context) {
-        // hasn't fetch
-        if (context.isEmpty())
+        if (context.currentTokenIsEmpty()) // if hasn't fetch
             context.fetchNextToken();
-        c
+        if (!parseTag(context))
+            throw new ElementException(String.format("Token %s is not a tag", context.getCurrentToken()));
+        while (context.fetchNextToken())
+            if (!parseKeyValuePair(context))
+                break;
+        if (!parseClosedTag(context))
+            throw new ElementException(String.format("Tag <%s> is not closed", name));
+        context.fetchNextToken();
     }
 
     @Override
