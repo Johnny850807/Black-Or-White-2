@@ -20,8 +20,8 @@ public abstract class GameApplication implements AppView {
 
     public GameApplication(IocFactory iocFactory) {
     	InputManager inputManager = iocFactory.inputManager();
-		gameFrame = new GameFrame(new GamePanel(), inputManager);
-		soundPlayer = new SwingSoundPlayer();
+		gameFrame = new GameFrame(new GamePanel(inputManager), inputManager);
+		soundPlayer = iocFactory.soundPlayer();
 		gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
         gameEngine = new GameEngine(iocFactory, inputManager, gameWindowsConfigurator, soundPlayer);
         gameEngine.setGameView(this);

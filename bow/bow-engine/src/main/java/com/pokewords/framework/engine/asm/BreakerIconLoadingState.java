@@ -27,7 +27,7 @@ public class BreakerIconLoadingState extends AppState {
 
     @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) {
-        getGameWindowsConfigurator().size(800, 600);
+        getGameWindowsConfigurator().gameSize(800, 600);
 
         declareAndSpawnBreakerIconLoadingAnimation();
         declareAndSpawnAnimationSourceText();
@@ -38,8 +38,7 @@ public class BreakerIconLoadingState extends AppState {
     private void declareAndSpawnBreakerIconLoadingAnimation() {
         getAppStateWorld().spawn(
                 getSpriteInitializer().declare(Types.BreakerIconLoadingState)
-                        .position(0, 0)
-                        .areaSize(getGameWindowDefinition().size)
+                        .area(0, 0, getGameWindowDefinition().size)
                         .with(GifScriptMaker.createSequenceScript( "assets/sequences/BreakerLoadingIcon",
                                 new Range(0, 249), 0, 249, 30, 0))
                         .weaver(new Set0FrameAsCurrentNodeWeaverNode())
@@ -51,10 +50,12 @@ public class BreakerIconLoadingState extends AppState {
     private void declareAndSpawnAnimationSourceText() {
         getAppStateWorld().spawn(
                 getSpriteInitializer().declare(Types.AnimationSourceText)
-                        .position(155, 560)
-                        .with(new StringComponent(new StringFrame(0, 1,
-                                "Animation Source: https://www.reddit.com/r/loadingicon/comments/7cwyib/beaker_loading_icon/",
-                                Color.white, new Font("@Microsoft JhengHei UI", Font.PLAIN, 15), false)))
+                        .position(165, 575)
+                        .with(new StringComponent(
+                                new StringFrame(0, 1,
+                                "Animation Source: https://www.reddit.com/r/loadingicon/comments/7cwyib/beaker_loading_icon/")
+                                    .color(Color.white)
+                                    .font(new Font("@Microsoft JhengHei UI", Font.PLAIN, 15))))
                         .commit()
                         .create()
         );
@@ -71,11 +72,9 @@ public class BreakerIconLoadingState extends AppState {
     }
 
     @Override
-    protected void onAppStateDestroying() {
-    }
+    protected void onAppStateDestroying() { }
 
     @Override
-    protected void onAppStateUpdating(double timePerFrame) {
-    }
+    protected void onAppStateUpdating(double timePerFrame) { }
 
 }

@@ -12,7 +12,13 @@ import java.util.Objects;
  * The width and the height are determined by the sprite at runtime.
  * @author johnny850807 (waterball)
  */
+@SuppressWarnings("ConstantConditions")
 public class ImageFrame extends AbstractFrame {
+    /**
+     * the stringFrame's rendered point will be seen as its center point.
+     */
+    public final static int CANVAS_FLAG_RENDER_BY_CENTER = 1;
+
    protected Image image;
    protected boolean renderWithCenterAdjusted;
 
@@ -39,13 +45,16 @@ public class ImageFrame extends AbstractFrame {
     public void renderItself(Canvas canvas) {
         Objects.requireNonNull(sprite);
 
-        if (renderWithCenterAdjusted)
-            canvas.renderImageWithCenterAdjusted(sprite.getX(), sprite.getY(),
-                    sprite.getWidth(), sprite.getHeight(), image);
-        else
-            canvas.renderImage(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), image);
+        canvas.render(this);
     }
 
+    public void setImage(String imagePath) {
+        this.image = ImageUtility.readImageFromResources(imagePath);
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
     public Image getImage() {
         return image;

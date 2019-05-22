@@ -32,7 +32,7 @@ public class GameEngine {
         this.inputManager = inputManager;
         this.spriteInitializer = new SpriteInitializer(iocFactory);
         this.appStateMachine = new AppStateMachine(inputManager, spriteInitializer, gameWindowsConfigurator, soundPlayer);
-        this.scheduler = Executors.newScheduledThreadPool(3);
+        this.scheduler = Executors.newScheduledThreadPool(8);
         this.gameLoopingTask = this::gameLooping;
     }
 
@@ -53,6 +53,7 @@ public class GameEngine {
 
     private void gameLooping() {
         try {
+            fpsCounter.update();
             loopingCounter = (loopingCounter +1) % Integer.MAX_VALUE;
             inputManager.onUpdate(timePerFrame);
             appStateMachine.onUpdate(timePerFrame);

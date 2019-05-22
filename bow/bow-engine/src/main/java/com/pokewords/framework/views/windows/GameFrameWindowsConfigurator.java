@@ -17,7 +17,7 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
 
     private void defaultConfig() {
         this.name("Default")
-                .size(50, 50)
+                .gameSize(50, 50)
                 .location(0, 0)
                 .gamePanelBackground(Color.black);
 
@@ -36,9 +36,10 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
     }
 
     @Override
-    public GameWindowsConfigurator size(int width, int height){
+    public GameWindowsConfigurator gameSize(int width, int height){
         gameWindowDefinition.size = new Dimension(width, height);
-        gameFrame.setSize(width, height);
+        gameFrame.getGamePanel().setPreferredSize(new Dimension(width, height));
+        gameFrame.pack();
         return this;
     }
 

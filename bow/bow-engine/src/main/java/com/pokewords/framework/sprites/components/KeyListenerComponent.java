@@ -20,11 +20,19 @@ public class KeyListenerComponent extends CloneableComponent {
         listener.onUpdate(sprite);
     }
 
-    public interface Listener {
-        default void onUpdate(Sprite sprite) {}
-        default void onKeyPressed(Sprite sprite, int keyCode) {}
-        default void onKeyReleased(Sprite sprite, int keyCode) {}
-        default void onKeyClicked(Sprite sprite, int keyCode) {}
+    public abstract static class Listener implements Cloneable {
+        public void onUpdate(Sprite sprite) {}
+        public void onKeyPressed(Sprite sprite, int keyCode) {}
+        public void onKeyReleased(Sprite sprite, int keyCode) {}
+        public void onKeyClicked(Sprite sprite, int keyCode) {}
+
+        public Listener clone() {
+            try {
+                return (Listener) super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new Error(e);
+            }
+        }
     }
 
     public Listener getListener() {
@@ -33,5 +41,12 @@ public class KeyListenerComponent extends CloneableComponent {
 
     public Sprite getSprite() {
         return sprite;
+    }
+
+    @Override
+    public KeyListenerComponent clone() {
+        KeyListenerComponent clone = (KeyListenerComponent) super.clone();
+        clone.listener = this.listener.clone();
+        return clone;
     }
 }

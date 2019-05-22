@@ -4,6 +4,10 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.views.Canvas;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * An EffectFrame created by wrapping a frame.
+ * @author johnny850807 (waterball)
+ */
 public class EffectWrappedFrame extends DefaultEffectFrame {
     private int duration;
     private Frame frame;

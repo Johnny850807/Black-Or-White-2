@@ -9,13 +9,16 @@ import java.util.function.BiConsumer;
  * @author johnny850807
  */
 @FunctionalInterface
-public interface GameEffect extends BiConsumer<AppStateWorld, Sprite> {
+public interface GameEffect {
 
     /**
      * @param world the effected world
      * @param sprite the effected sprite
      */
-    default void apply(AppStateWorld world, Sprite sprite){
-        this.accept(world, sprite);
+    void apply(AppStateWorld world, Sprite sprite);
+
+
+    static GameEffect empty() {
+        return (world, sprite) -> {};
     }
 }

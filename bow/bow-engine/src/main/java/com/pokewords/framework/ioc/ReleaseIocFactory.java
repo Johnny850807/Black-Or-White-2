@@ -12,6 +12,7 @@ import com.pokewords.framework.sprites.parsing.ScriptRulesParser;
 import com.pokewords.framework.views.inputs.DefaultInputManager;
 import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.SoundPlayer;
+import com.pokewords.framework.views.sound.SwingSoundPlayer;
 
 public class ReleaseIocFactory implements IocFactory{
     private PrototypeFactory prototypeFactory;
@@ -27,7 +28,7 @@ public class ReleaseIocFactory implements IocFactory{
 
     @Override
     public SoundPlayer soundPlayer() {
-        return null;
+        return new SwingSoundPlayer();
     }
 
     @Override

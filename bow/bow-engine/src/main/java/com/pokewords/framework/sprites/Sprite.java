@@ -232,6 +232,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         getPropertiesComponent().setCenter(point);
     }
 
+	public void move(Point point) {
+		getPropertiesComponent().move(point);
+	}
+
     public void move(int velocityX, int velocityY) {
 		getPropertiesComponent().move(velocityX, velocityY);
 	}
