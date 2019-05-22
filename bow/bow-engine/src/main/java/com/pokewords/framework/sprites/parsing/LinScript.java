@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * LinScript is a special segment which only contains other segments.
  * @author nyngwang
  */
 public class LinScript extends Segment {
