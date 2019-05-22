@@ -52,27 +52,16 @@ public class LinScriptSegment extends Segment {
     public String toString(int indentation, int width) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
-        resultBuilder.append(String.format(
-                indent + "<%s>%s%s\n",
-                name, id == Integer.MIN_VALUE? "" : " " + String.valueOf(id), description == null? "" : description));
-        keyValuePairsToString(indentation * 2, width);
-        getElements().forEach(element -> resultBuilder.append(element.toString(indentation * 2, width)));
-        resultBuilder.append(String.format(indent + "</%s>", name));
+        resultBuilder.append(String.format("<%s>%s%s\n",
+                name,
+                id == Integer.MIN_VALUE? "" : " " + String.valueOf(id),
+                description == null? "" : " " + description));
+        resultBuilder.append(keyValuePairsToString(width).replaceAll("([^\n]*\n)", indent + "$1"));
+        getElements().forEach(element ->
+                resultBuilder.append(element
+                        .toString(indentation, width)
+                        .replaceAll("([^\n]*\n)", indent + "$1")));
+        resultBuilder.append(String.format("</%s>\n", name));
         return resultBuilder.toString();
     }
-
-//    @Override
-//    public String toString(int indentation) {
-//        StringBuilder resultBuilder = new StringBuilder();
-//        String indent = new String(new char[indentation]).replace("\0", " ");
-//        resultBuilder.append(String.format("<%s> %d %s\n", getName(), getId(), getDescription() == null? "" : getDescription()));
-//        keyValuePairs.stringMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-//        keyValuePairs.integerMap.forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
-//        elements.forEach(element ->
-//                resultBuilder.append(element
-//                        .toString(indentation)
-//                        .replaceAll("(.*?\n)", indent + "$1")));
-//        resultBuilder.append(String.format("</%s>\n", getName()));
-//        return resultBuilder.toString();
-//    }
 }
