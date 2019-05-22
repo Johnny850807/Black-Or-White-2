@@ -28,6 +28,7 @@ public class PropertiesComponent extends CloneableComponent {
     @Override
     public PropertiesComponent clone() {
         PropertiesComponent clone = (PropertiesComponent) super.clone();
+        clone.area = (Rectangle) this.area.clone();
         if (body != null)
             clone.body = (Rectangle) this.body.clone();
         if (center != null)

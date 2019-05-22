@@ -18,7 +18,7 @@ public class ComponentsTest extends AbstractTest {
     @Test
     public void testPropertiesComponentAccessors() {
         PropertiesComponent pc = new PropertiesComponent("Type");
-        pc.setBody(50, 50, 50, 50);
+        pc.setArea(50, 50, 50, 50);
         pc.setCenter(200, 200);
 
         assertEquals("Type", pc.getType());
