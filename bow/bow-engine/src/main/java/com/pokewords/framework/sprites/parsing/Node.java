@@ -16,7 +16,7 @@ public abstract class Node {
     protected String name;
     protected KeyValuePairs keyValuePairs;
 
-    protected Node(String name) {
+    public Node(String name) {
         this.name = name;
         keyValuePairs = new KeyValuePairs();
     }
@@ -49,6 +49,8 @@ public abstract class Node {
         return keyValuePairs.getMap().keySet();
     }
 
+    // Parsing utils
+
     protected boolean parseTag(Context context) {
         if (context.getTag() == null)
             return false;
@@ -69,15 +71,6 @@ public abstract class Node {
         return name.equals(Context.deTag(context.getTag()));
     }
 
-    public abstract void parse(Context context);
-
-    public abstract String toString(int indentation, int width);
-
-    @Override
-    public String toString() {
-        return toString(2, 4);
-    }
-
     protected String keyValuePairsToString(int width) {
         StringBuilder resultBuilder = new StringBuilder();
         int counter = 0;
@@ -91,6 +84,16 @@ public abstract class Node {
             resultBuilder.append('\n');
         return resultBuilder.toString();
     }
+
+    public abstract void parse(Context context);
+
+    public abstract String toString(int indentation, int width);
+
+    @Override
+    public String toString() {
+        return toString(2, 4);
+    }
+
 
     public static void main(String[] args) {
         Segment script = new DefaultSegment();
