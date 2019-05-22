@@ -31,10 +31,21 @@ public class LinScriptSegment extends Segment {
         context.fetchNextToken();
         if (parseDescription(context))
             context.fetchNextToken();
-        do {
-
+        else do {
+            if (parseClosedTag(context)) {
+                context.fetchNextToken();
+                return;
+            }
+            if (parseKeyValuePair(context)) continue;
+            if (parseTag(context)) {
+                Element element = new LinScriptElement();
+                element.parse(context);
+                addElement(element);
+                continue;
+            }
+            throw new SegmentException(String.format("In <%s>: token \"%s\" is not allowed here", name, context.getCurrentToken()));
         } while (context.fetchNextToken());
-
+        throw new SegmentException(String.format("Tag <%s> is not closed", name));
     }
 
     @Override

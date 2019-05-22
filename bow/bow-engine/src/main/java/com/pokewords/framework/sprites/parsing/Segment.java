@@ -46,50 +46,50 @@ public abstract class Segment extends Node {
 
     // Segments
 
-    public Segment addSegment(Segment segment) {
+    protected Segment addSegment(Segment segment) {
         segments.add(segment);
         segment.setParent(this);
         return this;
     }
 
-    public List<Segment> getSegments() {
+    protected List<Segment> getSegments() {
         return segments;
     }
 
-    public boolean containsSegment(String name) {
+    protected boolean containsSegment(String name) {
         for (Segment segment : segments)
             if (segment.getName().equals(name))
                 return true;
         return false;
     }
 
-    public boolean containsSegmentId(int id) {
+    protected boolean containsSegmentId(int id) {
         for (Segment segment : segments)
             if (segment.getId() == id)
                 return true;
         return false;
     }
 
-    public boolean containsSegmentDescription(String description) {
+    protected boolean containsSegmentDescription(String description) {
         for (Segment segment : segments)
             if (segment.getDescription().equals(description))
                 return true;
         return false;
     }
 
-    public List<Segment> getSegments(String name) {
+    protected List<Segment> getSegments(String name) {
         return segments.stream()
                 .filter(segment -> segment.getName().equals(name))
                 .collect(Collectors.toList());
     }
 
-    public List<Segment> getSegmentsById(int id) {
+    protected List<Segment> getSegmentsById(int id) {
         return segments.stream()
                 .filter(segment -> segment.getId() == id)
                 .collect(Collectors.toList());
     }
 
-    public List<Segment> getSegmentsByDescription(String description) {
+    protected List<Segment> getSegmentsByDescription(String description) {
         return segments.stream()
                 .filter(segment -> segment.getDescription().equals(description))
                 .collect(Collectors.toList());
