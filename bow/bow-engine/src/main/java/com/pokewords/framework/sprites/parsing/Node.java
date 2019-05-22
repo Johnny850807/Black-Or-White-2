@@ -11,10 +11,10 @@ import java.util.OptionalInt;
 
 public abstract class Node {
     private String name;
-    private int id;
-    private String description;
-    private KeyValuePairs keyValuePairs;
-    private Segment parent;
+    protected int id;
+    protected String description;
+    protected KeyValuePairs keyValuePairs;
+    protected Segment parent;
 
     protected Node(String name, int id, String description) {
         init();
@@ -23,17 +23,11 @@ public abstract class Node {
         this.description = description;
     }
 
-    protected Node(String name) {
-        init();
-        this.name = name;
-        this.id = Integer.MIN_VALUE;
-    }
-
     private void init() {
         keyValuePairs = new KeyValuePairs();
     }
 
-    public String getName() {
+    protected String getName() {
         return name;
     }
 
@@ -79,22 +73,23 @@ public abstract class Node {
         return keyValuePairs.getMap().keySet();
     }
 
-    public void setParent(Segment parent) {
+    protected Node setParent(Segment parent) {
         this.parent = parent;
+        return this;
     }
 
     public Segment getParent() {
         return parent;
     }
 
-    public String keyValuePairsToString(int indentation) {
+    protected String keyValuePairsToString(int indentation) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
         keyValuePairs.getMap().forEach((key, value) -> resultBuilder.append(String.format(indent + "%s: %s\n", key, value)));
         return resultBuilder.toString();
     }
 
-    public String keyValuePairsToString() {
+    protected String keyValuePairsToString() {
         return keyValuePairsToString(0);
     }
 
@@ -117,13 +112,18 @@ public abstract class Node {
     }
 
     protected void parseKeyValuePairs(Context context) {
-        if (context.getKey() == null) return;
         do {
+            if (context.getKey() == null) return;
             put(context.getKey(), context.getValue());
-        } while (fetchAndCheck(context) && context.getKey() != null);
+        } while (fetchAndCheck(context));
     }
 
     public abstract void parse(Context context);
+    public abstract String toString(int indentation);
+    @Override
+    public String toString() {
+        return toString(4);
+    }
 
     static void main(String[] args) {
         Segment script = new LinScriptSegment("name", 1);

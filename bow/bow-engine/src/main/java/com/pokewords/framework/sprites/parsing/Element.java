@@ -10,5 +10,31 @@ import java.util.OptionalInt;
  * @author nyngwang
  */
 public abstract class Element extends Node {
-    String toString(int indentation);
+
+    protected Element(String name, int id, String description) {
+        super(name, id, description);
+    }
+
+    @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    @Override
+    public Element put(String key, String value) {
+        super.put(key, value);
+        return this;
+    }
+
+    @Override
+    public Element put(String key, int value) {
+        super.put(key, value);
+        return this;
+    }
+
+    @Override
+    public Element setParent(Segment parent) {
+        super.setParent(parent);
+        return this;
+    }
 }
