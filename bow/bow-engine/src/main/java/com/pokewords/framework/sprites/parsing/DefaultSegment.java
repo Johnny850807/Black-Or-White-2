@@ -3,7 +3,7 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
 /**
- *  Each segment has a reference to its parent Script, possibly some Elements, and its key-value pairs.
+ *  Default segment: parsing format = LinScript.
  *  @author nyngwang
  */
 public class DefaultSegment extends Segment {
