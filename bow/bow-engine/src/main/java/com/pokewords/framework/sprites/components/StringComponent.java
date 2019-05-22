@@ -10,14 +10,14 @@ public class StringComponent extends FrameComponent<StringFrame> {
     }
 
     public void setText(String text) {
-        getFrame().setText(text);
+        getFrame().text(text);
     }
 
     public void setColor(Color color) {
-        getFrame().setColor(color);
+        getFrame().color(color);
     }
 
     public void setFont(Font font) {
-        getFrame().setFont(font);
+        getFrame().font(font);
     }
 }
