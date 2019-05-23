@@ -41,7 +41,7 @@ public class GraphicsCanvas implements Canvas {
     public void render(ImageFrame imageFrame) {
         if (imageFrame.hasFlag(ImageFrame.CANVAS_FLAG_RENDER_BY_CENTER))
             canvas.graphics.drawImage(imageFrame.getImage(), imageFrame.getX()-imageFrame.getWidth()/2,
-                    imageFrame.getY()-imageFrame.getHeight()/2, null);
+                    imageFrame.getY()-imageFrame.getHeight()/2, imageFrame.getWidth(), imageFrame.getHeight(),null);
         else
             canvas.graphics.drawImage(imageFrame.getImage(), imageFrame.getX(), imageFrame.getY(),
                     imageFrame.getWidth(), imageFrame.getHeight(), null);
@@ -55,7 +55,6 @@ public class GraphicsCanvas implements Canvas {
             canvas.graphics.fillRect(rectangleFrame.getX(), rectangleFrame.getY(), rectangleFrame.getWidth(), rectangleFrame.getHeight());
         else
             canvas.graphics.drawRect(rectangleFrame.getX(), rectangleFrame.getY(), rectangleFrame.getWidth(), rectangleFrame.getHeight());
-
     }
 
     @Override
@@ -70,5 +69,6 @@ public class GraphicsCanvas implements Canvas {
             canvas.graphics.drawRoundRect(roundedRectangleFrame.getX(), roundedRectangleFrame.getY(),
                     roundedRectangleFrame.getWidth(), roundedRectangleFrame.getHeight(),
                     roundedRectangleFrame.getArcWidth(), roundedRectangleFrame.getArcHeight());
+
     }
 }

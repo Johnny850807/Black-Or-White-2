@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.factories;
 
+import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
 import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.commons.utils.StringUtility;
@@ -25,6 +26,13 @@ public class SpriteInitializer {
     private PrototypeFactory prototypeFactory;
     private SpriteBuilder spriteBuilder;
     private InitializationMode initializationMode;
+
+    /**
+     * Use this reference to indicate which type of sprite the client is declaring.
+     * Whenever the client commit the sprite, this reference should be set null.
+     * Hence we can see if the client forgot to commit the sprite, then throw an exception.
+     */
+    private Object declaringType;
 
     // <sprite's type, the sprite>
     private final Map<Object, Declaration> declarationMap = new HashMap<>();
@@ -81,6 +89,10 @@ public class SpriteInitializer {
 
 
     public SpriteDeclarator declare(@NotNull Object type) {
+        if (declaringType != null)
+            throw new GameEngineException("You are declaring " + declaringType + ", did you forget to commit it? " +
+                    "You should commit it before declaring another sprite.");
+        declaringType = type;
         return new SpriteDeclarator(type);
     }
 
@@ -184,6 +196,7 @@ public class SpriteInitializer {
 
             declarationMap.put(type, declaration);
 
+            declaringType = null;
             return new SpriteCreator();
         }
 
