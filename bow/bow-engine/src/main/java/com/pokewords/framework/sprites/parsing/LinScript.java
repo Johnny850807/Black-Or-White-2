@@ -2,9 +2,6 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.SegmentException;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * LinScript is a special segment which only contains other segments.
  * @author nyngwang
@@ -16,7 +13,7 @@ public class LinScript extends Script {
 
     @Override
     public void parse(Context context) {
-        while (context.fetchNextToken()) {
+        while (context.consumeToken()) {
             if (parseTag(context)) {
                 Segment segment = new DefaultSegment();
                 segment.parse(context);
@@ -24,7 +21,7 @@ public class LinScript extends Script {
                 continue;
             }
             throw new SegmentException(String.format(
-                    "LinScript format error: \"%s\" is not allowed here", context.getCurrentToken()));
+                    "LinScript format error: \"%s\" is not allowed here", context.peekToken()));
         }
     }
 

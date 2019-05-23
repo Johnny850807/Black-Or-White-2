@@ -6,7 +6,7 @@ package com.pokewords.framework.sprites.parsing;
 public interface Node {
     Node getParent();
 
-    boolean parse(Context context);
+    void parse(Context context);
 
     String toString(int indent);
 }

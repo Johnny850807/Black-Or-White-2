@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.engine.exceptions.KeyValuePairsException;
+
 import java.util.Map;
 
 public class NoCommaPairs extends KeyValuePairs {
@@ -15,9 +17,25 @@ public class NoCommaPairs extends KeyValuePairs {
     }
 
     @Override
-    public boolean parse(Context context) {
+    public void parse(Context context) {
+        while (context.hasNextToken()) {
+            String key = context.fetchToken();
+            String colon = context.fetchToken();
+            String value = context.fetchToken();
 
+            if (!colon.equals(":"))
+                throw new KeyValuePairsException(String.format(
+                        "This is not a key-value pair: %s %s %s", key, colon, value));
+            if (key.matches("<\\S+>"))
+                throw new KeyValuePairsException(String.format(
+                        "The key cannot be a tag: %s %s %s", key, colon, value));
+            if (value.matches("<\\S+>"))
+                throw new KeyValuePairsException(String.format(
+                        "The value cannot be a tag: %s %s %s", key, colon, value));
+            put(key, value);
+        }
     }
+
 
     @Override
     public String toString(int indent) {

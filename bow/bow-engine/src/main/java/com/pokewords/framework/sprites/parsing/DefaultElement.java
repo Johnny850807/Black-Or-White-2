@@ -19,17 +19,17 @@ public class DefaultElement extends Element {
     @Override
     public void parse(Context context) {
         if (context.currentTokenIsEmpty()) // if hasn't fetch
-            context.fetchNextToken();
+            context.consumeToken();
         if (!parseTag(context))
-            throw new ElementException(String.format("Token %s is not a tag", context.getCurrentToken()));
+            throw new ElementException(String.format("Token %s is not a tag", context.peekToken()));
 
-        while (context.fetchNextToken()) {
+        while (context.consumeToken()) {
             if (parseClosedTag(context)) {
-                context.fetchNextToken();
+                context.consumeToken();
                 return;
             }
             if (!parseKeyValuePair(context))
-                throw new ElementException(String.format("In <%s>: token \"%s\" is not allowed here", name, context.getCurrentToken()));
+                throw new ElementException(String.format("In <%s>: token \"%s\" is not allowed here", name, context.peekToken()));
         }
         throw new ElementException(String.format("Tag <%s> is not closed", name));
     }

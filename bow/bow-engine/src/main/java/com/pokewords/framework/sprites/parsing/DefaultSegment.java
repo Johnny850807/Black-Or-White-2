@@ -28,18 +28,18 @@ public class DefaultSegment extends Segment {
     @Override
     public void parse(Context context) {
         if (context.currentTokenIsEmpty()) // if hasn't fetch
-            context.fetchNextToken();
+            context.consumeToken();
         if (!parseTag(context))
-            throw new SegmentException(String.format("Token %s is not a tag", context.getCurrentToken()));
-        context.fetchNextToken();
+            throw new SegmentException(String.format("Token %s is not a tag", context.peekToken()));
+        context.consumeToken();
         if (!parseId(context))
-            throw new SegmentException(String.format("Token %s is not an ID", context.getCurrentToken()));
-        context.fetchNextToken();
+            throw new SegmentException(String.format("Token %s is not an ID", context.peekToken()));
+        context.consumeToken();
         if (parseDescription(context))
-            context.fetchNextToken();
+            context.consumeToken();
         else do {
             if (parseClosedTag(context)) {
-                context.fetchNextToken();
+                context.consumeToken();
                 return;
             }
             if (parseKeyValuePair(context)) continue;
@@ -49,8 +49,8 @@ public class DefaultSegment extends Segment {
                 addElement(element);
                 continue;
             }
-            throw new SegmentException(String.format("In <%s>: token \"%s\" is not allowed here", name, context.getCurrentToken()));
-        } while (context.fetchNextToken());
+            throw new SegmentException(String.format("In <%s>: token \"%s\" is not allowed here", name, context.peekToken()));
+        } while (context.consumeToken());
         throw new SegmentException(String.format("Tag <%s> is not closed", name));
     }
 
