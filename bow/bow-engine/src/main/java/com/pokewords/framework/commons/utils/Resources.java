@@ -13,7 +13,7 @@ public class Resources {
         URL url = Thread.currentThread().getContextClassLoader().getResource(path);
         if (url == null)
             throw new IllegalArgumentException("No file (" + path + ") found.");
-        return new File(url.toString());
+        return new File(url.getFile());
     }
 
 }
