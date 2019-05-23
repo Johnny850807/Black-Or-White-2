@@ -1,0 +1,316 @@
+
+<galleries>
+    <sheet>
+        startPic: 0 endPic: 6 path: sheets/character.png
+    </sheet>
+</galleries>
+
+<frame> 0 walkLeft
+    duration: 80 next: 1 pic: 0 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveX: -8
+    </effect>
+</frame>
+
+<frame> 1 walkLeft
+    duration: 80 next: 2 pic: 1 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveX: -8
+    </effect>
+</frame>
+
+<frame> 2 walkLeft
+    duration: 80 next: 0 pic: 4 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveX: -8
+    </effect>
+</frame>
+
+
+<frame> 3 walkRight
+    duration: 80 next: 4 pic: 2 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveX: 8
+    </effect>
+</frame>
+
+<frame> 4 walkRight
+    duration: 80 next: 5 pic: 5 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveX: 8
+    </effect>
+</frame>
+
+<frame> 5 walkRight
+    duration: 80 next: 3 pic: 6 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveX: 8
+    </effect>
+</frame>
+
+
+<frame> 6 walkLeftUp
+    duration: 80 next: 7 pic: 0 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveY: -7
+    </effect>
+</frame>
+
+<frame> 7 walkLeftUp
+    duration: 80 next: 8 pic: 1 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+		moveY: -7
+    </effect>
+</frame>
+
+<frame> 8 walkLeftUp
+    duration: 80 next: 6 pic: 4 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveY: -7
+    </effect>
+</frame>
+
+
+<frame> 9 walkLeftDown
+    duration: 80 next: 10 pic: 0 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveY: 7
+    </effect>
+</frame>
+
+<frame> 10 walkLeftDown
+    duration: 80 next: 11 pic: 1 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveY: 7
+    </effect>
+</frame>
+
+<frame> 11 walkLeftDown
+    duration: 80 next: 9 pic: 4 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveY: 7
+    </effect>
+</frame>
+
+<frame> 12 walkRightUp
+    duration: 80 next: 13 pic: 2 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveY: -7
+    </effect>
+</frame>
+
+<frame> 13 walkRightUp
+    duration: 80 next: 14 pic: 5 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveY: -7
+    </effect>
+</frame>
+
+<frame> 14 walkRightUp
+    duration: 80 next: 12 pic: 6 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveY: -7
+    </effect>
+</frame>
+
+<frame> 15 walkRightDown
+    duration: 80 next: 16 pic: 2 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveY: 7
+    </effect>
+</frame>
+
+<frame> 16 walkRightUp
+    duration: 80 next: 17 pic: 5 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveY: 7
+    </effect>
+</frame>
+
+<frame> 17 walkRightUp
+    duration: 80 next: 15 pic: 6 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 12
+		walkDown: 15
+	</transitions>
+    <body>
+        x: 9 y: 11 w: 44 h: 64
+    </body>
+    <effect>
+        moveY: 7
+    </effect>
+</frame>
+

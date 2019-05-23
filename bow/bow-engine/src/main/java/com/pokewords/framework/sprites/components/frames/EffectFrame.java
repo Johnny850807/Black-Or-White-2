@@ -2,6 +2,8 @@ package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.views.Canvas;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author johnny850807 (waterball)
@@ -25,4 +27,21 @@ public interface EffectFrame extends Frame {
      * @return get the frame's duration
      */
     int getDuration();
+
+    /**
+     * Wrap a frame with EffectFrame interface.
+     */
+    static EffectFrame wrap(Frame frame, int duration) {
+        return new EffectWrappedFrame(frame, duration);
+    }
+
+    /**
+     * Wrap a frame with EffectFrame interface.
+     */
+    static EffectFrame wrap(Frame frame) {
+        return new EffectWrappedFrame(frame, 0);
+    }
+
+    @Override
+    EffectFrame clone();
 }

@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class FrameComponent<T extends Frame> extends CloneableComponent implements Renderable {
-    private Sprite sprite;
     private T frame;
     private Collection<T> frameSingletonCollection;
 
@@ -27,8 +26,13 @@ public class FrameComponent<T extends Frame> extends CloneableComponent implemen
     }
 
     @Override
-    public void onComponentInjected() {
-        frame.setSprite(sprite);
+    public void onComponentAttachedSprite(Sprite sprite) {
+        frame.boundToSprite(sprite);
+    }
+
+    @Override
+    public void onComponentRemoved() {
+        frame.boundToSprite(null);
     }
 
     @Override

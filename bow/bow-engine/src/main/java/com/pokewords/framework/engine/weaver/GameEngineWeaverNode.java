@@ -1,16 +1,12 @@
 package com.pokewords.framework.engine.weaver;
 
-import com.pokewords.framework.commons.Range;
 import com.pokewords.framework.engine.Events;
-import com.pokewords.framework.engine.parsing.EffectElement;
-import com.pokewords.framework.engine.parsing.FrameSegment;
-import com.pokewords.framework.engine.parsing.GalleryElement;
-import com.pokewords.framework.engine.parsing.PropertiesElement;
+import com.pokewords.framework.engine.parsing.*;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.EffectFrameFactory;
-import com.pokewords.framework.sprites.components.frames.ImageEffectFrame;
+import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
 import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
@@ -18,8 +14,8 @@ import com.pokewords.framework.sprites.parsing.Segment;
 import com.pokewords.framework.views.helpers.galleries.Gallery;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Read the <frame> Segment and the game-engine domain attributes within the frame.
@@ -28,15 +24,16 @@ import java.util.List;
  * into the FrameStateMachineComponent of the sprite.
  * (2) Add the 'update' transitions from all frames corresponding to their 'next' attributes.
  * (3) Parse and effect the elements :
- *      i. <properties>
+ *      i. <body>
  *      ii. <effect>
+ *      iii. <transitions>
  * @author johnny850807 (waterball)
  */
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
     private EffectFrameFactory effectFrameFactory;
 
-    // <FrameSegment's Id, frameSegment>
-    private Map<Integer, FrameSegment> frameSegmentMap = Collections.synchronizedMap(new HashMap<>());
+    private Sprite sprite;
+    private Map<Integer, FrameSegment> frameSegmentMap = Collections.synchronizedMap(new HashMap<>()); // <FrameSegment's Id, frameSegment>
 
     public GameEngineWeaverNode() {
         this.effectFrameFactory = new GameEngineEffectFrameFactory();
@@ -47,22 +44,24 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
     }
 
     @Override
-    public void onWeaving(Script script, Sprite sprite) {
+    public synchronized void onWeaving(Script script, Sprite sprite) {
         if (sprite.hasComponent(FrameStateMachineComponent.class))
         {
+            this.sprite = sprite;
             List<Segment> frames = script.getSegmentsByName("frame");
-            frames.forEach(f -> parseAndAddFrame(f, sprite));
-            setNextTransitions(sprite);
+            frames.forEach(this::parseAndAddFrame);
+            setNextTransitions();
+            setAllCustomTransitions();
+            cleanUpWeaverNode();
         }
-
     }
 
-    private void parseAndAddFrame(Segment frame, Sprite sprite) {
+    private void parseAndAddFrame(Segment frame) {
         EffectFrame effectFrame = effectFrameFactory.createFrame(frame);
         sprite.getFrameStateMachineComponent().addFrame(effectFrame);
     }
 
-    private void setNextTransitions(Sprite sprite) {
+    private void setNextTransitions() {
         FrameStateMachineComponent fsmc = sprite.getFrameStateMachineComponent();
         for (Integer id : frameSegmentMap.keySet()) {
             EffectFrame from = fsmc.getFrame(id);
@@ -71,19 +70,48 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
     }
 
+
+    private void setAllCustomTransitions() {
+        for (Integer id : frameSegmentMap.keySet()) {
+            FrameSegment frameSegment = frameSegmentMap.get(id);
+            frameSegment.getTransitionsElement()
+                    .ifPresent(transitionsElement ->
+                            setCustomTransitionsFromTransitionsElement(id, transitionsElement));
+        }
+    }
+
+    private void setCustomTransitionsFromTransitionsElement(int frameId, TransitionsElement transitionsElement) {
+        FrameStateMachineComponent fsmc = sprite.getFrameStateMachineComponent();
+
+        for (Map.Entry<Object, Integer> entry : transitionsElement.getTransitionMap().entrySet())
+        {
+            EffectFrame from = fsmc.getFrame(frameId);
+            Object event = entry.getKey();
+            int toId = entry.getValue();
+            EffectFrame to = fsmc.getFrame(toId);
+            fsmc.addTransition(from, event, to);
+        }
+    }
+
+    private void cleanUpWeaverNode() {
+        this.sprite = null;
+        this.frameSegmentMap.clear();
+    }
+
     public class GameEngineEffectFrameFactory implements EffectFrameFactory {
         // < <startPic/endPic>, gallery instance>
         private Set<Gallery> gallerySet;
 
         @Override
         public EffectFrame createFrame(Segment segment) {
-            setupGalleryMapIfNotExists(segment.getParentScript());
+            setupGalleryMapIfNotExists(segment.getParent());
             FrameSegment frameSegment = new FrameSegment(segment);
             EffectFrame effectFrame = initEffectFrame(frameSegment, segment);
-            parsePropertiesElement(frameSegment, effectFrame);
+            parseBodyElement(frameSegment, effectFrame);
             parseEffectElement(frameSegment, effectFrame);
             return effectFrame;
         }
+
 
         private void setupGalleryMapIfNotExists(Script script) {
             if (gallerySet == null) {
@@ -106,8 +134,8 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         private EffectFrame initEffectFrame(FrameSegment frameSegment, Segment segment) {
             frameSegmentMap.put(frameSegment.getId(), frameSegment);
-            return new ImageEffectFrame(frameSegment.getId(), frameSegment.getLayer(), frameSegment.getDuration(),
-                    getImage(frameSegment.getPic()));
+            return EffectFrame.wrap(new ImageFrame(frameSegment.getId(), frameSegment.getLayer(),
+                    getImage(frameSegment.getPic())), frameSegment.getDuration());
         }
 
         private synchronized Image getImage(int pic) {
@@ -119,12 +147,12 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
     }
 
-    private void parsePropertiesElement(FrameSegment frameSegment, EffectFrame effectFrame) {
-        frameSegment.getPropertiesElement()
-                .ifPresent(p -> effectPropertiesElement(p, effectFrame));
+    private void parseBodyElement(FrameSegment frameSegment, EffectFrame effectFrame) {
+        frameSegment.getBodyElement()
+                .ifPresent(p -> effectBodyElement(p, effectFrame));
     }
 
-    private void effectPropertiesElement(PropertiesElement element, EffectFrame effectFrame) {
+    private void effectBodyElement(BodyElement element, EffectFrame effectFrame) {
         effectFrame.addEffect((world, sprite) -> {
             int x = element.getX().orElse(sprite.getX());
             int y = element.getY().orElse(sprite.getY());

@@ -7,109 +7,188 @@ import java.util.Objects;
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
-	private Rectangle body = new Rectangle(0, 0, 0, 0);
-	private Point center = new Point();
-	private Object type;
+    private double timePerFrame;
+    private Rectangle area = new Rectangle(0, 0, 0, 0);
+    private Rectangle body;
+    private Point center;
+    private Object type;
 
-	public PropertiesComponent() {
-	}
+    public PropertiesComponent() {
+    }
 
-	public PropertiesComponent(Object type) {
-		this.type = type;
-	}
+    public PropertiesComponent(Object type) {
+        this.type = type;
+    }
 
-	@Override
-	public PropertiesComponent clone() {
-		PropertiesComponent clone = (PropertiesComponent) super.clone();
-		clone.body = (Rectangle) this.body.clone();
-		clone.center = (Point) this.center.clone();
-		return clone;
-	}
+    @Override
+    public void onUpdate(double timePerFrame) {
+        this.timePerFrame = timePerFrame;
+    }
 
-	public Rectangle getBody() {
-		return body;
-	}
-
-	public void setBody(int x, int y, int w, int h){
-		this.body.setBounds(x, y, w, h);
-	}
-
-	public void setBody(Rectangle body) {
-		this.body = body;
-	}
-
-	public int getX(){
-		return (int) getPosition().getX();
-	}
-	public int getY(){
-		return (int) getPosition().getY();
-	}
-	public int getW(){
-		return (int) getBody().getWidth();
-	}
-	public int getH(){
-		return (int) getBody().getHeight();
-	}
+    @Override
+    public PropertiesComponent clone() {
+        PropertiesComponent clone = (PropertiesComponent) super.clone();
+        clone.area = (Rectangle) this.area.clone();
+        if (body != null)
+            clone.body = (Rectangle) this.body.clone();
+        if (center != null)
+            clone.center = (Point) this.center.clone();
+        return clone;
+    }
 
 
-	public Point getPosition(){
-		return body.getLocation();
-	}
+    public Rectangle getBody() {
+        if (body == null)
+            body = area;
+        return body;
+    }
 
-	public void setPosition(Point position) {
-		this.body.setLocation(position);
-	}
+    public void setBody(int x, int y, int w, int h) {
+        setBody(new Rectangle(x, y, w, h));
+    }
 
-	public void setPosition(int x, int y) {
-		this.body.setLocation(x, y);
-	}
+    public void setBody(Rectangle body) {
+        if (this.body == null)
+            this.body = new Rectangle(body);
+        else
+            this.body.setBounds(body);
+    }
 
-	public Object getType() {
-		return type;
-	}
+    public void move(Point point) {
+        move(point.x, point.y);
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void move(int velocityX, int velocityY) {
+        getArea().translate(velocityX, velocityY);
+    }
 
-	public void setCenter(int x, int y) {
-		this.setCenter(new Point(x, y));
-	}
+    public void moveX(int velocityX) {
+        getArea().translate(velocityX, 0);
+    }
 
-	public void setCenter(Point center) {
-		this.center = center;
-	}
+    public void moveY(int velocityY) {
+        getArea().translate(0, velocityY);
+    }
 
-	public Point getCenter() {
-		return center;
-	}
 
-	@Override
-	public void onAppStateCreate() {
-		Objects.requireNonNull(type);
-	}
+    public int getX() {
+        return (int) getPosition().getX();
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		PropertiesComponent that = (PropertiesComponent) o;
-		return body.equals(that.body) &&
-				center.equals(that.center) &&
-				type.equals(that.type);
-	}
+    public int getY() {
+        return (int) getPosition().getY();
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(body, center, type);
-	}
+    public int getWidth() {
+        return (int) getArea().getWidth();
+    }
 
-	@Override
-	public String toString() {
-		return "PropertiesComponent{" +
-				"body=" + body +
-				", center=" + center +
-				", type='" + type + '\'' +
-				'}';
-	}
+    public int getHeight() {
+        return (int) getArea().getHeight();
+    }
+
+    public Point getPosition() {
+        return area.getLocation();
+    }
+
+    public void setPosition(Point position) {
+        getArea().setLocation(position);
+    }
+
+    public void setPosition(int x, int y) {
+        getArea().setLocation(x, y);
+    }
+
+    public Rectangle getArea() {
+        return area;
+    }
+
+    public void setArea(Rectangle area) {
+        getArea().setBounds(area);
+    }
+
+    public void setArea(int x, int y, int w, int h) {
+        getArea().setBounds(x, y, w, h);
+    }
+
+    public void setAreaSize(int w, int h) {
+        getArea().setSize(w, h);
+    }
+
+    public void setAreaSize(Dimension area) {
+        getArea().setSize(area);
+    }
+
+    public Dimension getAreaSize() {
+        return getArea().getSize();
+    }
+
+    public Dimension getBodySize() {
+        return getBody().getSize();
+    }
+
+    public boolean isType(Object type) {
+        return getType() == type;
+    }
+
+    public Object getType() {
+        return type;
+    }
+
+    public void setType(Object type) {
+        this.type = type;
+    }
+
+    public void setCenter(int x, int y) {
+        this.setCenter(new Point(x, y));
+    }
+
+    public void setCenter(Point center) {
+        if (this.center == null)
+            this.center = new Point(center);
+        else
+            this.center.setLocation(center);
+    }
+
+    public Point getCenter() {
+        if (center == null)
+        {
+            int bodyX = (int) getBody().getX();
+            int bodyY = (int) getBody().getY();
+            center = new Point(bodyX + (int) getBody().getWidth() / 2, bodyY + (int) getBody().getHeight() / 2);
+        }
+        return center;
+    }
+
+    @Override
+    public void onAppStateCreate() {
+        Objects.requireNonNull(type);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PropertiesComponent that = (PropertiesComponent) o;
+        return getArea().equals(that.getArea()) &&
+                getBody().equals(that.getBody()) &&
+                getCenter().equals(that.getCenter()) &&
+                getType().equals(that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getArea(), getBody(), getCenter(), getType());
+    }
+
+    @Override
+    public String toString() {
+        return "PropertiesComponent{" +
+                "area=" + getArea() +
+                ", body=" + getBody() +
+                ", center=" + getCenter() +
+                ", type=" + getType() +
+                '}';
+    }
+
 }

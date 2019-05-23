@@ -9,11 +9,16 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/joagunna/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/shotgunininder/pom.xml" />
+        <option value="$PROJECT_DIR$/shotshotning/pom.xml" />
+        <option value="$PROJECT_DIR$/watershot/pom.xml" />
       </set>
     </option>
   </component>
   <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/bow-engine-demo/src/main/resources/scripts/character.bow" />
     <file url="file://$PROJECT_DIR$/bow-engine/src/main/resources/assets/scripts/loadingText.bow" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK" />

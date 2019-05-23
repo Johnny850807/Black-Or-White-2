@@ -12,10 +12,7 @@
     <modules>
         <module>bow-engine</module>
         <module>bow-core</module>
-        <module>watershot</module>
-        <module>shotgunininder</module>
-        <module>joagunna</module>
-        <module>shotshotning</module>
+        <module>bow-engine-demo</module>
     </modules>
 
     <dependencies>

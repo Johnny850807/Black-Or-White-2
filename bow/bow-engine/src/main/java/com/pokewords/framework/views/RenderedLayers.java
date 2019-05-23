@@ -1,36 +1,28 @@
 package com.pokewords.framework.views;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.IntStream;
+import java.util.*;
 
+import com.pokewords.framework.commons.NullIterator;
 import com.pokewords.framework.sprites.components.frames.Frame;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author Joanna
+ * @author johnny850807 (waterball)
  */
-public class RenderedLayers {
-	private List<List<Frame>> layers;
+public class RenderedLayers implements Iterable<Frame> {
+	private Map<Integer, Collection<Frame>> layers = new TreeMap<>();
 
-	public RenderedLayers() {
-	    layers = new ArrayList<>();
-	}
 
-	public RenderedLayers(List<List<Frame>> layers) {
-		this.layers = layers;
-	}
-
-	public List<List<Frame>> getLayers() {
+	public Map<Integer, Collection<Frame>> getLayers() {
 		return layers;
 	}
 
-	public void setLayers(List<List<Frame>> layers) {
-		this.layers = layers;
+	public void clear() {
+		layers.clear();
 	}
 
 	public void clearEachLayer() {
-		layers.forEach(List::clear);
+		layers.values().forEach(Collection::clear);
 	}
 
     /**
@@ -38,12 +30,51 @@ public class RenderedLayers {
      * @param frame The Frame.
      */
     public void addFrame(Frame frame) {
-        expandLayersToFitTheIndex(frame.getLayerIndex());
-        layers.get(frame.getLayerIndex()).add(frame);
+    	if (!layers.containsKey(frame.getLayerIndex()))
+    		layers.put(frame.getLayerIndex(), new LinkedList<>());
+		layers.get(frame.getLayerIndex()).add(frame);
     }
 
-    private void expandLayersToFitTheIndex(int layerIndex) {
-        IntStream.range(layers.size(), layerIndex+1)
-                .forEach(i -> layers.add(new ArrayList<>()));
-    }
+    public void addFrames(Collection<? extends Frame> frames) {
+    	frames.forEach(this::addFrame);
+	}
+
+	public Collection<Frame> getLayer(int layerIndex) {
+    	return layers.get(layerIndex);
+	}
+
+	@NotNull
+	@Override
+	public Iterator<Frame> iterator() {
+		return new LayersIterator();
+	}
+
+	private class LayersIterator implements Iterator<Frame> {
+		private Iterator<Collection<Frame>> layersIterator;
+		private Iterator<Frame> currentLayerIterator;
+
+		public LayersIterator() {
+			layersIterator = layers.values().iterator();
+			currentLayerIterator = layersIterator.hasNext() ? layersIterator.next().iterator() : new NullIterator<>();
+		}
+
+		@Override
+		public boolean hasNext() {
+			return currentLayerIterator.hasNext() || findNextNonEmptyLayer();
+		}
+
+		private boolean findNextNonEmptyLayer() {
+			if (layersIterator.hasNext())
+			{
+				currentLayerIterator = layersIterator.next().iterator();
+				return currentLayerIterator.hasNext() || findNextNonEmptyLayer();
+			}
+			return false;
+		}
+
+		@Override
+		public Frame next() {
+			return currentLayerIterator.next();
+		}
+	}
 }

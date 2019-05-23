@@ -1,8 +1,10 @@
 package com.pokewords.framework.engine.gameworlds;
 
+import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.frames.Frame;
+import com.pokewords.framework.sprites.components.KeyListenerComponent;
+import com.pokewords.framework.sprites.components.MouseListenerComponent;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,33 +18,32 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * @author Joanna
+ * @author Joanna, johnny850807 (waterball)
  */
 public class AppStateWorld implements AppStateLifeCycleListener {
+    private AppState appState;
     private List<Sprite> sprites;
-    private AtomicInteger spriteCount;
     private Map<Integer, Sprite> idSpriteMap;
     private Map<Sprite, Integer> spriteIdMap;
     private RenderedLayers renderedLayers;
-    private List<CollisionHandler> collisionHandlers;
+    private Map<CollisionHandler.Type, List<CollisionHandler>> collisionHandlerMap;
 
-    public AppStateWorld() {
-        sprites = new ArrayList<>();
-        spriteCount = new AtomicInteger(0);
-        renderedLayers = new RenderedLayers(new ArrayList<>());
-        collisionHandlers = new ArrayList<>();
+    public AppStateWorld(AppState appState) {
+        this.appState = appState;
+        sprites = Collections.synchronizedList(new ArrayList<>(30));
+        renderedLayers = new RenderedLayers();
+        collisionHandlerMap = new HashMap<>();
         idSpriteMap = new HashMap<>();
         spriteIdMap = new IdentityHashMap<>();
     }
 
     /**
      * @param sprite the spawned sprite to be added into the world
-     * @return the Sprite's unique id
+     * @return the Sprite's unique event
      */
     public int spawn(Sprite sprite) {
-        int id = spriteCount.incrementAndGet();
+        int id = sprites.size();
         addSpriteIntoWorld(id, sprite);
-        addFramesToRenderedLayer(sprite.getRenderedFrames());
         sprite.setWorld(this);
         return id;
     }
@@ -58,7 +59,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @param sprite the spawned sprite to be added into the world
      * @param time the time-delay to spawn
      * @param timeUnit the time unit of
-     * @param callback the callback receives the spawned sprite's id when the sprite is actually spawned
+     * @param callback the callback receives the spawned sprite's event when the sprite is actually spawned
      */
     public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, @Nullable Consumer<Integer> callback) {
         new Thread(() -> {
@@ -74,25 +75,20 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         }).start();
     }
 
-    /**
-     * Add the frames to the rendered layer.
-     * @param renderedFrames The Frame will be add in the rendered layer.
-     */
-    private void addFramesToRenderedLayer(Collection<? extends Frame> renderedFrames) {
-        for (Frame frame: renderedFrames) {
-            renderedLayers.addFrame(frame);
-        }
-    }
-
     public RenderedLayers getRenderedLayers() {
         return renderedLayers;
     }
 
     public void addCollisionHandler(CollisionHandler collisionHandler) {
+        CollisionHandler.Type collisionHandlerType = new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType());
+        List<CollisionHandler> collisionHandlers = (collisionHandlerMap.containsKey(collisionHandlerType))?
+                collisionHandlerMap.get(collisionHandlerType) : new ArrayList<>();
         collisionHandlers.add(collisionHandler);
+        collisionHandlerMap.put(collisionHandlerType, collisionHandlers);
     }
 
     public void removeCollisionHandler(CollisionHandler collisionHandler) {
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType()));
         collisionHandlers.remove(collisionHandler);
     }
 
@@ -100,34 +96,38 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         return sprites;
     }
 
-    public List<CollisionHandler> getCollisionHandlers() {
+    public Collection<CollisionHandler> getCollisionHandlers() {
+        List<CollisionHandler> collisionHandlers = new ArrayList<>();
+        for (List<CollisionHandler> collisionHandlerList: collisionHandlerMap.values()) {
+            collisionHandlers.addAll(collisionHandlerList);
+        }
         return collisionHandlers;
     }
 
     @Override
     public void onAppStateCreate() {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onAppStateCreate();
         }
     }
 
     @Override
     public void onAppStateEnter() {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onAppStateEnter();
         }
     }
 
     @Override
     public void onAppStateExit() {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onAppStateExit();
         }
     }
 
     @Override
     public void onAppStateDestroy() {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onAppStateDestroy();
         }
     }
@@ -135,7 +135,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     @Override
     public void onUpdate(double timePerFrame) {
-        for (Sprite sprite: sprites) {
+        for (Sprite sprite: spriteIterates()) {
             sprite.onUpdate(timePerFrame);
         }
         rejoinRenderedLayers();
@@ -144,9 +144,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     private void rejoinRenderedLayers() {
         renderedLayers.clearEachLayer();
-        for (Sprite sprite: sprites) {
-            addFramesToRenderedLayer(sprite.getRenderedFrames());
-        }
+        sprites.forEach( sprite -> renderedLayers.addFrames(sprite.getRenderedFrames()));
     }
 
     private void findCollidedSpritesAndNotifyCollisionHandlers() {
@@ -163,13 +161,11 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     /**
      * To notify sprites if they have collided
-     * //TODO O(1) collisionHandlers map
      */
     private void notifyCollisionHandlers(Sprite sprite1, Sprite sprite2) {
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(sprite1.getType(), sprite2.getType()));
         for (CollisionHandler collisionHandler: collisionHandlers) {
-            if ((collisionHandler.s1Type.equals(sprite1.getType()) && collisionHandler.s2Type.equals(sprite2.getType())) ||
-                    (collisionHandler.s1Type.equals(sprite2.getType()) && collisionHandler.s2Type.equals(sprite1.getType())))
-                collisionHandler.onCollision(sprite1, sprite2);
+            collisionHandler.onCollision(sprite1, sprite2);
         }
     }
 
@@ -196,21 +192,23 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     /**
-     * @return if the sprite who owns the id is in the world
+     * @return if the sprite who owns the event is in the world
      */
     public boolean contains(int spriteId) {
         return idSpriteMap.containsKey(spriteId);
     }
 
     /**
-     * @return the sprite's id
+     * @return the sprite's event
      */
     public int getId(Sprite sprite) {
+        if (!spriteIdMap.containsKey(sprite))
+            throw new IllegalArgumentException("Sprite " + sprite + " is not found.");
         return spriteIdMap.get(sprite);
     }
 
     /**
-     * @return the sprite who owns the id
+     * @return the sprite who owns the event
      */
     public Sprite getSprite(int spriteId) {
         return idSpriteMap.get(spriteId);
@@ -257,7 +255,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the sprites collided with the given sprite
      */
     public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        Set<Sprite> sprites = Collections.newSetFromMap( new IdentityHashMap<>());
+        Set<Sprite> sprites = Collections.newSetFromMap(new IdentityHashMap<>());
         sprites.addAll(getSpritesCollidedWithinArea(sprite.getBody()));
         sprites.remove(sprite);
         return sprites;
@@ -269,19 +267,40 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      */
     public void clearSprites() {
         sprites.forEach(this::removeSprite);
-        spriteCount = new AtomicInteger(0);
-        renderedLayers.setLayers(new ArrayList<>());
+        renderedLayers.clear();
         idSpriteMap.clear();
         spriteIdMap.clear();
         System.gc();
     }
 
     public void removeSprite(Sprite sprite) {
+        int id = getId(sprite);
         sprites.remove(sprite);
+        idSpriteMap.remove(id);
+        spriteIdMap.remove(sprite);
         sprite.setWorld(null);
     }
 
+    /**
+     * use this method to iterate the sprites can avoid ConcurrentModificationException
+     */
+    public List<Sprite> spriteIterates() {
+        return new ArrayList<>(sprites);
+    }
+
     public void clearCollisionHandlers() {
-        collisionHandlers.clear();
+        collisionHandlerMap.clear();
+    }
+
+    public Collection<MouseListenerComponent> getMouseListenerComponents() {
+        return sprites.stream().filter(s -> s.hasComponent(MouseListenerComponent.class))
+                        .map(s -> s.getComponent(MouseListenerComponent.class))
+                        .collect(Collectors.toList());
+    }
+
+    public Collection<KeyListenerComponent> getKeyListenerComponents() {
+        return sprites.stream().filter(s -> s.hasComponent(KeyListenerComponent.class))
+                .map(s -> s.getComponent(KeyListenerComponent.class))
+                .collect(Collectors.toList());
     }
 }

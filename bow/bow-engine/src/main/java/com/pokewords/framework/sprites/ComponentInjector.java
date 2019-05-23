@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 /**
  * @author nyngwang
+ * @deprecated we use explicit instance setting instead of reflective injecting.
  */
 public class ComponentInjector {
 	/**
@@ -35,8 +36,6 @@ public class ComponentInjector {
 			else if (field.getType() == AppStateWorld.class)
 				injectField(field, component, sprite.getWorld());
 		}
-
-		component.onComponentInjected();
 	}
 
 	private static List<Field> getInheritedPrivateFields(Class<?> type) {

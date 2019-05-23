@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -11,7 +13,7 @@ public interface Element {
     Element put(String key, String value);
     Element put(String key, int value);
 
-    String getElementName();
+    String getName();
 
     Optional<String> getStringByKeyOptional(String key);
     OptionalInt getIntByKeyOptional(String key);
@@ -19,8 +21,10 @@ public interface Element {
     String getStringByKey(String key);
     Integer getIntByKey(String key);
 
-    Element setParentSegment(Segment parentSegment);
-    Segment getParentSegment();
+    Collection<String> getKeys();
+
+    Element setParent(Segment parentSegment);
+    Segment getParent();
 
     String toString(int indentation);
 }

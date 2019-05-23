@@ -124,14 +124,50 @@ public class SpriteInitializer {
             return this;
         }
 
-        public SpriteDeclarator size(Point size) {
-            return size(size.x, size.y);
+        public SpriteDeclarator areaSize(Dimension size) {
+            return areaSize((int) size.getWidth(), (int) size.getHeight());
         }
 
-        public SpriteDeclarator size(int w, int y) {
-            Rectangle body = declaration.propertiesComponent.getBody();
-            declaration.propertiesComponent.setBody((int) body.getX(), (int) body.getY(),
-                    w, y);
+        public SpriteDeclarator areaSize(int w, int h) {
+            declaration.propertiesComponent.getArea().setSize(w, h);
+            return this;
+        }
+        public SpriteDeclarator area(Rectangle area) {
+            declaration.propertiesComponent.setArea(area);
+            return this;
+        }
+
+        public SpriteDeclarator area(Point position, int w, int h) {
+            declaration.propertiesComponent.setPosition(position);
+            declaration.propertiesComponent.setAreaSize( w, h);
+            return this;
+        }
+
+        public SpriteDeclarator area(Point position, Dimension size) {
+            declaration.propertiesComponent.setPosition(position);
+            declaration.propertiesComponent.setAreaSize(size);
+            return this;
+        }
+
+        public SpriteDeclarator area(int x, int y, Dimension size) {
+            declaration.propertiesComponent.setPosition(x, y);
+            declaration.propertiesComponent.setAreaSize(size);
+            return this;
+        }
+
+
+        public SpriteDeclarator area(int x, int y, int w, int h) {
+            declaration.propertiesComponent.setArea(x, y, w, h);
+            return this;
+        }
+
+        public SpriteDeclarator body(Rectangle body) {
+            declaration.propertiesComponent.setBody(body);
+            return this;
+        }
+
+        public SpriteDeclarator body(int x, int y, int w, int h) {
+            declaration.propertiesComponent.setBody(x, y, w, h);
             return this;
         }
 
@@ -145,8 +181,8 @@ public class SpriteInitializer {
 
             if (initializationMode == InitializationMode.NON_LAZY)  //non-lazy mode needn't save the declarations, simply init it after declare it
                 declaration.startInitializingSprite();
-            else
-                declarationMap.put(type, declaration);
+
+            declarationMap.put(type, declaration);
 
             return new SpriteCreator();
         }
@@ -201,11 +237,15 @@ public class SpriteInitializer {
 
 
     private void validateSpriteHasBeenDeclared(Object type) {
-        if (!declarationMap.containsKey(type)) {
+        if (!hasDeclared(type)) {
             System.out.println(StringUtility.toString(declarationMap));
             throw new SpriteDeclarationException(String.format("You haven't declared the sprite '%s', " +
                     "use declare(type) to start your declarations. (Did you commit your declaration?)", type));
         }
+    }
+
+    public boolean hasDeclared(Object type) {
+        return declarationMap.containsKey(type);
     }
 
     private void validateUnderCustomStrictModeShouldInitByYourself(Object type) {

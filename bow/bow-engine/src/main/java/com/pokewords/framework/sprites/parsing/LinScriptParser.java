@@ -1,7 +1,10 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.engine.exceptions.LinScriptParserException;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,7 +55,7 @@ public class LinScriptParser implements ScriptParser {
         segment = new LinScriptSegment(segmentName, Integer.parseInt(segmentId), segmentDescription);
         setupSegmentKVPairsAndElementsIfExist(segmentText);
         linScript.addSegment(segment);
-        segment.setParentScript(linScript);
+        segment.setParent(linScript);
     }
 
     private void validateNameOfWhom(String name, String whom) {
@@ -60,9 +63,11 @@ public class LinScriptParser implements ScriptParser {
             case ScriptDefinitions.LinScript.SEGMENT:
                 if ( !linScriptRules.getValidSegmentNames().contains(name) )
                     throw new LinScriptParserException("Segment name is unrecognizable!");
+                break;
             case ScriptDefinitions.LinScript.ELEMENT:
                 if ( !linScriptRules.getValidElementNames().contains(name) )
-                    throw new LinScriptParserException("Element name is unrecognizable!");
+                    throw new LinScriptParserException(String.format("Element name %s is unrecognizable!", name));
+                break;
             default:
                 throw new LinScriptParserException("Internal error: misuse of validateNameOfWhom()");
         }
@@ -70,7 +75,7 @@ public class LinScriptParser implements ScriptParser {
 
     private void setupSegmentKVPairsAndElementsIfExist(String segmentText) {
         Pattern pattern = Pattern.compile(
-                "(?:\\s*(<(\\w+)>.*?</\\2>)\\s*)|([^<]+)",
+                "\\s*(<(\\w+)>.*?</\\2>)\\s*|([^<]+)",
                 Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(segmentText);
         while (matcher.find()) {
@@ -155,7 +160,18 @@ public class LinScriptParser implements ScriptParser {
             element = new LinScriptElement(elementName);
             setupKVPairsOfWhom(elementKVPairsText, ScriptDefinitions.LinScript.ELEMENT);
             segment.addElement(element);
-            element.setParentSegment(segment);
+            element.setParent(segment);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            ScriptParser scriptParser = new LinScriptParser();
+            String scriptString = new String(Files.readAllBytes(Resources.get("assets/scripts/loadingText.bow").toPath()));
+            Script script = scriptParser.parse(scriptString, ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
+            System.out.println("stop");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

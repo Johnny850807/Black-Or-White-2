@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * A sound player that is tightly coupled to the Swing GUI framework.
+ * (Only when the GUI has been init can the player work.)
  * @author johnny850807 (waterball)
  */
 public class SwingSoundPlayer implements SoundPlayer {

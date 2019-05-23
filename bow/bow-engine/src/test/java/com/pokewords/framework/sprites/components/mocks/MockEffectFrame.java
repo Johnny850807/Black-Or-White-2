@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.components.mocks;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.AbstractFrame;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
+import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.frames.GameEffect;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.Canvas;
@@ -19,10 +20,6 @@ public class MockEffectFrame extends AbstractFrame implements EffectFrame {
     public Map<GameEffect, Integer> effectAppliedCount = new HashMap<>();
     public int applyCount = 0;
     public int renderCount = 0;
-
-    public MockEffectFrame(String name) {
-        this(0, name);
-    }
 
     public MockEffectFrame(int id, String name) {
         super(id, 0);
@@ -70,5 +67,10 @@ public class MockEffectFrame extends AbstractFrame implements EffectFrame {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), name, effects, effectAppliedCount, applyCount, renderCount);
+    }
+
+    @Override
+    public EffectFrame clone() {
+        return (EffectFrame) super.clone();
     }
 }

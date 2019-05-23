@@ -1,5 +1,6 @@
 package com.pokewords.framework.views.windows;
 
+import com.pokewords.framework.commons.utils.StringUtility;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.views.AppView;
 import com.pokewords.framework.views.GraphicsCanvas;
@@ -22,8 +23,14 @@ public class GamePanel extends JPanel implements AppView {
 
     public GamePanel(InputManager inputManager) {
         this.inputManager = inputManager;
-        addKeyListener(new KeyListener());
-        addMouseListener(new MouseListener());
+        setFocusable(true);
+        addKeyListener(new GamePanel.KeyListener());
+        addMouseListener(new GamePanel.MouseListener());
+        addMouseMotionListener(new GamePanel.MouseListener());
+    }
+
+    public void setGamePanelBackground(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     private class KeyListener extends KeyAdapter {
@@ -41,20 +48,24 @@ public class GamePanel extends JPanel implements AppView {
 
     private class MouseListener extends MouseAdapter {
         @Override
-        public void mouseClicked(MouseEvent e) {
-            super.mouseClicked(e);
+        public void mousePressed(MouseEvent e) {
             inputManager.onMouseHitDown(e.getPoint());
         }
 
         @Override
+        public void mouseReleased(MouseEvent e) {
+            inputManager.onMouseReleasedUp(e.getPoint());
+        }
+
+        @Override
         public void mouseMoved(MouseEvent e) {
-            super.mouseMoved(e);
             inputManager.onMouseMoved(e.getPoint());
         }
-    }
 
-    public void setGamePanelBackground(Color backgroundColor) {
-        this.backgroundColor = backgroundColor;
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            inputManager.onMouseDragged(e.getPoint());
+        }
     }
 
     @Override
@@ -79,10 +90,12 @@ public class GamePanel extends JPanel implements AppView {
     }
 
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        drawBackground(g);
-        drawRenderedLayers(g);
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+        drawBackground(g2d);
+        drawRenderedLayers(g2d);
     }
 
     private void drawBackground(Graphics g) {
@@ -91,12 +104,8 @@ public class GamePanel extends JPanel implements AppView {
     }
 
     private void drawRenderedLayers(Graphics g) {
-        List<List<Frame>> layers = renderedLayers.getLayers();
-        for (int i = 0; i < layers.size(); i++) {
-            List<Frame> layer = layers.get(i);
-            for (int j = 0; j < layer.size(); j++) {
-                layer.get(j).renderItself(GraphicsCanvas.of(g));
-            }
+        for (Frame frame : renderedLayers) {
+            frame.renderItself(GraphicsCanvas.of(g));
         }
     }
 }

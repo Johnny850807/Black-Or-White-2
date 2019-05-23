@@ -8,7 +8,11 @@ import java.awt.*;
 public interface GameWindowsConfigurator {
     GameWindowsConfigurator name(String windowName);
 
-    GameWindowsConfigurator size(int width, int height);
+    default GameWindowsConfigurator gameSize(Dimension dimension) {
+        return gameSize(dimension.width, dimension.height);
+    }
+
+    GameWindowsConfigurator gameSize(int width, int height);
 
     GameWindowsConfigurator atCenter();
 
