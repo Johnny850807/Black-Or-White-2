@@ -1,9 +1,8 @@
-package com.pokewords.framework.commons;
+package com.pokewords.framework.sprites.parsing;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class KeyValuePairs {
+public class KeyValuePairs implements Node {
     private Map<String, String> map;
 
     public KeyValuePairs() {
@@ -28,6 +27,18 @@ public class KeyValuePairs {
 
     public int getInt(String key) {
         return Integer.parseInt(map.get(key));
+    }
+
+    public Optional<String> getStringOptional(String key) {
+        return map.containsKey(key)? Optional.of(map.get(key)) : Optional.empty();
+    }
+
+    public OptionalInt getIntOptional(String key) {
+        return map.containsKey(key)? OptionalInt.of(Integer.parseInt(map.get(key))) : OptionalInt.empty();
+    }
+
+    public Collection<String> getKeys() {
+        return map.keySet();
     }
 
     public Map<String, String> getMap() {

@@ -9,7 +9,7 @@ import java.util.OptionalInt;
  * An Element doesn't contain other Nodes.
  * @author nyngwang
  */
-public abstract class Element extends Node {
+public abstract class Element implements Node {
     protected Element(String name, int id, String description) {
         super(name, id, description);
     }

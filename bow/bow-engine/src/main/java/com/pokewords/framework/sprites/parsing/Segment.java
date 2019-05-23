@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
  * A Segment contains: id, description, parent(Script), and elements.
  * @author nyngwang
  */
-public abstract class Segment extends Node {
+public abstract class Segment extends Element {
     protected int id;
     protected String description;
     protected List<Element> elements;

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * @author nyngwang
  */
-public abstract class Script extends Node {
+public abstract class Script implements Node {
     protected List<Segment> segments;
 
     protected Script(String name, int id, String description) {

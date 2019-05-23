@@ -1,8 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.KeyValuePairs;
-import org.jetbrains.annotations.Contract;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -12,30 +9,14 @@ import java.util.OptionalInt;
  * A Node provides some basic data structures / data.
  * @author nyngwang
  */
-public abstract class Node {
-    protected String name;
-    protected KeyValuePairs keyValuePairs;
+public interface Node {
 
-    public Node(String name) {
-        this.name = name;
-        keyValuePairs = new KeyValuePairs();
-    }
+    Node getParent();
 
-    public String getName() {
-        return name;
-    }
+    void parse(Context context);
 
-    public boolean containsKey(String key) {
-        return keyValuePairs.containsKey(key);
-    }
 
-    public String getString(String key) {
-        return keyValuePairs.getString(key);
-    }
-
-    public Integer getInt(String key) {
-        return keyValuePairs.getInt(key);
-    }
+    //
 
     public Optional<String> getStringOptional(String key) {
         return keyValuePairs.containsKey(key)? Optional.of(keyValuePairs.getString(key)) : Optional.empty();
@@ -84,8 +65,6 @@ public abstract class Node {
             resultBuilder.append('\n');
         return resultBuilder.toString();
     }
-
-    public abstract void parse(Context context);
 
     public abstract String toString(int indentation, int width);
 
