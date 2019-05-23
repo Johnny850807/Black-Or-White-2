@@ -4,24 +4,28 @@ import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
+import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.GameEffect;
 import com.pokewords.framework.sprites.components.frames.RectangleFrame;
-import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.sprites.factories.SpriteBuilder;
 import com.pokewords.framework.views.SoundPlayer;
+import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 import java.awt.*;
 
 /**
  * A cross fading transition effect, the most normal transition effect.
+ *
  * @author johnny850807 (waterball)
  */
 public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
+    private SpriteBuilder spriteBuilder;
     private AppState from;
     private AppState to;
     private Listener[] transitionEffectListeners;
     private SoundPlayer soundPlayer;
-    private SpriteInitializer spriteInitializer;
+    private Dimension gameWindowsSize;
 
     private enum Types {
         FADED_IN_RECTANGLE, FADED_OUT_RECTANGLE
@@ -29,51 +33,51 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
 
     private Object soundType;
 
-    public CrossFadingTransitionEffect() { }
+    public CrossFadingTransitionEffect() {
+    }
 
     public CrossFadingTransitionEffect(Object soundType) {
         this.soundType = soundType;
     }
 
     @Override
-    public synchronized void effect(AppState from, AppState to, Listener... transitionEffectListeners) {
+    public synchronized void effect(SpriteBuilder spriteBuilder, AppState from, AppState to, Listener... transitionEffectListeners) {
+        this.spriteBuilder = spriteBuilder;
         this.from = from;
         this.to = to;
         this.transitionEffectListeners = transitionEffectListeners;
         this.soundPlayer = from.getSoundPlayer();
-        this.spriteInitializer = from.getSpriteInitializer();
+        this.gameWindowsSize = from.getWindowSize();
 
         declareEffectSpritesAndSpawn();
     }
 
 
     private void declareEffectSpritesAndSpawn() {
-        if (!spriteInitializer.hasDeclared(Types.FADED_IN_RECTANGLE))
-            declareFadedInRectangle();
-        if (!spriteInitializer.hasDeclared(Types.FADED_OUT_RECTANGLE))
-            declareFadedOutRectangle();
+        Sprite fadedInRectangle = createFadedInRectangle();
+        Sprite fadedOutRectangle = createFadedOutRectangle();
 
-        from.getAppStateWorld().spawn(spriteInitializer.createSprite(Types.FADED_IN_RECTANGLE));
-        to.getAppStateWorld().spawn(spriteInitializer.createSprite(Types.FADED_OUT_RECTANGLE));
+        from.getAppStateWorld().spawn(fadedInRectangle);
+        to.getAppStateWorld().spawn(fadedOutRectangle);
     }
 
 
-    private void declareFadedInRectangle() {
+    private Sprite createFadedInRectangle() {
         Color transparentWhite = new Color(255, 255, 255, 0);
         EffectFrame rectangleEffectFrame = createFadingEffectRectangleFrame(transparentWhite, true);
 
-        spriteInitializer.declare(Types.FADED_IN_RECTANGLE)
-                .position(0, 0)
-                .areaSize(from.getGameWindowDefinition().size)
-                .with(createFrameStateMachineComponentWithFadingEffect(rectangleEffectFrame))
-                .commit();
+        PropertiesComponent propertiesComponent = new PropertiesComponent(Types.FADED_IN_RECTANGLE);
+        propertiesComponent.setArea(0, 0, gameWindowsSize.width, gameWindowsSize.height);
+
+        return spriteBuilder.init().setPropertiesComponent(propertiesComponent)
+                .setFSMComponent(createFrameStateMachineComponentWithFadingEffect(rectangleEffectFrame))
+                .build();
     }
 
 
     private class FadedInEffect implements GameEffect {
         private RectangleFrame rectangleFrame;
         private EffectFrame rectangleEffectFrame;
-        private boolean justStarted = true;
         private Color latestColor;
 
         public FadedInEffect(RectangleFrame rectangleFrame, EffectFrame rectangleEffectFrame) {
@@ -82,18 +86,16 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
         }
 
         @Override
-        public void apply(AppStateWorld appStateWorld, Sprite sprite) {
-            this.latestColor = rectangleFrame.getColor();
-            playSoundIfJustStarted();
-            fadeInTheColor();
-            endUpEffectIfAlphaEqual255();
+        public void onFirstApply(AppStateWorld world, Sprite sprite) {
+            if (soundType != null)
+                soundPlayer.playSound(soundType);
         }
 
-        private void playSoundIfJustStarted() {
-            if (justStarted) {
-                justStarted = false;
-                soundPlayer.playSound(soundType);
-            }
+        @Override
+        public void apply(AppStateWorld appStateWorld, Sprite sprite) {
+            this.latestColor = rectangleFrame.getColor();
+            fadeInTheColor();
+            endUpEffectIfAlphaEqual255();
         }
 
         private void fadeInTheColor() {
@@ -102,8 +104,7 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
         }
 
         private void endUpEffectIfAlphaEqual255() {
-            if (latestColor.getAlpha() == 255)
-            {
+            if (latestColor.getAlpha() == 255) {
                 from.getAppStateWorld().removeSprite(rectangleEffectFrame.getSprite());
                 notifyOnExitingAppStateEffectEnd(transitionEffectListeners);
             }
@@ -111,18 +112,20 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
     }
 
 
-    private void declareFadedOutRectangle() {
+    private Sprite createFadedOutRectangle() {
         EffectFrame rectangleEffectFrame = createFadingEffectRectangleFrame(Color.white, false);
-        spriteInitializer.declare(Types.FADED_OUT_RECTANGLE)
-                .position(0, 0)
-                .areaSize(to.getGameWindowDefinition().size)
-                .with(createFrameStateMachineComponentWithFadingEffect(rectangleEffectFrame))
-                .commit();
 
+        PropertiesComponent propertiesComponent = new PropertiesComponent(Types.FADED_OUT_RECTANGLE);
+        propertiesComponent.setArea(0, 0, gameWindowsSize.width, gameWindowsSize.height);
+
+        return spriteBuilder.init().setPropertiesComponent(propertiesComponent)
+                .setFSMComponent(createFrameStateMachineComponentWithFadingEffect(rectangleEffectFrame))
+                .build();
     }
 
     private EffectFrame createFadingEffectRectangleFrame(Color startedColor, boolean fadeIn) {
-        RectangleFrame rectangleFrame = new RectangleFrame(0, Integer.MAX_VALUE, startedColor);
+        RectangleFrame rectangleFrame = new RectangleFrame(0, Integer.MAX_VALUE, startedColor)
+                .flags(RectangleFrame.CANVAS_FLAG_FILLED);
         EffectFrame rectangleEffectFrame = EffectFrame.wrap(rectangleFrame, 15);
 
         GameEffect fadingEffect = fadeIn ? new FadedInEffect(rectangleFrame, rectangleEffectFrame)
@@ -150,6 +153,11 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
         }
 
         @Override
+        public void onFirstApply(AppStateWorld world, Sprite sprite) {
+
+        }
+
+        @Override
         public void apply(AppStateWorld appStateWorld, Sprite sprite) {
             this.latestColor = rectangleFrame.getColor();
 
@@ -164,11 +172,15 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
         }
 
         private void endUpEffectIfAlphaEqual0() {
-            if (latestColor.getAlpha() == 0)
-            {
+            if (latestColor.getAlpha() == 0) {
                 to.getAppStateWorld().removeSprite(rectangleEffectFrame.getSprite());
                 notifyOnEnteringAppStateEffectEnd(transitionEffectListeners);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
     }
 }

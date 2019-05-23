@@ -1,6 +1,6 @@
 package com.pokewords.framework.engine.gameworlds;
 
-import com.pokewords.framework.engine.asm.EmptyAppState;
+import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.sprites.MockSprite;
 import com.pokewords.framework.sprites.Sprite;
 import org.junit.Test;

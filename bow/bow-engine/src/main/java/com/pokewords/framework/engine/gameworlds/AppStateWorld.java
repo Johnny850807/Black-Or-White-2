@@ -1,13 +1,10 @@
 package com.pokewords.framework.engine.gameworlds;
 
-import com.pokewords.framework.commons.Pair;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
-import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.parsing.ScriptRules;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,12 +18,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * @author Joanna
+ * @author Joanna, johnny850807 (waterball)
  */
 public class AppStateWorld implements AppStateLifeCycleListener {
     private AppState appState;
     private List<Sprite> sprites;
-    private AtomicInteger spriteCount;
     private Map<Integer, Sprite> idSpriteMap;
     private Map<Sprite, Integer> spriteIdMap;
     private RenderedLayers renderedLayers;
@@ -34,8 +30,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     public AppStateWorld(AppState appState) {
         this.appState = appState;
-        sprites = new ArrayList<>(30);
-        spriteCount = new AtomicInteger(0);
+        sprites = Collections.synchronizedList(new ArrayList<>(30));
         renderedLayers = new RenderedLayers();
         collisionHandlerMap = new HashMap<>();
         idSpriteMap = new HashMap<>();
@@ -47,7 +42,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the Sprite's unique event
      */
     public int spawn(Sprite sprite) {
-        int id = spriteCount.incrementAndGet();
+        int id = sprites.size();
         addSpriteIntoWorld(id, sprite);
         sprite.setWorld(this);
         return id;
@@ -207,6 +202,8 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the sprite's event
      */
     public int getId(Sprite sprite) {
+        if (!spriteIdMap.containsKey(sprite))
+            throw new IllegalArgumentException("Sprite " + sprite + " is not found.");
         return spriteIdMap.get(sprite);
     }
 
@@ -270,7 +267,6 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      */
     public void clearSprites() {
         sprites.forEach(this::removeSprite);
-        spriteCount = new AtomicInteger(0);
         renderedLayers.clear();
         idSpriteMap.clear();
         spriteIdMap.clear();
@@ -278,7 +274,10 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public void removeSprite(Sprite sprite) {
+        int id = getId(sprite);
         sprites.remove(sprite);
+        idSpriteMap.remove(id);
+        spriteIdMap.remove(sprite);
         sprite.setWorld(null);
     }
 

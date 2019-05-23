@@ -1,5 +1,7 @@
 package com.pokewords.framework.commons;
 
+import com.sun.org.apache.xml.internal.serializer.ToStream;
+
 import java.util.Objects;
 
 public class Triple<X, Y, Z> {
@@ -53,5 +55,10 @@ public class Triple<X, Y, Z> {
     @Override
     public int hashCode() {
         return Objects.hash(first, second, third);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("<%s, %s, %s>", first, second, third);
     }
 }

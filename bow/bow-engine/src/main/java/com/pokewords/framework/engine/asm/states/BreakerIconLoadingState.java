@@ -1,7 +1,8 @@
-package com.pokewords.framework.engine.asm;
+package com.pokewords.framework.engine.asm.states;
 
 import com.pokewords.framework.commons.Range;
 import com.pokewords.framework.commons.utils.GifScriptMaker;
+import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
 import com.pokewords.framework.sprites.components.StringComponent;

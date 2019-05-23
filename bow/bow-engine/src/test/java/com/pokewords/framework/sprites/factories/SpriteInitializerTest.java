@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.factories;
 
 import com.pokewords.framework.AbstractTest;
+import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.Sprite;
@@ -34,6 +35,17 @@ public class SpriteInitializerTest extends AbstractTest {
                 return mockSpriteBuilder = new MockDefaultSpriteBuilder(this);
             }
         });
+    }
+
+    @Test
+    public void testShouldThrowExceptionIfForgotCommit() {
+        spriteInitializer.declare("Type")
+                        .area(10, 10, 10, 10);
+
+        try {
+            spriteInitializer.declare("Another Type");
+            fail();
+        } catch (GameEngineException ignored) { }
     }
 
     @Test
