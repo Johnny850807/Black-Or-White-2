@@ -1,6 +1,6 @@
 package com.pokewords.framework.ioc;
 
-import com.pokewords.framework.engine.UserConfig;
+import com.pokewords.framework.engine.DataSaver;
 import com.pokewords.framework.sprites.factories.PrototypeFactory;
 import com.pokewords.framework.sprites.factories.SpriteBuilder;
 import com.pokewords.framework.sprites.parsing.ScriptParser;
@@ -14,7 +14,7 @@ public interface IocFactory {
 
 	SoundPlayer soundPlayer();
 
-	UserConfig userConfig();
+	DataSaver userConfig();
 
 	InputManager inputManager();
 

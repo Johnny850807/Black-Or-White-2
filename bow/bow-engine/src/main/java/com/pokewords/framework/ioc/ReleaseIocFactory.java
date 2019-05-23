@@ -1,6 +1,6 @@
 package com.pokewords.framework.ioc;
 
-import com.pokewords.framework.engine.UserConfig;
+import com.pokewords.framework.engine.DataSaver;
 import com.pokewords.framework.sprites.factories.DefaultSpriteBuilder;
 import com.pokewords.framework.sprites.factories.PrototypeFactory;
 import com.pokewords.framework.sprites.factories.DefaultPrototypeFactory;
@@ -32,7 +32,7 @@ public class ReleaseIocFactory implements IocFactory{
     }
 
     @Override
-    public UserConfig userConfig() {
+    public DataSaver userConfig() {
         return null;
     }
 
