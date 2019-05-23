@@ -10,29 +10,16 @@ import java.util.OptionalInt;
  * @author nyngwang
  */
 public abstract class Element implements Node {
-    protected Element(String name, int id, String description) {
-        super(name, id, description);
+    boolean parseTag(Context context) {
+        if (context.getTag() == null)
+            return false;
+        name = Context.deTag(context.getTag());
+        return true;
     }
 
-    // Fluent
-
-    @Override
-    public Element put(String key, String value) {
-        super.put(key, value);
-        return this;
-    }
-
-    @Override
-    public Element put(String key, int value) {
-        super.put(key, value);
-        return this;
-    }
-
-    // Change to public
-
-    @Override
-    public Element setParent(Segment parent) {
-        super.setParent(parent);
-        return this;
+    boolean parseClosedTag(Context context) {
+        if (context.getTag() == null)
+            return false;
+        return name.equals(Context.deTag(context.getTag()));
     }
 }
