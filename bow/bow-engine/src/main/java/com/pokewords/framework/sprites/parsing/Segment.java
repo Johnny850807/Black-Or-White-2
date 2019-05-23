@@ -7,10 +7,13 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public abstract class Segment extends Element {
+    private Node parent;
+
+
+
     protected int id;
     protected String description;
     protected List<Element> elements;
-    protected Script parent;
 
     public Segment(String name, int id, String description, Script parent) {
         super(name);
