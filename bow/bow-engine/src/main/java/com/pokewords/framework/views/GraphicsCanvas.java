@@ -55,7 +55,6 @@ public class GraphicsCanvas implements Canvas {
             canvas.graphics.fillRect(rectangleFrame.getX(), rectangleFrame.getY(), rectangleFrame.getWidth(), rectangleFrame.getHeight());
         else
             canvas.graphics.drawRect(rectangleFrame.getX(), rectangleFrame.getY(), rectangleFrame.getWidth(), rectangleFrame.getHeight());
-
     }
 
     @Override
@@ -70,5 +69,6 @@ public class GraphicsCanvas implements Canvas {
             canvas.graphics.drawRoundRect(roundedRectangleFrame.getX(), roundedRectangleFrame.getY(),
                     roundedRectangleFrame.getWidth(), roundedRectangleFrame.getHeight(),
                     roundedRectangleFrame.getArcWidth(), roundedRectangleFrame.getArcHeight());
+
     }
 }
