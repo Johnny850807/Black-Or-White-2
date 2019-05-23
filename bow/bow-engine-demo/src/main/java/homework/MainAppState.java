@@ -1,6 +1,6 @@
 package homework;
 
-import com.pokewords.framework.engine.asm.EmptyAppState;
+import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.StringComponent;
