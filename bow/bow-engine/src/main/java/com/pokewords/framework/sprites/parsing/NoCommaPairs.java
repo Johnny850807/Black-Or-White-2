@@ -16,10 +16,7 @@ public class NoCommaPairs extends KeyValuePairs {
 
     @Override
     public boolean parse(Context context) {
-        if (context.getKey() == null || context.getValue() == null)
-            return false;
 
-        return false;
     }
 
     @Override

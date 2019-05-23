@@ -27,6 +27,7 @@ public class Context {
     }
 
     private List<String> tokens;
+    private String currentToken;
 
     private Context(String scriptText) {
         tokens = new ArrayList<>();
@@ -44,18 +45,26 @@ public class Context {
         }
     }
 
-    public boolean hasNextToken() {
-        return tokens.isEmpty();
+    public boolean fetchNextToken() {
+        if (hasNextToken()) {
+            currentToken = tokens.remove(0);
+            return true;
+        }
+        return false;
     }
 
-    public String getNextToken() {
-        return tokens.remove(0);
+    public boolean hasNextToken() {
+        return !tokens.isEmpty();
+    }
+
+    public String getCurrentToken() {
+        return currentToken;
     }
 
     public static void main(String[] args) {
         Context context = Context.fromText(SCRIPT_TEXT);
-        while (context.hasNextToken()) {
-            String token = context.getNextToken();
+        while (context.fetchNextToken()) {
+            String token = context.getCurrentToken();
         }
     }
 }
