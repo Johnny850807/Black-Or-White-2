@@ -23,8 +23,8 @@ public class AngularBracketElement extends Element {
         String openTag = context.fetchNextToken();
         name = deTag(openTag);
         String closeTag = String.format("</%s>", name);
-
         keyValuePairs.parse(context);
+        keyValuePairs.setParent(this);
         String shouldBeCloseTag = context.fetchNextToken();
         if (!shouldBeCloseTag.equals(closeTag))
             throw new ElementException(String.format(

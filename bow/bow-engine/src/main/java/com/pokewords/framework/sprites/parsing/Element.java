@@ -5,8 +5,8 @@ package com.pokewords.framework.sprites.parsing;
  * @author nyngwang
  */
 public abstract class Element implements Node {
+    private Node parent;
     protected String name;
-    protected Node parent;
     protected KeyValuePairs keyValuePairs;
 
     public Element(String name, Node parent, KeyValuePairs keyValuePairs) {
@@ -18,5 +18,9 @@ public abstract class Element implements Node {
     @Override
     public Node getParent() {
         return parent;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
     }
 }

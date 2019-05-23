@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * A Segment contains: id, description, parent(Script), and elements.
  * @author nyngwang
  */
 public abstract class Segment extends Element {
@@ -60,21 +59,6 @@ public abstract class Segment extends Element {
 
     public Element getElement(String name) {
         return containsElement(name)? getElements(name).get(0) : null;
-    }
-
-    public Segment put(String key, String value) {
-        keyValuePairs.put(key, value);
-        return this;
-    }
-
-    public Segment put(String key, int value) {
-        keyValuePairs.put(key, value);
-        return this;
-    }
-
-    public Segment setParent(Script parent) {
-        this.parent = parent;
-        return this;
     }
 
     // Parsing utils

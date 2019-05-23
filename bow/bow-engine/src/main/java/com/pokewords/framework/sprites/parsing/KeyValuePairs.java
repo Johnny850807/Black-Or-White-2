@@ -7,7 +7,7 @@ import java.util.*;
  */
 public abstract class KeyValuePairs implements Node {
     private Map<String, String> map;
-    protected Node parent;
+    private Node parent;
 
     public KeyValuePairs(Node parent) {
         this.map = new HashMap<>();
@@ -53,5 +53,9 @@ public abstract class KeyValuePairs implements Node {
     @Override
     public Node getParent() {
         return parent;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
     }
 }
