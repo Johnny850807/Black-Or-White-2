@@ -5,25 +5,8 @@ import java.util.Map;
 public class NoCommaPairs extends KeyValuePairs {
     private Element parent;
 
-    protected boolean parseKeyValuePair(Context context) {
-        if (context.getKey() == null || context.getValue() == null)
-            return false;
-        keyValuePairs.put(context.getKey(), context.getValue());
-        return true;
-    }
-
-    protected String keyValuePairsToString(int width) {
-        StringBuilder resultBuilder = new StringBuilder();
-        int counter = 0;
-        for (Map.Entry entry: keyValuePairs.getMap().entrySet()) {
-            counter = counter % width + 1;
-            resultBuilder.append(String.format(
-                    "%s%s: %s%s",
-                    counter > 1? " ": "", entry.getKey(), entry.getValue(), counter == width? "\n": ""));
-        }
-        if (counter != width)
-            resultBuilder.append('\n');
-        return resultBuilder.toString();
+    public NoCommaPairs(Element parent) {
+        this.parent = parent;
     }
 
     @Override
@@ -32,32 +15,31 @@ public class NoCommaPairs extends KeyValuePairs {
     }
 
     @Override
-    public void parse(Context context) {
+    public boolean parse(Context context) {
+        if (context.getKey() == null || context.getValue() == null)
+            return false;
 
-    }
-
-    @Override
-    protected boolean parseTag(Context context) {
         return false;
     }
 
     @Override
-    protected boolean parseKeyValuePair(Context context) {
-        return false;
-    }
+    public String toString(int indent) {
+        StringBuilder resultBuilder = new StringBuilder();
+        int counter = 0;
+        int width = 5;
 
-    @Override
-    protected boolean parseClosedTag(Context context) {
-        return false;
-    }
+        for (Map.Entry entry: getMap().entrySet()) {
+            counter = counter % width + 1;
+            resultBuilder.append(
+                    String.format("%s%s: %s%s",
+                            counter > 1? " ": "",
+                            entry.getKey(), entry.getValue(),
+                            counter == width? "\n": ""));
+        }
 
-    @Override
-    protected String keyValuePairsToString(int width) {
-        return null;
-    }
+        if (counter != width)
+            resultBuilder.append('\n');
 
-    @Override
-    public String toString(int indentation, int width) {
-        return null;
+        return resultBuilder.toString();
     }
 }

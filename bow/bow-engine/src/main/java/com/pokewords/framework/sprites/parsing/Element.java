@@ -10,6 +10,12 @@ import java.util.OptionalInt;
  * @author nyngwang
  */
 public abstract class Element implements Node {
+    private KeyValuePairs pairs = new NoCommaPairs();
+
+    public static String deTag(String tag) {
+        return tag.replaceAll("</?(\\S+)>", "$1");
+    }
+
     boolean parseTag(Context context) {
         if (context.getTag() == null)
             return false;

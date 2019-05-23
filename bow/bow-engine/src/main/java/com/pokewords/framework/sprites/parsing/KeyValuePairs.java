@@ -3,45 +3,45 @@ package com.pokewords.framework.sprites.parsing;
 import java.util.*;
 
 public abstract class KeyValuePairs implements Node {
-    private Map<String, String> pairs;
+    private Map<String, String> map;
 
     public KeyValuePairs() {
-        pairs = new HashMap<>();
+        map = new HashMap<>();
     }
 
     public void put(String key, String value) {
-        pairs.put(key, value);
+        map.put(key, value);
     }
 
     public void put(String key, int value) {
-        pairs.put(key, String.valueOf(value));
+        map.put(key, String.valueOf(value));
     }
 
     public boolean containsKey(String key) {
-        return pairs.containsKey(key);
+        return map.containsKey(key);
     }
 
     public String getString(String key) {
-        return pairs.get(key);
+        return map.get(key);
     }
 
     public int getInt(String key) {
-        return Integer.parseInt(pairs.get(key));
+        return Integer.parseInt(map.get(key));
     }
 
     public Optional<String> getStringOptional(String key) {
-        return pairs.containsKey(key)? Optional.of(pairs.get(key)) : Optional.empty();
+        return map.containsKey(key)? Optional.of(map.get(key)) : Optional.empty();
     }
 
     public OptionalInt getIntOptional(String key) {
-        return pairs.containsKey(key)? OptionalInt.of(Integer.parseInt(pairs.get(key))) : OptionalInt.empty();
+        return map.containsKey(key)? OptionalInt.of(Integer.parseInt(map.get(key))) : OptionalInt.empty();
     }
 
     public Collection<String> getKeys() {
-        return pairs.keySet();
+        return map.keySet();
     }
 
-    public Map<String, String> getPairs() {
-        return pairs;
+    public Map<String, String> getMap() {
+        return map;
     }
 }
