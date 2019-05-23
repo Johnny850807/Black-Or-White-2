@@ -45,8 +45,8 @@ public class MenuAppState extends AppState {
         if (loop ++ == 200)
         {
             Bundle message = new Bundle();
-            message.put(MultiplayerRoomState.KEY_PLAYER_NAME, "水球");
-            message.put(MultiplayerRoomState.KEY_PLAYER_IP, "125.37.1.65");
+            message.put(MultiplayerRoomState.KEY_PLAYER_NAME_STRING, "水球");
+            message.put(MultiplayerRoomState.KEY_PLAYER_IP_STRING, "125.37.1.65");
             getAppStateMachine().trigger(Events.TO_MULTIPLAYER, message);
         }
     }

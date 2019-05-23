@@ -10,28 +10,29 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class MultiplayerRoomState extends AppState {
-    public final static String KEY_PLAYER_IP = "playerIp";
-    public final static String KEY_PLAYER_NAME = "playerName";
+    public final static String KEY_PLAYER_IP_STRING = "playerIp";
+    public final static String KEY_PLAYER_NAME_STRING = "playerName";
+    public final static String KEY_THEME = "theme";
     private ArrayList<Sprite> playerCards = new ArrayList<>(8);
-    private Theme theme;
+    private Theme theme = new Theme(Color.decode("#191F26"), Color.white);
     private Player host;
 
-    public MultiplayerRoomState() {
-        this(new Theme(Color.decode("#191F26"), Color.white));
-    }
-
-    public MultiplayerRoomState(Theme theme) {
-        this.theme = theme;
-    }
 
     @Override
     public void onReceiveMessageBundle(Bundle bundle) {
-        String ip = bundle.getStringOptional(KEY_PLAYER_IP)
-                .orElseThrow(() -> new IllegalArgumentException("The bundle toward MultiplayerRoomState should be set key KEY_PLAYER_IP."));
-        String name = bundle.getStringOptional(KEY_PLAYER_NAME)
-                .orElseThrow(() -> new IllegalArgumentException("The bundle toward MultiplayerRoomState should be set key KEY_PLAYER_NAME."));
+        String ip = bundle.getStringOptional(KEY_PLAYER_IP_STRING)
+                .orElseThrow(() -> new IllegalArgumentException("The bundle toward MultiplayerRoomState should be set key KEY_PLAYER_IP_STRING."));
+        String name = bundle.getStringOptional(KEY_PLAYER_NAME_STRING)
+                .orElseThrow(() -> new IllegalArgumentException("The bundle toward MultiplayerRoomState should be set key KEY_PLAYER_NAME_STRING."));
+
+        theme = (Theme) bundle.getOptional(KEY_THEME).orElse(theme);
+
 
         this.host = new Player(ip, name, true);
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
     }
 
     @Override

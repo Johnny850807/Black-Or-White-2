@@ -41,6 +41,16 @@ public class Bundle {
         return String.valueOf( data.get(key));
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T get(Object key) {
+        lazyInitMap();
+        return (T) data.get(key);
+    }
+
+    public <T> Optional<T> getOptional(Object key) {
+        return containsKey(key) ? Optional.of(get(key)) : Optional.empty();
+    }
+
     public OptionalInt getIntOptional(Object key) {
         return containsKey(key) ? OptionalInt.of(getInt(key)) : OptionalInt.empty();
     }
