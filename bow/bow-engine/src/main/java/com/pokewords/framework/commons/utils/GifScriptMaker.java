@@ -14,7 +14,7 @@ public class GifScriptMaker {
                                               int gifStartPic, int gifEndPic, int duration, int layer) {
         Script script = new LinScript();
         Segment galleriesSegment = new DefaultSegment("galleries", 0);
-        Element sequenceElement = new DefaultElement("sequence");
+        Element sequenceElement = new AngularBracketElement("sequence");
         galleriesSegment.addElement(sequenceElement);
         script.addSegment(galleriesSegment);
         return makeSequentialFrames(galleryPath, galleryPicRange, gifStartPic, gifEndPic, duration, layer, script, sequenceElement);
@@ -24,7 +24,7 @@ public class GifScriptMaker {
                                            int gifStartPic, int gifEndPic, int duration, int layer) {
         Script script = new LinScript();
         Segment galleriesSegment = new DefaultSegment("galleries", 0);
-        Element sheetElement = new DefaultElement("sheet");
+        Element sheetElement = new AngularBracketElement("sheet");
         galleriesSegment.addElement(sheetElement);
         script.addSegment(galleriesSegment);
         sheetElement.put("row", sheetRow);

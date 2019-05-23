@@ -39,7 +39,7 @@ public class Context {
 
         while (matcher.find()) {
             if (matcher.group(1) == null)
-                throw new ContextException(String.format("Invalid token: \"%s\".", matcher.group(2)));
+                throw new ContextException(String.format("Cannot tokenize the symbol: %s", matcher.group(2)));
             tokens.add(matcher.group(1));
         }
     }
@@ -57,9 +57,11 @@ public class Context {
     public void consumeToken() {
         if (hasNextToken())
             tokens.remove(0);
+        else
+            throw new ContextException("Cannot consume token: Run out of tokens");
     }
 
-    public String fetchToken() {
+    public String fetchNextToken() {
         String token = peekToken();
         consumeToken();
         return token;
@@ -68,7 +70,7 @@ public class Context {
     public static void main(String[] args) {
         Context context = Context.fromText(SCRIPT_TEXT);
         while (context.hasNextToken()) {
-            String current = context.fetchToken();
+            String current = context.fetchNextToken();
         }
     }
 }

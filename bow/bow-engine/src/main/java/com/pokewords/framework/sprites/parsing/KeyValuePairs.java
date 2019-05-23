@@ -2,11 +2,16 @@ package com.pokewords.framework.sprites.parsing;
 
 import java.util.*;
 
+/**
+ * @author nyngwang
+ */
 public abstract class KeyValuePairs implements Node {
     private Map<String, String> map;
+    protected Node parent;
 
-    public KeyValuePairs() {
-        map = new HashMap<>();
+    public KeyValuePairs(Node parent) {
+        this.map = new HashMap<>();
+        this.parent = parent;
     }
 
     public void put(String key, String value) {
@@ -43,5 +48,10 @@ public abstract class KeyValuePairs implements Node {
 
     public Map<String, String> getMap() {
         return map;
+    }
+
+    @Override
+    public Node getParent() {
+        return parent;
     }
 }

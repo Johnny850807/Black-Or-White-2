@@ -4,38 +4,36 @@ import com.pokewords.framework.engine.exceptions.KeyValuePairsException;
 
 import java.util.Map;
 
+/**
+ * @author nyngwang
+ */
 public class NoCommaPairs extends KeyValuePairs {
-    private Element parent;
-
-    public NoCommaPairs(Element parent) {
-        this.parent = parent;
+    public NoCommaPairs(Node parent) {
+        super(parent);
     }
 
-    @Override
-    public Node getParent() {
-        return parent;
+    public NoCommaPairs() {
+        super(null);
     }
 
     @Override
     public void parse(Context context) {
         while (context.hasNextToken()) {
-            String key = context.fetchToken();
-            String colon = context.fetchToken();
-            String value = context.fetchToken();
+            if (context.peekToken().matches("<\\S+>"))
+                return;
+            String key = context.fetchNextToken();
+            String colon = context.fetchNextToken();
+            String value = context.fetchNextToken();
 
             if (!colon.equals(":"))
                 throw new KeyValuePairsException(String.format(
                         "This is not a key-value pair: %s %s %s", key, colon, value));
-            if (key.matches("<\\S+>"))
-                throw new KeyValuePairsException(String.format(
-                        "The key cannot be a tag: %s %s %s", key, colon, value));
             if (value.matches("<\\S+>"))
                 throw new KeyValuePairsException(String.format(
                         "The value cannot be a tag: %s %s %s", key, colon, value));
             put(key, value);
         }
     }
-
 
     @Override
     public String toString(int indent) {
