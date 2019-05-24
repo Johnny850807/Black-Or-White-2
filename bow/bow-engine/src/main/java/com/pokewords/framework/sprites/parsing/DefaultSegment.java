@@ -26,18 +26,18 @@ public class DefaultSegment extends Segment {
     @Override
     public void parse(Context context) {
         if (context.currentTokenIsEmpty()) // if hasn't fetch
-            context.consumeToken();
+            context.consumeOneToken();
         if (!parseTag(context))
             throw new SegmentException(String.format("Token %s is not a tag", context.peekToken()));
-        context.consumeToken();
+        context.consumeOneToken();
         if (!parseId(context))
             throw new SegmentException(String.format("Token %s is not an ID", context.peekToken()));
-        context.consumeToken();
+        context.consumeOneToken();
         if (parseDescription(context))
-            context.consumeToken();
+            context.consumeOneToken();
         else do {
             if (parseClosedTag(context)) {
-                context.consumeToken();
+                context.consumeOneToken();
                 return;
             }
             if (parseKeyValuePair(context)) continue;
@@ -48,7 +48,7 @@ public class DefaultSegment extends Segment {
                 continue;
             }
             throw new SegmentException(String.format("In <%s>: token \"%s\" is not allowed here", name, context.peekToken()));
-        } while (context.consumeToken());
+        } while (context.consumeOneToken());
         throw new SegmentException(String.format("Tag <%s> is not closed", name));
     }
 

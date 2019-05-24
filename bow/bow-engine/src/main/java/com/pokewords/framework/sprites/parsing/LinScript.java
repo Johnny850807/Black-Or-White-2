@@ -11,7 +11,7 @@ public class LinScript extends Script {
 
     @Override
     public void parse(Context context) {
-        while (context.consumeToken()) {
+        while (context.consumeOneToken()) {
             if (parseTag(context)) {
                 Segment segment = new DefaultSegment();
                 segment.parse(context);

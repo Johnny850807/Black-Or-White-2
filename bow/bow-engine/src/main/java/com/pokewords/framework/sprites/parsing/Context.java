@@ -54,31 +54,31 @@ public class Context {
         return !tokens.isEmpty();
     }
 
-    public void consumeToken(String noMoreToken) {
+    public void consumeOneToken(String noMoreToken) {
         if (!hasNextToken())
             throw new ScriptParsingException(noMoreToken);
         tokens.remove(0);
     }
 
-    public void consumeToken() {
-        consumeToken("Run out of tokens");
+    public void consumeOneToken() {
+        consumeOneToken("Run out of tokens");
     }
 
     public String fetchNextToken() {
         String token = peekToken();
-        consumeToken();
+        consumeOneToken();
         return token;
     }
 
     public String fetchNextToken(String noMoreToken) {
         String token = peekToken();
-        consumeToken(noMoreToken);
+        consumeOneToken(noMoreToken);
         return token;
     }
 
     public String fetchNextToken(String regex, String noMatch) {
         String token = peekToken();
-        consumeToken("Should check hasNextToken() before fetchNextToken() or parse()");
+        consumeOneToken("Should check hasNextToken() before fetchNextToken() or parse()");
         if (!token.matches(regex))
             throw new ScriptParsingException(noMatch);
         return token;
@@ -88,7 +88,9 @@ public class Context {
         tokens.add(0, token);
     }
 
-    public void probingHandle()
+    public int getRemainingTokensCount() {
+        return tokens.size();
+    }
 
     public static void main(String[] args) {
         Context context = Context.fromText(SCRIPT_TEXT);

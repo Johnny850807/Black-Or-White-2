@@ -18,8 +18,9 @@ public class AngularBracketSegment extends Segment {
     }
 
     public AngularBracketSegment(String name, int id, String description) {
-        this(null, name, null, new ArrayList<>(), id, description);
+        this(null, name, null, null, id, description);
         keyValuePairs = new NoCommaPairs(this);
+        elements = new ArrayList<>();
     }
 
     public AngularBracketSegment(String name, int id) {
@@ -56,20 +57,27 @@ public class AngularBracketSegment extends Segment {
             description = Optional.of(at1AfterId);
             context.putBack(at2AfterId);
         }
-        do {
-            if (context.hasNextToken())
-                keyValuePairs.parse(context);
+        while (context.hasNextToken()) { // Either some key-value pairs or an element.
+            if (context.peekToken().equals("</" + getName() + ">")) {
+                context.consumeOneToken();
+                return;
+            }
+            int beforeKeyValuePairsAndOrElement = context.getRemainingTokensCount();
+            keyValuePairs.parse(context);
             if (context.hasNextToken()) {
+                int beforeElement = context.getRemainingTokensCount();
                 Element element = new AngularBracketElement();
                 element.parse(context);
-                context;
+                int afterElement = context.getRemainingTokensCount();
+                if (beforeElement > afterElement)
+                    elements.add(element);
             }
-            String mayBeCloseTag = context.fetchNextToken(
-                    "Run out of token before reaching: </"+getName()+">");
-            if (mayBeCloseTag.equals("</"+getName()+">"))
-                return;
-            context.putBack(mayBeCloseTag);
-        } while (true);
+            int afterKeyValuePairsAndOrElement = context.getRemainingTokensCount();
+            if (beforeKeyValuePairsAndOrElement > afterKeyValuePairsAndOrElement)
+                throw new ScriptParsingException(
+                        "Segment body contains something that is neither key-value pair nor element.");
+        }
+        throw new ScriptParsingException("Run out of token before reaching: </" + getName() + ">");
     }
 
     @Override
