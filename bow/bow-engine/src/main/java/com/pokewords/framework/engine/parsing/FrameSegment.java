@@ -1,5 +1,6 @@
 package com.pokewords.framework.engine.parsing;
 
+import com.pokewords.framework.sprites.parsing.AngularBracketSegment;
 import com.pokewords.framework.sprites.parsing.Segment;
 
 import java.util.Optional;
@@ -20,12 +21,12 @@ public class FrameSegment {
     private Optional<TransitionsElement> transitionsElement;
 
     public FrameSegment(Segment frameSegment) {
-        this.id = frameSegment.getId();
+        this.id = ((AngularBracketSegment) frameSegment).getId();
         this.description = frameSegment.getName();
-        this.pic = frameSegment.getInt("pic");
-        this.layer = frameSegment.getInt("layer");
-        this.duration = frameSegment.getInt("duration");
-        this.next = frameSegment.getInt("next");
+        this.pic = frameSegment.getKeyValuePairs().getInt("pic");
+        this.layer = frameSegment.getKeyValuePairs().getInt("layer");
+        this.duration = frameSegment.getKeyValuePairs().getInt("duration");
+        this.next = frameSegment.getKeyValuePairs().getInt("next");
         this.bodyElement = Optional.ofNullable(
                 frameSegment.containsElement("body")?
                 new BodyElement(frameSegment.getFirstElement("body")) : null);

@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -33,5 +34,13 @@ public abstract class Script implements Node {
         return segments.stream()
                 .filter(segment -> segment.getName().equals(name))
                 .collect(Collectors.toList());
+    }
+
+    public Segment getFirstSegment(String name) {
+        return containsSegment(name)? getSegments(name).get(0) : null;
+    }
+
+    public Optional<Segment> getFirstSegmentOptional(String name) {
+        return containsSegment(name)? Optional.of(getSegments(name).get(0)) : Optional.empty();
     }
 }

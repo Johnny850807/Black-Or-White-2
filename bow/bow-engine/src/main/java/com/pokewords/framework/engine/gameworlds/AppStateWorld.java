@@ -1,13 +1,10 @@
 package com.pokewords.framework.engine.gameworlds;
 
-import com.pokewords.framework.commons.Pair;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
-import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.parsing.ScriptRules;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
 
