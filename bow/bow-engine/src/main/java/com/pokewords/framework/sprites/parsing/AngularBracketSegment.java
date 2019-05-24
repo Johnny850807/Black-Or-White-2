@@ -83,7 +83,21 @@ public class AngularBracketSegment extends Segment {
 
     @Override
     public String toString(int indent) {
-        return null;
+        StringBuilder resultBuilder = new StringBuilder();
+        String spaces = new String(new char[indent]).replace("\0", " ");
+        resultBuilder.append(String.format("<%s>%s%s\n",
+                getName(),
+                id > Integer.MIN_VALUE? String.format(" %s", String.valueOf(id)) : "",
+                description.isPresent()? String.format(" %s", description.get()) : ""));
+        resultBuilder.append(keyValuePairs.toString(indent).replaceAll(
+                "([^\n]*\n)",
+                indent + "$1"));
+        elements.forEach(element ->
+                resultBuilder.append(element
+                        .toString(indent)
+                        .replaceAll("([^\n]*\n)", indent + "$1")));
+        resultBuilder.append(String.format("</%s>\n", getName()));
+        return resultBuilder.toString();
     }
 
     private String deTag(String tag) {
