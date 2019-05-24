@@ -32,23 +32,30 @@ public class AngularBracketSegment extends Segment {
 
     @Override
     public void parse(Context context) {
-        String openTag = context.fetchNextToken(
-                "<[^/\\s]\\S+>",
-                "Invalid <openTag>: " + context.peekToken());
+        if (!context.peekToken().matches("<[^/\\s]\\S+>"))
+            return;
+        String openTag = context.fetchNextToken();
         setName(deTag(openTag));
         String id = context.hasNextToken()?
                 context.fetchNextToken(
                         "0|[1-9]\\d*",
-                        "")
+                        "Invalid id: " + context.peekToken())
                 : context.fetchNextToken("Run out of token before reaching: id");
-        String mayBeDescription = context.hasNextToken()?
-                context.fetchNextToken(
-                        "\\S+",
-                        "Invalid description: " + context.peekToken())
-                : context.fetchNextToken("Run out of token after reaching: <"+getName()+"> "+id);
-        description = context.peekToken().matches(":")? Optional.empty() : Optional.of(mayBeDescription);
-        if (!description.isPresent())
-            context.putBack(mayBeDescription);
+        this.id = Integer.parseInt(id);
+        String at1AfterId = context.fetchNextToken("Run out of token before reaching: </" + getName() + ">");
+        if (at1AfterId.equals("</" + getName() + ">")) {
+            description = Optional.empty();
+            return;
+        }
+        String at2AfterId = context.fetchNextToken("Run out of token before reaching: </" + getName() + ">");
+        if (at2AfterId.equals("</" + getName() + ">")) {
+            description = Optional.of(at1AfterId);
+            return;
+        }
+        if (at2AfterId.matches("[^\\s:<>]+")) { // it's key
+            description = Optional.of(at1AfterId);
+            context.putBack(at2AfterId);
+        }
         do {
             if (context.hasNextToken())
                 keyValuePairs.parse(context);

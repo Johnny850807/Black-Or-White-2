@@ -21,24 +21,17 @@ public class AngularBracketElement extends Element {
 
     @Override
     public void parse(Context context) {
-        // Test match nothing
-        String testFirst = context.fetchNextToken();
-        if (!testFirst.matches("<[^/\\s]\\S+>")) {
-            context.putBack(testFirst);
+        if (!context.peekToken().matches("<[^/\\s]\\S+>"))
             return;
-        }
-        context.putBack(testFirst);
-        String openTag = context.fetchNextToken(
-                "<[^/\\s]\\S+>",
-                "Invalid <openTag>: " + context.peekToken());
+        String openTag = context.fetchNextToken();
         setName(deTag(openTag));
         if (context.hasNextToken())
             keyValuePairs.parse(context);
         String closeTag = context.hasNextToken()?
                 context.fetchNextToken(
-                        "</"+getName()+">",
-                        "Expect </"+getName()+"> but get: " + context.peekToken())
-                : context.fetchNextToken("Run out of token before reaching: </"+getName()+">");
+                        "</" + getName() + ">",
+                        "Expect </" + getName() + "> but get: " + context.peekToken())
+                : context.fetchNextToken("Run out of token before reaching: </" + getName() + ">");
     }
 
     @Override

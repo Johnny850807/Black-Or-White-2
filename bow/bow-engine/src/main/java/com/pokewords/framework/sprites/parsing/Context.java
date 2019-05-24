@@ -88,6 +88,8 @@ public class Context {
         tokens.add(0, token);
     }
 
+    public void probingHandle()
+
     public static void main(String[] args) {
         Context context = Context.fromText(SCRIPT_TEXT);
         while (context.hasNextToken()) {
