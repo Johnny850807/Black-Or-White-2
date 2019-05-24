@@ -3,6 +3,7 @@ package homework;
 import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
 
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -47,6 +48,11 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
                 clearMovement(Direction.RIGHT);
                 break;
         }
+    }
+
+    @Override
+    public void onKeyClicked(Sprite sprite, int keyCode) {
+        super.onKeyClicked(sprite, keyCode);
     }
 
     private void clearMovement(Direction direction) {

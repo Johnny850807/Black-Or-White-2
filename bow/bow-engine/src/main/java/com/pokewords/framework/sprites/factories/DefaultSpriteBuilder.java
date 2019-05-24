@@ -32,6 +32,12 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     protected ScriptRulesParser scriptRulesParser;
     protected List<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
 
+    /**
+     * Use this boolean to indicate if init() has been invoked. If the client forgot to invoke init()
+     * after the last build() but invokes other building method, exception thrown.
+     */
+    protected boolean hasBeenInit = false;
+
     public DefaultSpriteBuilder(IocFactory iocFactory) {
         spriteWeaver = new SpriteWeaver(iocFactory);
         scriptParser = iocFactory.scriptParser();
@@ -48,17 +54,21 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         hasPropertiesComponent = false;
         spriteWeaver.clear();
         weaverNodes = new LinkedList<>(Collections.singletonList(new GameEngineWeaverNode()));
+        hasBeenInit = true;
         return this;
     }
 
     @Override
     public DefaultSpriteBuilder setFSMComponent(FrameStateMachineComponent frameStateMachineComponent) {
+        validateIfInitHasBeenInvoked();
         components.add(frameStateMachineComponent);
         return this;
     }
 
     @Override
     public DefaultSpriteBuilder setPropertiesComponent(PropertiesComponent propertiesComponent) {
+        validateIfInitHasBeenInvoked();
+
         components.add(propertiesComponent);
         hasPropertiesComponent = true;
         return this;
@@ -66,6 +76,8 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public DefaultSpriteBuilder addComponent(Component component) {
+        validateIfInitHasBeenInvoked();
+
         components.add(component);
         if (component instanceof PropertiesComponent)
             hasPropertiesComponent = true;
@@ -74,6 +86,8 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public DefaultSpriteBuilder buildScriptFromPath(String path) {
+        validateIfInitHasBeenInvoked();
+
         try {
             String scriptString = new String(Files.readAllBytes(Resources.get(path).toPath())).trim();
             script = scriptParser.parse(scriptString, ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
@@ -87,6 +101,8 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public DefaultSpriteBuilder setScript(@NotNull Script script) {
+        validateIfInitHasBeenInvoked();
+
         this.script = script;
         addComponent(new FrameStateMachineComponent());
         return this;
@@ -94,14 +110,17 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     @Override
     public DefaultSpriteBuilder addWeaverNode(SpriteWeaver.Node node) {
+        validateIfInitHasBeenInvoked();
         weaverNodes.add(node);
         return this;
     }
 
     @Override
     public Sprite build() {
+        validateIfInitHasBeenInvoked();
         setupSprite();
         setupAndStartSpriteWeaving();
+        hasBeenInit = false;
         return sprite;
     }
 
@@ -121,6 +140,10 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         }
     }
 
+    private void validateIfInitHasBeenInvoked() {
+        if (!hasBeenInit)
+            throw new IllegalStateException("SpriteBuilder's init() should be invoked before using any building methods.");
+    }
 
     public static void main(String[] args) {
 

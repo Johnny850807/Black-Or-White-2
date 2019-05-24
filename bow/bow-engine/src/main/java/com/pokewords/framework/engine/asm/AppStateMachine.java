@@ -2,6 +2,9 @@ package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.commons.Triple;
+import com.pokewords.framework.commons.bundles.Bundle;
+import com.pokewords.framework.commons.bundles.EmptyReadOnlyBundle;
+import com.pokewords.framework.commons.bundles.InputEventsDelegator;
 import com.pokewords.framework.engine.asm.states.BreakerIconLoadingState;
 import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
@@ -26,7 +29,7 @@ import java.util.Map;
  * Built-in transitions:
  * EmptyState --(EVENT_LOADING)--> LoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
  *
- * Use AppStateMachine#createState(appStateType) to create your app state.
+ * Use AppStateMachine#createState(appStateType) to fromGallery your app state.
  * @author johnny850807 (waterball)
  */
 public class AppStateMachine implements GameLoopingListener {
@@ -163,8 +166,6 @@ public class AppStateMachine implements GameLoopingListener {
 		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState,
 				transitionEffect, listeners);
 	}
-
-
 
 	public AppState getCurrentState() {
 		return currentState;

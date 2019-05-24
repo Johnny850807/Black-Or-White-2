@@ -1,4 +1,4 @@
-package com.pokewords.framework.engine.asm;
+package com.pokewords.framework.commons.bundles;
 
 /**
  * A read only version of bundle.

@@ -7,6 +7,7 @@ import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.EffectFrameFactory;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
+import com.pokewords.framework.sprites.components.frames.ImageFrameFactory;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
 import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
@@ -106,7 +107,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         public EffectFrame createFrame(Segment segment) {
             setupGalleryMapIfNotExists(segment.getParent());
             FrameSegment frameSegment = new FrameSegment(segment);
-            EffectFrame effectFrame = initEffectFrame(frameSegment, segment);
+            EffectFrame effectFrame = createAndPutImageEffectFrame(frameSegment, segment);
             parseBodyElement(frameSegment, effectFrame);
             parseEffectElement(frameSegment, effectFrame);
             return effectFrame;
@@ -127,32 +128,34 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         private void addAllGalleriesToGalleryMap(Segment galleriesSegment) {
             for (Element element : galleriesSegment.getElements()) {
-                GalleryElement galleryElement = new GalleryElement(element);
-                gallerySet.add(galleryElement.toGallery());
+                //TODO gallerySet.add(galleryElement.toGallery());
             }
         }
 
-        private EffectFrame initEffectFrame(FrameSegment frameSegment, Segment segment) {
+        private EffectFrame createAndPutImageEffectFrame(FrameSegment frameSegment, Segment segment) {
             frameSegmentMap.put(frameSegment.getId(), frameSegment);
-            return EffectFrame.wrap(new ImageFrame(frameSegment.getId(), frameSegment.getLayer(),
-                    getImage(frameSegment.getPic())), frameSegment.getDuration());
+            Gallery targetGallery = locateGallery(frameSegment.getPic());
+            ImageFrame imageFrame = ImageFrameFactory.fromGallery(frameSegment.getLayer(),
+                    targetGallery, frameSegment.getPic());
+            return EffectFrame.wrap(imageFrame, frameSegment.getId(), frameSegment.getDuration());
+
         }
 
-        private synchronized Image getImage(int pic) {
-            for (Gallery gallery : gallerySet)
-                if (gallery.containsPicture(pic))
-                    return gallery.getImage(pic);
-
-            throw new IllegalArgumentException(String.format("The pic %d is not within any galleries.", pic));
+        private Gallery locateGallery(int pic) {
+            return gallerySet.stream()
+                    .filter(g -> g.containsPicture(pic))
+                    .findFirst()
+                    .orElseThrow(()-> new IllegalArgumentException("The pic number " + pic + " is not found in any gallery range."));
         }
+
     }
 
     private void parseBodyElement(FrameSegment frameSegment, EffectFrame effectFrame) {
         frameSegment.getBodyElement()
-                .ifPresent(p -> effectBodyElement(p, effectFrame));
+                .ifPresent(p -> applyBodyElement(p, effectFrame));
     }
 
-    private void effectBodyElement(BodyElement element, EffectFrame effectFrame) {
+    private void applyBodyElement(BodyElement element, EffectFrame effectFrame) {
         effectFrame.addEffect((world, sprite) -> {
             int x = element.getX().orElse(sprite.getX());
             int y = element.getY().orElse(sprite.getY());
@@ -167,10 +170,10 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
     private void parseEffectElement(FrameSegment frameSegment, EffectFrame effectFrame) {
         frameSegment.getEffectElement()
-                .ifPresent(e -> effectEffectElement(e, effectFrame));
+                .ifPresent(e -> applyEffectElement(e, effectFrame));
     }
 
-    private void effectEffectElement(EffectElement element, EffectFrame effectFrame) {
+    private void applyEffectElement(EffectElement element, EffectFrame effectFrame) {
         effectFrame.addEffect((world, sprite) -> {
             element.getMoveX().ifPresent(sprite::moveX);
             element.getMoveY().ifPresent(sprite::moveY);

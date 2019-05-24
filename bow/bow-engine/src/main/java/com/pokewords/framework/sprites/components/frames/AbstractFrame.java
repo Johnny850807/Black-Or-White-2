@@ -6,72 +6,91 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.util.Objects;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public abstract class AbstractFrame implements Frame {
-    private Rectangle area = new Rectangle();
-    protected @Nullable Sprite sprite;
-    protected int id;
+    protected Rectangle area = new Rectangle();
     protected int layerIndex;
     protected int flags;
 
+    protected @Nullable Sprite sprite;
 
-    public AbstractFrame(int id, int layerIndex) {
-        this.id = id;
+    public AbstractFrame(int layerIndex) {
         this.layerIndex = layerIndex;
     }
 
-    public AbstractFrame(int id, int layerIndex, int flags) {
-        this.id = id;
-        this.layerIndex = layerIndex;
-        this.flags = flags;
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
+    /**
+     * @inheritDoc
+     */
     @Override
     public int getLayerIndex() {
         return layerIndex;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void setLayerIndex(int layerIndex) {
         this.layerIndex = layerIndex;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Nullable
     public Sprite getSprite() {
         return sprite;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void boundToSprite(@Nullable Sprite sprite) {
         this.sprite = sprite;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void setFlags(int flags) {
         this.flags = flags;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public int getFlags() {
         return flags;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
     public void setPosition(Point position) {
         if (getSprite() != null)
             throw new IllegalStateException("The frame is bound to a Sprite, you should set that sprite's position instead.");
         area.setLocation(position);
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
     public void setSize(Dimension dimension) {
         if (getSprite() != null)
             throw new IllegalStateException("The frame is bound to a Sprite, you should set that sprite's size instead.");
         area.setSize(dimension);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public int getX() {
         if (getSprite() != null)
@@ -79,6 +98,9 @@ public abstract class AbstractFrame implements Frame {
         return (int) area.getX();
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public int getY() {
         if (getSprite() != null)
@@ -86,6 +108,9 @@ public abstract class AbstractFrame implements Frame {
         return (int) area.getY();
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public int getWidth() {
         if (getSprite() != null)
@@ -93,6 +118,9 @@ public abstract class AbstractFrame implements Frame {
         return (int) area.getWidth();
     }
 
+    /**
+     * @inheritDoc
+     */
     public int getHeight() {
         if (getSprite() != null)
             return getSprite().getHeight();
@@ -104,20 +132,21 @@ public abstract class AbstractFrame implements Frame {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AbstractFrame that = (AbstractFrame) o;
-        return id == that.id &&
-                layerIndex == that.layerIndex &&
+        return layerIndex == that.layerIndex &&
                 flags == that.flags;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, layerIndex, flags);
+        return Objects.hash(layerIndex, flags);
     }
 
     @Override
-    public Frame clone() {
+    public AbstractFrame clone() {
         try {
-            return (Frame) super.clone();
+            AbstractFrame clone = (AbstractFrame) super.clone();
+            clone.area = (Rectangle) this.area.clone();
+            return clone;
         } catch (CloneNotSupportedException e) {
             throw new Error(e);
         }

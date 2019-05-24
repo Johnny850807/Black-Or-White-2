@@ -1,8 +1,10 @@
 package com.pokewords.framework.engine.gameworlds;
 
+import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.sprites.MockSprite;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,8 +12,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class AppStateWorldTest {
-    private AppStateWorld appStateWorld = new AppStateWorld(new EmptyAppState());
+public class AppStateWorldTest extends AbstractTest {
+    private AppStateWorld appStateWorld = new AppStateWorld(new EmptyAppState(),
+            new SpriteInitializer(release));
 
     @Test
     public void testAppStateWorldLifecycleHasBeenDelegatedToSprite() {

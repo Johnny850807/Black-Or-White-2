@@ -1,7 +1,7 @@
 package com.pokewords.framework.engine.asm.states.multiplayer;
 
 import com.pokewords.framework.engine.asm.AppState;
-import com.pokewords.framework.engine.asm.Bundle;
+import com.pokewords.framework.commons.bundles.Bundle;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
@@ -18,6 +18,15 @@ public class MultiplayerRoomState extends AppState {
     private Player host;
 
 
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+    }
+
+    @Override
+    protected void onAppStateCreating(AppStateWorld appStateWorld) { }
+
+
     @Override
     public void onReceiveMessageBundle(Bundle bundle) {
         String ip = bundle.getStringOptional(KEY_PLAYER_IP_STRING)
@@ -30,14 +39,6 @@ public class MultiplayerRoomState extends AppState {
 
         this.host = new Player(ip, name, true);
     }
-
-    public void setTheme(Theme theme) {
-        this.theme = theme;
-    }
-
-    @Override
-    protected void onAppStateCreating(AppStateWorld appStateWorld) { }
-
 
     @Override
     protected void onAppStateEntering() {
@@ -58,7 +59,7 @@ public class MultiplayerRoomState extends AppState {
     private void spawnPlayerCard(Player player) {
         Sprite playerCard = createSprite(Types.CARD);
         playerCards.add(playerCard);
-        playerCard.addComponent(new PlayerComponent(new PlayerCardFrame(0, 1, player)));
+        playerCard.addComponent(new PlayerComponent(new PlayerCardFrame(1, player)));
         getAppStateWorld().spawn(playerCard);
     }
 

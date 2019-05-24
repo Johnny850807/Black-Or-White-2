@@ -37,7 +37,7 @@ public class MouseListenerComponent extends CloneableComponent {
         public void onMouseReleased(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
         public void onMouseClicked(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
         public void onMouseEnter(Sprite sprite, Point mousePositionInWorld, Point mousePositionInArea) {}
-        public void onMouseExit(Sprite sprite, Point mousePositionInWorld) {}
+        public void onMouseExit(Sprite sprite, Point mousePositionInWorld) { }
         public Listener clone() {
             try {
                 return (Listener) super.clone();

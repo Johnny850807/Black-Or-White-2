@@ -5,6 +5,7 @@ import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.ioc.ReleaseIocFactory;
 import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
+import com.pokewords.framework.sprites.components.frames.ImageFrameFactory;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
@@ -24,14 +25,13 @@ public class InputsMovementDemo extends GameApplication {
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.declare(Types.SMILE)
-                .with(new ImageComponent(
-                        new ImageFrame(0, 2, "images/smile.png")
+                .with(new ImageComponent(ImageFrameFactory.fromPath(2, "images/smile.png")
                                 .flags(ImageFrame.CANVAS_FLAG_RENDER_BY_CENTER)))
                 .area(getGameWindowDefinition().center(), 50, 50)
                 .commit();
 
         spriteInitializer.declare(Types.DINOSAUR)
-                .with(new ImageComponent(new ImageFrame(0, 2, "images/dinosaur.png")
+                .with(new ImageComponent(ImageFrameFactory.fromPath(2, "images/dinosaur.png")
                                     .flags(ImageFrame.CANVAS_FLAG_RENDER_BY_CENTER)))
                 .area(-200, 0, 38, 38)
                 .commit();

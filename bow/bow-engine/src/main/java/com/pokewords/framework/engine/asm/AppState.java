@@ -1,5 +1,6 @@
 package com.pokewords.framework.engine.asm;
 
+import com.pokewords.framework.commons.bundles.Bundle;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
@@ -123,7 +124,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * @return the created app state world
 	 */
 	protected AppStateWorld onCreateAppStateWorld() {
-		return new AppStateWorld(this);
+		return new AppStateWorld(this, getSpriteInitializer());
 	}
 
 	/**

@@ -7,17 +7,17 @@ import com.pokewords.framework.sprites.parsing.Script;
 import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * Chain of responsibility. Each node within the weaver is interested in parsing certain parts of Script.
+ * @author nyngwang
+ */
 public class SpriteWeaver {
     private IocFactory iocFactory;
     private LinkedList<SpriteWeaver.Node> weaverNodes;
 
     public SpriteWeaver(IocFactory iocFactory) {
-        init();
-        this.iocFactory = iocFactory;
-    }
-
-    private void init() {
         weaverNodes = new LinkedList<>();
+        this.iocFactory = iocFactory;
     }
 
     public void addWeaverNode(SpriteWeaver.Node node) {

@@ -5,7 +5,7 @@ import com.pokewords.constants.SoundTypes;
 import com.pokewords.constants.SpriteTypes;
 import com.pokewords.constants.Theme;
 import com.pokewords.framework.engine.asm.AppState;
-import com.pokewords.framework.engine.asm.Bundle;
+import com.pokewords.framework.commons.bundles.Bundle;
 import com.pokewords.framework.engine.asm.states.multiplayer.MultiplayerRoomState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;

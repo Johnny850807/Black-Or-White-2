@@ -1,4 +1,6 @@
-package com.pokewords.framework.engine.asm;
+package com.pokewords.framework.commons.bundles;
+
+import com.pokewords.framework.engine.exceptions.ExpectedPropertyMissingException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,18 +34,21 @@ public class Bundle {
     }
 
     public int getInt(Object key) {
-        lazyInitMap();
+        if (!containsKey(key))
+            throw new ExpectedPropertyMissingException(key);
         return (int) data.get(key);
     }
 
     public String getString(Object key) {
-        lazyInitMap();
+        if (!containsKey(key))
+            throw new ExpectedPropertyMissingException(key);
         return String.valueOf( data.get(key));
     }
 
     @SuppressWarnings("unchecked")
     public <T> T get(Object key) {
-        lazyInitMap();
+        if (!containsKey(key))
+            throw new ExpectedPropertyMissingException(key);
         return (T) data.get(key);
     }
 
@@ -70,8 +75,27 @@ public class Bundle {
     }
 
     private void lazyInitMap() {
-        if (data == null)
+        if (data == null) {
             data = new HashMap<>();
+        }
     }
 
+
+    public static class BundleBuilder {
+        private Bundle bundle = new Bundle();
+
+        public BundleBuilder eventId(int eventId) {
+            bundle.eventId = eventId;
+            return this;
+        }
+
+        public BundleBuilder put(Object key, Object value) {
+            bundle.put(key, value);
+            return this;
+        }
+
+        public Bundle build() {
+            return bundle;
+        }
+    }
 }

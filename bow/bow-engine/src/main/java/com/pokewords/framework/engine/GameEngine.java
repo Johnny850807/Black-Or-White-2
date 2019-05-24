@@ -69,7 +69,7 @@ public class GameEngine {
     private void printProfileEveryCertainLoops() {
         if (loopingCounter % 300 == 0)
         {
-            System.out.printf("Memory Used: %d\n" , Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+            System.out.printf("Memory Used: %d MB.\n" , (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) /8/1024/1024);
             System.out.printf("FPS: %f\n", fpsCounter.getAverageFramesPerSecond());
         }
     }

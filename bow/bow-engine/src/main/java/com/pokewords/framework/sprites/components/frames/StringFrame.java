@@ -3,6 +3,9 @@ package com.pokewords.framework.sprites.components.frames;
 import com.pokewords.framework.views.Canvas;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 /**
@@ -13,7 +16,7 @@ import java.util.Objects;
  *
  * @author johnny850807 (waterball)
  */
-public class StringFrame extends AbstractFrame {
+public class StringFrame extends SerializableFrame {
     /**
      * the stringFrame's rendered point will be seen as its center point.
      */
@@ -30,8 +33,8 @@ public class StringFrame extends AbstractFrame {
     protected Font font = new Font("微軟正黑體", Font.PLAIN, 15);
     protected Dimension size;
 
-    public StringFrame(int id, int layerIndex, String text) {
-        super(id, layerIndex);
+    public StringFrame(int layerIndex, String text) {
+        super(layerIndex);
         this.text = text;
     }
 
@@ -130,5 +133,19 @@ public class StringFrame extends AbstractFrame {
         clone.font = new Font(font.getName(), font.getStyle(), font.getSize());
         clone.size = (Dimension) size.clone();
         return clone;
+    }
+
+    @Override
+    protected void onDeserializing(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        this.text = in.readUTF();
+        this.color = new Color(in.readInt());
+        this.font = (Font) in.readObject();
+    }
+
+    @Override
+    protected void onSerializing(ObjectOutputStream out) throws IOException, ClassNotFoundException {
+        out.writeUTF(text);
+        out.writeInt(color.getRGB());
+        out.writeObject(font);
     }
 }

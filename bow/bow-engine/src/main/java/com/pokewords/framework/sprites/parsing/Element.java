@@ -1,7 +1,8 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.commons.bundles.Bundle;
+
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -27,4 +28,5 @@ public interface Element {
     Segment getParent();
 
     String toString(int indentation);
+
 }
