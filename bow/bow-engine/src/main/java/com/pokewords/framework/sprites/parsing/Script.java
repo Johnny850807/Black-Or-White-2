@@ -1,9 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -12,13 +9,11 @@ import java.util.stream.Collectors;
 public abstract class Script implements Node {
     protected List<Segment> segments;
 
-    protected Script(String name, int id, String description) {
-        super(name, id, description);
+    public Script() {
+
     }
 
-    // Segments
-
-    protected Segment addSegment(Segment segment) {
+    public Segment addSegment(Segment segment) {
         segments.add(segment);
         segment.setParent(this);
         return this;

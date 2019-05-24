@@ -68,10 +68,9 @@ public class AngularBracketSegment extends Segment {
                 int beforeElement = context.getRemainingTokensCount();
                 Element element = new AngularBracketElement();
                 element.parse(context);
-                element.setParent(this);
                 int afterElement = context.getRemainingTokensCount();
                 if (beforeElement > afterElement)
-                    elements.add(element);
+                    addElement(element);
             }
             int afterKeyValuePairsAndOrElement = context.getRemainingTokensCount();
             if (beforeKeyValuePairsAndOrElement > afterKeyValuePairsAndOrElement)

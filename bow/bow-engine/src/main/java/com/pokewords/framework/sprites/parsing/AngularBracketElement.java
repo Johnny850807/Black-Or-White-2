@@ -1,7 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.engine.exceptions.ScriptParsingException;
-
 /**
  * @author nyngwang
  */
