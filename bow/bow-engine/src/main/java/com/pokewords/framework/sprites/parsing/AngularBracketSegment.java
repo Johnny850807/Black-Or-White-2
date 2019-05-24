@@ -31,6 +31,14 @@ public class AngularBracketSegment extends Segment {
         this(null, Integer.MIN_VALUE);
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public Optional<String> getDescription() {
+        return description;
+    }
+
     @Override
     public void parse(Context context) {
         if (!context.peekToken().matches("<[^/\\s]\\S+>"))
@@ -73,9 +81,9 @@ public class AngularBracketSegment extends Segment {
                     addElement(element);
             }
             int afterKeyValuePairsAndOrElement = context.getRemainingTokensCount();
-            if (beforeKeyValuePairsAndOrElement > afterKeyValuePairsAndOrElement)
+            if (beforeKeyValuePairsAndOrElement == afterKeyValuePairsAndOrElement)
                 throw new ScriptParsingException(
-                        "Segment body contains something that is neither key-value pair nor element.");
+                        "Segment body contains something that is neither key-value pair nor element");
         }
         throw new ScriptParsingException("Run out of token before reaching: </" + getName() + ">");
     }
