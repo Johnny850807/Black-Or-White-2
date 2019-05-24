@@ -1,7 +1,10 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.engine.exceptions.ElementException;
+import com.pokewords.framework.engine.exceptions.ScriptParsingException;
 
+/**
+ * @author nyngwang
+ */
 public class AngularBracketElement extends Element {
     public AngularBracketElement(Node parent, String name, KeyValuePairs keyValuePairs) {
         super(parent, name, keyValuePairs);
@@ -18,17 +21,22 @@ public class AngularBracketElement extends Element {
 
     @Override
     public void parse(Context context) {
-        if (!context.peekToken().matches("<[^/\\s]\\S+>"))
+        if (!context.hasNextToken())
             return;
         String openTag = context.fetchNextToken();
+        if (!openTag.matches("<[^/\\s]\\S+>"))
+            throw new ScriptParsingException(String.format(
+                    "Should be a <openTag> but receive: %s", openTag));
         setName(deTag(openTag));
-        String closeTag = String.format("</%s>", getName());
+        keyValuePairs = new NoCommaPairs(this);
         keyValuePairs.parse(context);
-        keyValuePairs.setParent(this);
-        String shouldBeCloseTag = context.fetchNextToken();
-        if (!shouldBeCloseTag.equals(closeTag))
-            throw new ElementException(String.format(
-                    "Angular brackets do not match: %s %s", openTag, shouldBeCloseTag));
+        if (!context.hasNextToken())
+            throw new ScriptParsingException(String.format(
+                    "The </closeTag> for %s is missing", openTag));
+        String closeTag = context.fetchNextToken();
+        if (!closeTag.equals(String.format("</%s>", getName())))
+            throw new ScriptParsingException(String.format(
+                    "The <openTag> is incorrectly closed: %s %s", openTag, closeTag));
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.engine.exceptions.SegmentException;
-
 /**
  * LinScript is a special segment which only contains other segments.
  * @author nyngwang

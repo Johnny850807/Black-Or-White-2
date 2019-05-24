@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.KeyValuePairsException;
+import com.pokewords.framework.engine.exceptions.ScriptParsingException;
 
 import java.util.Map;
 
@@ -21,16 +22,17 @@ public class NoCommaPairs extends KeyValuePairs {
         while (context.hasNextToken()) {
             if (context.peekToken().matches("<\\S+>"))
                 return;
-            String key = context.fetchNextToken();
-            String colon = context.fetchNextToken();
-            String value = context.fetchNextToken();
-
-            if (!colon.equals(":"))
-                throw new KeyValuePairsException(String.format(
-                        "This is not a key-value pair: %s %s %s", key, colon, value));
-            if (value.matches("<\\S+>"))
-                throw new KeyValuePairsException(String.format(
-                        "The value cannot be a tag: %s %s %s", key, colon, value));
+            String key = context.fetchNextToken("[^\\s:<>]+", "Invalid key " + context.peekToken());
+            String colon = context.hasNextToken()?
+                    context.fetchNextToken(
+                            ":",
+                            "Expect a colon between " + key + " and " + context.peekToken())
+                    : context.fetchNextToken("Run out of token after " + key);
+            String value = context.hasNextToken()?
+                    context.fetchNextToken(
+                            "[^\\s:<>]+",
+                            "Invalid value " + context.peekToken())
+                    : context.fetchNextToken("Run out of token after colon(:)");
             put(key, value);
         }
     }

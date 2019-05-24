@@ -1,7 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.commons.utils.FileUtility;
-import com.pokewords.framework.engine.exceptions.ContextException;
+import com.pokewords.framework.engine.exceptions.ScriptParsingException;
 
 import java.io.IOException;
 import java.util.*;
@@ -39,7 +39,7 @@ public class Context {
 
         while (matcher.find()) {
             if (matcher.group(1) == null)
-                throw new ContextException(String.format("Cannot tokenize the symbol: %s", matcher.group(2)));
+                throw new ScriptParsingException(String.format("Cannot tokenize the symbol: %s", matcher.group(2)));
             tokens.add(matcher.group(1));
         }
     }
@@ -54,11 +54,14 @@ public class Context {
         return !tokens.isEmpty();
     }
 
+    public void consumeToken(String noMoreToken) {
+        if (!hasNextToken())
+            throw new ScriptParsingException(noMoreToken);
+        tokens.remove(0);
+    }
+
     public void consumeToken() {
-        if (hasNextToken())
-            tokens.remove(0);
-        else
-            throw new ContextException("Cannot consume token: Run out of tokens");
+        consumeToken("Run out of tokens");
     }
 
     public String fetchNextToken() {
@@ -67,10 +70,28 @@ public class Context {
         return token;
     }
 
+    public String fetchNextToken(String noMoreToken) {
+        String token = peekToken();
+        consumeToken(noMoreToken);
+        return token;
+    }
+
+    public String fetchNextToken(String regex, String noMatch) {
+        String token = peekToken();
+        consumeToken("Should check hasNextToken() first");
+        if (!token.matches(regex))
+            throw new ScriptParsingException(noMatch);
+        return token;
+    }
+
+    public String error(String message) {
+        throw new ScriptParsingException(message);
+    }
+
     public static void main(String[] args) {
         Context context = Context.fromText(SCRIPT_TEXT);
         while (context.hasNextToken()) {
-            String current = context.fetchNextToken();
+            String openTag = context.fetchNextToken("Can fetch openTag: run out of token");
         }
     }
 }
