@@ -1,11 +1,16 @@
 package com.pokewords.framework.sprites.parsing;
 
-
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author nyngwang
  */
 public abstract class Script implements Node {
-    public abstract Collection<? extends Node> getNodes();
+    private List<Segment> segments;
+
+    public Script(List<Segment> segments) {
+        this.segments = segments;
+    }
+
+
 }

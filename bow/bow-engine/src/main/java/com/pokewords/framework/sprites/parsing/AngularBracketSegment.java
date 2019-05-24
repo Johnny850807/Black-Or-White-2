@@ -18,9 +18,8 @@ public class AngularBracketSegment extends Segment {
     }
 
     public AngularBracketSegment(String name, int id, String description) {
-        this(null, name, null, null, id, description);
+        this(null, name, null, new ArrayList<>(), id, description);
         keyValuePairs = new NoCommaPairs(this);
-        elements = new ArrayList<>();
     }
 
     public AngularBracketSegment(String name, int id) {
@@ -99,7 +98,7 @@ public class AngularBracketSegment extends Segment {
         resultBuilder.append(keyValuePairs.toString(indent).replaceAll(
                 "([^\n]*\n)",
                 indent + "$1"));
-        elements.forEach(element ->
+        getElements().forEach(element ->
                 resultBuilder.append(element
                         .toString(indent)
                         .replaceAll("([^\n]*\n)", indent + "$1")));

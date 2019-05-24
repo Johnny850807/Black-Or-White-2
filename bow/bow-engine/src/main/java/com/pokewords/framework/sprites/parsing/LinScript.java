@@ -11,10 +11,9 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class LinScript extends Script {
-    private List<AngularBracketSegment> segments;
 
     public LinScript() {
-        segments = new ArrayList<>();
+        super(new ArrayList<>());
     }
 
     public void addSegment(AngularBracketSegment segment) {

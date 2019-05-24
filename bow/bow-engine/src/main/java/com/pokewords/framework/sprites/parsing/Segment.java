@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public abstract class Segment extends Element {
-    protected List<Element> elements;
+    private List<Element> elements;
 
     public Segment(Node parent, String name, KeyValuePairs keyValuePairs, List<Element> elements) {
         super(parent, name, keyValuePairs);
