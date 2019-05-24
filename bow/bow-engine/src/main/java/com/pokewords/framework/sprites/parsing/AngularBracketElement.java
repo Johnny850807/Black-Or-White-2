@@ -3,12 +3,12 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.ElementException;
 
 public class AngularBracketElement extends Element {
-    public AngularBracketElement(String name, Node parent, KeyValuePairs keyValuePairs) {
-        super(name, parent, keyValuePairs);
+    public AngularBracketElement(Node parent, String name, KeyValuePairs keyValuePairs) {
+        super(parent, name, keyValuePairs);
     }
 
     public AngularBracketElement(String name) {
-        super(name, null, null);
+        this(null, name, null);
         keyValuePairs = new NoCommaPairs(this);
     }
 
@@ -21,8 +21,8 @@ public class AngularBracketElement extends Element {
         if (!context.peekToken().matches("<[^/\\s]\\S+>"))
             return;
         String openTag = context.fetchNextToken();
-        name = deTag(openTag);
-        String closeTag = String.format("</%s>", name);
+        setName(deTag(openTag));
+        String closeTag = String.format("</%s>", getName());
         keyValuePairs.parse(context);
         keyValuePairs.setParent(this);
         String shouldBeCloseTag = context.fetchNextToken();
@@ -35,9 +35,9 @@ public class AngularBracketElement extends Element {
     public String toString(int indent) {
         StringBuilder resultBuilder = new StringBuilder();
         String spaces = new String(new char[indent]).replace("\0", " ");
-        resultBuilder.append(String.format("<%s>\n", name));
+        resultBuilder.append(String.format("<%s>\n", getName()));
         resultBuilder.append(keyValuePairs.toString(indent).replaceAll("([^\n]*\n)", spaces + "$1"));
-        resultBuilder.append(String.format("</%s>\n", name));
+        resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
     }
 

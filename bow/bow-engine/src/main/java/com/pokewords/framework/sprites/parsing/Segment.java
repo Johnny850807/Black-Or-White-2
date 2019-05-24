@@ -7,44 +7,16 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public abstract class Segment extends Element {
-    private Node parent;
+    private List<Element> elements;
 
-
-
-    protected int id;
-    protected String description;
-    protected List<Element> elements;
-
-    public Segment(String name, int id, String description, Script parent) {
-        super(name);
-        this.id = id;
-        this.description = description;
-        this.elements = new ArrayList<>();
-        this.parent = parent;
+    public Segment(Node parent, String name, KeyValuePairs keyValuePairs, List<Element> elements) {
+        super(parent, name, keyValuePairs);
+        this.elements = elements;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Script getParent() {
-        return parent;
-    }
-
-    // Elements
-
-    public Segment addElement(Element element) {
+    public void addElement(Element element) {
         elements.add(element);
         element.setParent(this);
-        return this;
-    }
-
-    public List<Element> getElements() {
-        return elements;
     }
 
     public boolean containsElement(String name) {
@@ -54,29 +26,21 @@ public abstract class Segment extends Element {
         return false;
     }
 
+    public List<Element> getElements() {
+        return elements;
+    }
+
     public List<Element> getElements(String name) {
         return elements.stream()
                 .filter(element -> element.getName().equals(name))
                 .collect(Collectors.toList());
     }
 
-    public Element getElement(String name) {
+    public Element getFirstElement(String name) {
         return containsElement(name)? getElements(name).get(0) : null;
     }
 
-    // Parsing utils
-
-    protected boolean parseId(Context context) {
-        if (context.getSingle() == null)
-            return false;
-        id = Integer.parseInt(context.getSingle());
-        return true;
-    }
-
-    protected boolean parseDescription(Context context) {
-        if (context.getSingle() == null)
-            return false;
-        description = context.getSingle();
-        return true;
+    public Optional<Element> getFirstElementOptional(String name) {
+        return containsElement(name)? Optional.of(getElements(name).get(0)) : Optional.empty();
     }
 }

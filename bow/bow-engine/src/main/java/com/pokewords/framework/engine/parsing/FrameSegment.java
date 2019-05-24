@@ -28,13 +28,13 @@ public class FrameSegment {
         this.next = frameSegment.getInt("next");
         this.bodyElement = Optional.ofNullable(
                 frameSegment.containsElement("body")?
-                new BodyElement(frameSegment.getElement("body")) : null);
+                new BodyElement(frameSegment.getFirstElement("body")) : null);
         this.effectElement = Optional.ofNullable(
                 frameSegment.containsElement("effect")?
-                new EffectElement(frameSegment.getElement("effect")) : null);
+                new EffectElement(frameSegment.getFirstElement("effect")) : null);
         this.transitionsElement = Optional.ofNullable(
                 frameSegment.containsElement("transitions") ?
-                        new TransitionsElement(frameSegment.getElement("transitions")) : null
+                        new TransitionsElement(frameSegment.getFirstElement("transitions")) : null
         );
     }
 

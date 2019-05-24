@@ -6,12 +6,12 @@ package com.pokewords.framework.sprites.parsing;
  */
 public abstract class Element implements Node {
     private Node parent;
-    protected String name;
+    private String name;
     protected KeyValuePairs keyValuePairs;
 
-    public Element(String name, Node parent, KeyValuePairs keyValuePairs) {
-        this.name = name;
+    public Element(Node parent, String name, KeyValuePairs keyValuePairs) {
         this.parent = parent;
+        this.name = name;
         this.keyValuePairs = keyValuePairs;
     }
 
@@ -22,5 +22,17 @@ public abstract class Element implements Node {
 
     public void setParent(Node parent) {
         this.parent = parent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public KeyValuePairs getKeyValuePairs() {
+        return keyValuePairs;
     }
 }
