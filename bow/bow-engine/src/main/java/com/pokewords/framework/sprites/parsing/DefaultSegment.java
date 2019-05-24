@@ -18,41 +18,6 @@ public class DefaultSegment extends Segment {
     }
 
     @Override
-    public DefaultSegment setParent(Segment parent) {
-        super.setParent(parent);
-        return this;
-    }
-
-    @Override
-    public void parse(Context context) {
-        if (context.currentTokenIsEmpty()) // if hasn't fetch
-            context.consumeOneToken();
-        if (!parseTag(context))
-            throw new SegmentException(String.format("Token %s is not a tag", context.peekToken()));
-        context.consumeOneToken();
-        if (!parseId(context))
-            throw new SegmentException(String.format("Token %s is not an ID", context.peekToken()));
-        context.consumeOneToken();
-        if (parseDescription(context))
-            context.consumeOneToken();
-        else do {
-            if (parseClosedTag(context)) {
-                context.consumeOneToken();
-                return;
-            }
-            if (parseKeyValuePair(context)) continue;
-            if (parseTag(context)) {
-                Element element = new DefaultElement();
-                element.parse(context);
-                addElement(element);
-                continue;
-            }
-            throw new SegmentException(String.format("In <%s>: token \"%s\" is not allowed here", name, context.peekToken()));
-        } while (context.consumeOneToken());
-        throw new SegmentException(String.format("Tag <%s> is not closed", name));
-    }
-
-    @Override
     public String toString(int indentation, int width) {
         StringBuilder resultBuilder = new StringBuilder();
         String indent = new String(new char[indentation]).replace("\0", " ");
