@@ -32,31 +32,37 @@ public class AngularBracketSegment extends Segment {
 
     @Override
     public void parse(Context context) {
-        if (!context.hasNextToken())
-            return;
-        String openTag = context.fetchNextToken();
-        if (!openTag.matches("<[^/\\s]\\S+>"))
-            throw new ScriptParsingException(String.format(
-                    "Should be a <openTag> but receive: %s", openTag));
+        String openTag = context.fetchNextToken(
+                "<[^/\\s]\\S+>",
+                "Invalid <openTag>: " + context.peekToken());
         setName(deTag(openTag));
-        if (!context.hasNextToken())
-            throw new ScriptParsingException(
-                    String.format("The id of %s is missing", openTag));
-        String id = context.fetchNextToken();
-        if (!id.matches("0|[1-9]\\d*"))
-            throw new ScriptParsingException(String.format(
-                    "The id should be integer format: <%s> %s", getName(), id));
-        keyValuePairs = new NoCommaPairs(this);
-        elements = new ArrayList<>();
-        description = Optional.empty();
-        String mayBeCloseTag = context.fetchNextToken();
-        if (tagsMatch(closeTag, mayBeCloseTag))
-            return;
-
-        String mayBeKey = mayBeCloseTag;
-
-        String first = context.fetchNextToken();
-        if (context.peekToken().matches("</\\S+>"))
+        String id = context.hasNextToken()?
+                context.fetchNextToken(
+                        "0|[1-9]\\d*",
+                        "")
+                : context.fetchNextToken("Run out of token before reaching: id");
+        String mayBeDescription = context.hasNextToken()?
+                context.fetchNextToken(
+                        "\\S+",
+                        "Invalid description: " + context.peekToken())
+                : context.fetchNextToken("Run out of token after reaching: <"+getName()+"> "+id);
+        description = context.peekToken().matches(":")? Optional.empty() : Optional.of(mayBeDescription);
+        if (!description.isPresent())
+            context.putBack(mayBeDescription);
+        do {
+            if (context.hasNextToken())
+                keyValuePairs.parse(context);
+            if (context.hasNextToken()) {
+                Element element = new AngularBracketElement();
+                element.parse(context);
+                context;
+            }
+            String mayBeCloseTag = context.fetchNextToken(
+                    "Run out of token before reaching: </"+getName()+">");
+            if (mayBeCloseTag.equals("</"+getName()+">"))
+                return;
+            context.putBack(mayBeCloseTag);
+        } while (true);
     }
 
     @Override
@@ -66,14 +72,5 @@ public class AngularBracketSegment extends Segment {
 
     private String deTag(String tag) {
         return tag.replaceAll("</?(\\S+)>", "$1");
-    }
-
-    private boolean tagsMatch(String closeTag, String mayBeCloseTag) {
-        if (mayBeCloseTag.matches("</\\S+>")) {
-            if (mayBeCloseTag.equals(closeTag))
-                return;
-            throw new ScriptParsingException(String.format(
-                    "Angular brackets do not match: %s %s", openTag, mayBeCloseTag));
-        }
     }
 }

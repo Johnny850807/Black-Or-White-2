@@ -78,14 +78,14 @@ public class Context {
 
     public String fetchNextToken(String regex, String noMatch) {
         String token = peekToken();
-        consumeToken("Should check hasNextToken() first");
+        consumeToken("Should check hasNextToken() before fetchNextToken() or parse()");
         if (!token.matches(regex))
             throw new ScriptParsingException(noMatch);
         return token;
     }
 
-    public String error(String message) {
-        throw new ScriptParsingException(message);
+    public void putBack(String token) {
+        tokens.add(0, token);
     }
 
     public static void main(String[] args) {

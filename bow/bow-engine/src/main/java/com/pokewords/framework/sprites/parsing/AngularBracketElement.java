@@ -21,22 +21,24 @@ public class AngularBracketElement extends Element {
 
     @Override
     public void parse(Context context) {
-        if (!context.hasNextToken())
+        // Test match nothing
+        String testFirst = context.fetchNextToken();
+        if (!testFirst.matches("<[^/\\s]\\S+>")) {
+            context.putBack(testFirst);
             return;
-        String openTag = context.fetchNextToken();
-        if (!openTag.matches("<[^/\\s]\\S+>"))
-            throw new ScriptParsingException(String.format(
-                    "Should be a <openTag> but receive: %s", openTag));
+        }
+        context.putBack(testFirst);
+        String openTag = context.fetchNextToken(
+                "<[^/\\s]\\S+>",
+                "Invalid <openTag>: " + context.peekToken());
         setName(deTag(openTag));
-        keyValuePairs = new NoCommaPairs(this);
-        keyValuePairs.parse(context);
-        if (!context.hasNextToken())
-            throw new ScriptParsingException(String.format(
-                    "The </closeTag> for %s is missing", openTag));
-        String closeTag = context.fetchNextToken();
-        if (!closeTag.equals(String.format("</%s>", getName())))
-            throw new ScriptParsingException(String.format(
-                    "The <openTag> is incorrectly closed: %s %s", openTag, closeTag));
+        if (context.hasNextToken())
+            keyValuePairs.parse(context);
+        String closeTag = context.hasNextToken()?
+                context.fetchNextToken(
+                        "</"+getName()+">",
+                        "Expect </"+getName()+"> but get: " + context.peekToken())
+                : context.fetchNextToken("Run out of token before reaching: </"+getName()+">");
     }
 
     @Override

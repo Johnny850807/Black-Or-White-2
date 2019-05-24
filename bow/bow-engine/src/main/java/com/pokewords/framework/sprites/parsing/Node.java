@@ -6,7 +6,8 @@ package com.pokewords.framework.sprites.parsing;
 public interface Node {
     Node getParent();
 
-    // It will check whether context is run out of tokens.
+    // Should check context.hasNextToken() before call.
+    // Do nothing if mismatch at first token.
     void parse(Context context);
 
     String toString(int indent);
