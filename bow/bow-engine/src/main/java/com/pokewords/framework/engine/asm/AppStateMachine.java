@@ -5,11 +5,11 @@ import com.pokewords.framework.commons.Triple;
 import com.pokewords.framework.commons.bundles.Bundle;
 import com.pokewords.framework.commons.bundles.EmptyReadOnlyBundle;
 import com.pokewords.framework.commons.bundles.InputEventsDelegator;
+import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.asm.states.BreakerIconLoadingState;
 import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.ioc.IocContainer;
-import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.SoundPlayer;
@@ -18,7 +18,6 @@ import com.pokewords.framework.views.effects.AppStateTransitionEffectListenersWr
 import com.pokewords.framework.views.effects.CrossFadingTransitionEffect;
 import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.inputs.InputManager;
-import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +36,7 @@ public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_GAME_STARTED = "Game Started";
 
 	private IocContainer iocContainer;
+	private GameEngineFacade gameEngineFacade;
 
 	private Map<Transition, AppStateTransitionEffect> transitionEffectMap = new HashMap<>();
 	private boolean transitionEffecting = false;
@@ -48,10 +48,8 @@ public class AppStateMachine implements GameLoopingListener {
 	 */
 	private AppState currentState;
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
-	private SpriteInitializer spriteInitializer;
-	private GameWindowsConfigurator gameWindowsConfigurator;
-	private SoundPlayer soundPlayer;
 	private InputManager inputManager;
+	private SoundPlayer soundPlayer;
 	private AppState loadingState;
 	private AppState gameInitialState;
 
@@ -59,12 +57,11 @@ public class AppStateMachine implements GameLoopingListener {
 		TRANSITION
 	}
 
-	public AppStateMachine(IocContainer iocContainer, InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
+	public AppStateMachine(IocContainer iocContainer, GameEngineFacade gameEngineFacade) {
 		this.iocContainer = iocContainer;
-		this.inputManager = inputManager;
-		this.spriteInitializer = spriteInitializer;
-		this.gameWindowsConfigurator = gameWindowsConfigurator;
-		this.soundPlayer = soundPlayer;
+		this.inputManager = iocContainer.inputManager();
+		this.soundPlayer = iocContainer.soundPlayer();
+		this.gameEngineFacade = gameEngineFacade;
 		soundPlayer.addSound(SoundTypes.TRANSITION, "assets/sounds/chimeTransitionSound.wav");
 		InputEventsDelegator.delegateToInputEventsListenerComponents(inputManager, this::getCurrentStateWorld);
 		setupStates();
@@ -88,7 +85,7 @@ public class AppStateMachine implements GameLoopingListener {
 		T state;
 		try {
 			state = appStateType.newInstance();
-			state.inject(inputManager, this, spriteInitializer, gameWindowsConfigurator, soundPlayer);
+			state.inject(iocContainer, this, gameEngineFacade);
 			fsm.addState(state);
 			state.onAppStateCreate();
 			return state;

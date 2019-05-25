@@ -1,28 +1,28 @@
 package com.pokewords.framework.views;
 
 import com.pokewords.framework.commons.utils.ThreadUtility;
-import com.pokewords.framework.engine.GameEngine;
+import com.pokewords.framework.engine.DefaultGameEngine;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
-import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.windows.*;
 
 /**
  * @author johnny850807 (waterball), shawn
  */
 public abstract class GameApplication implements AppView {
-	private GameEngine gameEngine;
+	private DefaultGameEngine gameEngine;
 	private GameFrame gameFrame;
 	private GameWindowsConfigurator gameWindowsConfigurator;
+	private SpriteInitializer spriteInitializer;
 	private SoundPlayer soundPlayer;
 
     public GameApplication(IocContainer iocContainer) {
-    	InputManager inputManager = iocContainer.inputManager();
-		gameFrame = new GameFrame(new GamePanel(inputManager), inputManager);
-		soundPlayer = iocContainer.soundPlayer();
-		gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
-        gameEngine = new GameEngine(iocContainer, inputManager, gameWindowsConfigurator, soundPlayer);
+    	this.spriteInitializer = iocContainer.spriteInitializer();
+		this.gameFrame = new GameFrame(new GamePanel(iocContainer.inputManager()));
+		this.soundPlayer = iocContainer.soundPlayer();
+		this.gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
+		this.gameEngine = new DefaultGameEngine(iocContainer, gameWindowsConfigurator);
         gameEngine.setGameView(this);
     }
 
@@ -48,8 +48,8 @@ public abstract class GameApplication implements AppView {
 	/**
 	 * This method is invoked during the LoadingState.
 	 *
-	 * onAppLoading() will be executed asynchronously by the GameEngine,
-	 * at the moment executing this method, the GameEngine will render the loading-state.
+	 * onAppLoading() will be executed asynchronously by the DefaultGameEngine,
+	 * at the moment executing this method, the DefaultGameEngine will render the loading-state.
 	 *
 	 * Hence, it's fine to put heavy tasks as many as possible within this method.
 	 */
@@ -57,7 +57,7 @@ public abstract class GameApplication implements AppView {
 	public void onAppLoading() {
 		gameFrame.onAppLoading();
 		ThreadUtility.delay(getLoadingStateDelayTime()); //delay on purpose to show loading scene
-		onSpriteDeclaration(gameEngine.getSpriteInitializer());
+		onSpriteDeclaration(spriteInitializer);
 		onSoundPlayerConfiguration(soundPlayer);
 		onAppStatesConfiguration(gameEngine.getAppStateMachine());
 	}

@@ -17,11 +17,9 @@ import java.awt.event.MouseEvent;
 public class GameFrame extends JFrame implements AppView {
     private GamePanel gamePanel;
     private GameWindowDefinition gameWindowDefinition;
-    private InputManager inputManager;
 
-    public GameFrame(GamePanel gamePanel, InputManager inputManager) throws HeadlessException {
+    public GameFrame(GamePanel gamePanel) throws HeadlessException {
         this.gamePanel = gamePanel;
-        this.inputManager = inputManager;
         setContentPane(gamePanel);
         pack();
     }

@@ -66,10 +66,10 @@ public abstract class KeyValuePairs implements Node, Packable, Iterable<Pair<Str
 
     @Override
     public ReadOnlyBundle pack() {
-        ReadOnlyBundle readOnlyBundle = new ReadOnlyBundle();
+        ReadOnlyBundle.Builder builder = new ReadOnlyBundle.Builder();
         for (Pair pair : this)
-            readOnlyBundle.put(pair.getKey(), pair.getValue());
-        return readOnlyBundle;
+            builder.put(pair.getKey(), pair.getValue());
+        return builder.build();
     }
 
     @NotNull

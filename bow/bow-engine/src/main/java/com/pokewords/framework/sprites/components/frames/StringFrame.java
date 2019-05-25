@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.views.Canvas;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class StringFrame extends SerializableFrame {
 
     public StringFrame(int layerIndex, String text) {
         super(layerIndex);
+        Objects.requireNonNull(text);
         this.text = text;
     }
 
@@ -48,6 +50,7 @@ public class StringFrame extends SerializableFrame {
     }
 
     public StringFrame text(String text) {
+        Objects.requireNonNull(text);
         this.text = text;
         return this;
     }
@@ -56,12 +59,14 @@ public class StringFrame extends SerializableFrame {
         return this;
     }
 
-    public StringFrame color(Color color) {
+    public StringFrame color(@NotNull Color color) {
+        Objects.requireNonNull(color);
         this.color = color;
         return this;
     }
 
-    public StringFrame font(Font font) {
+    public StringFrame font(@NotNull Font font) {
+        Objects.requireNonNull(font);
         this.font = font;
         return this;
     }
@@ -107,7 +112,7 @@ public class StringFrame extends SerializableFrame {
 
     private void validateSizeNotNull() {
         if (size == null)
-            throw new IllegalStateException("The StringFrame can only know its size after it's been rendered.");
+            throw new IllegalStateException("The StringFrame can only know its size after it's been rendered at least once.");
     }
 
     @Override
@@ -131,7 +136,7 @@ public class StringFrame extends SerializableFrame {
         StringFrame clone = (StringFrame) super.clone();
         clone.color = new Color(color.getRGB());
         clone.font = new Font(font.getName(), font.getStyle(), font.getSize());
-        clone.size = (Dimension) size.clone();
+        clone.size = size == null ? null : (Dimension) size.clone();
         return clone;
     }
 
@@ -140,6 +145,7 @@ public class StringFrame extends SerializableFrame {
         this.text = in.readUTF();
         this.color = new Color(in.readInt());
         this.font = (Font) in.readObject();
+        this.size = (Dimension) in.readObject();
     }
 
     @Override
@@ -147,5 +153,6 @@ public class StringFrame extends SerializableFrame {
         out.writeUTF(text);
         out.writeInt(color.getRGB());
         out.writeObject(font);
+        out.writeObject(size);
     }
 }

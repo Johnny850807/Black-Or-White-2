@@ -6,14 +6,34 @@ package com.pokewords.framework.commons.bundles;
  */
 public class ReadOnlyBundle extends Bundle {
 
-    public ReadOnlyBundle() { }
+    protected ReadOnlyBundle() { }
 
-    public ReadOnlyBundle(int eventId) {
-        super(eventId);
+    protected ReadOnlyBundle(Bundle bundle) {
+        super(bundle.getEventId());
+        this.data = bundle.data;
     }
+
 
     @Override
     public void put(Object key, Object value) {
         throw new UnsupportedOperationException("The bundle is read-only.");
+    }
+
+    public static class Builder {
+        private Bundle bundle = new Bundle();
+
+        public Builder eventId(int eventId) {
+            bundle.eventId = eventId;
+            return this;
+        }
+
+        public Builder put(Object key, Object value) {
+            bundle.put(key, value);
+            return this;
+        }
+
+        public ReadOnlyBundle build() {
+            return new ReadOnlyBundle(bundle);
+        }
     }
 }

@@ -14,8 +14,8 @@ import java.util.OptionalInt;
  */
 public class Bundle {
     public final static int NO_EVENT = -999999999;
-    private int eventId;
-    private Map<Object, Object> data;
+    protected int eventId;
+    protected Map<Object, Object> data;
 
     public Bundle() {
         this(NO_EVENT);
@@ -84,22 +84,4 @@ public class Bundle {
         }
     }
 
-
-    public static class BundleBuilder {
-        private Bundle bundle = new Bundle();
-
-        public BundleBuilder eventId(int eventId) {
-            bundle.eventId = eventId;
-            return this;
-        }
-
-        public BundleBuilder put(Object key, Object value) {
-            bundle.put(key, value);
-            return this;
-        }
-
-        public Bundle build() {
-            return bundle;
-        }
-    }
 }

@@ -38,7 +38,7 @@ public class SpriteWeaver {
 
     public void weave(Script script, Sprite sprite) {
         for (Node weaverNode : weaverNodes) {
-            weaverNode.onWeaving(script, sprite);
+            weaverNode.onWeaving(script, sprite, iocContainer);
         }
     }
 
@@ -49,6 +49,6 @@ public class SpriteWeaver {
          * @param sprite the sprite
          * @param script the sprite's declaration script.
          */
-        void onWeaving(Script script, Sprite sprite);
+        void onWeaving(Script script, Sprite sprite, IocContainer iocContainer);
     }
 }

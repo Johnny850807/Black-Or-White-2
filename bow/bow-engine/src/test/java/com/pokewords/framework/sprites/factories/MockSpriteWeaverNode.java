@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.factories;
 
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.parsing.Script;
 
@@ -11,7 +12,7 @@ public class MockSpriteWeaverNode implements SpriteWeaver.Node {
     private Sprite weavedSprite;
 
     @Override
-    public void onWeaving(Script script, Sprite sprite) {
+    public void onWeaving(Script script, Sprite sprite, IocContainer iocContainer) {
         this.weavingScript = script;
         this.weavedSprite = sprite;
     }

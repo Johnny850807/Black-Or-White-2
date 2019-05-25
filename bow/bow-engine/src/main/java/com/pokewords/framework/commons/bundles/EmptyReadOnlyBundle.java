@@ -7,7 +7,7 @@ package com.pokewords.framework.commons.bundles;
 public class EmptyReadOnlyBundle extends ReadOnlyBundle {
     private static EmptyReadOnlyBundle instance = new EmptyReadOnlyBundle();
 
-    private EmptyReadOnlyBundle() {}
+    private EmptyReadOnlyBundle() { }
 
     public static EmptyReadOnlyBundle getInstance() {
         return instance;

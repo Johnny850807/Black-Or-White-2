@@ -137,21 +137,4 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         if (!hasBeenInit)
             throw new IllegalStateException("SpriteBuilder's init() should be invoked before using any building methods.");
     }
-
-    public static void main(String[] args) {
-
-        DefaultSpriteBuilder builder = new DefaultSpriteBuilder(new ReleaseIocContainer());
-
-        Sprite mySprite = builder.init()
-                .setFSMComponent(new FrameStateMachineComponent())
-                .setPropertiesComponent(new PropertiesComponent())
-                .addComponent(new CollidableComponent())
-                .buildScriptFromPath("path/to/script_text")
-                .addWeaverNode((script, sprite) -> {
-                    for (Segment frameSegment: script.getSegments("frame")) {
-                        List<Element> bows = frameSegment.getElements("bow");
-                    }
-                })
-                .build();
-    }
 }

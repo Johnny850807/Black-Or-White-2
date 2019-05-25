@@ -2,6 +2,7 @@ package com.pokewords.framework.engine.weaver;
 
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.parsing.*;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
@@ -13,6 +14,7 @@ import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.sprites.parsing.Segment;
 import com.pokewords.framework.views.helpers.galleries.Gallery;
+import com.pokewords.framework.views.helpers.galleries.GalleryFactory;
 
 import java.awt.*;
 import java.util.List;
@@ -31,6 +33,7 @@ import java.util.*;
  * @author johnny850807 (waterball)
  */
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
+    private IocContainer iocContainer;
     private EffectFrameFactory effectFrameFactory;
 
     private Sprite sprite;
@@ -45,10 +48,11 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
     }
 
     @Override
-    public synchronized void onWeaving(Script script, Sprite sprite) {
+    public synchronized void onWeaving(Script script, Sprite sprite, IocContainer iocContainer) {
         if (sprite.hasComponent(FrameStateMachineComponent.class))
         {
             this.sprite = sprite;
+            this.iocContainer = iocContainer;
             List<Segment> frames = script.getSegments("frame");
             frames.forEach(this::parseAndAddFrame);
             setNextTransitions();
@@ -96,6 +100,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
     private void cleanUpWeaverNode() {
         this.sprite = null;
+        this.iocContainer = null;
         this.frameSegmentMap.clear();
     }
 
@@ -127,9 +132,9 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
 
         private void addAllGalleriesToGalleryMap(Segment galleriesSegment) {
+            GalleryFactory galleryFactory = iocContainer.galleryFactory();
             for (Element element : galleriesSegment.getElements()) {
-
-                //TODO gallerySet.add(galleryElement.toGallery());
+                gallerySet.add(galleryFactory.create(element.getName(), element.pack()));
             }
         }
 

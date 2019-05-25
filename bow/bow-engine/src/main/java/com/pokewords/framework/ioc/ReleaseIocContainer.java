@@ -1,10 +1,9 @@
 package com.pokewords.framework.ioc;
 
 import com.pokewords.framework.engine.DataSaver;
-import com.pokewords.framework.sprites.factories.DefaultSpriteBuilder;
-import com.pokewords.framework.sprites.factories.PrototypeFactory;
-import com.pokewords.framework.sprites.factories.DefaultPrototypeFactory;
-import com.pokewords.framework.sprites.factories.SpriteBuilder;
+import com.pokewords.framework.sprites.factories.*;
+import com.pokewords.framework.views.helpers.galleries.DefaultGalleryFactory;
+import com.pokewords.framework.views.helpers.galleries.GalleryFactory;
 import com.pokewords.framework.views.inputs.DefaultInputManager;
 import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.SoundPlayer;
@@ -12,16 +11,21 @@ import com.pokewords.framework.views.sound.SwingSoundPlayer;
 
 public class ReleaseIocContainer implements IocContainer {
     private PrototypeFactory prototypeFactory;
+    private SpriteBuilder spriteBuilder;
+    private SoundPlayer soundPlayer;
+    private InputManager inputManager;
+    private GalleryFactory galleryFactory;
+    private SpriteInitializer spriteInitializer;
 
     @Override
     public PrototypeFactory prototypeFactory() {
-        return prototypeFactory == null?
+        return prototypeFactory == null ?
                 prototypeFactory = new DefaultPrototypeFactory() : prototypeFactory;
     }
 
     @Override
     public SoundPlayer soundPlayer() {
-        return new SwingSoundPlayer();
+        return soundPlayer == null ? soundPlayer = new SwingSoundPlayer() : soundPlayer;
     }
 
     @Override
@@ -31,11 +35,25 @@ public class ReleaseIocContainer implements IocContainer {
 
     @Override
     public InputManager inputManager() {
-        return new DefaultInputManager();
+        return inputManager == null ? inputManager = new DefaultInputManager() : inputManager;
     }
 
     @Override
     public SpriteBuilder spriteBuilder() {
-        return new DefaultSpriteBuilder(this);
+        return spriteBuilder == null ?
+                spriteBuilder = new DefaultSpriteBuilder(this) : spriteBuilder;
     }
+
+    @Override
+    public GalleryFactory galleryFactory() {
+        return galleryFactory == null ? galleryFactory = new DefaultGalleryFactory() : galleryFactory;
+    }
+
+    @Override
+    public SpriteInitializer spriteInitializer() {
+        return spriteInitializer == null ?
+                spriteInitializer = new SpriteInitializer(this) : spriteInitializer;
+    }
+
+
 }

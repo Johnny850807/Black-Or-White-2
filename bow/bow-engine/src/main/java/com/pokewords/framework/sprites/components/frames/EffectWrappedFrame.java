@@ -19,6 +19,7 @@ public class EffectWrappedFrame extends DefaultEffectFrame {
 
     public EffectWrappedFrame(SerializableFrame frame, int id, int duration) {
         super(id, frame.getLayerIndex(), duration);
+        this.frame = frame;
         setFlags(frame.getFlags());
         if (frame.getSprite() == null)
         {
@@ -27,7 +28,6 @@ public class EffectWrappedFrame extends DefaultEffectFrame {
         }
         else
             boundToSprite(frame.getSprite());
-        this.frame = frame;
     }
 
     @Override
