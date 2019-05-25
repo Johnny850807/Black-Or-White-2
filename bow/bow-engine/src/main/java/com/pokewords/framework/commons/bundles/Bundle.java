@@ -1,4 +1,7 @@
-package com.pokewords.framework.engine.asm;
+package com.pokewords.framework.commons.bundles;
+
+import com.pokewords.framework.engine.exceptions.ExpectedPropertyMissingException;
+import com.sun.corba.se.impl.io.TypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +14,8 @@ import java.util.OptionalInt;
  */
 public class Bundle {
     public final static int NO_EVENT = -999999999;
-    private int eventId;
-    private Map<Object, Object> data;
+    protected int eventId;
+    protected Map<Object, Object> data;
 
     public Bundle() {
         this(NO_EVENT);
@@ -32,18 +35,24 @@ public class Bundle {
     }
 
     public int getInt(Object key) {
-        lazyInitMap();
-        return (int) data.get(key);
+        if (!containsKey(key))
+            throw new ExpectedPropertyMissingException(key);
+        Object value = data.get(key);
+        if (value instanceof String)
+            return Integer.parseInt((String) value);
+        throw new TypeMismatchException("The value is of type " + value.getClass().getSimpleName() + ", cannot convert it into int.");
     }
 
     public String getString(Object key) {
-        lazyInitMap();
+        if (!containsKey(key))
+            throw new ExpectedPropertyMissingException(key);
         return String.valueOf( data.get(key));
     }
 
     @SuppressWarnings("unchecked")
     public <T> T get(Object key) {
-        lazyInitMap();
+        if (!containsKey(key))
+            throw new ExpectedPropertyMissingException(key);
         return (T) data.get(key);
     }
 
@@ -70,8 +79,9 @@ public class Bundle {
     }
 
     private void lazyInitMap() {
-        if (data == null)
+        if (data == null) {
             data = new HashMap<>();
+        }
     }
 
 }

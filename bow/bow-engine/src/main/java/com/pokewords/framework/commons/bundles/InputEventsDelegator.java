@@ -1,4 +1,4 @@
-package com.pokewords.framework.engine.asm;
+package com.pokewords.framework.commons.bundles;
 
 import com.pokewords.framework.commons.tools.QuaternaryConsumer;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;

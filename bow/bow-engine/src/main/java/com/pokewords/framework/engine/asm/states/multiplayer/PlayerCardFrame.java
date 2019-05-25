@@ -19,20 +19,20 @@ public class PlayerCardFrame extends AbstractFrame {
     private StringFrame nameStringFrame;
 
 
-    public PlayerCardFrame(int id, int layerIndex, Player player) {
-        super(id, layerIndex);
+    public PlayerCardFrame(int layerIndex, Player player) {
+        super(layerIndex);
         this.player = player;
         initFrames();
     }
 
     private void initFrames() {
-        cardFrame = new RoundedRectangleFrame(0, 1, Color.white, 30, 30)
+        cardFrame = new RoundedRectangleFrame(1, Color.white, 30, 30)
                 .flags(RoundedRectangleFrame.CANVAS_FLAG_FILLED);
-        ipStringFrame = new StringFrame(1, 2, player.ip)
+        ipStringFrame = new StringFrame(2, player.ip)
                 .color(Color.black)
                 .font(new Font("微軟正黑體", Font.PLAIN, 20))
                 .flags(StringFrame.CANVAS_FLAG_RENDER_BY_CENTER);
-        nameStringFrame = new StringFrame(2, 2, player.name)
+        nameStringFrame = new StringFrame(2, player.name)
                 .color(Color.red)
                 .font(new Font("微軟正黑體", Font.BOLD, 22))
                 .flags(StringFrame.CANVAS_FLAG_RENDER_BY_CENTER);

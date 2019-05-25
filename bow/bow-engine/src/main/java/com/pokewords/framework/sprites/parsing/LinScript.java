@@ -1,112 +1,86 @@
 package com.pokewords.framework.sprites.parsing;
 
-import java.util.*;
+import com.pokewords.framework.engine.exceptions.ScriptParsingException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * @author nyngwang
  */
-public class LinScript implements Script {
-    private ArrayList<Segment> segments;
-
+public class LinScript extends Script {
     public LinScript() {
-        segments = new ArrayList<>();
+        super(new ArrayList<>());
     }
 
-    @Override
-    public Script addSegment(Segment segment) {
-        segments.add(segment);
-        segment.setParent(this);
-        return this;
-    }
-
-    @Override
     public boolean containsSegmentId(int id) {
-        for (Segment segment : segments)
-            if (segment.getId() == id)
+        for (Segment segment : getSegments()) {
+            if (((AngularBracketSegment) segment).getId() == id)
                 return true;
+        }
         return false;
     }
 
-    @Override
-    public boolean containsSegmentName(String name) {
-        for (Segment segment : segments)
-            if (segment.getName().equals(name))
-                return true;
-        return false;
-    }
-
-    @Override
     public boolean containsSegmentDescription(String description) {
-        for (Segment segment : segments)
-            if (segment.getDescription().equals(description))
+        for (Segment segment : getSegments()) {
+            if (((AngularBracketSegment) segment).getDescription().orElse("").equals(description))
                 return true;
+        }
         return false;
     }
 
-    @Override
-    public List<Segment> getSegmentsByName(String name) {
-        return segments.stream()
-                .filter(segment -> segment.getName().equals(name))
+    public List<Segment> getSegmentsById(int id) {
+        return getSegments().stream()
+                .filter(segment -> ((AngularBracketSegment) segment).getId() == id)
+                .collect(Collectors.toList());
+    }
+
+    public List<Segment> getSegmentsByDescription(String description) {
+        return getSegments().stream()
+                .filter(segment -> ((AngularBracketSegment) segment)
+                        .getDescription().orElse("").equals(description))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Segment getSegmentById(int id) {
-        for (Segment segment : segments)
-            if (segment.getId() == id)
-                return segment;
+    public Node getParent() {
         return null;
     }
 
     @Override
-    public List<Segment> getSegmentsByDescription(String description) {
-        return segments.stream()
-                .filter(segment -> segment.getDescription().equals(description))
-                .collect(Collectors.toList());
+    public void parse(Context context) {
+        if (!context.peekToken().matches("<[^/\\s]\\S+>"))
+            return;
+        while (context.hasNextToken()) {
+            int beforeSegment = context.getRemainingTokensCount();
+            Segment segment = new AngularBracketSegment();
+            segment.parse(context);
+            int afterSegment = context.getRemainingTokensCount();
+            if (beforeSegment > afterSegment)
+                addSegment(segment);
+            if (beforeSegment == afterSegment)
+                throw new ScriptParsingException(
+                        "Script body contains something that is not segment");
+        }
     }
 
     @Override
-    public List<Segment> getSegments() { return segments; }
-
-    @Override
-    public String toString(int indentation) {
+    public String toString(int indent) {
         StringBuilder resultBuilder = new StringBuilder();
-
-        segments.sort((o1, o2) -> {
+        String spaces = new String(new char[indent]).replace("\0", " ");
+        getSegments().sort((o1, o2) -> {
             String leftName = o1.getName();
             String rightName = o2.getName();
-            int leftId = o1.getId();
-            int rightId = o2.getId();
+            int leftId = ((AngularBracketSegment) o1).getId();
+            int rightId = ((AngularBracketSegment) o2).getId();
             return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
                     : leftName.compareTo(rightName);
         });
-        for (Segment segment : segments)
-            resultBuilder.append(segment.toString(indentation));
+        getSegments().forEach(segment ->
+                resultBuilder.append(segment.toString(indent)
+                        .replaceAll("([^\n]*\n)", indent + "$1")));
         return resultBuilder.toString();
-    }
-
-    @Override
-    public String toString() {
-        return toString(4);
-    }
-
-    public static void main(String[] args) {
-        Script script = new LinScript()
-                .addSegment(new LinScriptSegment("frame", 1, "punch")
-                        .put("next", 2).put("duration", 10)
-                        .addElement(new LinScriptElement("bow")
-                                .put("x", 1)
-                                .put("y", 2))
-                        .addElement(new LinScriptElement("bow2")
-                                .put("a", 1)
-                                .put("b", 2)))
-                .addSegment(new LinScriptSegment("galleries", 1)
-                        .put("length", 2)
-                        .addElement(new LinScriptElement("gallery")
-                                .put("path", "path/to/gallery1"))
-                        .addElement(new LinScriptElement("gallery")
-                                .put("path", "path/to/gallery2")));
-        System.out.println(script);
     }
 }

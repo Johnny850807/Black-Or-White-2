@@ -1,41 +1,46 @@
 package com.pokewords.framework.sprites.parsing;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- *  @author nyngwang
+ * @author nyngwang
  */
-public interface Segment {
+public abstract class Segment extends Element {
+    private List<Element> elements;
 
-    default Element getElementByName(String name) {
-        List<Element> elements = getElementsByName(name);
-        return elements.isEmpty() ? null : elements.get(0);
+    public Segment(Node parent, String name, KeyValuePairs keyValuePairs, List<Element> elements) {
+        super(parent, name, keyValuePairs);
+        this.elements = elements;
     }
 
-    Segment addElement(Element element);
+    public void addElement(Element element) {
+        elements.add(element);
+        element.setParent(this);
+    }
 
-    boolean containsElementName(String name);
+    public boolean containsElement(String name) {
+        for (Element element : elements)
+            if (element.getName().equals(name))
+                return true;
+        return false;
+    }
 
-    List<Element> getElementsByName(String name);
-    List<Element> getElements();
+    public List<Element> getElements() {
+        return elements;
+    }
 
-    Segment put(String key, String value);
-    Segment put(String key, int value);
+    public List<Element> getElements(String name) {
+        return elements.stream()
+                .filter(element -> element.getName().equals(name))
+                .collect(Collectors.toList());
+    }
 
-    String getName();
-    int getId();
-    String getDescription();
+    public Element getFirstElement(String name) {
+        return containsElement(name)? getElements(name).get(0) : null;
+    }
 
-    Optional<String> getStringByKeyOptional(String key);
-    OptionalInt getIntByKeyOptional(String key);
-    boolean containsKey(String key);
-    String getStringByKey(String key);
-    Integer getIntByKey(String key);
-
-    Segment setParent(Script parent);
-    Script getParent();
-
-    String toString(int indentation);
+    public Optional<Element> getFirstElementOptional(String name) {
+        return containsElement(name)? Optional.of(getElements(name).get(0)) : Optional.empty();
+    }
 }

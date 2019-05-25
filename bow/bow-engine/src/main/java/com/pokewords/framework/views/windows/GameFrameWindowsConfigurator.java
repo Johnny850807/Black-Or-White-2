@@ -26,8 +26,6 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
     }
 
 
-    //TODO more config methods
-
     @Override
     public GameWindowsConfigurator name(String windowName){
         gameWindowDefinition.name = windowName;

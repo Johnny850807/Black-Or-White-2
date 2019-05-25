@@ -1,6 +1,6 @@
 package com.pokewords.framework.sprites.factories;
 
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 
 /**
@@ -12,8 +12,8 @@ import com.pokewords.framework.sprites.Sprite;
 public class MockDefaultSpriteBuilder extends DefaultSpriteBuilder {
     private Sprite builtSprite;
 
-    public MockDefaultSpriteBuilder(IocFactory iocFactory) {
-        super(iocFactory);
+    public MockDefaultSpriteBuilder(IocContainer iocContainer) {
+        super(iocContainer);
     }
 
     @Override

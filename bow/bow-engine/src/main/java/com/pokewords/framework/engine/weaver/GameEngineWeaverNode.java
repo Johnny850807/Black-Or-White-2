@@ -2,16 +2,19 @@ package com.pokewords.framework.engine.weaver;
 
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.parsing.*;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.EffectFrameFactory;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
+import com.pokewords.framework.sprites.components.frames.ImageFrameFactory;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
 import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.sprites.parsing.Segment;
 import com.pokewords.framework.views.helpers.galleries.Gallery;
+import com.pokewords.framework.views.helpers.galleries.GalleryFactory;
 
 import java.awt.*;
 import java.util.List;
@@ -30,6 +33,7 @@ import java.util.*;
  * @author johnny850807 (waterball)
  */
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
+    private IocContainer iocContainer;
     private EffectFrameFactory effectFrameFactory;
 
     private Sprite sprite;
@@ -44,11 +48,12 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
     }
 
     @Override
-    public synchronized void onWeaving(Script script, Sprite sprite) {
+    public synchronized void onWeaving(Script script, Sprite sprite, IocContainer iocContainer) {
         if (sprite.hasComponent(FrameStateMachineComponent.class))
         {
             this.sprite = sprite;
-            List<Segment> frames = script.getSegmentsByName("frame");
+            this.iocContainer = iocContainer;
+            List<Segment> frames = script.getSegments("frame");
             frames.forEach(this::parseAndAddFrame);
             setNextTransitions();
             setAllCustomTransitions();
@@ -95,6 +100,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
     private void cleanUpWeaverNode() {
         this.sprite = null;
+        this.iocContainer = null;
         this.frameSegmentMap.clear();
     }
 
@@ -104,9 +110,9 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         @Override
         public EffectFrame createFrame(Segment segment) {
-            setupGalleryMapIfNotExists(segment.getParent());
+            setupGalleryMapIfNotExists((Script) segment.getParent());
             FrameSegment frameSegment = new FrameSegment(segment);
-            EffectFrame effectFrame = initEffectFrame(frameSegment, segment);
+            EffectFrame effectFrame = createAndPutImageEffectFrame(frameSegment, segment);
             parseBodyElement(frameSegment, effectFrame);
             parseEffectElement(frameSegment, effectFrame);
             return effectFrame;
@@ -118,7 +124,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
                 synchronized (this) {
                     if (gallerySet == null) {
                         gallerySet = Collections.synchronizedSet(new HashSet<>());
-                        Segment galleriesSegment = script.getSegmentByName("galleries");
+                        Segment galleriesSegment = script.getFirstSegment("galleries");
                         addAllGalleriesToGalleryMap(galleriesSegment);
                     }
                 }
@@ -126,33 +132,36 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
 
         private void addAllGalleriesToGalleryMap(Segment galleriesSegment) {
+            GalleryFactory galleryFactory = iocContainer.galleryFactory();
             for (Element element : galleriesSegment.getElements()) {
-                GalleryElement galleryElement = new GalleryElement(element);
-                gallerySet.add(galleryElement.toGallery());
+                gallerySet.add(galleryFactory.create(element.getName(), element.pack()));
             }
         }
 
-        private EffectFrame initEffectFrame(FrameSegment frameSegment, Segment segment) {
+        private EffectFrame createAndPutImageEffectFrame(FrameSegment frameSegment, Segment segment) {
             frameSegmentMap.put(frameSegment.getId(), frameSegment);
-            return EffectFrame.wrap(new ImageFrame(frameSegment.getId(), frameSegment.getLayer(),
-                    getImage(frameSegment.getPic())), frameSegment.getDuration());
+            Gallery targetGallery = locateGallery(frameSegment.getPic());
+            ImageFrame imageFrame = ImageFrameFactory.fromGallery(frameSegment.getLayer(),
+                    targetGallery, frameSegment.getPic());
+            return EffectFrame.wrap(imageFrame, frameSegment.getId(), frameSegment.getDuration());
+
         }
 
-        private synchronized Image getImage(int pic) {
-            for (Gallery gallery : gallerySet)
-                if (gallery.containsPicture(pic))
-                    return gallery.getImage(pic);
-
-            throw new IllegalArgumentException(String.format("The pic %d is not within any galleries.", pic));
+        private Gallery locateGallery(int pic) {
+            return gallerySet.stream()
+                    .filter(g -> g.containsPicture(pic))
+                    .findFirst()
+                    .orElseThrow(()-> new IllegalArgumentException("The pic number " + pic + " is not found in any gallery range."));
         }
+
     }
 
     private void parseBodyElement(FrameSegment frameSegment, EffectFrame effectFrame) {
         frameSegment.getBodyElement()
-                .ifPresent(p -> effectBodyElement(p, effectFrame));
+                .ifPresent(p -> applyBodyElement(p, effectFrame));
     }
 
-    private void effectBodyElement(BodyElement element, EffectFrame effectFrame) {
+    private void applyBodyElement(BodyElement element, EffectFrame effectFrame) {
         effectFrame.addEffect((world, sprite) -> {
             int x = element.getX().orElse(sprite.getX());
             int y = element.getY().orElse(sprite.getY());
@@ -167,10 +176,10 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
     private void parseEffectElement(FrameSegment frameSegment, EffectFrame effectFrame) {
         frameSegment.getEffectElement()
-                .ifPresent(e -> effectEffectElement(e, effectFrame));
+                .ifPresent(e -> applyEffectElement(e, effectFrame));
     }
 
-    private void effectEffectElement(EffectElement element, EffectFrame effectFrame) {
+    private void applyEffectElement(EffectElement element, EffectFrame effectFrame) {
         effectFrame.addEffect((world, sprite) -> {
             element.getMoveX().ifPresent(sprite::moveX);
             element.getMoveY().ifPresent(sprite::moveY);

@@ -58,4 +58,12 @@ public class FrameComponent<T extends Frame> extends CloneableComponent implemen
     public int hashCode() {
         return Objects.hash(frame, frameSingletonCollection);
     }
+
+    @Override
+    public FrameComponent clone() {
+        FrameComponent clone = (FrameComponent) super.clone();
+        clone.frame = this.frame.clone();
+        clone.frameSingletonCollection = Collections.singleton(clone.frame);
+        return clone;
+    }
 }

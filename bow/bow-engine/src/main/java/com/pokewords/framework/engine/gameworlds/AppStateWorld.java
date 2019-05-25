@@ -5,6 +5,7 @@ import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,19 +23,25 @@ import java.util.stream.Collectors;
  */
 public class AppStateWorld implements AppStateLifeCycleListener {
     private AppState appState;
+    private SpriteInitializer spriteInitializer;
     private List<Sprite> sprites;
     private Map<Integer, Sprite> idSpriteMap;
     private Map<Sprite, Integer> spriteIdMap;
     private RenderedLayers renderedLayers;
     private Map<CollisionHandler.Type, List<CollisionHandler>> collisionHandlerMap;
 
-    public AppStateWorld(AppState appState) {
+    public AppStateWorld(AppState appState, SpriteInitializer spriteInitializer) {
         this.appState = appState;
         sprites = Collections.synchronizedList(new ArrayList<>(30));
+        this.spriteInitializer = spriteInitializer;
         renderedLayers = new RenderedLayers();
         collisionHandlerMap = new HashMap<>();
         idSpriteMap = new HashMap<>();
         spriteIdMap = new IdentityHashMap<>();
+    }
+
+    public SpriteInitializer getSpriteInitializer() {
+        return spriteInitializer;
     }
 
     /**

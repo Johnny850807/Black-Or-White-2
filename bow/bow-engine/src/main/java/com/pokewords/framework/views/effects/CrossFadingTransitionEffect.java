@@ -20,6 +20,8 @@ import java.awt.*;
  * @author johnny850807 (waterball)
  */
 public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
+    public final static int FADED_IN_RECTANGLE_ID = 9990;
+    public final static int FADED_OUT_RECTANGLE_ID = 9991;
     private SpriteBuilder spriteBuilder;
     private AppState from;
     private AppState to;
@@ -124,9 +126,12 @@ public class CrossFadingTransitionEffect implements AppStateTransitionEffect {
     }
 
     private EffectFrame createFadingEffectRectangleFrame(Color startedColor, boolean fadeIn) {
-        RectangleFrame rectangleFrame = new RectangleFrame(0, Integer.MAX_VALUE, startedColor)
+        int id = fadeIn ? FADED_IN_RECTANGLE_ID : FADED_OUT_RECTANGLE_ID;
+
+        RectangleFrame rectangleFrame = new RectangleFrame(Integer.MAX_VALUE, startedColor)
                 .flags(RectangleFrame.CANVAS_FLAG_FILLED);
-        EffectFrame rectangleEffectFrame = EffectFrame.wrap(rectangleFrame, 15);
+
+        EffectFrame rectangleEffectFrame = EffectFrame.wrap(rectangleFrame, 999, 15);
 
         GameEffect fadingEffect = fadeIn ? new FadedInEffect(rectangleFrame, rectangleEffectFrame)
                 : new FadeOutEffect(rectangleFrame, rectangleEffectFrame);

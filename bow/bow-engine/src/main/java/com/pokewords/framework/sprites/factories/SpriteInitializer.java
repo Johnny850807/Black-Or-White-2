@@ -4,7 +4,7 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
 import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.commons.utils.StringUtility;
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
@@ -51,7 +51,7 @@ public class SpriteInitializer {
         /**
          * The sprite declarator will not init sprites at any time, it's waiting for your invocation of the method SpriteInitializer#init(type),
          * the sprite is init only when you invoke that method. So you can customize when to init, and in which AppState. Notice, anytime, if a sprite
-         * you are going to create has not been init, it will help you init then create it. If you want to strictly expect all inits are by yourself,
+         * you are going to fromGallery has not been init, it will help you init then fromGallery it. If you want to strictly expect all inits are by yourself,
          * and raise an explicit error message at such situation, use CUSTOM_STRICT instead.
          */
         CUSTOM,
@@ -59,7 +59,7 @@ public class SpriteInitializer {
         /**
          * The sprite declarator will not init sprites at any time, it's waiting for your invocation of the method SpriteInitializer#init(type),
          * the sprite is init only when you invoke that method. So you can customize when to init, and in which AppState. Notice, anytime, a sprite
-         * you are going to create has not been init, this will throw the GameEngineException. If you want this to help you init rather than error,
+         * you are going to fromGallery has not been init, this will throw the GameEngineException. If you want this to help you init rather than error,
          * use CUSTOM instead.
          */
         CUSTOM_STRICT
@@ -67,9 +67,9 @@ public class SpriteInitializer {
 
     private final HashSet<Object> spriteTypesThatHaveBeenInit = new HashSet<>();
 
-    public SpriteInitializer(IocFactory iocFactory) {
-        this.prototypeFactory = iocFactory.prototypeFactory();
-        this.spriteBuilder = iocFactory.spriteBuilder();
+    public SpriteInitializer(IocContainer iocContainer) {
+        this.prototypeFactory = iocContainer.prototypeFactory();
+        this.spriteBuilder = iocContainer.spriteBuilder();
     }
 
     /**

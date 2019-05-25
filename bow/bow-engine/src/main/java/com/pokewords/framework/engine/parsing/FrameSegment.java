@@ -1,5 +1,6 @@
 package com.pokewords.framework.engine.parsing;
 
+import com.pokewords.framework.sprites.parsing.AngularBracketSegment;
 import com.pokewords.framework.sprites.parsing.Segment;
 
 import java.util.Optional;
@@ -20,21 +21,21 @@ public class FrameSegment {
     private Optional<TransitionsElement> transitionsElement;
 
     public FrameSegment(Segment frameSegment) {
-        this.id = frameSegment.getId();
+        this.id = ((AngularBracketSegment) frameSegment).getId();
         this.description = frameSegment.getName();
-        this.pic = frameSegment.getIntByKey("pic");
-        this.layer = frameSegment.getIntByKey("layer");
-        this.duration = frameSegment.getIntByKey("duration");
-        this.next = frameSegment.getIntByKey("next");
+        this.pic = frameSegment.getKeyValuePairs().getInt("pic");
+        this.layer = frameSegment.getKeyValuePairs().getInt("layer");
+        this.duration = frameSegment.getKeyValuePairs().getInt("duration");
+        this.next = frameSegment.getKeyValuePairs().getInt("next");
         this.bodyElement = Optional.ofNullable(
-                frameSegment.containsElementName("body")?
-                new BodyElement(frameSegment.getElementByName("body")) : null);
+                frameSegment.containsElement("body")?
+                new BodyElement(frameSegment.getFirstElement("body")) : null);
         this.effectElement = Optional.ofNullable(
-                frameSegment.containsElementName("effect")?
-                new EffectElement(frameSegment.getElementByName("effect")) : null);
+                frameSegment.containsElement("effect")?
+                new EffectElement(frameSegment.getFirstElement("effect")) : null);
         this.transitionsElement = Optional.ofNullable(
-                frameSegment.containsElementName("transitions") ?
-                        new TransitionsElement(frameSegment.getElementByName("transitions")) : null
+                frameSegment.containsElement("transitions") ?
+                        new TransitionsElement(frameSegment.getFirstElement("transitions")) : null
         );
     }
 

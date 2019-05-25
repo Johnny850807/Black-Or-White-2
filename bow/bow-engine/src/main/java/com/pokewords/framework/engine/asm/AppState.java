@@ -1,5 +1,8 @@
 package com.pokewords.framework.engine.asm;
 
+import com.pokewords.framework.commons.bundles.Bundle;
+import com.pokewords.framework.engine.GameEngineFacade;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
@@ -31,13 +34,12 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * this method is expected to be used by the AppStateMachine for initializing injection.
 	 * @see AppStateMachine#createState(Class)
 	 */
-	protected void inject(InputManager inputManager, AppStateMachine asm, SpriteInitializer spriteInitializer,
-						  GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
+	protected void inject(IocContainer iocContainer, AppStateMachine asm, GameEngineFacade gameEngineFacade) {
 		this.asm = asm;
-		this.spriteInitializer = spriteInitializer;
-		this.inputManager = inputManager;
-		this.gameWindowsConfigurator = gameWindowsConfigurator;
-		this.soundPlayer = soundPlayer;
+		this.spriteInitializer = iocContainer.spriteInitializer();
+		this.inputManager = iocContainer.inputManager();
+		this.soundPlayer = iocContainer.soundPlayer();
+		this.gameWindowsConfigurator = gameEngineFacade.getGameWindowsConfigurator();
 	}
 
 	@Override
@@ -123,7 +125,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * @return the created app state world
 	 */
 	protected AppStateWorld onCreateAppStateWorld() {
-		return new AppStateWorld(this);
+		return new AppStateWorld(this, getSpriteInitializer());
 	}
 
 	/**

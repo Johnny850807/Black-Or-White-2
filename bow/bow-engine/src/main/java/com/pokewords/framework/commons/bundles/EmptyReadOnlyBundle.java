@@ -1,4 +1,4 @@
-package com.pokewords.framework.engine.asm;
+package com.pokewords.framework.commons.bundles;
 
 /**
  * An empty read only bundle.
@@ -7,7 +7,7 @@ package com.pokewords.framework.engine.asm;
 public class EmptyReadOnlyBundle extends ReadOnlyBundle {
     private static EmptyReadOnlyBundle instance = new EmptyReadOnlyBundle();
 
-    private EmptyReadOnlyBundle() {}
+    private EmptyReadOnlyBundle() { }
 
     public static EmptyReadOnlyBundle getInstance() {
         return instance;

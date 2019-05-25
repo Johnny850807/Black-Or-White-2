@@ -3,7 +3,7 @@ package com.pokewords.framework.sprites.factories;
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
+import com.pokewords.framework.ioc.ReleaseIocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import org.junit.Before;
@@ -24,7 +24,7 @@ public class SpriteInitializerTest extends AbstractTest {
 
     @Before
     public void setup() {
-        spriteInitializer = new SpriteInitializer(new ReleaseIocFactory(){
+        spriteInitializer = new SpriteInitializer(new ReleaseIocContainer(){
             @Override
             public PrototypeFactory prototypeFactory() {
                 return mockPrototypeFactory = new MockPrototypeFactory();

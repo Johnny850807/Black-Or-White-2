@@ -1,8 +1,12 @@
 package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.views.Canvas;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 /**
@@ -13,7 +17,7 @@ import java.util.Objects;
  *
  * @author johnny850807 (waterball)
  */
-public class StringFrame extends AbstractFrame {
+public class StringFrame extends SerializableFrame {
     /**
      * the stringFrame's rendered point will be seen as its center point.
      */
@@ -30,8 +34,9 @@ public class StringFrame extends AbstractFrame {
     protected Font font = new Font("微軟正黑體", Font.PLAIN, 15);
     protected Dimension size;
 
-    public StringFrame(int id, int layerIndex, String text) {
-        super(id, layerIndex);
+    public StringFrame(int layerIndex, String text) {
+        super(layerIndex);
+        Objects.requireNonNull(text);
         this.text = text;
     }
 
@@ -45,6 +50,7 @@ public class StringFrame extends AbstractFrame {
     }
 
     public StringFrame text(String text) {
+        Objects.requireNonNull(text);
         this.text = text;
         return this;
     }
@@ -53,12 +59,14 @@ public class StringFrame extends AbstractFrame {
         return this;
     }
 
-    public StringFrame color(Color color) {
+    public StringFrame color(@NotNull Color color) {
+        Objects.requireNonNull(color);
         this.color = color;
         return this;
     }
 
-    public StringFrame font(Font font) {
+    public StringFrame font(@NotNull Font font) {
+        Objects.requireNonNull(font);
         this.font = font;
         return this;
     }
@@ -104,7 +112,7 @@ public class StringFrame extends AbstractFrame {
 
     private void validateSizeNotNull() {
         if (size == null)
-            throw new IllegalStateException("The StringFrame can only know its size after it's been rendered.");
+            throw new IllegalStateException("The StringFrame can only know its size after it's been rendered at least once.");
     }
 
     @Override
@@ -128,7 +136,23 @@ public class StringFrame extends AbstractFrame {
         StringFrame clone = (StringFrame) super.clone();
         clone.color = new Color(color.getRGB());
         clone.font = new Font(font.getName(), font.getStyle(), font.getSize());
-        clone.size = (Dimension) size.clone();
+        clone.size = size == null ? null : (Dimension) size.clone();
         return clone;
+    }
+
+    @Override
+    protected void onDeserializing(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        this.text = in.readUTF();
+        this.color = new Color(in.readInt());
+        this.font = (Font) in.readObject();
+        this.size = (Dimension) in.readObject();
+    }
+
+    @Override
+    protected void onSerializing(ObjectOutputStream out) throws IOException, ClassNotFoundException {
+        out.writeUTF(text);
+        out.writeInt(color.getRGB());
+        out.writeObject(font);
+        out.writeObject(size);
     }
 }

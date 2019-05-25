@@ -10,11 +10,13 @@ import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+@SuppressWarnings("Duplicates")
 public class MainAppState extends AppState {
     private Sprite face;
     private Sprite dinosaur;
     private Set<Direction> directions = new HashSet<>();
 
+    @SuppressWarnings("Duplicates")
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
         face = createSprite(Types.SMILE);

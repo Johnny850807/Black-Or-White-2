@@ -1,10 +1,11 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.marks.Shareable;
 
-import java.awt.font.ImageGraphicAttribute;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Mark a sprite as Collidable, you can add ignoredTypes into this component, those ignoredType sprites are not collided with
