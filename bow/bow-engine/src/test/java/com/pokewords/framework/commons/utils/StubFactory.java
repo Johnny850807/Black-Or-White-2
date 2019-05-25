@@ -37,12 +37,11 @@ public interface StubFactory {
              * - CollidableComponent
              */
             static Sprite createSimpleSprite(){
-                PropertiesComponent propertiesComponent = new PropertiesComponent();
+                PropertiesComponent propertiesComponent = new PropertiesComponent(TYPE);
                 FrameStateMachineComponent frameStateMachineComponent = createFrameStateMachineComponentStub();
                 Sprite spriteStub = new Sprite(propertiesComponent);
                 spriteStub.addComponent(frameStateMachineComponent);
                 spriteStub.setBody(BODY);
-                spriteStub.setType(TYPE);
                 spriteStub.addComponent(COLLIDABLE_COMPONENT);
                 return spriteStub;
             }

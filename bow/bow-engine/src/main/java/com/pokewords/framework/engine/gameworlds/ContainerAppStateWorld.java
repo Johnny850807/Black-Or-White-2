@@ -15,19 +15,16 @@ public class ContainerAppStateWorld extends AppStateWorld {
 
     Rectangle gameArea = new Rectangle();
 
-
     @Override
-    public void handleSpriteRigidCollisionDetection(Sprite sprite, Runnable rigidCollisionTrigger) {
-        super.handleSpriteRigidCollisionDetection(sprite, rigidCollisionTrigger);
+    public void onSpritePositionChanged(Sprite sprite) {
+        super.onSpritePositionChanged(sprite);
 
         Dimension windowsSize = gameEngineFacade.getGameWindowDefinition().size;
         gameArea.setSize(windowsSize);
-        for (Sprite s : getSprites()) {
-            if (s.hasComponent(RigidBodyComponent.class))
-            {
-                while (!gameArea.contains(s.getBody()))
-                    rigidCollisionTrigger.run();
-            }
-        }
+
+        if (sprite.hasComponent(RigidBodyComponent.class)
+             && !gameArea.contains(sprite.getBody()))
+                sprite.resumeToLatestPosition();
     }
+
 }

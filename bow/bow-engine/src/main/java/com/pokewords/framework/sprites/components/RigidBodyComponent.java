@@ -7,7 +7,7 @@ import com.pokewords.framework.sprites.components.marks.Shareable;
  * Two rigid-body sprites will be blocked by each other when they are collided together.
  * @author johnny850807 (waterball)
  */
-public class RigidBodyComponent extends Component implements Shareable {
+public final class RigidBodyComponent extends Component implements Shareable {
     private static final RigidBodyComponent instance = new RigidBodyComponent();
 
     public static RigidBodyComponent getInstance() {

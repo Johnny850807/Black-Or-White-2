@@ -1,17 +1,19 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 
 import java.awt.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.List;
 
 /**
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
     private Sprite sprite;
-    private AppStateWorld appStateWorld;
     private Rectangle area = new Rectangle();
     private Point latestPosition = new Point();
     private Rectangle body = new Rectangle();
@@ -20,10 +22,14 @@ public class PropertiesComponent extends CloneableComponent {
     private boolean hasCenter = false;
     private Object type;
 
-    public PropertiesComponent() { }
+    private HashSet<SpritePositionChangedListener> positionChangedListeners = new HashSet<>();
+
+    public interface SpritePositionChangedListener {
+        void onSpritePositionChanged(Sprite sprite);
+    }
 
     public PropertiesComponent(Object type) {
-        this.type = type;
+        this.type = Objects.requireNonNull(type);
     }
 
     @Override
@@ -32,12 +38,18 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     @Override
-    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
-        this.appStateWorld = appStateWorld;
+    public void onAppStateEnter() {
+        Objects.requireNonNull(type);
     }
 
-    @Override
-    public void onUpdate(double timePerFrame) {}
+    public void addPositionListener(SpritePositionChangedListener positionChangedListener) {
+        positionChangedListeners.add(positionChangedListener);
+    }
+
+    public void removePositionChangedListener(SpritePositionChangedListener positionChangedListener) {
+        positionChangedListeners.remove(positionChangedListener);
+    }
+
 
     @Override
     @SuppressWarnings("unchecked")
@@ -45,6 +57,7 @@ public class PropertiesComponent extends CloneableComponent {
         PropertiesComponent clone = (PropertiesComponent) super.clone();
         clone.area = (Rectangle) this.area.clone();
         clone.latestPosition = this.area.getLocation();
+        clone.positionChangedListeners = new HashSet<>();
         if (hasBody)
             clone.body = (Rectangle) this.body.clone();
         if (hasCenter)
@@ -82,7 +95,7 @@ public class PropertiesComponent extends CloneableComponent {
     public void move(int velocityX, int velocityY) {
         recordLatestPosition();
         getArea().translate(velocityX, velocityY);
-        validateAndAdjustPosition();
+        notifyPositionChangedListeners();
     }
 
     public int getX() {
@@ -112,7 +125,7 @@ public class PropertiesComponent extends CloneableComponent {
     public void setPosition(int x, int y) {
         recordLatestPosition();
         getArea().setLocation(x, y);
-        validateAndAdjustPosition();
+        notifyPositionChangedListeners();
     }
 
     public Rectangle getArea() {
@@ -125,8 +138,11 @@ public class PropertiesComponent extends CloneableComponent {
 
     public void setArea(int x, int y, int w, int h) {
         recordLatestPosition();
+        boolean positionChanged = getArea().x != x || getArea().y != y;
         getArea().setBounds(x, y, w, h);
-        validateAndAdjustPosition();
+
+        if (positionChanged)
+            notifyPositionChangedListeners();
     }
 
     public void setAreaSize(int w, int h) {
@@ -180,18 +196,12 @@ public class PropertiesComponent extends CloneableComponent {
         latestPosition.setLocation(area.getX(), area.getY());
     }
 
-    private void validateAndAdjustPosition() {
-        if (appStateWorld != null)
-            appStateWorld.handleSpriteRigidCollisionDetection(sprite, this::resumeToLatestPosition);
-    }
-
     public void resumeToLatestPosition() {
         area.setLocation(latestPosition.x, latestPosition.y);
     }
 
-    @Override
-    public void onAppStateCreate() {
-        Objects.requireNonNull(type);
+    public void notifyPositionChangedListeners() {
+        positionChangedListeners.forEach(p -> p.onSpritePositionChanged(sprite));
     }
 
     @Override

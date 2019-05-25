@@ -155,6 +155,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 			component.onAppStateDestroy();
 	}
 
+	public void addPositionChangedListener(PropertiesComponent.SpritePositionChangedListener positionChangedListener) {
+		getPropertiesComponent().addPositionListener(positionChangedListener);
+	}
+
+	public void removePositionChangedListener(PropertiesComponent.SpritePositionChangedListener positionChangedListener) {
+		getPropertiesComponent().removePositionChangedListener(positionChangedListener);
+	}
+
 	public void setBody(int x, int y, int w, int h) {
         getPropertiesComponent().setBody(x, y, w, h);
     }

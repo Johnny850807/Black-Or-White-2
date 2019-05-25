@@ -6,6 +6,7 @@ import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
+import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.components.RigidBodyComponent;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * @author Joanna, johnny850807 (waterball)
  */
-public class AppStateWorld implements AppStateLifeCycleListener {
+public class AppStateWorld implements AppStateLifeCycleListener, PropertiesComponent.SpritePositionChangedListener {
     protected AppState appState;
     protected GameEngineFacade gameEngineFacade;
     private List<Sprite> sprites;
@@ -73,7 +74,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public void addCollisionHandler(CollisionHandler collisionHandler) {
-        CollisionHandler.TargetPair collisionHandlerType = new CollisionHandler.TargetPair(collisionHandler.getFirstType(), collisionHandler.getSecondType());
+        CollisionHandler.TargetPair collisionHandlerType = collisionHandler.getTargetPair();
         if (!collisionHandlerMap.containsKey(collisionHandlerType))
             collisionHandlerMap.put(collisionHandlerType, new ArrayList<>());
 
@@ -139,10 +140,13 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     private void handleReadyToBeSpawnedOrRemovedSprites() {
-        sprites.removeAll(readyToBeRemovedSprites);
-        readyToBeRemovedSprites.clear();
         sprites.addAll(readyToBeSpawnedSprites);
+        readyToBeSpawnedSprites.forEach(s -> s.addPositionChangedListener(this));
         readyToBeSpawnedSprites.clear();
+
+        sprites.removeAll(readyToBeRemovedSprites);
+        readyToBeSpawnedSprites.forEach(s -> s.removePositionChangedListener(this));
+        readyToBeRemovedSprites.clear();
     }
 
     private void reproduceRenderedLayers() {
@@ -176,13 +180,15 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         }
     }
 
-    public void handleSpriteRigidCollisionDetection(Sprite sprite, Runnable taskIfInvalidPosition) {
+    @Override
+    public void onSpritePositionChanged(Sprite sprite) {
         if (sprite.hasComponent(RigidBodyComponent.class))
         {
             if (!getSpritesRigidlyCollidedWith(sprite).isEmpty())
-                taskIfInvalidPosition.run();
+                sprite.resumeToLatestPosition();
         }
     }
+
 
     /**
      * To know if two sprites have a collision.
@@ -221,10 +227,9 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         Point2D center = sprite.getCenter();
         int x = (int) center.getX() - w / 2;
         int y = (int) center.getY() - h / 2;
-        Set<Sprite> sprites = Collections.newSetFromMap( new IdentityHashMap<>());
-        sprites.addAll(getSpritesCollidedWithinArea(new Rectangle(x, y, w, h)));
-        sprites.remove(sprite);
-        return sprites;
+        Collection<Sprite> collidedSprites = getSpritesCollidedWithinArea(new Rectangle(x, y, w, h));
+        collidedSprites.remove(sprite);
+        return collidedSprites;
     }
 
     /**
@@ -247,10 +252,9 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return the sprites collided with the given sprite
      */
     public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        Set<Sprite> sprites = Collections.newSetFromMap(new IdentityHashMap<>());
-        sprites.addAll(getSpritesCollidedWithinArea(sprite.getBody()));
-        sprites.remove(sprite);
-        return sprites;
+        Collection<Sprite> collidedSprites = getSpritesCollidedWithinArea(sprite.getBody());
+        collidedSprites.remove(sprite);
+        return collidedSprites;
     }
 
     /**
@@ -297,4 +301,5 @@ public class AppStateWorld implements AppStateLifeCycleListener {
                 .map(s -> s.getComponent(KeyListenerComponent.class))
                 .collect(Collectors.toList());
     }
+
 }
