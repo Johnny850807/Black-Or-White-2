@@ -8,7 +8,7 @@ import com.pokewords.framework.commons.bundles.InputEventsDelegator;
 import com.pokewords.framework.engine.asm.states.BreakerIconLoadingState;
 import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
@@ -36,7 +36,7 @@ public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_LOADING = "Start Loading";
 	public static final String EVENT_GAME_STARTED = "Game Started";
 
-	private IocFactory iocFactory;
+	private IocContainer iocContainer;
 
 	private Map<Transition, AppStateTransitionEffect> transitionEffectMap = new HashMap<>();
 	private boolean transitionEffecting = false;
@@ -59,8 +59,8 @@ public class AppStateMachine implements GameLoopingListener {
 		TRANSITION
 	}
 
-	public AppStateMachine(IocFactory iocFactory,InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
-		this.iocFactory = iocFactory;
+	public AppStateMachine(IocContainer iocContainer, InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
+		this.iocContainer = iocContainer;
 		this.inputManager = inputManager;
 		this.spriteInitializer = spriteInitializer;
 		this.gameWindowsConfigurator = gameWindowsConfigurator;
@@ -133,7 +133,7 @@ public class AppStateMachine implements GameLoopingListener {
 	private void handleTransition(AppState from, AppState to, AppStateTransitionEffect transitionEffect) {
 		transitionEffecting = true;
 
-		transitionEffect.effect(iocFactory.spriteBuilder(), from, to, new AppStateTransitionEffect.DefaultListener() {
+		transitionEffect.effect(iocContainer.spriteBuilder(), from, to, new AppStateTransitionEffect.DefaultListener() {
 			@Override
 			public void onExitingAppStateEffectEnd() {
 				from.onAppStateExit();

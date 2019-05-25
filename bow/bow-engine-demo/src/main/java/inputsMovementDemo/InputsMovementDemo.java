@@ -1,8 +1,8 @@
 package inputsMovementDemo;
 
 import com.pokewords.framework.engine.asm.AppStateMachine;
-import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
+import com.pokewords.framework.ioc.IocContainer;
+import com.pokewords.framework.ioc.ReleaseIocContainer;
 import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.components.frames.ImageFrameFactory;
@@ -12,8 +12,8 @@ import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 public class InputsMovementDemo extends GameApplication {
 
-    public InputsMovementDemo(IocFactory iocFactory) {
-        super(iocFactory);
+    public InputsMovementDemo(IocContainer iocContainer) {
+        super(iocContainer);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class InputsMovementDemo extends GameApplication {
 
 
     public static void main(String[] args) {
-        InputsMovementDemo app = new InputsMovementDemo(new ReleaseIocFactory());
+        InputsMovementDemo app = new InputsMovementDemo(new ReleaseIocContainer());
         app.launch();
     }
 }

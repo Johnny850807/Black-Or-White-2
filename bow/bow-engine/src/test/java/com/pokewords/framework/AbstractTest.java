@@ -1,9 +1,8 @@
 package com.pokewords.framework;
 
-import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
+import com.pokewords.framework.ioc.IocContainer;
+import com.pokewords.framework.ioc.ReleaseIocContainer;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import static org.junit.Assert.*;
  * @author johnny850807 (waterball)
  */
 public abstract class AbstractTest {
-    protected IocFactory release = new ReleaseIocFactory();
+    protected IocContainer release = new ReleaseIocContainer();
 
     protected void assertNotSameButEquals(Object o1, Object o2){
         assertNotSame(o1, o2);

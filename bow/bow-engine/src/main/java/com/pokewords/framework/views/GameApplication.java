@@ -3,10 +3,9 @@ package com.pokewords.framework.views;
 import com.pokewords.framework.commons.utils.ThreadUtility;
 import com.pokewords.framework.engine.GameEngine;
 import com.pokewords.framework.engine.asm.AppStateMachine;
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.inputs.InputManager;
-import com.pokewords.framework.views.sound.SwingSoundPlayer;
 import com.pokewords.framework.views.windows.*;
 
 /**
@@ -18,12 +17,12 @@ public abstract class GameApplication implements AppView {
 	private GameWindowsConfigurator gameWindowsConfigurator;
 	private SoundPlayer soundPlayer;
 
-    public GameApplication(IocFactory iocFactory) {
-    	InputManager inputManager = iocFactory.inputManager();
+    public GameApplication(IocContainer iocContainer) {
+    	InputManager inputManager = iocContainer.inputManager();
 		gameFrame = new GameFrame(new GamePanel(inputManager), inputManager);
-		soundPlayer = iocFactory.soundPlayer();
+		soundPlayer = iocContainer.soundPlayer();
 		gameWindowsConfigurator = new GameFrameWindowsConfigurator(gameFrame);
-        gameEngine = new GameEngine(iocFactory, inputManager, gameWindowsConfigurator, soundPlayer);
+        gameEngine = new GameEngine(iocContainer, inputManager, gameWindowsConfigurator, soundPlayer);
         gameEngine.setGameView(this);
     }
 

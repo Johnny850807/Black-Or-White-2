@@ -10,7 +10,7 @@ import com.pokewords.framework.views.inputs.InputManager;
 import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.sound.SwingSoundPlayer;
 
-public class ReleaseIocFactory implements IocFactory{
+public class ReleaseIocContainer implements IocContainer {
     private PrototypeFactory prototypeFactory;
 
     @Override

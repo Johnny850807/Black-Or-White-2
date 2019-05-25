@@ -3,11 +3,11 @@ package com.pokewords.framework.sprites.factories;
 import com.pokewords.framework.engine.weaver.GameEngineWeaverNode;
 import com.pokewords.framework.engine.exceptions.SpriteBuilderException;
 import com.pokewords.framework.commons.utils.Resources;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
+import com.pokewords.framework.ioc.ReleaseIocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.parsing.*;
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.IocContainer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -32,8 +32,8 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
      */
     protected boolean hasBeenInit = false;
 
-    public DefaultSpriteBuilder(IocFactory iocFactory) {
-        spriteWeaver = new SpriteWeaver(iocFactory);
+    public DefaultSpriteBuilder(IocContainer iocContainer) {
+        spriteWeaver = new SpriteWeaver(iocContainer);
         components = new HashSet<>();
         init();
     }
@@ -140,7 +140,7 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     public static void main(String[] args) {
 
-        DefaultSpriteBuilder builder = new DefaultSpriteBuilder(new ReleaseIocFactory());
+        DefaultSpriteBuilder builder = new DefaultSpriteBuilder(new ReleaseIocContainer());
 
         Sprite mySprite = builder.init()
                 .setFSMComponent(new FrameStateMachineComponent())

@@ -1,6 +1,5 @@
 package com.pokewords.framework.sprites.factories;
 
-import com.pokewords.framework.ioc.IocFactory;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;

@@ -1,6 +1,6 @@
 package com.pokewords.framework.engine;
 
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.AppView;
 import com.pokewords.framework.engine.asm.AppStateMachine;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @author johnny850807 (waterball)
  */
 public class GameEngine {
-    private IocFactory iocFactory;
+    private IocContainer iocContainer;
     private AppView gameView;
     private SpriteInitializer spriteInitializer;
     private InputManager inputManager;
@@ -27,11 +27,11 @@ public class GameEngine {
     private int loopingCounter = 0;
     private double timePerFrame = 1 / 60.0;  // 60 fps
 
-    public GameEngine(IocFactory iocFactory, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
-        this.iocFactory = iocFactory;
+    public GameEngine(IocContainer iocContainer, InputManager inputManager, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
+        this.iocContainer = iocContainer;
         this.inputManager = inputManager;
-        this.spriteInitializer = new SpriteInitializer(iocFactory);
-        this.appStateMachine = new AppStateMachine(iocFactory, inputManager, spriteInitializer, gameWindowsConfigurator, soundPlayer);
+        this.spriteInitializer = new SpriteInitializer(iocContainer);
+        this.appStateMachine = new AppStateMachine(iocContainer, inputManager, spriteInitializer, gameWindowsConfigurator, soundPlayer);
         this.scheduler = Executors.newScheduledThreadPool(8);
         this.gameLoopingTask = this::gameLooping;
     }

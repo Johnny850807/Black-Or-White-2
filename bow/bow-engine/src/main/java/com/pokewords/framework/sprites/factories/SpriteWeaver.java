@@ -1,6 +1,6 @@
 package com.pokewords.framework.sprites.factories;
 
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.parsing.Script;
 
@@ -12,12 +12,12 @@ import java.util.LinkedList;
  * @author nyngwang
  */
 public class SpriteWeaver {
-    private IocFactory iocFactory;
+    private IocContainer iocContainer;
     private LinkedList<SpriteWeaver.Node> weaverNodes;
 
-    public SpriteWeaver(IocFactory iocFactory) {
+    public SpriteWeaver(IocContainer iocContainer) {
         weaverNodes = new LinkedList<>();
-        this.iocFactory = iocFactory;
+        this.iocContainer = iocContainer;
     }
 
     public void addWeaverNode(SpriteWeaver.Node node) {

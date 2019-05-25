@@ -3,13 +3,12 @@ package homework;
 import com.pokewords.framework.commons.utils.GifScriptMaker;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
-import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
+import com.pokewords.framework.ioc.IocContainer;
+import com.pokewords.framework.ioc.ReleaseIocContainer;
 import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
 import com.pokewords.framework.sprites.components.StringComponent;
-import com.pokewords.framework.sprites.components.frames.ImageFrame;
 import com.pokewords.framework.sprites.components.frames.ImageFrameFactory;
 import com.pokewords.framework.sprites.components.frames.StringFrame;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
@@ -22,8 +21,8 @@ import java.awt.*;
 
 public class HomeworkApp extends GameApplication {
 
-    public HomeworkApp(IocFactory iocFactory) {
-        super(iocFactory);
+    public HomeworkApp(IocContainer iocContainer) {
+        super(iocContainer);
     }
 
     @Override
@@ -94,6 +93,6 @@ public class HomeworkApp extends GameApplication {
     }
 
     public static void main(String[] args) {
-        new HomeworkApp(new ReleaseIocFactory()).launch();
+        new HomeworkApp(new ReleaseIocContainer()).launch();
     }
 }

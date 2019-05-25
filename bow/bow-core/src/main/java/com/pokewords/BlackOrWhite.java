@@ -9,8 +9,8 @@ import com.pokewords.framework.commons.utils.GifScriptMaker;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.engine.asm.states.multiplayer.MultiplayerRoomState;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
-import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
+import com.pokewords.framework.ioc.IocContainer;
+import com.pokewords.framework.ioc.ReleaseIocContainer;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.SoundPlayer;
@@ -20,8 +20,8 @@ import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 public class BlackOrWhite extends GameApplication {
 
-    public BlackOrWhite(IocFactory iocFactory) {
-        super(iocFactory);
+    public BlackOrWhite(IocContainer iocContainer) {
+        super(iocContainer);
     }
 
     @Override
@@ -61,6 +61,6 @@ public class BlackOrWhite extends GameApplication {
 
 
     public static void main(String[] args) {
-        new BlackOrWhite(new ReleaseIocFactory()).launch();
+        new BlackOrWhite(new ReleaseIocContainer()).launch();
     }
 }

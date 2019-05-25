@@ -1,19 +1,18 @@
 package basics;
 
 import com.pokewords.framework.engine.asm.AppStateMachine;
-import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.ioc.ReleaseIocFactory;
+import com.pokewords.framework.ioc.IocContainer;
+import com.pokewords.framework.ioc.ReleaseIocContainer;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
-import static com.pokewords.framework.sprites.factories.SpriteInitializer.InitializationMode.LAZY;
 import static com.pokewords.framework.sprites.factories.SpriteInitializer.InitializationMode.NON_LAZY;
 
 public class BasicsDemo extends GameApplication {
 
-    public BasicsDemo(IocFactory iocFactory) {
-        super(iocFactory);
+    public BasicsDemo(IocContainer iocContainer) {
+        super(iocContainer);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class BasicsDemo extends GameApplication {
 
 
     public static void main(String[] args) {
-        BasicsDemo app = new BasicsDemo(new ReleaseIocFactory());
+        BasicsDemo app = new BasicsDemo(new ReleaseIocContainer());
         app.launch();
     }
 }

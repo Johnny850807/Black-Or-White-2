@@ -4,7 +4,7 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
 import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.commons.utils.StringUtility;
-import com.pokewords.framework.ioc.IocFactory;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
@@ -67,9 +67,9 @@ public class SpriteInitializer {
 
     private final HashSet<Object> spriteTypesThatHaveBeenInit = new HashSet<>();
 
-    public SpriteInitializer(IocFactory iocFactory) {
-        this.prototypeFactory = iocFactory.prototypeFactory();
-        this.spriteBuilder = iocFactory.spriteBuilder();
+    public SpriteInitializer(IocContainer iocContainer) {
+        this.prototypeFactory = iocContainer.prototypeFactory();
+        this.spriteBuilder = iocContainer.spriteBuilder();
     }
 
     /**
