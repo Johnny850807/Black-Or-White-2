@@ -3,6 +3,7 @@ package Pacman;
 import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.CollisionHandler;
 import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.StringComponent;
@@ -18,6 +19,10 @@ public class MainAppState extends EmptyAppState {
         return new ContainerAppStateWorld(this, gameEngineFacade);
     }
 
+    private enum SoundTypes {
+        COLLISION
+    }
+
     @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) {
         getGameWindowsConfigurator().gameSize(800, 600);
@@ -29,8 +34,8 @@ public class MainAppState extends EmptyAppState {
         appStateWorld.spawn(mousePositionText = createSprite(Types.MOUSE_POSITION));
 
         bindMouseMovedAction(this::updateMousePositionText);
-    }
 
+    }
 
     private void updateMousePositionText(Point point) {
         mousePositionText.getComponent(StringComponent.class)

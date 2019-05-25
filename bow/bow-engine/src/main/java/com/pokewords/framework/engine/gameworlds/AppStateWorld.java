@@ -8,7 +8,6 @@ import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
 import com.pokewords.framework.sprites.components.RigidBodyComponent;
 import com.pokewords.framework.views.RenderedLayers;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
@@ -29,7 +28,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     private Map<Integer, Sprite> idSpriteMap;
     private Map<Sprite, Integer> spriteIdMap;
     private RenderedLayers renderedLayers;
-    private Map<CollisionHandler.Type, List<CollisionHandler>> collisionHandlerMap;
+    private Map<CollisionHandler.TargetPair, List<CollisionHandler>> collisionHandlerMap;
 
     public AppStateWorld(AppState appState, GameEngineFacade gameEngineFacade) {
         this.appState = appState;
@@ -84,15 +83,15 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     public void addCollisionHandler(CollisionHandler collisionHandler) {
-        CollisionHandler.Type collisionHandlerType = new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType());
-        List<CollisionHandler> collisionHandlers = (collisionHandlerMap.containsKey(collisionHandlerType))?
-                collisionHandlerMap.get(collisionHandlerType) : new ArrayList<>();
-        collisionHandlers.add(collisionHandler);
-        collisionHandlerMap.put(collisionHandlerType, collisionHandlers);
+        CollisionHandler.TargetPair collisionHandlerType = new CollisionHandler.TargetPair(collisionHandler.getFirstType(), collisionHandler.getSecondType());
+        if (!collisionHandlerMap.containsKey(collisionHandlerType))
+            collisionHandlerMap.put(collisionHandlerType, new ArrayList<>());
+
+        collisionHandlerMap.get(collisionHandlerType).add(collisionHandler);
     }
 
     public void removeCollisionHandler(CollisionHandler collisionHandler) {
-        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType()));
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(collisionHandler.getTargetPair());
         collisionHandlers.remove(collisionHandler);
     }
 
@@ -161,12 +160,6 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
                 if (isCollided(sprite1, sprite2)) {
                     notifyCollisionHandlers(sprite1, sprite2);
-
-                    if (isPhysicallyBlocked(sprite1, sprite2))
-                    {
-                        sprite1.resumeToLatestPosition();
-                        sprite2.resumeToLatestPosition();
-                    }
                 }
             }
         }
@@ -177,9 +170,17 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * To notify sprites if they have collided
      */
     private void notifyCollisionHandlers(Sprite sprite1, Sprite sprite2) {
-        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(sprite1.getType(), sprite2.getType()));
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.TargetPair(sprite1.getType(), sprite2.getType()));
         for (CollisionHandler collisionHandler: collisionHandlers) {
             collisionHandler.onCollision(sprite1, sprite2);
+        }
+    }
+
+    public void handleSpriteRigidCollisionDetection(Sprite sprite, Runnable taskIfInvalidPosition) {
+        if (sprite.hasComponent(RigidBodyComponent.class))
+        {
+            if (!getSpritesRigidlyCollidedWith(sprite).isEmpty())
+                taskIfInvalidPosition.run();
         }
     }
 
@@ -196,10 +197,6 @@ public class AppStateWorld implements AppStateLifeCycleListener {
                 sprite2.getCollidableComponent().isIgnored(sprite1.getType()))
             return false;
         return sprite1.getBody().intersects(sprite2.getBody());
-    }
-
-    private boolean isPhysicallyBlocked(Sprite sprite1, Sprite sprite2) {
-        return sprite1.hasComponent(RigidBodyComponent.class) && sprite2.hasComponent(RigidBodyComponent.class);
     }
 
     /**
@@ -291,14 +288,6 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         sprites.addAll(rigidCollidedSprites);
         sprites.remove(sprite);
         return sprites;
-    }
-
-    public void validateSpritePosition(Sprite sprite, Runnable taskIfInvalidPosition) {
-        if (sprite.hasComponent(RigidBodyComponent.class))
-        {
-            if (!getSpritesRigidlyCollidedWith(sprite).isEmpty())
-                taskIfInvalidPosition.run();
-        }
     }
 
 

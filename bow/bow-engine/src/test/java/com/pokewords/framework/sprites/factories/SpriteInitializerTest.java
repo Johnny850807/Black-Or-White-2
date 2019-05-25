@@ -39,11 +39,11 @@ public class SpriteInitializerTest extends AbstractTest {
 
     @Test
     public void testShouldThrowExceptionIfForgotCommit() {
-        spriteInitializer.declare("Type")
+        spriteInitializer.declare("TargetPair")
                         .area(10, 10, 10, 10);
 
         try {
-            spriteInitializer.declare("Another Type");
+            spriteInitializer.declare("Another TargetPair");
             fail();
         } catch (GameEngineException ignored) { }
     }

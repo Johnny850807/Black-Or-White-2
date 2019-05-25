@@ -4,8 +4,6 @@ import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -184,7 +182,7 @@ public class PropertiesComponent extends CloneableComponent {
 
     private void validateAndAdjustPosition() {
         if (appStateWorld != null)
-            appStateWorld.validateSpritePosition(sprite, this::resumeToLatestPosition);
+            appStateWorld.handleSpriteRigidCollisionDetection(sprite, this::resumeToLatestPosition);
     }
 
     public void resumeToLatestPosition() {

@@ -17,8 +17,8 @@ public class ComponentsTest extends AbstractTest {
 
     @Test
     public void testPropertiesComponentAccessors() {
-        PropertiesComponent pc = new PropertiesComponent("Type");
-        assertEquals("Type", pc.getType());
+        PropertiesComponent pc = new PropertiesComponent("TargetPair");
+        assertEquals("TargetPair", pc.getType());
 
         pc.setArea(50, 50, 50, 50);
         assertEquals(50, pc.getX());
@@ -44,8 +44,8 @@ public class ComponentsTest extends AbstractTest {
         assertEquals(new Point(300, 300), pc.getCenter());
 
 
-        pc.setType("Set-Type");
-        assertEquals("Set-Type", pc.getType());
+        pc.setType("Set-TargetPair");
+        assertEquals("Set-TargetPair", pc.getType());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class ComponentsTest extends AbstractTest {
     }
 
     private PropertiesComponent givenPropertiesComponent() {
-        PropertiesComponent pc = new PropertiesComponent("Type");
+        PropertiesComponent pc = new PropertiesComponent("TargetPair");
         pc.setBody(50, 50, 50, 50);
         pc.setCenter(100, 100);
         return pc;
@@ -70,7 +70,7 @@ public class ComponentsTest extends AbstractTest {
 
     @Test
     public void testPropertiesComponentClone() {
-        PropertiesComponent propertiesComponent = new PropertiesComponent("Type");
+        PropertiesComponent propertiesComponent = new PropertiesComponent("TargetPair");
         PropertiesComponent clone = propertiesComponent.clone();
 
         assertSame(propertiesComponent.getType(), clone.getType());

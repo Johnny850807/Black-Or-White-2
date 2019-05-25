@@ -114,6 +114,8 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         setupSprite();
         setupAndStartSpriteWeaving();
         hasBeenInit = false;
+
+        System.gc();
         return sprite;
     }
 

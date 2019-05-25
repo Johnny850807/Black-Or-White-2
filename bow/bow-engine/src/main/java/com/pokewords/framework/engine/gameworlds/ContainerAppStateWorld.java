@@ -17,8 +17,8 @@ public class ContainerAppStateWorld extends AppStateWorld {
 
 
     @Override
-    public void validateSpritePosition(Sprite sprite, Runnable taskIfInvalidPosition) {
-        super.validateSpritePosition(sprite, taskIfInvalidPosition);
+    public void handleSpriteRigidCollisionDetection(Sprite sprite, Runnable rigidCollisionTrigger) {
+        super.handleSpriteRigidCollisionDetection(sprite, rigidCollisionTrigger);
 
         Dimension windowsSize = gameEngineFacade.getGameWindowDefinition().size;
         gameArea.setSize(windowsSize);
@@ -26,7 +26,7 @@ public class ContainerAppStateWorld extends AppStateWorld {
             if (s.hasComponent(RigidBodyComponent.class))
             {
                 while (!gameArea.contains(s.getBody()))
-                    taskIfInvalidPosition.run();
+                    rigidCollisionTrigger.run();
             }
         }
     }

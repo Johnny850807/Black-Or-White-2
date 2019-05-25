@@ -57,7 +57,7 @@ public interface StubFactory {
              * MockComponent2,
              * MockComponent3
              * MockPropertiesComponent :
-             *      - type: 'Type'
+             *      - type: 'TargetPair'
              * MockFrameStateMachineComponent : empty
              */
             static Sprite createSpriteWithOnlyMockComponents() {

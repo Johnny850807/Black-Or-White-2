@@ -17,7 +17,7 @@ public class ComponentInjectorTest {
         MockComponent1 mockComponent1 = new MockComponent1();
         MockComponent2 mockComponent2 = new MockComponent2();
         MockComponent3 mockComponent3 = new MockComponent3();
-        Sprite sprite = new Sprite("Type");
+        Sprite sprite = new Sprite("TargetPair");
 
         sprite.addComponent(mockComponent1);
         sprite.addComponent(mockComponent2);
