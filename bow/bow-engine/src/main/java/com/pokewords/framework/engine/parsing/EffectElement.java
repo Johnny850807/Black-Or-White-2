@@ -16,8 +16,8 @@ public class EffectElement {
     }
 
     public EffectElement(@NotNull Element element) {
-        this.moveX = element.getIntByKeyOptional("moveX");
-        this.moveY = element.getIntByKeyOptional("moveY");
+        this.moveX = element.getKeyValuePairs().getIntOptional("moveX");
+        this.moveY = element.getKeyValuePairs().getIntOptional("moveY");
     }
 
     public OptionalInt getMoveX() {

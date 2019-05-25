@@ -1,35 +1,46 @@
 package com.pokewords.framework.sprites.parsing;
 
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author nyngwang
  */
-public interface Script {
-    class Mappings {
-        public Map<String, String> stringMap;
-        public Map<String, Integer> integerMap;
-        public Mappings() {
-            stringMap = new HashMap<>();
-            integerMap = new HashMap<>();
-        }
-    }
-    Script addSegment(Segment segment);
+public abstract class Script implements Node {
+    private List<Segment> segments;
 
-    default Segment getSegmentByName(String name) {
-        return getSegmentsByName(name).get(0);
+    public Script(List<Segment> segments) {
+        this.segments = segments;
     }
 
-    boolean containsSegmentName(String name);
-    boolean containsSegmentId(int id);
-    boolean containsSegmentDescription(String description);
-    List<Segment> getSegmentsByName(String name);
-    Segment getSegmentById(int id);
-    List<Segment> getSegmentsByDescription(String description);
-    List<Segment> getSegments();
+    public void addSegment(Segment segment) {
+        segments.add(segment);
+        segment.setParent(this);
+    }
 
-    String toString(int indentation);
+    public List<Segment> getSegments() {
+        return segments;
+    }
+
+    public boolean containsSegment(String name) {
+        for (Segment segment : segments)
+            if (segment.getName().equals(name))
+                return true;
+        return false;
+    }
+
+    public List<Segment> getSegments(String name) {
+        return segments.stream()
+                .filter(segment -> segment.getName().equals(name))
+                .collect(Collectors.toList());
+    }
+
+    public Segment getFirstSegment(String name) {
+        return containsSegment(name)? getSegments(name).get(0) : null;
+    }
+
+    public Optional<Segment> getFirstSegmentOptional(String name) {
+        return containsSegment(name)? Optional.of(getSegments(name).get(0)) : Optional.empty();
+    }
 }

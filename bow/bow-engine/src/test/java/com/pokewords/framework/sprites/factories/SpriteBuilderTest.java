@@ -8,8 +8,6 @@ import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.LinScript;
-import com.pokewords.framework.sprites.parsing.LinScriptSegment;
-import com.pokewords.framework.sprites.parsing.Script;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -44,7 +44,7 @@ public interface ScriptDefinitions {
                     "    effect\n" +
                     "        moveX ([1-9][0-9]+)|([0-9]) Integer\n" +
                     "        moveY ([1-9][0-9]+)|([0-9]) Integer";
-            ScriptRules SCRIPT_RULES = new LinScriptRulesParser().parse(SCRIPT_RULES_TEXT);
+            //ScriptRules SCRIPT_RULES = new LinScriptRulesParser().parse(SCRIPT_RULES_TEXT);
         }
     }
 }

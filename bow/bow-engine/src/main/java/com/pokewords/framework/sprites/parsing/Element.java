@@ -1,32 +1,64 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.bundles.Bundle;
+import com.pokewords.framework.commons.bundles.Packable;
+import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
+import javafx.util.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.Iterator;
 
 
 /**
- *  @author nyngwang
+ * @author nyngwang
  */
-public interface Element {
-    Element put(String key, String value);
-    Element put(String key, int value);
+public abstract class Element implements Node, Packable, Iterable<Pair<String, String>> {
+    private Node parent;
+    private String name;
+    protected KeyValuePairs keyValuePairs;
 
-    String getName();
+    public Element(Node parent, String name, KeyValuePairs keyValuePairs) {
+        this.parent = parent;
+        this.name = name;
+        this.keyValuePairs = keyValuePairs;
+    }
 
-    Optional<String> getStringByKeyOptional(String key);
-    OptionalInt getIntByKeyOptional(String key);
-    boolean containsKey(String key);
-    String getStringByKey(String key);
-    Integer getIntByKey(String key);
+    @Override
+    public Node getParent() {
+        return parent;
+    }
 
-    Collection<String> getKeys();
+    public void setParent(Node parent) {
+        this.parent = parent;
+    }
 
-    Element setParent(Segment parentSegment);
-    Segment getParent();
+    public String getName() {
+        return name;
+    }
 
-    String toString(int indentation);
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public KeyValuePairs getKeyValuePairs() {
+        return keyValuePairs;
+    }
+
+    public int getInt(String key) {
+        return keyValuePairs.getInt(key);
+    }
+
+    public String getString(String key) {
+        return keyValuePairs.getString(key);
+    }
+
+    @Override
+    public ReadOnlyBundle pack() {
+        return keyValuePairs.pack();
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Pair<String, String>> iterator() {
+        return keyValuePairs.iterator();
+    }
 }

@@ -15,11 +15,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 /**
- *
- *   1. 先做出 Sprite
- *   2. 再 LinScript.Parser.parse() 得出 LinScript
- *   3. SpriteWeaver用(LinScript, Sprite)完成Sprite
- *
+ * TODO: Should re-implement.
  * @author nyngwang
  */
 public class DefaultSpriteBuilder implements SpriteBuilder {
@@ -28,8 +24,6 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
     protected boolean hasPropertiesComponent;
     protected Script script;
     protected SpriteWeaver spriteWeaver;
-    protected ScriptParser scriptParser;
-    protected ScriptRulesParser scriptRulesParser;
     protected List<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
 
     /**
@@ -40,8 +34,6 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
 
     public DefaultSpriteBuilder(IocFactory iocFactory) {
         spriteWeaver = new SpriteWeaver(iocFactory);
-        scriptParser = iocFactory.scriptParser();
-        scriptRulesParser = iocFactory.scriptRulesParser();
         components = new HashSet<>();
         init();
     }
@@ -89,8 +81,9 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
         validateIfInitHasBeenInvoked();
 
         try {
-            String scriptString = new String(Files.readAllBytes(Resources.get(path).toPath())).trim();
-            script = scriptParser.parse(scriptString, ScriptDefinitions.LinScript.Samples.SCRIPT_RULES);
+            String script = new String(Files.readAllBytes(Resources.get(path).toPath())).trim();
+            this.script = new LinScript();
+            this.script.parse(Context.fromText(script));
             addComponent(new FrameStateMachineComponent());
         } catch (IOException e) {
             e.printStackTrace();
@@ -155,7 +148,9 @@ public class DefaultSpriteBuilder implements SpriteBuilder {
                 .addComponent(new CollidableComponent())
                 .buildScriptFromPath("path/to/script_text")
                 .addWeaverNode((script, sprite) -> {
-                    List<Element> bows = script.getSegmentByName("frame").getElementsByName("bow");
+                    for (Segment frameSegment: script.getSegments("frame")) {
+                        List<Element> bows = frameSegment.getElements("bow");
+                    }
                 })
                 .build();
     }

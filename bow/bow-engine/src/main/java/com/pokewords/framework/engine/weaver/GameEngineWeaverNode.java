@@ -49,7 +49,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         if (sprite.hasComponent(FrameStateMachineComponent.class))
         {
             this.sprite = sprite;
-            List<Segment> frames = script.getSegmentsByName("frame");
+            List<Segment> frames = script.getSegments("frame");
             frames.forEach(this::parseAndAddFrame);
             setNextTransitions();
             setAllCustomTransitions();
@@ -105,7 +105,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         @Override
         public EffectFrame createFrame(Segment segment) {
-            setupGalleryMapIfNotExists(segment.getParent());
+            setupGalleryMapIfNotExists((Script) segment.getParent());
             FrameSegment frameSegment = new FrameSegment(segment);
             EffectFrame effectFrame = createAndPutImageEffectFrame(frameSegment, segment);
             parseBodyElement(frameSegment, effectFrame);
@@ -119,7 +119,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
                 synchronized (this) {
                     if (gallerySet == null) {
                         gallerySet = Collections.synchronizedSet(new HashSet<>());
-                        Segment galleriesSegment = script.getSegmentByName("galleries");
+                        Segment galleriesSegment = script.getFirstSegment("galleries");
                         addAllGalleriesToGalleryMap(galleriesSegment);
                     }
                 }
@@ -128,6 +128,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
 
         private void addAllGalleriesToGalleryMap(Segment galleriesSegment) {
             for (Element element : galleriesSegment.getElements()) {
+
                 //TODO gallerySet.add(galleryElement.toGallery());
             }
         }

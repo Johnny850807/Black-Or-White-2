@@ -1,6 +1,7 @@
 package com.pokewords.framework.commons.bundles;
 
 import com.pokewords.framework.engine.exceptions.ExpectedPropertyMissingException;
+import com.sun.corba.se.impl.io.TypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,10 @@ public class Bundle {
     public int getInt(Object key) {
         if (!containsKey(key))
             throw new ExpectedPropertyMissingException(key);
-        return (int) data.get(key);
+        Object value = data.get(key);
+        if (value instanceof String)
+            return Integer.parseInt((String) value);
+        throw new TypeMismatchException("The value is of type " + value.getClass().getSimpleName() + ", cannot convert it into int.");
     }
 
     public String getString(Object key) {
