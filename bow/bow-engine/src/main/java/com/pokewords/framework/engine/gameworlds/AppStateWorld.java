@@ -5,6 +5,7 @@ import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
+import com.pokewords.framework.sprites.components.PhysicsComponent;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.RenderedLayers;
 import org.jetbrains.annotations.Nullable;
@@ -159,8 +160,17 @@ public class AppStateWorld implements AppStateLifeCycleListener {
             for (int j = i + 1; j < sprites.size(); j++) {
                 Sprite sprite1 = sprites.get(i);
                 Sprite sprite2 = sprites.get(j);
-                if (sprite1 != sprite2 && isCollided(sprite1, sprite2)) {
+
+                assert sprite1 != sprite2;
+
+                if (isCollided(sprite1, sprite2)) {
                     notifyCollisionHandlers(sprite1, sprite2);
+
+                    if (isPhysicallyBlocked(sprite1, sprite2))
+                    {
+                        sprite1.resumeToLatestPosition();
+                        sprite2.resumeToLatestPosition();
+                    }
                 }
             }
         }
@@ -185,10 +195,14 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     private boolean isCollided(Sprite sprite1, Sprite sprite2) {
         if (!sprite1.isCollidable() || !sprite2.isCollidable())
             return false;
-        if (sprite1.getCollidableComponent().isIgnored(sprite2) &&
-                sprite2.getCollidableComponent().isIgnored(sprite1))
+        if (sprite1.getCollidableComponent().isIgnored(sprite2.getType()) &&
+                sprite2.getCollidableComponent().isIgnored(sprite1.getType()))
             return false;
         return sprite1.getBody().intersects(sprite2.getBody());
+    }
+
+    private boolean isPhysicallyBlocked(Sprite sprite1, Sprite sprite2) {
+        return sprite1.hasComponent(PhysicsComponent.class) && sprite2.hasComponent(PhysicsComponent.class);
     }
 
     /**

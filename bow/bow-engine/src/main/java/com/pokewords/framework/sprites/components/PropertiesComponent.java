@@ -7,28 +7,26 @@ import java.util.Objects;
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
-    private double timePerFrame;
     private Rectangle area = new Rectangle(0, 0, 0, 0);
+    private Point latestPosition = area.getLocation();
     private Rectangle body;
     private Point center;
     private Object type;
 
-    public PropertiesComponent() {
-    }
+    public PropertiesComponent() { }
 
     public PropertiesComponent(Object type) {
         this.type = type;
     }
 
     @Override
-    public void onUpdate(double timePerFrame) {
-        this.timePerFrame = timePerFrame;
-    }
+    public void onUpdate(double timePerFrame) {}
 
     @Override
     public PropertiesComponent clone() {
         PropertiesComponent clone = (PropertiesComponent) super.clone();
         clone.area = (Rectangle) this.area.clone();
+        clone.latestPosition = clone.area.getLocation();
         if (body != null)
             clone.body = (Rectangle) this.body.clone();
         if (center != null)
@@ -58,18 +56,18 @@ public class PropertiesComponent extends CloneableComponent {
         move(point.x, point.y);
     }
 
-    public void move(int velocityX, int velocityY) {
-        getArea().translate(velocityX, velocityY);
-    }
-
     public void moveX(int velocityX) {
-        getArea().translate(velocityX, 0);
+        move(velocityX, 0);
     }
 
     public void moveY(int velocityY) {
-        getArea().translate(0, velocityY);
+        move(0, velocityY);
     }
 
+    public void move(int velocityX, int velocityY) {
+        recordLatestPosition();
+        getArea().translate(velocityX, velocityY);
+    }
 
     public int getX() {
         return (int) getPosition().getX();
@@ -92,10 +90,11 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void setPosition(Point position) {
-        getArea().setLocation(position);
+        setPosition(position.x, position.y);
     }
 
     public void setPosition(int x, int y) {
+        recordLatestPosition();
         getArea().setLocation(x, y);
     }
 
@@ -104,10 +103,11 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void setArea(Rectangle area) {
-        getArea().setBounds(area);
+        setArea(area.x, area.y,area.width,area.height);
     }
 
     public void setArea(int x, int y, int w, int h) {
+        recordLatestPosition();
         getArea().setBounds(x, y, w, h);
     }
 
@@ -158,6 +158,14 @@ public class PropertiesComponent extends CloneableComponent {
             center = new Point(bodyX + (int) getBody().getWidth() / 2, bodyY + (int) getBody().getHeight() / 2);
         }
         return center;
+    }
+
+    private void recordLatestPosition() {
+        latestPosition.setLocation(area.getX(), area.getY());
+    }
+
+    public void resumeToLatestPosition() {
+        area.setLocation(latestPosition.x, latestPosition.y);
     }
 
     @Override
