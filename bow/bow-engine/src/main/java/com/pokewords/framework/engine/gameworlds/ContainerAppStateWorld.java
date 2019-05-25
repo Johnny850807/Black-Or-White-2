@@ -22,7 +22,7 @@ public class ContainerAppStateWorld extends AppStateWorld {
 
         Dimension windowsSize = gameEngineFacade.getGameWindowDefinition().size;
         gameArea.setSize(windowsSize);
-        for (Sprite s : spriteIterates()) {
+        for (Sprite s : getSprites()) {
             if (s.hasComponent(RigidBodyComponent.class))
             {
                 while (!gameArea.contains(s.getBody()))
