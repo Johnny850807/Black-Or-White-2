@@ -1,4 +1,4 @@
-package homework;
+package Pacman;
 
 public enum Types {
     MOUSE_POSITION,

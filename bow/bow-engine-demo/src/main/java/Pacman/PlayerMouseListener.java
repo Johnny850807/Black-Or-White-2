@@ -1,12 +1,10 @@
-package homework;
+package Pacman;
 
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.ImageComponent;
-import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 @SuppressWarnings("Duplicates")
 public class PlayerMouseListener extends MouseListenerComponent.Listener {

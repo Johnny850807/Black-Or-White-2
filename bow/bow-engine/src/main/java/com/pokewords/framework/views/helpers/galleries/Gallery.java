@@ -5,6 +5,7 @@ import com.pokewords.framework.commons.Range;
 import java.awt.*;
 
 /**
+ * TODO serializable
  * @author johnny850807 (waterball)
  */
 public interface Gallery {

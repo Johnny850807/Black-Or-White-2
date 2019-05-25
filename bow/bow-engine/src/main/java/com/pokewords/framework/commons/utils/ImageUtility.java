@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,12 @@ public class ImageUtility {
         try {
             if (imageCachedMap.containsKey(imagePath))
                 return imageCachedMap.get(imagePath);
-            return ImageIO.read(Resources.get(imagePath));
+            else
+            {
+                Image image = ImageIO.read(Resources.get(imagePath));
+                imageCachedMap.put(imagePath, image);
+                return image;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,16 +1,25 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.sprites.Sprite;
+
 import java.awt.*;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Objects;
 
 /**
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
-    private Rectangle area = new Rectangle(0, 0, 0, 0);
-    private Point latestPosition = area.getLocation();
-    private Rectangle body;
-    private Point center;
+    private Sprite sprite;
+    private AppStateWorld appStateWorld;
+    private Rectangle area = new Rectangle();
+    private Point latestPosition = new Point();
+    private Rectangle body = new Rectangle();
+    private Point center = new Point();
+    private boolean hasBody = false;
+    private boolean hasCenter = false;
     private Object type;
 
     public PropertiesComponent() { }
@@ -20,36 +29,44 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     @Override
+    public void onComponentAttachedSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
+    @Override
+    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
+        this.appStateWorld = appStateWorld;
+    }
+
+    @Override
     public void onUpdate(double timePerFrame) {}
 
     @Override
+    @SuppressWarnings("unchecked")
     public PropertiesComponent clone() {
         PropertiesComponent clone = (PropertiesComponent) super.clone();
         clone.area = (Rectangle) this.area.clone();
-        clone.latestPosition = clone.area.getLocation();
-        if (body != null)
+        clone.latestPosition = this.area.getLocation();
+        if (hasBody)
             clone.body = (Rectangle) this.body.clone();
-        if (center != null)
+        if (hasCenter)
             clone.center = (Point) this.center.clone();
         return clone;
     }
 
 
     public Rectangle getBody() {
-        if (body == null)
-            body = area;
-        return body;
-    }
-
-    public void setBody(int x, int y, int w, int h) {
-        setBody(new Rectangle(x, y, w, h));
+        return hasBody ? new Rectangle(area.x + body.x, area.y + body.y, body.width, body.height ) : area;
     }
 
     public void setBody(Rectangle body) {
-        if (this.body == null)
-            this.body = new Rectangle(body);
-        else
-            this.body.setBounds(body);
+        Objects.requireNonNull(body);
+        setBody(body.x, body.y, body.width, body.height);
+    }
+
+    public void setBody(int x, int y, int w, int h) {
+        this.body.setBounds(x, y, w, h);
+        hasBody = true;
     }
 
     public void move(Point point) {
@@ -67,6 +84,7 @@ public class PropertiesComponent extends CloneableComponent {
     public void move(int velocityX, int velocityY) {
         recordLatestPosition();
         getArea().translate(velocityX, velocityY);
+        validateAndAdjustPosition();
     }
 
     public int getX() {
@@ -96,6 +114,7 @@ public class PropertiesComponent extends CloneableComponent {
     public void setPosition(int x, int y) {
         recordLatestPosition();
         getArea().setLocation(x, y);
+        validateAndAdjustPosition();
     }
 
     public Rectangle getArea() {
@@ -109,6 +128,7 @@ public class PropertiesComponent extends CloneableComponent {
     public void setArea(int x, int y, int w, int h) {
         recordLatestPosition();
         getArea().setBounds(x, y, w, h);
+        validateAndAdjustPosition();
     }
 
     public void setAreaSize(int w, int h) {
@@ -139,29 +159,32 @@ public class PropertiesComponent extends CloneableComponent {
         this.type = type;
     }
 
-    public void setCenter(int x, int y) {
-        this.setCenter(new Point(x, y));
+    public void setCenter(Point center) {
+        setCenter(center.x, center.y);
     }
 
-    public void setCenter(Point center) {
-        if (this.center == null)
-            this.center = new Point(center);
-        else
-            this.center.setLocation(center);
+    public void setCenter(int x, int y) {
+        center.setLocation(x, y);
+        hasCenter = true;
     }
 
     public Point getCenter() {
-        if (center == null)
+        if (!hasCenter)
         {
             int bodyX = (int) getBody().getX();
             int bodyY = (int) getBody().getY();
-            center = new Point(bodyX + (int) getBody().getWidth() / 2, bodyY + (int) getBody().getHeight() / 2);
+            center = new Point(bodyX + getBody().width / 2, bodyY + getBody().height / 2);
         }
         return center;
     }
 
     private void recordLatestPosition() {
         latestPosition.setLocation(area.getX(), area.getY());
+    }
+
+    private void validateAndAdjustPosition() {
+        if (appStateWorld != null)
+            appStateWorld.validateSpritePosition(sprite, this::resumeToLatestPosition);
     }
 
     public void resumeToLatestPosition() {

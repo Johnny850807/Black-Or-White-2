@@ -20,7 +20,16 @@ public class ReadOnlyBundle extends Bundle {
     }
 
     public static class Builder {
-        private Bundle bundle = new Bundle();
+        private Bundle bundle;
+
+        public Builder() {
+            this.bundle = new Bundle();
+        }
+
+        public Builder(Bundle bundle) {
+            this.bundle = new Bundle();
+            this.bundle.data = bundle.data;
+        }
 
         public Builder eventId(int eventId) {
             bundle.eventId = eventId;

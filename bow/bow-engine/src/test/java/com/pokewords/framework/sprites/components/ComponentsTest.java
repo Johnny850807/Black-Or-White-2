@@ -18,25 +18,31 @@ public class ComponentsTest extends AbstractTest {
     @Test
     public void testPropertiesComponentAccessors() {
         PropertiesComponent pc = new PropertiesComponent("Type");
-        pc.setArea(50, 50, 50, 50);
-        pc.setCenter(200, 200);
-
         assertEquals("Type", pc.getType());
+
+        pc.setArea(50, 50, 50, 50);
         assertEquals(50, pc.getX());
         assertEquals(50, pc.getY());
         assertEquals(50, pc.getWidth());
         assertEquals(50, pc.getHeight());
         assertEquals(new Rectangle(50, 50, 50, 50), pc.getBody());
+        assertEquals(new Point(75, 75), pc.getCenter());
+
+        pc.setCenter(200, 200);
         assertEquals(new Point(200, 200), pc.getCenter());
-
-        pc.setBody(new Rectangle(100, 100, 100, 100));
-        assertEquals(new Rectangle(100, 100, 100, 100), pc.getBody());
-
-        pc.setPosition(20, 20);
-        assertEquals(new Rectangle(20, 20, 100, 100), pc.getBody());
-
         pc.setCenter(new Point(300, 300));
         assertEquals(new Point(300, 300), pc.getCenter());
+
+        pc.setBody(new Rectangle(20, 20, 20, 20));
+        assertEquals(new Rectangle(70, 70, 20, 20), pc.getBody());
+        pc.setBody(30, 30, 30, 30);
+        assertEquals(new Rectangle(80, 80, 30, 30), pc.getBody());
+
+        pc.setPosition(20, 20);
+        assertEquals(new Rectangle(20, 20, 50, 50), pc.getArea());
+        assertEquals(new Rectangle(50, 50, 30, 30), pc.getBody());
+        assertEquals(new Point(300, 300), pc.getCenter());
+
 
         pc.setType("Set-Type");
         assertEquals("Set-Type", pc.getType());

@@ -1,16 +1,22 @@
-package homework;
+package Pacman;
 
+import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.StringComponent;
 
 import java.awt.*;
-import java.util.Random;
 
 @SuppressWarnings("Duplicates")
 public class MainAppState extends EmptyAppState {
     private Sprite mousePositionText;
+
+    @Override
+    protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
+        return new ContainerAppStateWorld(this, gameEngineFacade);
+    }
 
     @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) {

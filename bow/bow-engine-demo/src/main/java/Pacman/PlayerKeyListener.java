@@ -1,9 +1,8 @@
-package homework;
+package Pacman;
 
 import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
-import com.pokewords.framework.sprites.factories.SpriteInitializer;
 
 import java.awt.event.KeyEvent;
 import java.util.HashSet;

@@ -57,7 +57,7 @@ public class SwingSoundPlayer implements SoundPlayer {
     }
 
     @Override
-    public void pause(Object name) {
+    public void pauseSound(Object name) {
         doIfSoundExistsOtherwiseThrowException(name, ()-> {
             Clip sound = soundsMap.get(name);
             sound.stop();
@@ -65,7 +65,7 @@ public class SwingSoundPlayer implements SoundPlayer {
     }
 
     @Override
-    public void stop(Object name) {
+    public void stopSound(Object name) {
         doIfSoundExistsOtherwiseThrowException(name, ()-> {
             Clip sound = soundsMap.get(name);
             sound.close();

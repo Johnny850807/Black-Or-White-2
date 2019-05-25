@@ -32,7 +32,7 @@ public class MenuAppState extends AppState {
 
     @Override
     protected void onAppStateExiting() {
-        getSoundPlayer().stop(SoundTypes.OPENING);
+        getSoundPlayer().stopSound(SoundTypes.OPENING);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package homework;
+package Pacman;
 
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.CloneableComponent;

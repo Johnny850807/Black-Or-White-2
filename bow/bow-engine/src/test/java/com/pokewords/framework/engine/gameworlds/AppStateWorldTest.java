@@ -1,10 +1,13 @@
 package com.pokewords.framework.engine.gameworlds;
 
 import com.pokewords.framework.AbstractTest;
+import com.pokewords.framework.engine.GameEngineFacade;
+import com.pokewords.framework.engine.MockGameEngine;
 import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.sprites.MockSprite;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.views.windows.MockGameWindowsConfigurator;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,7 +17,8 @@ import static org.junit.Assert.assertEquals;
 
 public class AppStateWorldTest extends AbstractTest {
     private AppStateWorld appStateWorld = new AppStateWorld(new EmptyAppState(),
-            new SpriteInitializer(release));
+            new GameEngineFacade(release, new MockGameEngine(),
+                    new MockGameWindowsConfigurator()));
 
     @Test
     public void testAppStateWorldLifecycleHasBeenDelegatedToSprite() {

@@ -37,15 +37,15 @@ public interface SoundPlayer {
     void playSoundLoopingForever(Object name);
 
     /**
-     * pause a sound.
+     * pauseSound a sound.
      * @param name the sound's name
      */
-    void pause(Object name);
+    void pauseSound(Object name);
 
     /**
-     * stop a sound.
+     * stopSound a sound.
      * @param name the sound's name
      */
-    void stop(Object name);
+    void stopSound(Object name);
 
 }

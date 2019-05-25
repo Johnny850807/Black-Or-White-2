@@ -69,7 +69,7 @@ public class BreakerIconLoadingState extends AppState {
 
     @Override
     protected void onAppStateExiting() {
-        getSoundPlayer().stop(Types.WaterDropSoundEffect);
+        getSoundPlayer().stopSound(Types.WaterDropSoundEffect);
     }
 
     @Override

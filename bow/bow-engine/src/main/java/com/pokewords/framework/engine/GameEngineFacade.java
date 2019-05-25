@@ -4,6 +4,7 @@ import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.SoundPlayer;
+import com.pokewords.framework.views.windows.GameWindowDefinition;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 /**
@@ -51,13 +52,13 @@ public class GameEngineFacade implements SoundPlayer {
     }
 
     @Override
-    public void pause(Object name) {
-        soundPlayer.pause(name);
+    public void pauseSound(Object name) {
+        soundPlayer.pauseSound(name);
     }
 
     @Override
-    public void stop(Object name) {
-        soundPlayer.stop(name);
+    public void stopSound(Object name) {
+        soundPlayer.stopSound(name);
     }
 
     public SpriteInitializer.SpriteDeclarator declare(Object type) {
@@ -70,6 +71,10 @@ public class GameEngineFacade implements SoundPlayer {
 
     public Sprite createSprite(Object type) {
         return spriteInitializer.createSprite(type);
+    }
+
+    public GameWindowDefinition getGameWindowDefinition() {
+        return gameWindowsConfigurator.getGameWindowDefinition();
     }
 
     public GameWindowsConfigurator getGameWindowsConfigurator() {

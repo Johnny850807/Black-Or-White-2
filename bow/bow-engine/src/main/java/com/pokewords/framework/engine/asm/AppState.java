@@ -25,6 +25,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	private SpriteInitializer spriteInitializer;
 	private InputManager inputManager;
 	private AppStateWorld appStateWorld;
+	private GameEngineFacade gameEngineFacade;
 	private GameWindowsConfigurator gameWindowsConfigurator;
 	private SoundPlayer soundPlayer;
 
@@ -36,15 +37,16 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 */
 	protected void inject(IocContainer iocContainer, AppStateMachine asm, GameEngineFacade gameEngineFacade) {
 		this.asm = asm;
-		this.spriteInitializer = iocContainer.spriteInitializer();
 		this.inputManager = iocContainer.inputManager();
-		this.soundPlayer = iocContainer.soundPlayer();
+		this.gameEngineFacade = gameEngineFacade;
 		this.gameWindowsConfigurator = gameEngineFacade.getGameWindowsConfigurator();
+		this.spriteInitializer = iocContainer.spriteInitializer();
+		this.soundPlayer = iocContainer.soundPlayer();
 	}
 
 	@Override
 	public void onAppStateCreate() {
-		this.appStateWorld = onCreateAppStateWorld();
+		this.appStateWorld = onCreateAppStateWorld(gameEngineFacade);
 		onAppStateCreating(appStateWorld);
 		this.appStateWorld.onAppStateCreate();
 	}
@@ -124,8 +126,8 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * For customizing your AppStateWorld, overwrite this method.
 	 * @return the created app state world
 	 */
-	protected AppStateWorld onCreateAppStateWorld() {
-		return new AppStateWorld(this, getSpriteInitializer());
+	protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
+		return new AppStateWorld(this, gameEngineFacade);
 	}
 
 	/**

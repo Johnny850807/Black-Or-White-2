@@ -1,13 +1,14 @@
 package com.pokewords.framework.engine.gameworlds;
 
+import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
-import com.pokewords.framework.sprites.components.PhysicsComponent;
-import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.sprites.components.RigidBodyComponent;
 import com.pokewords.framework.views.RenderedLayers;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
@@ -15,7 +16,6 @@ import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -23,26 +23,22 @@ import java.util.stream.Collectors;
  * @author Joanna, johnny850807 (waterball)
  */
 public class AppStateWorld implements AppStateLifeCycleListener {
-    private AppState appState;
-    private SpriteInitializer spriteInitializer;
+    protected AppState appState;
+    protected GameEngineFacade gameEngineFacade;
     private List<Sprite> sprites;
     private Map<Integer, Sprite> idSpriteMap;
     private Map<Sprite, Integer> spriteIdMap;
     private RenderedLayers renderedLayers;
     private Map<CollisionHandler.Type, List<CollisionHandler>> collisionHandlerMap;
 
-    public AppStateWorld(AppState appState, SpriteInitializer spriteInitializer) {
+    public AppStateWorld(AppState appState, GameEngineFacade gameEngineFacade) {
         this.appState = appState;
+        this.gameEngineFacade = gameEngineFacade;
         sprites = Collections.synchronizedList(new ArrayList<>(30));
-        this.spriteInitializer = spriteInitializer;
         renderedLayers = new RenderedLayers();
         collisionHandlerMap = new HashMap<>();
         idSpriteMap = new HashMap<>();
         spriteIdMap = new IdentityHashMap<>();
-    }
-
-    public SpriteInitializer getSpriteInitializer() {
-        return spriteInitializer;
     }
 
     /**
@@ -176,6 +172,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         }
     }
 
+
     /**
      * To notify sprites if they have collided
      */
@@ -202,7 +199,7 @@ public class AppStateWorld implements AppStateLifeCycleListener {
     }
 
     private boolean isPhysicallyBlocked(Sprite sprite1, Sprite sprite2) {
-        return sprite1.hasComponent(PhysicsComponent.class) && sprite2.hasComponent(PhysicsComponent.class);
+        return sprite1.hasComponent(RigidBodyComponent.class) && sprite2.hasComponent(RigidBodyComponent.class);
     }
 
     /**
@@ -280,6 +277,28 @@ public class AppStateWorld implements AppStateLifeCycleListener {
         sprites.addAll(getSpritesCollidedWithinArea(sprite.getBody()));
         sprites.remove(sprite);
         return sprites;
+    }
+
+    /**
+     * @return the rigid-body sprites collided with the given sprite
+     */
+    public Collection<Sprite> getSpritesRigidlyCollidedWith(Sprite sprite) {
+        Set<Sprite> sprites = Collections.newSetFromMap(new IdentityHashMap<>());
+        Collection<Sprite> rigidCollidedSprites = getSpritesCollidedWithinArea(sprite.getBody())
+                                                    .stream().filter(s -> s.hasComponent(RigidBodyComponent.class))
+                                                                .collect(Collectors.toList());
+
+        sprites.addAll(rigidCollidedSprites);
+        sprites.remove(sprite);
+        return sprites;
+    }
+
+    public void validateSpritePosition(Sprite sprite, Runnable taskIfInvalidPosition) {
+        if (sprite.hasComponent(RigidBodyComponent.class))
+        {
+            if (!getSpritesRigidlyCollidedWith(sprite).isEmpty())
+                taskIfInvalidPosition.run();
+        }
     }
 
 
