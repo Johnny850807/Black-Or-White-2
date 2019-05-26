@@ -14,8 +14,7 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
 
     @Override
     public void onKeyPressed(Sprite sprite, int keyCode) {
-        switch (keyCode)
-        {
+        switch (keyCode) {
             case KeyEvent.VK_UP:
                 move(sprite, Direction.UP);
                 break;
@@ -28,13 +27,14 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
             case KeyEvent.VK_RIGHT:
                 move(sprite, Direction.RIGHT);
                 break;
+            case KeyEvent.VK_SPACE:
+                sprite.getComponent(GunComponent.class).shootIfAvailable();
         }
     }
 
     @Override
     public void onKeyReleased(Sprite sprite, int keyCode) {
-        switch (keyCode)
-        {
+        switch (keyCode) {
             case KeyEvent.VK_UP:
                 clearMovement(sprite, Direction.UP);
                 break;
@@ -47,14 +47,6 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
             case KeyEvent.VK_RIGHT:
                 clearMovement(sprite, Direction.RIGHT);
                 break;
-        }
-    }
-
-    @Override
-    public void onKeyClicked(Sprite sprite, int keyCode) {
-        super.onKeyClicked(sprite, keyCode);
-        if (keyCode == KeyEvent.VK_SPACE) {
-            sprite.getComponent(GunComponent.class).shootIfAvailable();
         }
     }
 

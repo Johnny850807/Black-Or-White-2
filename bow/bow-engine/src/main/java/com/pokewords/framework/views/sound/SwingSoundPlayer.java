@@ -17,7 +17,7 @@ import java.util.*;
 public class SwingSoundPlayer implements SoundPlayer {
     private Map<Object, byte[]> soundsStreamMap = new HashMap<>();  // <sound's type, sound bytes>
     private Map<Object, Clip> activeSoundsMap = Collections.synchronizedMap(new HashMap<>());
-    private Set<Object> playingSounds = Collections.synchronizedSet(new HashSet<>()); // <sound's type>
+    private Set<Clip> playingSounds = Collections.synchronizedSet(new HashSet<>()); // <sound's type>
 
     @Override
     public void addSound(Object name, String soundPath) {
@@ -116,9 +116,9 @@ public class SwingSoundPlayer implements SoundPlayer {
             if (event.getType().equals(LineEvent.Type.OPEN))
                 activeSoundsMap.put(soundType, clip);
             else if (event.getType().equals(LineEvent.Type.START))
-                playingSounds.add(soundType);
+                playingSounds.add(clip);
             else if (event.getType().equals(LineEvent.Type.STOP))
-                playingSounds.remove(soundType);
+                playingSounds.remove(clip);
             else if (event.getType().equals(LineEvent.Type.CLOSE))
                 activeSoundsMap.remove(soundType);
         }

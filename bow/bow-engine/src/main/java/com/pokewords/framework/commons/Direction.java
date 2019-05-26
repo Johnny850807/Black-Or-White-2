@@ -80,8 +80,7 @@ public enum Direction {
 
     @SuppressWarnings("Duplicates")
     public Direction clearDirection(Direction direction) {
-        if (this == direction)
-            return NO_DIRECTION;
+        System.out.println("Clear dir: " + direction);
 
         switch (this) {
             case NO_DIRECTION:
@@ -106,6 +105,13 @@ public enum Direction {
                     return DOWN;
                 if (direction == DOWN)
                     return RIGHT;
+            case UP:
+            case DOWN:
+            case LEFT:
+            case RIGHT:
+                if (this == direction)
+                    return Direction.NO_DIRECTION;
+                return this;
             default:
                 throw new Error("Not reached.");
         }

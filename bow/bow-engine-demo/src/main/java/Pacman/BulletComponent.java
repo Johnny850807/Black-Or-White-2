@@ -1,6 +1,7 @@
 package Pacman;
 
 import com.pokewords.framework.commons.Direction;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.frames.Frame;
@@ -26,6 +27,12 @@ public class BulletComponent extends CloneableComponent implements Renderable {
     public void onComponentAttachedSprite(Sprite sprite) {
         super.onComponentAttachedSprite(sprite);
         bulletFrame.boundToSprite(sprite);
+    }
+
+    @Override
+    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
+        super.onComponentAttachedWorld(appStateWorld);
+        getGameEngineFacade().playSound(Types.SHOOT);
     }
 
     @Override

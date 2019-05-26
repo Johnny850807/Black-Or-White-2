@@ -58,7 +58,7 @@ public class DefaultGameEngine implements GameEngine {
             appStateMachine.onUpdate(timePerFrame);
             gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
             printProfileEveryCertainLoops();
-        } catch (Exception err) {
+        } catch (Error err) {
             err.printStackTrace();
         } finally {
             scheduler.schedule(gameLoopingTask,  (long) (timePerFrame*1000), TimeUnit.MILLISECONDS);

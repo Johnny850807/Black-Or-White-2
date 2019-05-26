@@ -31,6 +31,9 @@ public class PacmanApp extends GameApplication {
 
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
+        getSoundPlayer().addSound(Types.PACE, "sounds/pace.wav");
+        getSoundPlayer().addSound(Types.SHOOT, "sounds/machineGun.wav");
+
         spriteInitializer.declare(Types.AI1)
                 .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
                         8, 8, 22, 23, 120, 1))
@@ -67,7 +70,6 @@ public class PacmanApp extends GameApplication {
                 .body(2, 2, 33, 33)
                 .commit();
 
-        getSoundPlayer().addSound(Types.PACE, "sounds/pace.wav");
         spriteInitializer.declare(Types.PLAYER)
                 .with(new ImageComponent(ImageFrameFactory.fromPath(1, "images/smile.png")))
                 .with(KeyListenerComponent.ofListener(new PlayerKeyListener()))
