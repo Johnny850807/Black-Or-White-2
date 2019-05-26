@@ -6,22 +6,24 @@ import com.pokewords.framework.sprites.components.CollisionListenerComponent;
 import com.pokewords.framework.sprites.components.ImageComponent;
 
 public class PacmanCollisionListener extends CollisionListenerComponent.Listener {
-    private long latestRigidCollisionTime;
+    private long loopTime;
+    private long latestRigidCollisionLoop = 0;
 
     @Override
     public void onCollision(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) { }
 
     @Override
     public void onUpdate(double timePerFrame, Sprite ownerSprite) {
-        if (System.currentTimeMillis() - latestRigidCollisionTime > 650)
+        loopTime = (loopTime + 1) % Long.MAX_VALUE;
+
+        if ((loopTime - latestRigidCollisionLoop) % 28 == 0)
             ownerSprite.getComponent(ImageComponent.class).setImage("images/smile.png");
     }
 
     @Override
     public void onRigidCollisionEvent(Sprite ownerSprite, GameEngineFacade gameEngineFacade) {
-        gameEngineFacade.playSoundIfNotPlaying(Types.PACE);
         ownerSprite.getComponent(ImageComponent.class).setImage("images/cry.png");
-        latestRigidCollisionTime = System.currentTimeMillis();
+        latestRigidCollisionLoop = loopTime;
     }
 
     @Override

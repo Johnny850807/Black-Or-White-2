@@ -7,17 +7,16 @@ import java.util.Random;
 
 public class AiComponent extends CloneableComponent {
     private final static Random random = new Random();
-    private long latestDirectionChangedTime = System.currentTimeMillis();
+    private long loopTime = 0;
     private Direction[] directions = Direction.values();
     private Direction currentDirection = directions[random.nextInt(directions.length)];
 
     @Override
     public void onUpdate(double timePerFrame) {
-        if (System.currentTimeMillis() - latestDirectionChangedTime > 1500)
-        {
+        loopTime  = (loopTime + 1) % Integer.MAX_VALUE;
+
+        if (loopTime % 80 == 0)
             currentDirection = directions[random.nextInt(directions.length)];
-            latestDirectionChangedTime = System.currentTimeMillis();
-        }
 
         if (random.nextInt(100) > 75)
         {
