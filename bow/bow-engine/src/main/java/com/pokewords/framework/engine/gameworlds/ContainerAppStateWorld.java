@@ -7,13 +7,17 @@ import com.pokewords.framework.sprites.components.RigidBodyComponent;
 
 import java.awt.*;
 
+/**
+ * A subclass of AppStateWorld which can block the sprites from moving out of the game panel.
+ * @author johnny850807 (waterball)
+ */
 public class ContainerAppStateWorld extends AppStateWorld {
 
     public ContainerAppStateWorld(AppState appState, GameEngineFacade gameEngineFacade) {
         super(appState, gameEngineFacade);
     }
 
-    Rectangle gameArea = new Rectangle();
+    Rectangle gameArea = new Rectangle(0, 0, 0, 0);
 
     @Override
     public void onSpritePositionChanged(Sprite sprite) {

@@ -81,14 +81,6 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return getComponent(PropertiesComponent.class);
 	}
 
-	public CollidableComponent getCollidableComponent() {
-		return getComponent(CollidableComponent.class);
-	}
-
-
-	public boolean isCollidable() {
-		return hasComponent(CollidableComponent.class);
-	}
 
 	public boolean hasComponent(Class<? extends Component> type) {
 		return components.containsKey(type);

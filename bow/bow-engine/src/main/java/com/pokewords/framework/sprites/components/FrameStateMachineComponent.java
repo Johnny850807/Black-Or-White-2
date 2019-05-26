@@ -95,7 +95,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
 
 
     /**
-     * @return the actual inner finite state machine which contains the frames and transitions
+     * @return the actual inner finite state machine which containsSprite the frames and transitions
      */
     public FiniteStateMachine<EffectFrame> getFiniteStateMachine(){
         return fsm;

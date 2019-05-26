@@ -28,6 +28,8 @@ public class AppStateWorldTest extends AbstractTest {
         for (Sprite sprite : sprites)
             appStateWorld.spawn(sprite);
 
+        appStateWorld.onUpdate(15);  // only after the update, the sprites are actually spawned
+
         appStateWorld.onAppStateCreate();
         appStateWorld.onAppStateEnter();
 
@@ -41,7 +43,7 @@ public class AppStateWorldTest extends AbstractTest {
         for (MockSprite sprite : sprites) {
             assertEquals(1, sprite.onAppStateStartCount);
             assertEquals(1, sprite.onAppStateEnterCount);
-            assertEquals(updateLoopCount, sprite.onUpdateCount);
+            assertEquals(updateLoopCount+1, sprite.onUpdateCount);
             assertEquals(1, sprite.onAppStateExitCount);
             assertEquals(1, sprite.onAppStateDestroyCount);
         }

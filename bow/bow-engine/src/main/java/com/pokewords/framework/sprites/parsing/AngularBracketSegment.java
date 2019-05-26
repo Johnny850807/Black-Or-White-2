@@ -82,7 +82,7 @@ public class AngularBracketSegment extends Segment {
             int afterKeyValuePairsAndOrElement = context.getRemainingTokensCount();
             if (beforeKeyValuePairsAndOrElement == afterKeyValuePairsAndOrElement)
                 throw new ScriptParsingException(
-                        "Segment body contains something that is neither key-value pair nor element");
+                        "Segment body containsSprite something that is neither key-value pair nor element");
         }
         throw new ScriptParsingException("Run out of token before reaching: </" + getName() + ">");
     }

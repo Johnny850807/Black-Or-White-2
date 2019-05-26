@@ -62,7 +62,7 @@ public class LinScript extends Script {
                 addSegment(segment);
             if (beforeSegment == afterSegment)
                 throw new ScriptParsingException(
-                        "Script body contains something that is not segment");
+                        "Script body containsSprite something that is not segment");
         }
     }
 
