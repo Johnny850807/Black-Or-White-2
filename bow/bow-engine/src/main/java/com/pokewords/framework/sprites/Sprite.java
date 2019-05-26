@@ -45,9 +45,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		components.forEach(this::addComponent);
 	}
 
-	public void setWorld(@Nullable AppStateWorld world) {
+	public void attachToWorld(AppStateWorld world) {
 		this.world = world;
 		components.foreachComponent(c -> c.onComponentAttachedWorld(world));
+	}
+
+	public void detachFromWorld(AppStateWorld world) {
+		assert this.world == world;
+		components.foreachComponent(c -> c.onComponentDetachedWorld(world));
 	}
 
 	@Nullable
@@ -114,7 +119,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
 	public <T extends Component> void removeComponent(Class<T> type) {
-		components.remove(type).onComponentRemoved();
+		components.remove(type).onComponentDetachedSprite(this);
 	}
 
 	@Override

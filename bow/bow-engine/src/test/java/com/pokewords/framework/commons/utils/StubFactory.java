@@ -1,7 +1,6 @@
 package com.pokewords.framework.commons.utils;
 
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.components.mocks.*;

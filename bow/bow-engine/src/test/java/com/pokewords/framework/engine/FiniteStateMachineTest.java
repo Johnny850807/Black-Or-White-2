@@ -120,28 +120,20 @@ public class FiniteStateMachineTest extends AbstractTest {
     public void testBasicFsmTriggerRemainsTheCurrentStateIfTransitionNotExists(){
         FiniteStateMachine<String> fsm = createBasicFsm();
 
-        //We add states but don't add transitions
-        fsm.addState(A);
-        fsm.addState(B);
-        fsm.addState(C);
-
-        final String[] EVENTS = {N1, N2, N3};
-
         //Assert the state will always remain at the current state
-
         fsm.setCurrentState(A);
         for (int i = 0; i < TEST_LOOP; i++)
-            assertRemainsCurrentState(fsm, A, fsm.trigger(EVENTS[i % EVENTS.length]));
+            assertRemainsCurrentState(fsm, A, "Not-existent Transition");
 
 
         fsm.setCurrentState(B);
         for (int i = 0; i < TEST_LOOP; i++) {
-            assertRemainsCurrentState(fsm, B, fsm.trigger(EVENTS[i % EVENTS.length]));
+            assertRemainsCurrentState(fsm, B, "Not-existent Transition");
         }
 
         fsm.setCurrentState(C);
         for (int i = 0; i < TEST_LOOP; i++) {
-            assertRemainsCurrentState(fsm, C, fsm.trigger(EVENTS[i % EVENTS.length]));
+            assertRemainsCurrentState(fsm, C, "Not-existent Transition");
         }
     }
 
@@ -381,11 +373,5 @@ public class FiniteStateMachineTest extends AbstractTest {
         }
     }
 
-    @Test
-    public void testShallowClone() {
-        FiniteStateMachine<String> fsm = createBasicFsm();
-        FiniteStateMachine<String> clone = fsm.clone();
 
-        assertNotSameButEquals(fsm, clone);
-    }
 }

@@ -27,11 +27,13 @@ public class FrameComponent<T extends Frame> extends CloneableComponent implemen
 
     @Override
     public void onComponentAttachedSprite(Sprite sprite) {
+        super.onComponentAttachedSprite(sprite);
         frame.boundToSprite(sprite);
     }
 
     @Override
-    public void onComponentRemoved() {
+    public void onComponentDetachedSprite(Sprite sprite) {
+        super.onComponentDetachedSprite(sprite);
         frame.boundToSprite(null);
     }
 

@@ -1,12 +1,12 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.sprites.Sprite;
 
 /**
  * @author johnny850807 (waterball)
  */
 public class CollisionListenerComponent extends CloneableComponent {
-    private Sprite sprite;
     private Listener listener;
 
     public static CollisionListenerComponent ofListener(Listener listener) {
@@ -18,15 +18,65 @@ public class CollisionListenerComponent extends CloneableComponent {
     }
 
     @Override
-    public void onComponentAttachedSprite(Sprite sprite) {
-        this.sprite = sprite;
+    public void onUpdate(double timePerFrame) {
+        listener.onUpdate(timePerFrame, getOwnerSprite());
     }
 
-    public interface Listener {
-        void onCollision(Sprite thisSprite, Sprite thatSprite);
+    public static abstract class Listener implements Cloneable {
+
+
+        public void onUpdate(double timePerFrame, Sprite ownerSprite) {
+            //hook
+        }
+
+        /**
+         * This method will be triggered during appStateWorld updating and
+         * if the owner Sprite is collided with another non-rigid-body Sprite.
+         * @param ownerSprite the owner sprite of the listener
+         * @param thatSprite the sprite collided with
+         */
+        public abstract void onCollision(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade);
+
+
+        /**
+         * This method will be triggered during the owner Sprite is being moved and
+         * if this movement causes a collision event to the owner Sprite.
+         *
+         * Note that this method will be triggered only once in every move despite the number
+         * of rigid sprites it collides with.
+         * @param ownerSprite the owner sprite of the listener
+         */
+        public abstract void onRigidCollisionEvent(Sprite ownerSprite, GameEngineFacade gameEngineFacade);
+
+
+        /**
+         * This method will be triggered during the owner Sprite is being moved and
+         * if the owner Sprite is collided with another rigid-body Sprite.
+         *
+         * Note that this method will be triggered for each rigid Sprite it collides with.
+         *
+         * @param ownerSprite the owner sprite of the listener
+         * @param thatSprite the sprite collided with
+         */
+        public abstract void onRigidCollisionToSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade);
+
+        public Listener clone() {
+            try {
+                return (Listener) super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new Error(e);
+            }
+        }
     }
 
-    public void notifyCollision(Sprite thatSprite) {
-        listener.onCollision(sprite, thatSprite);
+    public Listener getListener() {
+        return listener;
+    }
+
+    @Override
+    public CollisionListenerComponent clone() {
+        CollisionListenerComponent clone = (CollisionListenerComponent) super.clone();
+        clone.listener = listener.clone();
+        return clone;
     }
 }

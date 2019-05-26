@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  */
 public class AppStateWorld implements AppStateLifeCycleListener, PropertiesComponent.SpritePositionChangedListener {
     protected AppState appState;
-    protected GameEngineFacade gameEngineFacade;
     private List<Sprite> sprites;
     private RenderedLayers renderedLayers;
     private Map<TargetPair, List<CollisionHandler>> collisionHandlerMap;
@@ -29,12 +28,19 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     private Collection<Sprite> readyToBeSpawnedSprites = new LinkedList<>();
     private Collection<Sprite> readyToBeRemovedSprites = new LinkedList<>();
 
-    public AppStateWorld(AppState appState, GameEngineFacade gameEngineFacade) {
+    public AppStateWorld(AppState appState) {
         this.appState = appState;
-        this.gameEngineFacade = gameEngineFacade;
         sprites = new ArrayList<>(30);
         renderedLayers = new RenderedLayers();
         collisionHandlerMap = new HashMap<>();
+    }
+
+    public AppState getAppState() {
+        return appState;
+    }
+
+    public GameEngineFacade getGameEngineFacade() {
+        return getAppState().getGameEngineFacade();
     }
 
     /**
@@ -43,7 +49,6 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
      */
     public void spawn(Sprite sprite) {
         readyToBeSpawnedSprites.add(sprite);
-        sprite.setWorld(this);
     }
 
     /**
@@ -147,10 +152,12 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     private void handleReadyToBeSpawnedOrRemovedSprites() {
         sprites.addAll(readyToBeSpawnedSprites);
         readyToBeSpawnedSprites.forEach(s -> s.addPositionChangedListener(this));
+        readyToBeSpawnedSprites.forEach(s-> s.attachToWorld(this) );
         readyToBeSpawnedSprites.clear();
 
         sprites.removeAll(readyToBeRemovedSprites);
-        readyToBeSpawnedSprites.forEach(s -> s.removePositionChangedListener(this));
+        readyToBeRemovedSprites.forEach(s -> s.removePositionChangedListener(this));
+        readyToBeRemovedSprites.forEach(s-> s.detachFromWorld(this) );
         readyToBeRemovedSprites.clear();
     }
 
@@ -202,9 +209,9 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
 
     private void notifySpriteCollisionListenerComponents(Sprite sprite1, Sprite sprite2) {
         sprite1.getComponentOptional(CollisionListenerComponent.class)
-                .ifPresent(c -> c.notifyCollision(sprite2));
+                .ifPresent(c -> c.getListener().onCollision(sprite1, sprite2, getGameEngineFacade()));
         sprite2.getComponentOptional(CollisionListenerComponent.class)
-                .ifPresent(c -> c.notifyCollision(sprite1));
+                .ifPresent(c -> c.getListener().onCollision(sprite2, sprite1, getGameEngineFacade()));
     }
 
     @Override
@@ -215,8 +222,32 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     private void blockTheSpriteIfRigidCollisionOccurs(Sprite sprite) {
         if (sprite.hasComponent(RigidBodyComponent.class))
         {
-            if (!getSpritesRigidlyCollidedWith(sprite).isEmpty())
+            Collection<Sprite> collidedRigidBodySprites = getSpritesRigidlyCollidedWith(sprite);
+
+            if (!collidedRigidBodySprites.isEmpty())
+            {
+                notifySpriteRigidCollisionListener(sprite, collidedRigidBodySprites);
                 sprite.resumeToLatestPosition();
+            }
+        }
+    }
+
+    private void notifySpriteRigidCollisionListener(Sprite ownerSprite, Collection<Sprite> collidedRigidBodySprites) {
+        if (ownerSprite.hasComponent(CollisionListenerComponent.class))
+        {
+            ownerSprite.getComponent(CollisionListenerComponent.class)
+                        .getListener().onRigidCollisionEvent(ownerSprite, getGameEngineFacade());
+
+            for (Sprite collidedRigidBodySprite : collidedRigidBodySprites) {
+                collidedRigidBodySprite.getComponent(CollisionListenerComponent.class)
+                        .getListener().onRigidCollisionEvent(collidedRigidBodySprite, getGameEngineFacade());
+
+                ownerSprite.getComponent(CollisionListenerComponent.class)
+                        .getListener().onRigidCollisionToSprite(ownerSprite, collidedRigidBodySprite, getGameEngineFacade());
+
+                collidedRigidBodySprite.getComponent(CollisionListenerComponent.class)
+                        .getListener().onRigidCollisionToSprite(collidedRigidBodySprite, ownerSprite, getGameEngineFacade());
+            }
         }
     }
 
@@ -294,7 +325,6 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
      */
     public void removeSprite(Sprite sprite) {
         readyToBeRemovedSprites.add(sprite);
-        sprite.setWorld(null);
     }
 
     /**

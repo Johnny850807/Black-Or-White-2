@@ -16,21 +16,21 @@ public class MainAppState extends EmptyAppState {
 
     @Override
     protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
-        return new ContainerAppStateWorld(this, gameEngineFacade);
-    }
-
-    private enum SoundTypes {
-        COLLISION
+        return new ContainerAppStateWorld(this);
     }
 
     @Override
     protected void onAppStateCreating(AppStateWorld appStateWorld) {
         getGameWindowsConfigurator().gameSize(800, 600);
 
-        appStateWorld.spawn(createSprite(Types.AI1));
-        appStateWorld.spawn(createSprite(Types.AI2));
-        appStateWorld.spawn(createSprite(Types.AI3));
-        appStateWorld.spawn(createSprite(Types.PLAYER));
+        appStateWorld.spawn(createSprite(Types.AI1, 62, 229));
+        appStateWorld.spawn(createSprite(Types.AI2, 215, 70));
+        appStateWorld.spawn(createSprite(Types.AI3, 493, 64));
+        appStateWorld.spawn(createSprite(Types.AI1, 695, 210));
+        appStateWorld.spawn(createSprite(Types.AI2, 685, 431));
+        appStateWorld.spawn(createSprite(Types.AI3, 433, 528));
+        appStateWorld.spawn(createSprite(Types.AI1, 46, 47));
+        appStateWorld.spawn(createSprite(Types.PLAYER, 371, 276));
         appStateWorld.spawn(mousePositionText = createSprite(Types.MOUSE_POSITION));
 
         bindMouseMovedAction(this::updateMousePositionText);

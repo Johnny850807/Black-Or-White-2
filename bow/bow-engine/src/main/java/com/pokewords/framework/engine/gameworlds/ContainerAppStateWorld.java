@@ -13,8 +13,8 @@ import java.awt.*;
  */
 public class ContainerAppStateWorld extends AppStateWorld {
 
-    public ContainerAppStateWorld(AppState appState, GameEngineFacade gameEngineFacade) {
-        super(appState, gameEngineFacade);
+    public ContainerAppStateWorld(AppState appState) {
+        super(appState);
     }
 
     Rectangle gameArea = new Rectangle(0, 0, 0, 0);
@@ -23,7 +23,7 @@ public class ContainerAppStateWorld extends AppStateWorld {
     public void onSpritePositionChanged(Sprite sprite) {
         super.onSpritePositionChanged(sprite);
 
-        Dimension windowsSize = gameEngineFacade.getGameWindowDefinition().size;
+        Dimension windowsSize = getGameEngineFacade().getGameWindowDefinition().size;
         gameArea.setSize(windowsSize);
 
         if (sprite.hasComponent(RigidBodyComponent.class)

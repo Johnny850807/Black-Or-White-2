@@ -3,21 +3,20 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.sprites.Sprite;
 
 public class KeyListenerComponent extends CloneableComponent {
-    private Sprite sprite;
     private Listener listener;
 
-    public KeyListenerComponent(Listener listener) {
+    public static KeyListenerComponent ofListener(Listener listener) {
+        return new KeyListenerComponent(listener);
+    }
+
+    private KeyListenerComponent(Listener listener) {
         this.listener = listener;
     }
 
-    @Override
-    public void onComponentAttachedSprite(Sprite sprite) {
-        this.sprite = sprite;
-    }
 
     @Override
     public void onUpdate(double timePerFrame) {
-        listener.onUpdate(sprite);
+        listener.onUpdate(getOwnerSprite());
     }
 
     public abstract static class Listener implements Cloneable {
@@ -37,10 +36,6 @@ public class KeyListenerComponent extends CloneableComponent {
 
     public Listener getListener() {
         return listener;
-    }
-
-    public Sprite getSprite() {
-        return sprite;
     }
 
     @Override

@@ -31,6 +31,11 @@ public class MockSoundPlayer implements SoundPlayer {
     }
 
     @Override
+    public boolean isPlayingSound(Object name) {
+        return false;
+    }
+
+    @Override
     public void playSoundLooping(Object name, int loop) {
 
     }

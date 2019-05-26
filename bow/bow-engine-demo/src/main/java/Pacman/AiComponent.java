@@ -1,28 +1,28 @@
 package Pacman;
 
-import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 
 import java.util.Random;
 
 public class AiComponent extends CloneableComponent {
     private final static Random random = new Random();
-    private Sprite sprite;
-
-    @Override
-    public void onComponentAttachedSprite(Sprite sprite) {
-        this.sprite = sprite;
-    }
+    private long latestDirectionChangedTime = System.currentTimeMillis();
+    private Direction[] directions = Direction.values();
+    private Direction currentDirection = directions[random.nextInt(directions.length)];
 
     @Override
     public void onUpdate(double timePerFrame) {
-        if ((int)timePerFrame % 2 == 0 && random.nextInt(100) > 95)
+        if (System.currentTimeMillis() - latestDirectionChangedTime > 1500)
         {
-            int negativeX = random.nextBoolean() ? 1 : -1;
-            int negativeY = random.nextBoolean() ? 1 : -1;
-            int dx = random.nextInt(30) * negativeX;
-            int dy = random.nextInt(30) * negativeY;
-            sprite.move(dx, dy);
+            currentDirection = directions[random.nextInt(directions.length)];
+            latestDirectionChangedTime = System.currentTimeMillis();
+        }
+
+        if (random.nextInt(100) > 75)
+        {
+            int speed = random.nextInt(11) + 4;
+            getOwnerSprite().move(currentDirection.move(speed));
         }
     }
 }

@@ -133,12 +133,14 @@ public abstract class AbstractFrame implements Frame {
         if (o == null || getClass() != o.getClass()) return false;
         AbstractFrame that = (AbstractFrame) o;
         return layerIndex == that.layerIndex &&
-                flags == that.flags;
+                flags == that.flags &&
+                sprite == that.sprite /*they have the same owner or both don't have*/ &&
+                area.equals(that.area);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(layerIndex, flags);
+        return Objects.hash(area, layerIndex, flags);
     }
 
     @Override

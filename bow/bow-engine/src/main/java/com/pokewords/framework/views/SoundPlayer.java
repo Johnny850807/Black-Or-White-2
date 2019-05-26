@@ -24,6 +24,17 @@ public interface SoundPlayer {
     void playSound(Object name);
 
     /**
+     * @return if the sound of the given name is playing
+     */
+    boolean isPlayingSound(Object name);
+
+
+    default void playSoundIfNotPlaying(Object name) {
+        if (!isPlayingSound(name))
+            playSound(name);
+    }
+
+    /**
      * play a sound with looping given time
      * @param name the sound's name
      */

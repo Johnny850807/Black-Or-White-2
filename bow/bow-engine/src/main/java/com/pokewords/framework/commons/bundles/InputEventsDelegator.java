@@ -25,20 +25,20 @@ public class InputEventsDelegator {
     public static void delegateToInputEventsListenerComponents(InputManager inputManager, Supplier<AppStateWorld> currentWorldSupplier) {
         inputManager.bindKeyEventForRoot(KeyEvent.KEY_PRESSED, keyCode ->
                 currentWorldSupplier.get().getKeyListenerComponents()
-                        .forEach(c -> c.getListener().onKeyPressed(c.getSprite(), keyCode)));
+                        .forEach(c -> c.getListener().onKeyPressed(c.getOwnerSprite(), keyCode)));
 
         inputManager.bindKeyEventForRoot(KeyEvent.KEY_RELEASED, keyCode ->
                 currentWorldSupplier.get().getKeyListenerComponents()
-                        .forEach(c -> c.getListener().onKeyReleased(c.getSprite(), keyCode)));
+                        .forEach(c -> c.getListener().onKeyReleased(c.getOwnerSprite(), keyCode)));
 
         inputManager.bindKeyEventForRoot(KeyEvent.KEY_TYPED, keyCode ->
                 currentWorldSupplier.get().getKeyListenerComponents()
-                        .forEach(c -> c.getListener().onKeyClicked(c.getSprite(), keyCode)));
+                        .forEach(c -> c.getListener().onKeyClicked(c.getOwnerSprite(), keyCode)));
 
         inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_MOVED, mousePosition ->
                 currentWorldSupplier.get().getMouseListenerComponents()
                         .forEach(c -> {
-                            Sprite sprite = c.getSprite();
+                            Sprite sprite = c.getOwnerSprite();
                             if (!c.isMouseEntered() && sprite.getArea().contains(mousePosition))
                             {
                                 Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
@@ -67,9 +67,9 @@ public class InputEventsDelegator {
                                                                      QuaternaryConsumer<MouseListenerComponent.Listener, Sprite, Point, Point> firing)
     {
         currentWorldSupplier.get().getMouseListenerComponents().stream()
-                .filter(c -> c.getSprite().getArea().contains(mousePosition))
+                .filter(c -> c.getOwnerSprite().getArea().contains(mousePosition))
                 .forEach(c -> {
-                    Sprite sprite = c.getSprite();
+                    Sprite sprite = c.getOwnerSprite();
                     Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
                     firing.accept(c.getListener(), sprite, mousePosition, positionInArea);
                 });

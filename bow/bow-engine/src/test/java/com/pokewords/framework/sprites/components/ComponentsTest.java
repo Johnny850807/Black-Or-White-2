@@ -104,8 +104,6 @@ public class ComponentsTest extends AbstractTest {
         assertSame(fsmComponent.getCurrentFrame(), clone.getCurrentFrame());
         assertDeepNotSameButEquals(fsmComponent.renderedFrameCollection, clone.renderedFrameCollection);
         assertDeepNotSameButEquals(fsmComponent.effectFrameMap, clone.effectFrameMap);
-        assertSame(fsmComponent.world, clone.world);
-        assertSame(fsmComponent.sprite, clone.sprite);
     }
 
     @Test

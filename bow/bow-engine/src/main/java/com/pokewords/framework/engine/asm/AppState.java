@@ -44,6 +44,10 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		this.soundPlayer = iocContainer.soundPlayer();
 	}
 
+	public GameEngineFacade getGameEngineFacade() {
+		return gameEngineFacade;
+	}
+
 	@Override
 	public void onAppStateCreate() {
 		this.appStateWorld = onCreateAppStateWorld(gameEngineFacade);
@@ -127,7 +131,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * @return the created app state world
 	 */
 	protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
-		return new AppStateWorld(this, gameEngineFacade);
+		return new AppStateWorld(this);
 	}
 
 	/**
@@ -186,6 +190,16 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	protected Sprite createSprite(Object type) {
 		return spriteInitializer.createSprite(type);
+	}
+
+	protected Sprite createSprite(Object type, Point position) {
+		return createSprite(type, position.x, position.y);
+	}
+
+	protected Sprite createSprite(Object type, int x, int y) {
+		Sprite sprite = createSprite(type);
+		sprite.setPosition(x, y);
+		return sprite;
 	}
 
 	public SpriteInitializer getSpriteInitializer() {

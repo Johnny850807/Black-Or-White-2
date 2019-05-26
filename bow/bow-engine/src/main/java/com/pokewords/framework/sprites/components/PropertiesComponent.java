@@ -13,7 +13,6 @@ import java.util.List;
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
-    private Sprite sprite;
     private Rectangle area = new Rectangle();
     private Point latestPosition = new Point();
     private Rectangle body = new Rectangle();
@@ -32,10 +31,6 @@ public class PropertiesComponent extends CloneableComponent {
         this.type = Objects.requireNonNull(type);
     }
 
-    @Override
-    public void onComponentAttachedSprite(Sprite sprite) {
-        this.sprite = sprite;
-    }
 
     @Override
     public void onAppStateEnter() {
@@ -201,7 +196,7 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void notifyPositionChangedListeners() {
-        positionChangedListeners.forEach(p -> p.onSpritePositionChanged(sprite));
+        positionChangedListeners.forEach(p -> p.onSpritePositionChanged(getOwnerSprite()));
     }
 
     @Override

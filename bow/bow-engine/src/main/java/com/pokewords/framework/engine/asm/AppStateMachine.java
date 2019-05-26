@@ -159,7 +159,6 @@ public class AppStateMachine implements GameLoopingListener {
 		if (this.gameInitialState != null)
 			throw new GameEngineException("You can only set the GameInitialState once.");
 		this.gameInitialState = gameInitialState;
-		this.fsm.addState(this.gameInitialState);
 		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState,
 				transitionEffect, listeners);
 	}

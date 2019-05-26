@@ -16,9 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class AppStateWorldTest extends AbstractTest {
-    private AppStateWorld appStateWorld = new AppStateWorld(new EmptyAppState(),
-            new GameEngineFacade(release, new MockGameEngine(),
-                    new MockGameWindowsConfigurator()));
+    private AppStateWorld appStateWorld = new AppStateWorld(new EmptyAppState());
 
     @Test
     public void testAppStateWorldLifecycleHasBeenDelegatedToSprite() {

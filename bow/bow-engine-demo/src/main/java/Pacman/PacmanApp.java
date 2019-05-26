@@ -25,57 +25,63 @@ public class PacmanApp extends GameApplication {
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
         gameWindowsConfigurator.name("Homework")
-                            .gamePanelBackground(Color.decode("#404040"))
-                            .atCenter();
+                .gamePanelBackground(Color.decode("#404040"))
+                .atCenter();
     }
 
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer.declare(Types.AI1)
                 .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
-                        8, 8, 22, 23, 120, 1 ))
+                        8, 8, 22, 23, 120, 1))
                 .with(new AiComponent())
-                .with( RigidBodyComponent.getInstance())
+                .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
+                .with(RigidBodyComponent.getInstance())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .area(597, 130, 35, 35)
+                .areaSize(35, 35)
                 .body(2, 2, 33, 33)
                 .commit();
 
         spriteInitializer.declare(Types.AI2)
                 .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
-                        8, 8, 30, 31, 120, 1 ))
+                        8, 8, 30, 31, 120, 1))
                 .with(new AiComponent())
-                .with( RigidBodyComponent.getInstance())
+                .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
+                .with(RigidBodyComponent.getInstance())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .area(339, 145, 35, 35)
+                .areaSize( 35, 35)
                 .body(2, 2, 33, 33)
                 .commit();
 
         spriteInitializer.declare(Types.AI3)
                 .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
-                        8, 8, 38, 39, 120, 1 ))
+                        8, 8, 38, 39, 120, 1))
                 .with(new AiComponent())
-                .with( RigidBodyComponent.getInstance())
+                .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
+                .with(RigidBodyComponent.getInstance())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .area(98, 127, 35, 35)
+                .areaSize( 35, 35)
                 .body(2, 2, 33, 33)
                 .commit();
 
+        getSoundPlayer().addSound(Types.PACE, "sounds/pace.wav");
         spriteInitializer.declare(Types.PLAYER)
                 .with(new ImageComponent(ImageFrameFactory.fromPath(1, "images/smile.png")))
-                .with(new KeyListenerComponent(new PlayerKeyListener()))
-                .with( RigidBodyComponent.getInstance())
+                .with(KeyListenerComponent.ofListener(new PlayerKeyListener()))
+                .with(CollisionListenerComponent.ofListener(new PacmanCollisionListener()))
+                .with(new HpComponent(5))
+                .with(RigidBodyComponent.getInstance())
                 .with(MouseListenerComponent.ofListener(new PlayerMouseListener()))
-                .area(346, 453, 50, 50)
+                .areaSize( 50, 50)
                 .body(1, 1, 49, 49)
                 .commit();
 
         spriteInitializer.declare(Types.MOUSE_POSITION)
                 .with(new StringComponent(
                         new StringFrame(5, "")
-                            .font(new Font("微軟正黑體", Font.PLAIN, 25))
+                                .font(new Font("微軟正黑體", Font.PLAIN, 25))
                                 .color(Color.black)
-                            .flags(StringFrame.FLAG_STICK_SPRITE_AREA)))
+                                .flags(StringFrame.FLAG_STICK_SPRITE_AREA)))
                 .with(MouseListenerComponent.ofListener(new TextMouseListener()))
                 .position(0, 0)
                 .commit();

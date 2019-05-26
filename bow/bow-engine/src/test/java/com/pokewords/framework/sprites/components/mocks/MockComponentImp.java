@@ -15,7 +15,7 @@ public class MockComponentImp extends Component implements MockComponent {
     private int exitCount;
     private int updateCount = 0;
 
-    public Sprite getSprite() {
+    public Sprite getOwnerSprite() {
         return sprite;
     }
 

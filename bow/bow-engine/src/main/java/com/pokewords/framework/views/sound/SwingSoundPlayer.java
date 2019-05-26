@@ -3,10 +3,11 @@ package com.pokewords.framework.views.sound;
 import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.views.SoundPlayer;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.util.HashMap;
-import java.util.Map;
+import javax.sound.sampled.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.*;
 
 /**
  * A sound player that is tightly coupled to the Swing GUI framework.
@@ -14,14 +15,15 @@ import java.util.Map;
  * @author johnny850807 (waterball)
  */
 public class SwingSoundPlayer implements SoundPlayer {
-    private Map<Object, Clip> soundsMap = new HashMap<>();
+    private Map<Object, byte[]> soundsStreamMap = new HashMap<>();  // <sound's type, sound bytes>
+    private Map<Object, Clip> activeSoundsMap = Collections.synchronizedMap(new HashMap<>());
+    private Set<Object> playingSounds = Collections.synchronizedSet(new HashSet<>()); // <sound's type>
 
     @Override
     public void addSound(Object name, String soundPath) {
         try {
-            Clip soundClip = AudioSystem.getClip();
-            soundClip.open(AudioSystem.getAudioInputStream(Resources.get(soundPath)));
-            soundsMap.put(name, soundClip);
+            byte[] soundBytes = Files.readAllBytes(Resources.get(soundPath).toPath());
+            soundsStreamMap.put(name, soundBytes);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -30,16 +32,23 @@ public class SwingSoundPlayer implements SoundPlayer {
     @Override
     public void removeSound(Object name) {
         doIfSoundExistsOtherwiseThrowException(name, ()-> {
-            soundsMap.get(name).close();
-            soundsMap.remove(name);
+            if (activeSoundsMap.containsKey(name))
+                stopSound(name);
+            soundsStreamMap.remove(name);
         });
     }
 
     @Override
     public void playSound(Object name) {
         doIfSoundExistsOtherwiseThrowException(name, ()-> {
-            soundsMap.get(name).start();
+            Clip clip = readSoundClip(name);
+            clip.start();
         });
+    }
+
+    @Override
+    public boolean isPlayingSound(Object name) {
+        return playingSounds.contains(name);
     }
 
 
@@ -51,15 +60,28 @@ public class SwingSoundPlayer implements SoundPlayer {
     @Override
     public void playSoundLooping(Object name, int loop) {
         doIfSoundExistsOtherwiseThrowException(name, ()-> {
-            Clip sound = soundsMap.get(name);
-            sound.loop(loop);
+            Clip clip = readSoundClip(name);
+            clip.loop(loop);
         });
+    }
+
+    private Clip readSoundClip(Object soundType) {
+        try {
+            byte[] soundBytes = soundsStreamMap.get(soundType);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(soundBytes));
+            Clip clip = AudioSystem.getClip();
+            clip.addLineListener(new MyLineListener(soundType, clip));
+            clip.open(audioInputStream);
+            return clip;
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void pauseSound(Object name) {
         doIfSoundExistsOtherwiseThrowException(name, ()-> {
-            Clip sound = soundsMap.get(name);
+            Clip sound = activeSoundsMap.get(name);
             sound.stop();
         });
     }
@@ -67,16 +89,38 @@ public class SwingSoundPlayer implements SoundPlayer {
     @Override
     public void stopSound(Object name) {
         doIfSoundExistsOtherwiseThrowException(name, ()-> {
-            Clip sound = soundsMap.get(name);
-            sound.close();
+            Clip soundClip = activeSoundsMap.get(name);
+            soundClip.close();
         });
     }
 
     public void doIfSoundExistsOtherwiseThrowException(Object name, Runnable runnable) {
-        if (soundsMap.containsKey(name))
+        if (soundsStreamMap.containsKey(name))
             runnable.run();
         else
             throw new IllegalArgumentException("Sound " + name + " not found.");
     }
 
+
+    private class MyLineListener implements LineListener {
+        private Object soundType;
+        private Clip clip;
+
+        public MyLineListener(Object soundType, Clip clip) {
+            this.soundType = soundType;
+            this.clip = clip;
+        }
+
+        @Override
+        public void update(LineEvent event) {
+            if (event.getType().equals(LineEvent.Type.OPEN))
+                activeSoundsMap.put(soundType, clip);
+            else if (event.getType().equals(LineEvent.Type.START))
+                playingSounds.add(soundType);
+            else if (event.getType().equals(LineEvent.Type.STOP))
+                playingSounds.remove(soundType);
+            else if (event.getType().equals(LineEvent.Type.CLOSE))
+                activeSoundsMap.remove(soundType);
+        }
+    }
 }

@@ -3,8 +3,6 @@ package com.pokewords.framework.sprites.factories;
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.CollidableComponent;
-import com.pokewords.framework.sprites.components.CollisionListenerComponent;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import com.pokewords.framework.sprites.components.PropertiesComponent;

@@ -42,6 +42,11 @@ public class GameEngineFacade implements SoundPlayer {
     }
 
     @Override
+    public boolean isPlayingSound(Object name) {
+        return soundPlayer.isPlayingSound(name);
+    }
+
+    @Override
     public void playSoundLooping(Object name, int loop) {
         soundPlayer.playSoundLooping(name, loop);
     }

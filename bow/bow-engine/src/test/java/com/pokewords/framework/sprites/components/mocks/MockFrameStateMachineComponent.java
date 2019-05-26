@@ -6,8 +6,7 @@ import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 /**
  * @author johnny850807 (waterball)
  */
-public class MockFrameStateMachineComponent extends FrameStateMachineComponent implements MockComponent{
-    private Sprite sprite;
+public class MockFrameStateMachineComponent extends FrameStateMachineComponent implements MockComponent {
     private boolean hasStarted = false;
     private boolean hasDestroyed = false;
     private boolean isRunning = false;
@@ -45,11 +44,6 @@ public class MockFrameStateMachineComponent extends FrameStateMachineComponent i
         updateCount++;
     }
 
-
-    @Override
-    public Sprite getSprite() {
-        return sprite;
-    }
 
     @Override
     public boolean hasStarted() {

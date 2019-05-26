@@ -9,7 +9,6 @@ import java.awt.*;
  * @author johnny850807 (waterball)
  */
 public class MouseListenerComponent extends CloneableComponent {
-    protected Sprite sprite;
     protected boolean mouseEntered = false;
     protected Listener wrappedListener;
     protected WrapperListener listener;
@@ -23,10 +22,6 @@ public class MouseListenerComponent extends CloneableComponent {
 
     private MouseListenerComponent() { }
 
-    @Override
-    public void onComponentAttachedSprite(Sprite sprite) {
-        this.sprite = sprite;
-    }
 
     public Listener getListener() {
         return listener;
@@ -82,10 +77,6 @@ public class MouseListenerComponent extends CloneableComponent {
             mouseListenerComponent.mouseEntered = false;
             listener.onMouseExit(sprite, mousePositionInWorld);
         }
-    }
-
-    public Sprite getSprite() {
-        return sprite;
     }
 
     public boolean isMouseEntered() {
