@@ -20,7 +20,7 @@ public class GameEngineFacade implements SoundPlayer {
     public GameEngineFacade(IocContainer iocContainer, GameEngine gameEngine, GameWindowsConfigurator gameWindowsConfigurator) {
         this.iocContainer = iocContainer;
         this.soundPlayer = iocContainer.soundPlayer();
-        this.spriteInitializer = new SpriteInitializer(iocContainer);
+        this.spriteInitializer = iocContainer.spriteInitializer();
         this.gameEngine = gameEngine;
         this.gameWindowsConfigurator = gameWindowsConfigurator;
     }

@@ -37,6 +37,7 @@ public class PacmanApp extends GameApplication {
                 .with(new AiComponent())
                 .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
                 .with(RigidBodyComponent.getInstance())
+                .with(new HpComponent(5))
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .areaSize(35, 35)
                 .body(2, 2, 33, 33)
@@ -48,6 +49,7 @@ public class PacmanApp extends GameApplication {
                 .with(new AiComponent())
                 .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
                 .with(RigidBodyComponent.getInstance())
+                .with(new HpComponent(5))
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .areaSize( 35, 35)
                 .body(2, 2, 33, 33)
@@ -59,6 +61,7 @@ public class PacmanApp extends GameApplication {
                 .with(new AiComponent())
                 .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
                 .with(RigidBodyComponent.getInstance())
+                .with(new HpComponent(5))
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .areaSize( 35, 35)
                 .body(2, 2, 33, 33)
@@ -69,6 +72,8 @@ public class PacmanApp extends GameApplication {
                 .with(new ImageComponent(ImageFrameFactory.fromPath(1, "images/smile.png")))
                 .with(KeyListenerComponent.ofListener(new PlayerKeyListener()))
                 .with(CollisionListenerComponent.ofListener(new PacmanCollisionListener()))
+                .with(new GunComponent())
+                .with(new PacmanComponent(12))
                 .with(new HpComponent(5))
                 .with(RigidBodyComponent.getInstance())
                 .with(MouseListenerComponent.ofListener(new PlayerMouseListener()))
@@ -84,6 +89,12 @@ public class PacmanApp extends GameApplication {
                                 .flags(StringFrame.FLAG_STICK_SPRITE_AREA)))
                 .with(MouseListenerComponent.ofListener(new TextMouseListener()))
                 .position(0, 0)
+                .commit();
+
+        spriteInitializer.declare(Types.BULLET)
+                .areaSize(5, 5)
+                .with(new BulletComponent())
+                .with(CollisionListenerComponent.ofListener(new BulletCollisionListener()))
                 .commit();
     }
 

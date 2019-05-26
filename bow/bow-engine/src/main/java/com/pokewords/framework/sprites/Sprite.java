@@ -227,7 +227,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         return getPropertiesComponent().getType();
     }
 
-    public Point2D getCenter() {
+    public Point getCenter() {
         return getPropertiesComponent().getCenter();
     }
 
