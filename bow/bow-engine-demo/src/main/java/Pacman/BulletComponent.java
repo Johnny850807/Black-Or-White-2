@@ -7,7 +7,6 @@ import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.frames.RectangleFrame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
-import com.pokewords.framework.views.windows.GameWindowDefinition;
 
 import java.awt.*;
 import java.util.Collection;
@@ -17,6 +16,7 @@ public class BulletComponent extends CloneableComponent implements Renderable {
     private Direction direction;
     private RectangleFrame bulletFrame;
     private Collection<Frame> renderedFrame;
+    private Object bulletOwnerType;  //ai's or player's
 
     public BulletComponent() {
         bulletFrame = new RectangleFrame(2, Color.yellow).flags(RectangleFrame.CANVAS_FLAG_FILLED);
@@ -32,7 +32,8 @@ public class BulletComponent extends CloneableComponent implements Renderable {
     @Override
     public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
         super.onComponentAttachedWorld(appStateWorld);
-        getGameEngineFacade().playSound(Types.SHOOT);
+        if (getBulletOwnerType() == Types.PLAYER)
+            getGameEngineFacade().playSound(Types.SHOOT);
     }
 
     @Override
@@ -43,6 +44,18 @@ public class BulletComponent extends CloneableComponent implements Renderable {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void setBulletOwnerType(Object ownerType) {
+        this.bulletOwnerType = ownerType;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public Object getBulletOwnerType() {
+        return bulletOwnerType;
     }
 
     @Override

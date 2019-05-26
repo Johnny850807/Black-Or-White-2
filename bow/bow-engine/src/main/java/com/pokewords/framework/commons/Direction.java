@@ -5,6 +5,12 @@ import java.awt.*;
 public enum Direction {
     NO_DIRECTION, UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN;
 
+    /**
+     * @return all directions but 'NO_DIRECTION'
+     */
+    public static Direction[] allDirections() {
+        return new Direction[] {UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN};
+    }
 
     public Direction getOppositeDirection() {
         switch (this) {
@@ -80,8 +86,6 @@ public enum Direction {
 
     @SuppressWarnings("Duplicates")
     public Direction clearDirection(Direction direction) {
-        System.out.println("Clear dir: " + direction);
-
         switch (this) {
             case NO_DIRECTION:
                 return NO_DIRECTION;

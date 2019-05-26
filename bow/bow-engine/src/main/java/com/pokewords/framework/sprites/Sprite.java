@@ -92,7 +92,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	public <T extends Component> Optional<T> getComponentOptional(Class<T> type) {
-		return Optional.ofNullable(getComponent(type));
+		return hasComponent(type) ? Optional.of(getComponent(type)) : Optional.empty();
 	}
 
 	/**
@@ -101,6 +101,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @return the component's instance if exists, otherwise null.
 	 */
 	public <T extends Component> T getComponent(Class<T> type) {
+		if (!hasComponent(type))
+			throw new IllegalArgumentException("The sprite doesn't have component of the type " + type.getSimpleName() + ".");
 		return type.cast(components.get(type));
 	}
 

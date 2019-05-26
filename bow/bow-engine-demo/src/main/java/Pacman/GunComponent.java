@@ -15,17 +15,18 @@ public class GunComponent extends Component implements Shareable {
 
     }
 
-    public void shootIfAvailable() {
+    public void shootIfAvailable(Direction direction) {
         if ((loopTime - latestShootLoopTime) >= 7)
-            shoot();
+            shoot(direction);
     }
 
-    private void shoot() {
+    private void shoot(Direction direction) {
         latestShootLoopTime = loopTime;
         Sprite bullet = getGameEngineFacade().createSprite(Types.BULLET);
         bullet.setPosition(getOwnerSprite().getCenter());
-        Direction direction = getOwnerSprite().getComponent(PacmanComponent.class).getLatestDirection();
-        bullet.getComponent(BulletComponent.class).setDirection(direction);
+        BulletComponent bulletComponent = bullet.getComponent(BulletComponent.class);
+        bulletComponent.setDirection(direction);
+        bulletComponent.setBulletOwnerType(getOwnerSprite().getType());
         getAttachedWorld().spawn(bullet);
     }
 }

@@ -3,12 +3,12 @@ package Pacman;
 import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 
-public class PacmanComponent extends CloneableComponent {
+public class MovingComponent extends CloneableComponent {
     private Direction latestDirection = Direction.UP;
     private Direction direction = Direction.NO_DIRECTION;
     private int speed;
 
-    public PacmanComponent(int speed) {
+    public MovingComponent(int speed) {
         this.speed = speed;
     }
 

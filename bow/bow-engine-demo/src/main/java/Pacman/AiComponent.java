@@ -7,21 +7,33 @@ import java.util.Random;
 
 public class AiComponent extends CloneableComponent {
     private final static Random random = new Random();
+    private final static Direction[] directions = Direction.allDirections();
     private long loopTime = 0;
-    private Direction[] directions = Direction.values();
+    private int nextDecisionInterval = 0;
     private Direction currentDirection = directions[random.nextInt(directions.length)];
 
     @Override
     public void onUpdate(double timePerFrame) {
-        loopTime  = (loopTime + 1) % Integer.MAX_VALUE;
-
-        if (loopTime % 80 == 0)
-            currentDirection = directions[random.nextInt(directions.length)];
-
-        if (random.nextInt(100) > 75)
+        if (loopTime++ == nextDecisionInterval)
         {
-            int speed = random.nextInt(11) + 4;
-            getOwnerSprite().move(currentDirection.move(speed));
+            currentDirection = directions[random.nextInt(directions.length)];
+            getOwnerSprite().getComponent(MovingComponent.class).move(currentDirection);
+            nextDecisionInterval = random.nextInt(55) + 10;
+            loopTime = 0;
         }
+        else if (random.nextInt(100) > 95)
+            getOwnerSprite().getComponent(MovingComponent.class).clearMovement(currentDirection);
+
+        if (random.nextInt(1000) > 990) {
+            Direction direction = getOwnerSprite().getComponent(MovingComponent.class).getLatestDirection();
+            getOwnerSprite().getComponent(GunComponent.class).shootIfAvailable(direction);
+        }
+    }
+
+    @Override
+    public AiComponent clone() {
+        AiComponent clone = (AiComponent) super.clone();
+        clone.currentDirection = directions[random.nextInt(directions.length)];
+        return clone;
     }
 }

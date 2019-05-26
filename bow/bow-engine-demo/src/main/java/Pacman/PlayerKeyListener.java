@@ -1,13 +1,10 @@
 package Pacman;
 
 import com.pokewords.framework.commons.Direction;
-import com.pokewords.framework.engine.asm.states.multiplayer.Player;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
 
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
-import java.util.Set;
 
 @SuppressWarnings("Duplicates")
 public class PlayerKeyListener extends KeyListenerComponent.Listener {
@@ -28,7 +25,8 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
                 move(sprite, Direction.RIGHT);
                 break;
             case KeyEvent.VK_SPACE:
-                sprite.getComponent(GunComponent.class).shootIfAvailable();
+                Direction direction = sprite.getComponent(MovingComponent.class).getLatestDirection();
+                sprite.getComponent(GunComponent.class).shootIfAvailable(direction);
         }
     }
 
@@ -51,11 +49,11 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
     }
 
     private void move(Sprite sprite, Direction direction) {
-        sprite.getComponent(PacmanComponent.class).move(direction);
+        sprite.getComponent(MovingComponent.class).move(direction);
     }
 
     private void clearMovement(Sprite sprite, Direction direction) {
-        sprite.getComponent(PacmanComponent.class).clearMovement(direction);
+        sprite.getComponent(MovingComponent.class).clearMovement(direction);
     }
 
 
