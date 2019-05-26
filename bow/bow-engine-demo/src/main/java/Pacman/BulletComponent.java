@@ -41,13 +41,6 @@ public class BulletComponent extends CloneableComponent implements Renderable {
         removeSelfIfOutOfScreen();
     }
 
-    private void removeSelfIfOutOfScreen() {
-        GameWindowDefinition windowDefinition = getGameEngineFacade().getGameWindowDefinition();
-        Rectangle area = new Rectangle(0, 0, windowDefinition.size.width, windowDefinition.size.height);
-        if (!area.contains(getOwnerSprite().getBody()))
-            getAttachedWorld().removeSprite(getOwnerSprite());
-    }
-
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
