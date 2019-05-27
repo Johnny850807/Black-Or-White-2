@@ -162,10 +162,11 @@ public class FiniteStateMachine<T> implements Cloneable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FiniteStateMachine<?> that = (FiniteStateMachine<?>) o;
-        return Objects.equals(currentState, that.currentState) &&
-                stateIdMap.equals(that.stateIdMap) &&
-                eventIdMap.equals(that.eventIdMap) &&
-                transitionTable.equals(that.transitionTable);
+        boolean a = Objects.equals(currentState, that.currentState) ;
+        boolean b =        stateIdMap.equals(that.stateIdMap) ;
+        boolean c =        eventIdMap.equals(that.eventIdMap);
+        boolean d =       transitionTable.equals(that.transitionTable);
+        return a && b && c && d;
     }
 
     @Override

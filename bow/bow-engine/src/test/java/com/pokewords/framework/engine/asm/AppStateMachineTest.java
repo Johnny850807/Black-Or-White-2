@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class AppStateMachineTest extends AbstractTest {
     private AppStateMachine appStateMachine;
-    private int EVENT_NEXT = 0;
+    private int EVENT_NEXT = 19534667;
 
     @Before
     public void setup() {
@@ -31,8 +31,11 @@ public class AppStateMachineTest extends AbstractTest {
     @Test
     public void testLifecycleEventsDelegatingProperly() {
         MockAppState A = appStateMachine.createState(MockAppState.class);
+        A.setName("A");
         MockAppState B = appStateMachine.createState(MockAppState.class);
+        B.setName("B");
         MockAppState C = appStateMachine.createState(MockAppState.class);
+        C.setName("C");
 
         appStateMachine.setGameInitialState(A, NoTransitionEffect.getInstance());
         appStateMachine.addTransition(A, EVENT_NEXT, B);

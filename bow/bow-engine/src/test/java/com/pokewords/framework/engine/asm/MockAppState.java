@@ -6,6 +6,7 @@ import com.pokewords.framework.engine.gameworlds.AppStateWorld;
  * @author johnny850807 (waterball)
  */
 public class MockAppState extends AppState {
+    private String name;
     private int onAppStateCreatingCount = 0;
     private int onAppStateEntering = 0;
     private int onAppStateExiting = 0;
@@ -63,5 +64,14 @@ public class MockAppState extends AppState {
 
     public int getOnAppStateUpdating() {
         return onAppStateUpdating;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name == null ? super.toString() : name;
     }
 }

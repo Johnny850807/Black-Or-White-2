@@ -5,6 +5,8 @@ import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.CollisionListenerComponent;
 import com.pokewords.framework.sprites.components.ImageComponent;
 
+import java.lang.reflect.Type;
+
 public class PacmanCollisionListener extends CollisionListenerComponent.Listener {
     private long loopTime;
     private long latestRigidCollisionLoop = 0;
@@ -22,10 +24,14 @@ public class PacmanCollisionListener extends CollisionListenerComponent.Listener
 
     @Override
     public void onRigidCollisionEvent(Sprite ownerSprite, GameEngineFacade gameEngineFacade) {
-        ownerSprite.getComponent(ImageComponent.class).setImage("images/cry.png");
-        latestRigidCollisionLoop = loopTime;
     }
 
     @Override
-    public void onRigidCollisionToSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) { }
+    public void onRigidCollisionToSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
+        if (thatSprite.anyType(Types.AI1, Types.AI2, Types.AI3))
+        {
+            ownerSprite.getComponent(ImageComponent.class).setImage("images/cry.png");
+            latestRigidCollisionLoop = loopTime;
+        }
+    }
 }

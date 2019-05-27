@@ -80,4 +80,9 @@ public class MockEffectFrame extends AbstractFrame implements EffectFrame {
     public MockEffectFrame clone() {
         return (MockEffectFrame) super.clone();
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

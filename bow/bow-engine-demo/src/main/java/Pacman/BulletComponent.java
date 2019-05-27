@@ -17,6 +17,7 @@ public class BulletComponent extends CloneableComponent implements Renderable {
     private RectangleFrame bulletFrame;
     private Collection<Frame> renderedFrame;
     private Object bulletOwnerType;  //ai's or player's
+    private int speed = 20;
 
     public BulletComponent() {
         bulletFrame = new RectangleFrame(2, Color.yellow).flags(RectangleFrame.CANVAS_FLAG_FILLED);
@@ -38,8 +39,7 @@ public class BulletComponent extends CloneableComponent implements Renderable {
 
     @Override
     public void onUpdate(double timePerFrame) {
-        getOwnerSprite().move(direction.move(20));
-        removeSelfIfOutOfScreen();
+        getOwnerSprite().move(direction.move(speed));
     }
 
     public void setDirection(Direction direction) {
@@ -56,6 +56,14 @@ public class BulletComponent extends CloneableComponent implements Renderable {
 
     public Object getBulletOwnerType() {
         return bulletOwnerType;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     @Override

@@ -26,7 +26,8 @@ public class AiComponent extends CloneableComponent {
 
         if (random.nextInt(1000) > 990) {
             Direction direction = getOwnerSprite().getComponent(MovingComponent.class).getLatestDirection();
-            getOwnerSprite().getComponent(GunComponent.class).shootIfAvailable(direction);
+            getOwnerSprite().getComponentOptional(GunComponent.class)
+                    .ifPresent(gun -> gun.shootIfAvailable(direction));
         }
     }
 

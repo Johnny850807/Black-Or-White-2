@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class Component implements AppStateLifeCycleListener {
     private @Nullable Sprite sprite;
@@ -35,10 +36,12 @@ public abstract class Component implements AppStateLifeCycleListener {
     }
 
     public void onComponentDetachedSprite(Sprite sprite) {
+        assert this.sprite == sprite;
         this.sprite = null;
     }
 
     public void onComponentDetachedWorld(AppStateWorld appStateWorld) {
+        assert this.world == appStateWorld;
         this.world = null;
     }
 
@@ -78,13 +81,4 @@ public abstract class Component implements AppStateLifeCycleListener {
                 "thus it can't get the GameEngineFacade.").getGameEngineFacade();
     }
 
-    /**
-     * This method will see if the owner Sprite is out of Screen, if so, remove it from the world.
-     */
-    protected void removeSelfIfOutOfScreen() {
-        GameWindowDefinition windowDefinition = getGameEngineFacade().getGameWindowDefinition();
-        Rectangle area = new Rectangle(0, 0, windowDefinition.size.width, windowDefinition.size.height);
-        if (!area.contains(getOwnerSprite().getBody()) && !area.intersects(getOwnerSprite().getBody()))
-            getAttachedWorld().removeSprite(getOwnerSprite());
-    }
 }

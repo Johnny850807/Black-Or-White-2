@@ -101,7 +101,7 @@ public class ComponentsTest extends AbstractTest {
         FrameStateMachineComponent clone = fsmComponent.clone();
 
         assertNotSameButEquals(fsmComponent.getFiniteStateMachine(), clone.getFiniteStateMachine());
-        assertSame(fsmComponent.getCurrentFrame(), clone.getCurrentFrame());
+        assertNotSameButEquals(fsmComponent.getCurrentFrame(), clone.getCurrentFrame());
         assertDeepNotSameButEquals(fsmComponent.renderedFrameCollection, clone.renderedFrameCollection);
         assertDeepNotSameButEquals(fsmComponent.effectFrameMap, clone.effectFrameMap);
     }

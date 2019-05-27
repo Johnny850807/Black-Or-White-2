@@ -133,8 +133,7 @@ public abstract class AbstractFrame implements Frame {
         if (o == null || getClass() != o.getClass()) return false;
         AbstractFrame that = (AbstractFrame) o;
         return layerIndex == that.layerIndex &&
-                flags == that.flags &&
-                sprite == that.sprite /*they have the same owner or both don't have*/ &&
+                flags == that.flags  &&
                 area.equals(that.area);
     }
 

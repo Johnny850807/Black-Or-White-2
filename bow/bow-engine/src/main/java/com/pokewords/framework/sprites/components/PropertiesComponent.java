@@ -160,6 +160,14 @@ public class PropertiesComponent extends CloneableComponent {
         return getType() == type;
     }
 
+    public boolean anyType(Object ...types) {
+        for (Object t : types) {
+            if (isType(t))
+                return true;
+        }
+        return false;
+    }
+
     public Object getType() {
         return type;
     }

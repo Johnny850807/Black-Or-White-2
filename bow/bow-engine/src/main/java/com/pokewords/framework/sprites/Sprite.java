@@ -198,6 +198,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         return getPropertiesComponent().getY();
     }
 
+    public void setArea(int x, int y, int width, int height) {
+        getPropertiesComponent().setArea(x, y, width, height);
+    }
     public void setArea(Rectangle area) {
 		getPropertiesComponent().setArea(area);
 	}
@@ -256,9 +259,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		getPropertiesComponent().moveY(velocityY);
 	}
 
-	public boolean isType(Object obj) {
-		return  getPropertiesComponent().isType(obj);
+	public boolean isType(Object type) {
+		return  getPropertiesComponent().isType(type);
 	}
+
+	public boolean anyType(Object ...types) {
+	    return getPropertiesComponent().anyType(types);
+    }
+
 
 	public void resumeToLatestPosition() {
 		getPropertiesComponent().resumeToLatestPosition();

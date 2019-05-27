@@ -142,7 +142,12 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
         handleReadyToBeSpawnedOrRemovedSprites();
 
         for (Sprite sprite: sprites) {
-            sprite.onUpdate(timePerFrame);
+            try {
+
+                sprite.onUpdate(timePerFrame);
+            }catch (Exception err){
+                err.printStackTrace();
+            }
         }
 
         reproduceRenderedLayers();
@@ -150,6 +155,10 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     }
 
     private void handleReadyToBeSpawnedOrRemovedSprites() {
+        for (Sprite readyToBeRemovedSprite : readyToBeRemovedSprites) {
+            if (readyToBeRemovedSprite.getType().toString().contains("AI"))
+                System.out.println("a");
+        }
         sprites.addAll(readyToBeSpawnedSprites);
         readyToBeSpawnedSprites.forEach(s -> s.addPositionChangedListener(this));
         readyToBeSpawnedSprites.forEach(s-> s.attachToWorld(this) );
@@ -239,14 +248,16 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
                         .getListener().onRigidCollisionEvent(ownerSprite, getGameEngineFacade());
 
             for (Sprite collidedRigidBodySprite : collidedRigidBodySprites) {
-                collidedRigidBodySprite.getComponent(CollisionListenerComponent.class)
-                        .getListener().onRigidCollisionEvent(collidedRigidBodySprite, getGameEngineFacade());
+                collidedRigidBodySprite.getComponentOptional(CollisionListenerComponent.class)
+                        .ifPresent(c -> c.getListener().onRigidCollisionEvent(collidedRigidBodySprite, getGameEngineFacade()));
+
 
                 ownerSprite.getComponent(CollisionListenerComponent.class)
                         .getListener().onRigidCollisionToSprite(ownerSprite, collidedRigidBodySprite, getGameEngineFacade());
 
-                collidedRigidBodySprite.getComponent(CollisionListenerComponent.class)
-                        .getListener().onRigidCollisionToSprite(collidedRigidBodySprite, ownerSprite, getGameEngineFacade());
+                collidedRigidBodySprite.getComponentOptional(CollisionListenerComponent.class)
+                        .ifPresent(c -> c.getListener().onRigidCollisionToSprite(collidedRigidBodySprite, ownerSprite,
+                                getGameEngineFacade()));
             }
         }
     }

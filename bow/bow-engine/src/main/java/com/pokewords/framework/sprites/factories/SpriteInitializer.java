@@ -1,20 +1,23 @@
 package com.pokewords.framework.sprites.factories;
 
-import com.pokewords.framework.engine.exceptions.GameEngineException;
-import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
 import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.commons.utils.StringUtility;
+import com.pokewords.framework.engine.exceptions.GameEngineException;
+import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
+import com.pokewords.framework.sprites.components.ComponentMap;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.Script;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * This is the direct api to the client which is a convenient way to declare and init the Sprites.
@@ -105,9 +108,15 @@ public class SpriteInitializer {
             this.type = type;
             this.declaration = new Declaration(type);
         }
+//
+//        public SpriteDeclarator parent(Object type) {
+//            validateSpriteHasBeenDeclared(type);
+//
+//            Declaration parentDeclaration = declarationMap.get(type);
+//        }
 
         public SpriteDeclarator with(@NotNull Component component) {
-            declaration.components.add(component);
+            declaration.components.put(component.getClass(), component);
             return this;
         }
 
@@ -292,12 +301,12 @@ public class SpriteInitializer {
     private class Declaration {
         Object type;
         PropertiesComponent propertiesComponent;
-        HashSet<Component> components = new HashSet<>();
+        ComponentMap components = new ComponentMap();
 
         Script script;
         String scriptPath;
 
-        List<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
+        LinkedList<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
 
         public Declaration(Object type) {
             this.type = type;
@@ -308,7 +317,7 @@ public class SpriteInitializer {
             spriteBuilder.init();
             spriteBuilder.setPropertiesComponent(propertiesComponent);
             setFrameStateMachineComponent();
-            components.forEach(spriteBuilder::addComponent);
+            components.foreachComponent(spriteBuilder::addComponent);
             weaverNodes.forEach(spriteBuilder::addWeaverNode);
             Sprite sprite = spriteBuilder.build();
             prototypeFactory.addPrototype(type, sprite);
@@ -319,6 +328,15 @@ public class SpriteInitializer {
                 spriteBuilder.setScript(script);
             else if (scriptPath != null)
                 spriteBuilder.buildScriptFromPath(scriptPath);
+        }
+
+        @Override
+        protected Declaration clone() throws CloneNotSupportedException {
+            Declaration clone = (Declaration) super.clone();
+            clone.type = type;
+            clone.propertiesComponent = propertiesComponent.clone();
+            clone.components = components.clone();
+            return clone;
         }
     }
 

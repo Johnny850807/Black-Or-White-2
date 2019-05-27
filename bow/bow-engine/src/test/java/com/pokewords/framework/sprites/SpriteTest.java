@@ -48,10 +48,10 @@ public class SpriteTest extends AbstractTest {
     }
 
     private void testSpriteFieldsCloned(Sprite spriteStub, Sprite clone) {
-        assertNotSameButEquals(spriteStub, clone);
-        assertNotSameButEquals(spriteStub.components, clone.components);
         assertNotSameButEquals(spriteStub.getPropertiesComponent(), clone.getPropertiesComponent());
         assertNotSameButEquals(spriteStub.getFrameStateMachineComponent(), clone.getFrameStateMachineComponent());
+        assertNotSameButEquals(spriteStub.components, clone.components);
+        assertNotSameButEquals(spriteStub, clone);
 
         testComponentsShareability(spriteStub.components, clone.components);
     }

@@ -2,12 +2,19 @@ package Pacman;
 
 import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.sprites.components.marks.Shareable;
+import com.pokewords.framework.sprites.components.CloneableComponent;
 
-public class GunComponent extends Component implements Shareable {
+public class GunComponent extends CloneableComponent {
     private long loopTime = 0;
     private long latestShootLoopTime = 0;
+    private int shootInterval;
+    private int bulletSpeed;
+
+
+    public GunComponent(int shootInterval, int bulletSpeed) {
+        this.shootInterval = shootInterval;
+        this.bulletSpeed = bulletSpeed;
+    }
 
     @Override
     public void onUpdate(double timePerFrame) {
@@ -16,7 +23,7 @@ public class GunComponent extends Component implements Shareable {
     }
 
     public void shootIfAvailable(Direction direction) {
-        if ((loopTime - latestShootLoopTime) >= 7)
+        if ((loopTime - latestShootLoopTime) >= shootInterval)
             shoot(direction);
     }
 
@@ -27,6 +34,7 @@ public class GunComponent extends Component implements Shareable {
         BulletComponent bulletComponent = bullet.getComponent(BulletComponent.class);
         bulletComponent.setDirection(direction);
         bulletComponent.setBulletOwnerType(getOwnerSprite().getType());
+        bulletComponent.setSpeed(bulletSpeed);
         getAttachedWorld().spawn(bullet);
     }
 }

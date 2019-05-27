@@ -75,10 +75,41 @@ public enum Direction {
                         return direction;
                 }
             case LEFT_UP:
+                switch (direction)
+                {
+                    case LEFT:
+                    case UP:
+                        return this;
+                    default:
+                        return direction;
+                }
             case LEFT_DOWN:
+                switch (direction)
+                {
+                    case LEFT:
+                    case DOWN:
+                        return this;
+                    default:
+                        return direction;
+                }
             case RIGHT_UP:
+                switch (direction)
+                {
+                    case RIGHT:
+                    case UP:
+                        return this;
+                    default:
+                        return direction;
+                }
             case RIGHT_DOWN:
-                return direction;
+                switch (direction)
+                {
+                    case RIGHT:
+                    case DOWN:
+                        return this;
+                    default:
+                        return direction;
+                }
             default:
                 throw new Error("Not reached.");
         }

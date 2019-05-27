@@ -232,6 +232,6 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName();
+		return String.format("%s @(%s)", getClass().getSimpleName(), super.toString());
 	}
 }

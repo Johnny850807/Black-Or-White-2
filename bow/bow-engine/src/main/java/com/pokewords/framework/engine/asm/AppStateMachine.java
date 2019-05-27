@@ -101,7 +101,7 @@ public class AppStateMachine implements GameLoopingListener {
 
 	public AppState trigger(Object event, Bundle message) {
 		AppState from = currentState;
-		AppState to = fsm.trigger(event.toString());
+		AppState to = fsm.trigger(event);
 		if (from != to)
 		{
 			AppStateTransitionEffect transitionEffect =
@@ -118,7 +118,7 @@ public class AppStateMachine implements GameLoopingListener {
 
 	public AppState trigger(Object event, Bundle message, AppStateTransitionEffect transitionEffect, AppStateTransitionEffect.Listener ...listeners) {
 		AppState from = currentState;
-		AppState to = fsm.trigger(event.toString());
+		AppState to = fsm.trigger(event);
 		if (from != to)
 		{
 			to.onReceiveMessageBundle(message);

@@ -8,6 +8,7 @@ import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 import com.pokewords.framework.views.inputs.InputManager;
 
+import java.util.ConcurrentModificationException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -58,8 +59,11 @@ public class DefaultGameEngine implements GameEngine {
             appStateMachine.onUpdate(timePerFrame);
             gameView.onRender(appStateMachine.getCurrentStateWorld().getRenderedLayers());
             printProfileEveryCertainLoops();
-        } catch (Error err) {
+        } catch (ConcurrentModificationException err) {
             err.printStackTrace();
+        } catch (Exception | Error err) {
+            err.printStackTrace();
+            System.exit(0);
         } finally {
             scheduler.schedule(gameLoopingTask,  (long) (timePerFrame*1000), TimeUnit.MILLISECONDS);
         }
