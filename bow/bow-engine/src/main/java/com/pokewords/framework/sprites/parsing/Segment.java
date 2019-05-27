@@ -1,5 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,4 +45,5 @@ public abstract class Segment extends Element {
     public Optional<Element> getFirstElementOptional(String name) {
         return containsElement(name)? Optional.of(getElements(name).get(0)) : Optional.empty();
     }
+
 }

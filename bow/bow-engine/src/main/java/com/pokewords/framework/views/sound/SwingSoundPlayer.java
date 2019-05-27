@@ -12,6 +12,7 @@ import java.util.*;
 /**
  * A sound player that is tightly coupled to the Swing GUI framework.
  * (Only when the GUI has been init can the player work.)
+ * TODO optimize internal data structure usages
  * @author johnny850807 (waterball)
  */
 public class SwingSoundPlayer implements SoundPlayer {
@@ -48,7 +49,7 @@ public class SwingSoundPlayer implements SoundPlayer {
 
     @Override
     public boolean isPlayingSound(Object name) {
-        return playingSounds.contains(name);
+        return playingSounds.contains(activeSoundsMap.get(name));
     }
 
 
