@@ -2,7 +2,6 @@ package com.pokewords.framework.engine.asm.states;
 
 import com.pokewords.framework.commons.Range;
 import com.pokewords.framework.commons.utils.GifFrameStateMachineComponentMaker;
-import com.pokewords.framework.commons.utils.GifScriptMaker;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
@@ -41,7 +40,7 @@ public class BreakerIconLoadingState extends AppState {
         getAppStateWorld().spawn(
                 getSpriteInitializer().declare(Types.BreakerIconLoadingState)
                         .area(0, 0, getGameWindowDefinition().size)
-                        .with(GifFrameStateMachineComponentMaker.fromSequenceGallery( "assets/sequences/BreakerLoadingIcon",
+                        .with(GifFrameStateMachineComponentMaker.fromSequence( "assets/sequences/BreakerLoadingIcon",
                                 new Range(0, 249), 0, 249, 30, 0))
                         .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                         .commit()

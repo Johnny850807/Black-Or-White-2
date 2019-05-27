@@ -1,7 +1,6 @@
 package Pacman;
 
 import com.pokewords.framework.commons.utils.GifFrameStateMachineComponentMaker;
-import com.pokewords.framework.commons.utils.GifScriptMaker;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
 import com.pokewords.framework.ioc.IocContainer;
@@ -45,7 +44,7 @@ public class PacmanApp extends GameApplication {
                 .commit();
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI1)
-                .with(GifFrameStateMachineComponentMaker.fromSheetScript("sheets/pacManSheet.png",
+                .with(GifFrameStateMachineComponentMaker.fromSheet("sheets/pacManSheet.png",
                         8, 8, 22, 23, 120, 1))
                 .with(new MovingComponent(5))
                 .with(new GunComponent(20, 8))
@@ -53,7 +52,7 @@ public class PacmanApp extends GameApplication {
                 .commit();
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI2)
-                .with(GifFrameStateMachineComponentMaker.fromSheetScript("sheets/pacManSheet.png",
+                .with(GifFrameStateMachineComponentMaker.fromSheet("sheets/pacManSheet.png",
                         8, 8, 30, 31, 120, 1))
                 .with(new MovingComponent(8))
                 .with(new GunComponent(10, 14))
@@ -61,7 +60,7 @@ public class PacmanApp extends GameApplication {
                 .commit();
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI3)
-                .with(GifFrameStateMachineComponentMaker.fromSheetScript("sheets/pacManSheet.png",
+                .with(GifFrameStateMachineComponentMaker.fromSheet("sheets/pacManSheet.png",
                         8, 8, 38, 39, 120, 1))
                 .with(new MovingComponent(12))
                 .with(new GunComponent(3, 22))

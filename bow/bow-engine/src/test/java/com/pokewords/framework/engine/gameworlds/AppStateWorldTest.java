@@ -6,7 +6,6 @@ import com.pokewords.framework.sprites.MockSprite;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
-import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.mocks.MockEffectFrame;
 import com.pokewords.framework.sprites.components.mocks.MockRenderableComponent;
 import org.junit.Test;
@@ -16,12 +15,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.pokewords.framework.commons.utils.StubFactory.Sprites.SimpleSprite.createSimpleSprite;
 import static org.junit.Assert.*;
 
 /**
+ * TODO
  * @author Shawn
  */
 public class AppStateWorldTest {
@@ -103,8 +102,6 @@ public class AppStateWorldTest {
 
         Collection<Sprite> collisionSpriteList2 =  appStateWorld.getSpritesCollidedWith(spriteA);
         assertEquals(Collections.singletonList(mockSpriteB), collisionSpriteList2);
-
-
 
         Sprite mockSpriteC = createSingleSprite(HERO_TYPE,0, 0, 50, 100);
         appStateWorld.spawn(mockSpriteC);

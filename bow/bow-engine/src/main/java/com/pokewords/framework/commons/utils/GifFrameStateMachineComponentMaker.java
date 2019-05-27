@@ -19,8 +19,8 @@ import java.util.stream.IntStream;
  * @author johnny850807 (waterball)
  */
 public class GifFrameStateMachineComponentMaker {
-    public static FrameStateMachineComponent fromSequenceGallery(String galleryPath,  Range galleryPicRange,
-                                                  int gifStartPic, int gifEndPic, int duration, int layer)  {
+    public static FrameStateMachineComponent fromSequence(String galleryPath, Range galleryPicRange,
+                                                          int gifStartPic, int gifEndPic, int duration, int layer)  {
         SequenceGallery sequenceGallery = new SequenceGallery(galleryPath, galleryPicRange);
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
 
@@ -29,8 +29,8 @@ public class GifFrameStateMachineComponentMaker {
         return fsmc;
     }
 
-    public static FrameStateMachineComponent fromSheetScript(String galleryPath, int sheetRow, int sheetCol,
-                                          int gifStartPic, int gifEndPic, int duration, int layer) {
+    public static FrameStateMachineComponent fromSheet(String galleryPath, int sheetRow, int sheetCol,
+                                                       int gifStartPic, int gifEndPic, int duration, int layer) {
         SheetGallery sheetGallery = new SheetGallery(galleryPath, new Range(0, sheetRow*sheetCol-1),
                 sheetRow, sheetCol);
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
