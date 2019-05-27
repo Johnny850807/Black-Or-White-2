@@ -34,46 +34,37 @@ public class PacmanApp extends GameApplication {
         getSoundPlayer().addSound(Types.PACE, "sounds/pace.wav");
         getSoundPlayer().addSound(Types.SHOOT, "sounds/machineGun.wav");
 
-        spriteInitializer.declare(Types.AI1)
-                .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
-                        8, 8, 22, 23, 120, 1))
+        spriteInitializer.declare(Types.AI_PARENT)
                 .with(new AiComponent())
                 .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
                 .with(RigidBodyComponent.getInstance())
-                .with(new MovingComponent(5))
-                .with(new GunComponent(20, 8))
-                .with(new HpComponent(5))
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .areaSize(35, 35)
                 .body(2, 2, 33, 33)
                 .commit();
 
-        spriteInitializer.declare(Types.AI2)
+        spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI1)
+                .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
+                        8, 8, 22, 23, 120, 1))
+                .with(new MovingComponent(5))
+                .with(new GunComponent(20, 8))
+                .with(new HpComponent(5))
+                .commit();
+
+        spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI2)
                 .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
                         8, 8, 30, 31, 120, 1))
-                .with(new AiComponent())
-                .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
-                .with(RigidBodyComponent.getInstance())
                 .with(new MovingComponent(8))
                 .with(new GunComponent(10, 14))
                 .with(new HpComponent(8))
-                .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .areaSize( 35, 35)
-                .body(2, 2, 33, 33)
                 .commit();
 
-        spriteInitializer.declare(Types.AI3)
+        spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI3)
                 .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
                         8, 8, 38, 39, 120, 1))
-                .with(new AiComponent())
-                .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
-                .with(RigidBodyComponent.getInstance())
                 .with(new MovingComponent(12))
                 .with(new GunComponent(3, 22))
                 .with(new HpComponent(10))
-                .weaver(new Set0FrameAsCurrentNodeWeaverNode())
-                .areaSize( 35, 35)
-                .body(2, 2, 33, 33)
                 .commit();
 
         spriteInitializer.declare(Types.PLAYER)

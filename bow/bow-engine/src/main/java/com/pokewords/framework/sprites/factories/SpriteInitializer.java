@@ -90,7 +90,6 @@ public class SpriteInitializer {
         return initializationMode;
     }
 
-
     public SpriteDeclarator declare(@NotNull Object type) {
         if (declaringType != null)
             throw new GameEngineException("You are declaring " + declaringType + ", did you forget to commit it? " +
@@ -99,6 +98,13 @@ public class SpriteInitializer {
         return new SpriteDeclarator(type);
     }
 
+    public SpriteDeclarator declareFromParent(@NotNull Object parentType, @NotNull Object subtype) {
+        if (declaringType != null)
+            throw new GameEngineException("You are declaring " + declaringType + ", did you forget to commit it? " +
+                    "You should commit it before declaring another sprite.");
+        declaringType = subtype;
+        return new SpriteDeclarator(parentType, subtype);
+    }
 
     public class SpriteDeclarator {
         private Object type;
@@ -108,12 +114,18 @@ public class SpriteInitializer {
             this.type = type;
             this.declaration = new Declaration(type);
         }
-//
-//        public SpriteDeclarator parent(Object type) {
-//            validateSpriteHasBeenDeclared(type);
-//
-//            Declaration parentDeclaration = declarationMap.get(type);
-//        }
+
+        public SpriteDeclarator(Object parentType, Object subtype) {
+            validateSpriteHasBeenDeclared(parentType);
+
+            this.type = subtype;
+            this.declaration = new Declaration(subtype);
+
+            Declaration parentDeclaration = declarationMap.get(parentType);
+            this.declaration.propertiesComponent = parentDeclaration.propertiesComponent.clone();
+            this.declaration.propertiesComponent.setType(subtype);
+            this.declaration.components = parentDeclaration.components.clone();
+        }
 
         public SpriteDeclarator with(@NotNull Component component) {
             declaration.components.put(component.getClass(), component);
@@ -328,15 +340,6 @@ public class SpriteInitializer {
                 spriteBuilder.setScript(script);
             else if (scriptPath != null)
                 spriteBuilder.buildScriptFromPath(scriptPath);
-        }
-
-        @Override
-        protected Declaration clone() throws CloneNotSupportedException {
-            Declaration clone = (Declaration) super.clone();
-            clone.type = type;
-            clone.propertiesComponent = propertiesComponent.clone();
-            clone.components = components.clone();
-            return clone;
         }
     }
 
