@@ -47,12 +47,12 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public void attachToWorld(AppStateWorld world) {
 		this.world = world;
-		components.foreachComponent(c -> c.onComponentAttachedWorld(world));
+		components.foreachCloneableComponent(c -> c.onComponentAttachedWorld(world));
 	}
 
 	public void detachFromWorld(AppStateWorld world) {
 		assert this.world == world;
-		components.foreachComponent(c -> c.onComponentDetachedWorld(world));
+		components.foreachCloneableComponent(c -> c.onComponentDetachedWorld(world));
 	}
 
 	@Nullable
@@ -116,7 +116,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public <T extends Component> void addComponent(@NotNull Component component) {
 		components.put(component.getClass(), component);
-		component.onComponentAttachedSprite(this);
+
+		if (component instanceof CloneableComponent)
+			((CloneableComponent)component).onComponentAttachedSprite(this);
 	}
 
 	/**
@@ -125,7 +127,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
 	public <T extends Component> void removeComponent(Class<T> type) {
-		components.remove(type).onComponentDetachedSprite(this);
+		Component component = components.remove(type);
+		if (component instanceof CloneableComponent)
+			((CloneableComponent)component).onComponentDetachedSprite(this);
 	}
 
 	@Override
@@ -280,7 +284,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		try {
 			Sprite clone = (Sprite) super.clone();
 			clone.components = this.components.clone();
-			clone.components.foreachComponent((c) -> c.onComponentAttachedSprite(clone));
+			clone.components.foreachCloneableComponent((c) -> c.onComponentAttachedSprite(clone));
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
@@ -312,24 +316,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return components.getRenderableComponents();
 	}
 
-
-	/**
-	 * @return all components not marked by Shareable interface
-	 * @see Shareable
-	 */
-	public Set<Component> getNonshareableComponents(){
-		return components.getNonshareableComponents();
+	public Collection<CloneableComponent> getCloneableComponents() {
+		return components.getCloneableComponents();
 	}
-
-	/**
-	 * @return all components marked by Shareable interface
-	 * @see Shareable
-	 */
-	public Set<Component> getShareableComponents(){
-		return components.getShareableComponents();
-	}
-
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

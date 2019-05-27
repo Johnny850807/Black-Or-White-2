@@ -162,6 +162,9 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
 
     private void handleReadyToBeSpawnedOrRemovedSprites() {
         sprites.addAll(readyToBeSpawnedSprites);
+        readyToBeSpawnedSprites.stream()
+                .flatMap(s -> s.getComponents().stream())
+                .forEach(c -> c.setGameEngineFacade(getGameEngineFacade()));
         readyToBeSpawnedSprites.forEach(s -> s.addPositionChangedListener(this));
         readyToBeSpawnedSprites.forEach(s-> s.attachToWorld(this) );
         readyToBeSpawnedSprites.clear();

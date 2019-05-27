@@ -66,7 +66,13 @@ public class SessionServer {
         return ip;
     }
 
-    public void broadcast(byte[] rawMessage) {
+    public Client getClientById(int clientId) {
+        return clients.stream().filter(c -> c.getId() == clientId)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("The client with the id " + clientId + " is not found."));
+    }
+
+    public void broadcastToAllClients(byte[] rawMessage) {
         for (Client client : clients) {
             try {
                 client.broadcast(rawMessage);
@@ -75,6 +81,14 @@ public class SessionServer {
                 clients.remove(client);
                 clientListeners.forEach(clientListener -> clientListener.onClientDisconnected(client));
             }
+        }
+    }
+
+    public void shutDown() {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

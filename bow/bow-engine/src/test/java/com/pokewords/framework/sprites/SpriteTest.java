@@ -23,24 +23,6 @@ import static org.junit.Assert.*;
 public class SpriteTest extends AbstractTest {
 
     @Test
-    public void testGetAllShareableComponents() {
-        Sprite sprite = createSimpleSprite();
-        Set<Component> components = sprite.getShareableComponents();
-        for (Component component : components) {
-            assertTrue(component instanceof Shareable);
-        }
-    }
-
-    @Test
-    public void testGetAllNonshareableComponents() {
-        Sprite sprite = createSimpleSprite();
-        Set<Component> components = sprite.getNonshareableComponents();
-        for (Component component : components) {
-            assertFalse(component instanceof Shareable);
-        }
-    }
-
-    @Test
     public void testSpriteClone() {
         Sprite sprite = createSimpleSprite();
         Sprite clone = sprite.clone();

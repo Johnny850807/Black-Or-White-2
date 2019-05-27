@@ -8,6 +8,8 @@ import com.pokewords.framework.views.windows.GameWindowDefinition;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 /**
+ * The facade collects the functionalities of GameEngine, GameWindowsConfigurator,
+ * SoundPlayer, SpriteInitializer in one class.
  * @author johnny850807 (waterball)
  */
 public class GameEngineFacade implements SoundPlayer {

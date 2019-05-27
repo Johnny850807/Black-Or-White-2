@@ -2,20 +2,20 @@ package com.pokewords.framework.sprites.components;
 
 
 import com.pokewords.framework.engine.GameEngineFacade;
-import com.pokewords.framework.engine.asm.AppState;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
-import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.views.windows.GameWindowDefinition;
-import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
-import java.util.Objects;
-import java.util.Optional;
-
+/**
+ * A Component is a set of behaviors or data of a Sprite.
+ * Component will not be cloned, hence it should be functional and immutable.
+ * if you want your component to be cloned, use CloneableComponent instead.
+ * @author johnny850807 (waterball)
+ */
 public abstract class Component implements AppStateLifeCycleListener {
-    private @Nullable Sprite sprite;
-    private @Nullable AppStateWorld world;
+    protected GameEngineFacade gameEngineFacade;
+
+    public void setGameEngineFacade(GameEngineFacade gameEngineFacade) {
+        this.gameEngineFacade = gameEngineFacade;
+    }
 
     @Override
     public void onAppStateCreate() {
@@ -25,24 +25,6 @@ public abstract class Component implements AppStateLifeCycleListener {
     @Override
     public void onAppStateEnter() {
         //hook
-    }
-
-    public void onComponentAttachedSprite(Sprite sprite) {
-        this.sprite = sprite;
-    }
-
-    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
-        this.world = appStateWorld;
-    }
-
-    public void onComponentDetachedSprite(Sprite sprite) {
-        assert this.sprite == sprite;
-        this.sprite = null;
-    }
-
-    public void onComponentDetachedWorld(AppStateWorld appStateWorld) {
-        assert this.world == appStateWorld;
-        this.world = null;
     }
 
     @Override
@@ -60,25 +42,7 @@ public abstract class Component implements AppStateLifeCycleListener {
         //hook
     }
 
-    public boolean hasOwnerSprite() {
-        return sprite != null;
-    }
-
-    public boolean isAttachedToWorld() {
-        return world != null;
-    }
-
-    public Sprite getOwnerSprite() {
-        return Objects.requireNonNull(sprite, "The component is not attached to any Sprite.");
-    }
-
-    public AppStateWorld getAttachedWorld() {
-        return Objects.requireNonNull(world, "The component is not attached to any world.");
-    }
-
     public GameEngineFacade getGameEngineFacade() {
-        return Objects.requireNonNull(world, "The component is not attached to any world," +
-                "thus it can't get the GameEngineFacade.").getGameEngineFacade();
+        return gameEngineFacade;
     }
-
 }

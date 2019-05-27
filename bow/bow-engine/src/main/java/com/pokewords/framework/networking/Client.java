@@ -8,6 +8,11 @@ import java.io.OutputStream;
  * @author johnny850807 (waterball)
  */
 public interface Client {
+
+    String getIp();
+
+    int getId();
+
     void broadcast(byte[] rawMessage) throws IOException;
 
     InputStream getInputStream();

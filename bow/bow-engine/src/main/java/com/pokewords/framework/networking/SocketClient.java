@@ -1,7 +1,5 @@
 package com.pokewords.framework.networking;
 
-import jdk.internal.util.xml.impl.Input;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,6 +19,16 @@ public class SocketClient implements Client {
         this.socket = socket;
         this.inputStream = socket.getInputStream();
         this.outputStream = socket.getOutputStream();
+    }
+
+    @Override
+    public String getIp() {
+        return socket.getInetAddress().getHostAddress();
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override

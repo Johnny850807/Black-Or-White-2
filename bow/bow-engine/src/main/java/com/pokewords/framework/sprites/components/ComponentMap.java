@@ -15,6 +15,12 @@ import java.util.stream.Collectors;
 public class ComponentMap extends HashMap<Class<? extends Component>, Component> implements Renderable {
     private Set<Renderable> renderableComponents = new HashSet<>();
 
+    public void foreachCloneableComponent(Consumer<? super CloneableComponent> consumer) {
+        values().stream()
+                .filter(c -> c instanceof CloneableComponent)
+                .map(c -> (CloneableComponent)c).forEach(consumer);
+    }
+
     public void foreachComponent(Consumer<? super Component> consumer) {
         values().forEach(consumer);
     }
@@ -59,16 +65,11 @@ public class ComponentMap extends HashMap<Class<? extends Component>, Component>
                 .collect(Collectors.toSet());
     }
 
-    public Set<Component> getNonshareableComponents(){
-        return values().stream()
-                .filter(c -> ! (c instanceof Shareable) )
-                .collect(Collectors.toSet());
-    }
 
-
-    public Set<Component> getShareableComponents(){
+    public Set<CloneableComponent> getCloneableComponents(){
         return values().stream()
-                .filter(c ->c instanceof Shareable)
+                .filter(c ->c instanceof CloneableComponent)
+                .map(c -> (CloneableComponent) c)
                 .collect(Collectors.toSet());
     }
 
