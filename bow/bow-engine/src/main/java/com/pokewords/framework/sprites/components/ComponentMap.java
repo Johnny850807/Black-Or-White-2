@@ -3,7 +3,6 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.engine.exceptions.MandatoryComponentRequiredException;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -95,7 +94,7 @@ public class ComponentMap extends HashMap<Class<? extends Component>, Component>
 
 
     private static boolean isComponentSharedOnly(Component component) {
-        return !(component instanceof CloneableComponent) || component instanceof Shareable;
+        return !(component instanceof CloneableComponent);
     }
 
     private static void recacheRenderableComponents(ComponentMap componentMap) {

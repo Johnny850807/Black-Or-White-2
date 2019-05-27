@@ -7,12 +7,13 @@ import java.io.ObjectOutputStream;
 
 /**
  * The frame that can be serialized.
- * If you are going to support networking game, then all of your frames should extend from this class.
+ * If you are going to support networking game, then all of your frames should inherit from SerializableFrame.
  *
- * Note: 1. The order of reading and writing your objects or primitive variables should be the same.
- * 2. You don't have to make those non-serializable objects 'transient' because the default serialization
+ * Note: 1. The order of reading and writing to your objects or primitive variables should be the same.
+ * 2. You don't have to make those non-serializable objects 'transient' because the default serialization's
  * reading and writing are not used, all of the serialization / deserialization process is determined by
- * your implementation. However, if you write a non-serializable object, the error still happens.
+ * your onSerializing() / onDeserializing() implementation. However,
+ * if you write a non-serializable object, the error still happens.
  * @author johnny850807 (waterball)
  */
 public abstract class SerializableFrame extends AbstractFrame {

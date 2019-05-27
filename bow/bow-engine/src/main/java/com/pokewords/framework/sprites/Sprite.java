@@ -7,16 +7,13 @@ import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * A sprite is the fundamental unit in AppStateGameWorld.
