@@ -7,6 +7,19 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.function.Consumer;
 
+/**
+ * The inputManager serves as the middleware between the input triggering source and the client's input listeners.
+ * It queues all the input triggered from certain source (e.g. Swing) and fire all the queued input events
+ * when its onUpdate() is invoked.
+ *
+ * InputManager is AppState-awareness, it separates every appState's listeners, so only the bound state
+ * will be triggered. (Use bindAppState() and unbind() to set the listening appState.)
+ *
+ * There are tow kinds of binding, root and non-root.
+ * Root binding is always triggered regardless of which appState is currently bound.
+ * Non-root binding is exclusively triggered for the currently bound appState.
+ * @author johnny850807 (waterball)
+ */
 public interface InputManager extends GameLoopingListener {
 
     /**

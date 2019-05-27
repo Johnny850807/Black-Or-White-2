@@ -1,6 +1,7 @@
 package com.pokewords.framework.views;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.pokewords.framework.commons.NullIterator;
 import com.pokewords.framework.sprites.components.frames.Frame;
@@ -31,7 +32,7 @@ public class RenderedLayers implements Iterable<Frame> {
      */
     public void addFrame(Frame frame) {
     	if (!layers.containsKey(frame.getLayerIndex()))
-    		layers.put(frame.getLayerIndex(), new LinkedList<>());
+    		layers.put(frame.getLayerIndex(), new CopyOnWriteArrayList<>());
 		layers.get(frame.getLayerIndex()).add(frame);
     }
 
