@@ -6,6 +6,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public interface Frame extends Cloneable {
 
 	/**
@@ -25,16 +28,15 @@ public interface Frame extends Cloneable {
 	 */
 	void renderItself(Canvas canvas);
 
-
 	/**
-	 * If the frame is added to some component, and that component is of some sprite.
-	 * Then this method will be invoked with that Sprite passed.
-	 * Furthermore, the frame's area will be determined by its Sprite owner's area, which are (x, y, width, height).
-	 * In this situation, the invocations of the setters of (position, size) will throw an IllegalStateException.
+	 * If the frame is added to certain component of certain sprite.
+	 * Then this method should be invoked with that Sprite passed.
+	 * In such situation the frame's area will be determined by its owner Sprite's area, which are (x, y, width, height).
+	 * because it's area is determined by its owner, the setPosition() and setSize() will throw an exception.
 	 * Hence, you should set the sprite's position and size rather than frame's.
 	 *
-	 * If the frame is not owned (or namely bound toby ) any Sprite, then it's fine to just
-	 * set its position and dimension.
+	 * If the frame is not owned by (or namely bound to ) any Sprite, then it's fine to just
+	 * set its position and dimension by the setter.
 	 * @param sprite owner of the frame
 	 */
 	void boundToSprite(@Nullable Sprite sprite);
