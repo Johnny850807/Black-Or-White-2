@@ -19,7 +19,6 @@ public class GunComponent extends CloneableComponent {
     @Override
     public void onUpdate(double timePerFrame) {
         loopTime = (loopTime + 1) % Long.MAX_VALUE;
-
     }
 
     public void shootIfAvailable(Direction direction) {
