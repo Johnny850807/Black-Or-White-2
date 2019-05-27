@@ -91,6 +91,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return components.containsKey(type);
 	}
 
+	public boolean isRigidBody() {
+		return hasComponent(RigidBodyComponent.class);
+	}
+
 	public <T extends Component> Optional<T> getComponentOptional(Class<T> type) {
 		return hasComponent(type) ? Optional.of(getComponent(type)) : Optional.empty();
 	}

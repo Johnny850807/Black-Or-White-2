@@ -12,7 +12,7 @@ public class PacmanCollisionListener extends CollisionListenerComponent.Listener
     private long latestRigidCollisionLoop = 0;
 
     @Override
-    public void onCollision(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) { }
+    public void onCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) { }
 
     @Override
     public void onUpdate(double timePerFrame, Sprite ownerSprite) {
@@ -27,7 +27,7 @@ public class PacmanCollisionListener extends CollisionListenerComponent.Listener
     }
 
     @Override
-    public void onRigidCollisionToSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
+    public void onRigidCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
         if (thatSprite.anyType(Types.AI1, Types.AI2, Types.AI3))
         {
             ownerSprite.getComponent(ImageComponent.class).setImage("images/cry.png");

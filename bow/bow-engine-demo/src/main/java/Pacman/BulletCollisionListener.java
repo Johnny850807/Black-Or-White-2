@@ -6,7 +6,7 @@ import com.pokewords.framework.sprites.components.CollisionListenerComponent;
 
 public class BulletCollisionListener extends CollisionListenerComponent.Listener {
     @Override
-    public void onCollision(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
+    public void onCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
         Object bulletOwnerType = ownerSprite.getComponent(BulletComponent.class).getBulletOwnerType();
 
         // check bullet team
@@ -26,7 +26,7 @@ public class BulletCollisionListener extends CollisionListenerComponent.Listener
     }
 
     @Override
-    public void onRigidCollisionToSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
+    public void onRigidCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
 
 
     }

@@ -35,7 +35,7 @@ public class CollisionListenerComponent extends CloneableComponent {
          * @param ownerSprite the owner sprite of the listener
          * @param thatSprite the sprite collided with
          */
-        public abstract void onCollision(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade);
+        public abstract void onCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade);
 
 
         /**
@@ -58,7 +58,7 @@ public class CollisionListenerComponent extends CloneableComponent {
          * @param ownerSprite the owner sprite of the listener
          * @param thatSprite the sprite collided with
          */
-        public abstract void onRigidCollisionToSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade);
+        public abstract void onRigidCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade);
 
         public Listener clone() {
             try {
@@ -71,6 +71,18 @@ public class CollisionListenerComponent extends CloneableComponent {
 
     public Listener getListener() {
         return listener;
+    }
+
+    public void notifyCollisionWithSprite(Sprite collidedSprite) {
+        getListener().onCollisionWithSprite(getOwnerSprite(), collidedSprite, getGameEngineFacade());
+    }
+
+    public void notifyRigidCollisionEvent() {
+        getListener().onRigidCollisionEvent(getOwnerSprite(), getGameEngineFacade());
+    }
+
+    public void notifyRigidCollisionWithSprite(Sprite collidedSprite) {
+        getListener().onRigidCollisionWithSprite(getOwnerSprite(), collidedSprite, getGameEngineFacade());
     }
 
     @Override

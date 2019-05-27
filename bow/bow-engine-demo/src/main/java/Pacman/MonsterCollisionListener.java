@@ -10,7 +10,7 @@ public class MonsterCollisionListener extends CollisionListenerComponent.Listene
     private boolean injuryEnabled = true;
 
     @Override
-    public void onCollision(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) { }
+    public void onCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) { }
 
     @Override
     public void onUpdate(double timePerFrame, Sprite ownerSprite) {
@@ -26,7 +26,7 @@ public class MonsterCollisionListener extends CollisionListenerComponent.Listene
     }
 
     @Override
-    public void onRigidCollisionToSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
+    public void onRigidCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
         if (thatSprite.isType(Types.PLAYER) && injuryEnabled)
         {
             gameEngineFacade.playSoundIfNotPlaying(Types.PACE);
