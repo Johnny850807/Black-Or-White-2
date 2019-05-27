@@ -101,7 +101,7 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
      * @return whether the sprite is in the world
      */
     public boolean containsSprite(Sprite sprite) {
-        return getSprites().contains(sprite);
+        return getSprites().contains(sprite) || readyToBeSpawnedSprites.contains(sprite);
     }
 
     /**
@@ -321,6 +321,8 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
      */
     public void clearSprites() {
         sprites.forEach(this::removeSprite);
+        readyToBeSpawnedSprites.clear();
+        readyToBeRemovedSprites.clear();
         renderedLayers.clear();
         System.gc();
     }

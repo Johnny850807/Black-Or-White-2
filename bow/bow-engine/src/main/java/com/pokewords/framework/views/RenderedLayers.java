@@ -2,6 +2,7 @@ package com.pokewords.framework.views;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 import com.pokewords.framework.commons.NullIterator;
 import com.pokewords.framework.sprites.components.frames.Frame;
@@ -42,6 +43,12 @@ public class RenderedLayers implements Iterable<Frame> {
 
 	public Collection<Frame> getLayer(int layerIndex) {
     	return layers.get(layerIndex);
+	}
+
+	public Collection<Frame> getAllFrames() {
+    	return layers.values().stream()
+					.flatMap(Collection::stream)
+					.collect(Collectors.toList());
 	}
 
 	@NotNull
