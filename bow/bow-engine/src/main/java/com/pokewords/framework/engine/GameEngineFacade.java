@@ -70,6 +70,10 @@ public class GameEngineFacade implements SoundPlayer {
         return spriteInitializer.declare(type);
     }
 
+    public SpriteInitializer.SpriteDeclarator declareFromParent(Object parentType, Object subtype) {
+        return spriteInitializer.declareFromParent(parentType, subtype);
+    }
+
     public void setInitiazationMode(SpriteInitializer.InitializationMode mode) {
         spriteInitializer.setInitializationMode(mode);
     }

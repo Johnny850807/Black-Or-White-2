@@ -208,4 +208,33 @@ public enum Direction {
                 throw new Error("Not reached.");
         }
     }
+
+    @SuppressWarnings("ConstantConditions")
+    public static Direction getDirectionFromOnePointToAnother(Point fromPoint, Point toPoint) {
+        Point difference = new Point(fromPoint.x - toPoint.x, fromPoint.y - toPoint.y);
+        int x = difference.x;
+        int y = difference.y;
+
+        if (x == 0 && y == 0)
+            return NO_DIRECTION;
+
+        if (x > 0 && y > 0)
+            return RIGHT_DOWN;
+        if (x > 0 && y == 0)
+            return RIGHT;
+        if (x > 0 && y < 0)
+            return RIGHT_UP;
+        if (x < 0 && y > 0)
+            return LEFT_DOWN;
+        if (x < 0 && y == 0)
+            return LEFT;
+        if (x < 0 && y < 0)
+            return LEFT_UP;
+        if (x == 0 && y < 0)
+            return UP;
+        if (x == 0 && y > 0)
+            return DOWN;
+
+        throw new InternalError("All possible conditions are listed above, this line should not be reached.");
+    }
 }

@@ -79,11 +79,13 @@ public class SpriteInitializer {
      * Set the initialization mode, it's InitializationMode#LAZY as default.
      */
     public void setInitializationMode(InitializationMode initializationMode) {
+        if (!declarationMap.isEmpty())
+            throw new IllegalStateException("The initialization mode can only be set if the SpriteInitializer hasn't been used.");
         this.initializationMode = initializationMode;
     }
 
     public boolean hasSpriteBeenInit(Object type) {
-        return initializationMode == InitializationMode.NON_LAZY || spriteTypesThatHaveBeenInit.contains(type);
+        return spriteTypesThatHaveBeenInit.contains(type);
     }
 
     public InitializationMode getInitializationMode() {
@@ -294,7 +296,7 @@ public class SpriteInitializer {
      * @param type the init sprite's name
      * @see SpriteInitializer#setInitializationMode(InitializationMode)
      */
-    public void initSprite(String type) throws SpriteDeclarationException {
+    public void initSprite(Object type) throws SpriteDeclarationException {
         validateOnlyCustomInitModeCanUseThisMethod();
         validateSpriteHasBeenDeclared(type);
 

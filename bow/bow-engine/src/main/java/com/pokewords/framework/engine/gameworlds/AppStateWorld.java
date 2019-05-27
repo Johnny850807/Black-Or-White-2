@@ -268,8 +268,6 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     }
 
 
-
-
     /**
      * @return a set of sprites with the area (w, h) from the center point of the given sprite
      */
