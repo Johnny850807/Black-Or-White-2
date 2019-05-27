@@ -2,16 +2,37 @@ package com.pokewords.framework.commons;
 
 import java.awt.*;
 
+/**
+ * A useful direction enum, it supports composite direction.
+ * @author johnny850807 (waterball)
+ */
 public enum Direction {
     NO_DIRECTION, UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN;
 
     /**
-     * @return all directions but 'NO_DIRECTION'
+     * @return all directions but 'NO_DIRECTION', which are [UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN]
      */
     public static Direction[] allDirections() {
         return new Direction[] {UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN};
     }
 
+    /**
+     * @return [LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN]
+     */
+    public static Direction[] allCompositeDirections() {
+        return new Direction[] {LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN};
+    }
+
+    /**
+     * @return [UP, DOWN, LEFT, RIGHT]
+     */
+    public static Direction[] allAtomicDirections() {
+        return new Direction[] {UP, DOWN, LEFT, RIGHT};
+    }
+
+    /**
+     * @return the opposite direction
+     */
     public Direction getOppositeDirection() {
         switch (this) {
             case NO_DIRECTION:
@@ -37,6 +58,10 @@ public enum Direction {
         }
     }
 
+    /**
+     * @return the direction after added another direction.
+     * If two directions are compatible, then it will return a composite direction.
+     */
     @SuppressWarnings("Duplicates")
     public Direction addDirection(Direction direction) {
         switch (this) {
@@ -115,6 +140,9 @@ public enum Direction {
         }
     }
 
+    /**
+     * @return Clear a direction from the current direction.
+     */
     @SuppressWarnings("Duplicates")
     public Direction clearDirection(Direction direction) {
         switch (this) {
@@ -152,6 +180,10 @@ public enum Direction {
         }
     }
 
+    /**
+     * @param speed moving speed
+     * @return the movement point according to the Direction
+     */
     public Point move(int speed) {
         switch (this) {
             case NO_DIRECTION:
