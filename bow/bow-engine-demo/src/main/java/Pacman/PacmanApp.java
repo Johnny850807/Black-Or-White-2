@@ -1,5 +1,6 @@
 package Pacman;
 
+import com.pokewords.framework.commons.utils.GifFrameStateMachineComponentMaker;
 import com.pokewords.framework.commons.utils.GifScriptMaker;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.engine.weaver.Set0FrameAsCurrentNodeWeaverNode;
@@ -44,7 +45,7 @@ public class PacmanApp extends GameApplication {
                 .commit();
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI1)
-                .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
+                .with(GifFrameStateMachineComponentMaker.fromSheetScript("sheets/pacManSheet.png",
                         8, 8, 22, 23, 120, 1))
                 .with(new MovingComponent(5))
                 .with(new GunComponent(20, 8))
@@ -52,7 +53,7 @@ public class PacmanApp extends GameApplication {
                 .commit();
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI2)
-                .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
+                .with(GifFrameStateMachineComponentMaker.fromSheetScript("sheets/pacManSheet.png",
                         8, 8, 30, 31, 120, 1))
                 .with(new MovingComponent(8))
                 .with(new GunComponent(10, 14))
@@ -60,7 +61,7 @@ public class PacmanApp extends GameApplication {
                 .commit();
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI3)
-                .with(GifScriptMaker.createSheetScript("sheets/pacManSheet.png",
+                .with(GifFrameStateMachineComponentMaker.fromSheetScript("sheets/pacManSheet.png",
                         8, 8, 38, 39, 120, 1))
                 .with(new MovingComponent(12))
                 .with(new GunComponent(3, 22))
@@ -73,7 +74,7 @@ public class PacmanApp extends GameApplication {
                 .with(CollisionListenerComponent.ofListener(new PacmanCollisionListener()))
                 .with(new GunComponent(7, 20))
                 .with(new MovingComponent(12))
-                .with(new HpComponent(50))
+                .with(new HpComponent(8))
                 .with(RigidBodyComponent.getInstance())
                 .with(MouseListenerComponent.ofListener(new PlayerMouseListener()))
                 .areaSize( 50, 50)
