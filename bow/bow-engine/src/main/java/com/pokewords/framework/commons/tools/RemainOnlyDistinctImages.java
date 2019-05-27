@@ -54,6 +54,6 @@ public class RemainOnlyDistinctImages {
 
     public static void main(String[] args) throws IOException {
         RemainOnlyDistinctImages.applyToDirectory(
-                new File("D:\\NativeGit\\Black-Or-White-Java\\BlackOrWhite\\pics\\Bullet\\Cat_Bullet"));
+                new File("D:\\NativeGit\\Black-Or-White-Java\\BlackOrWhite\\pics\\AI\\Black\\Walk"));
     }
 }

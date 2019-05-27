@@ -16,7 +16,7 @@ public class HpComponent extends CloneableComponent implements Renderable {
     private RectangleFrame lostHpFrame;
     private RectangleFrame remainingHpFrame;
     private Collection<Frame> renderedFrames;
-    private int maxHp = 5;
+    private int maxHp;
     private int remainingHp;
 
     public HpComponent() {

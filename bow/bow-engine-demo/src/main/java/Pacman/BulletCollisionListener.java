@@ -22,12 +22,9 @@ public class BulletCollisionListener extends CollisionListenerComponent.Listener
 
     @Override
     public void onRigidCollisionEvent(Sprite ownerSprite, GameEngineFacade gameEngineFacade) {
-
     }
 
     @Override
     public void onRigidCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
-
-
     }
 }

@@ -9,25 +9,29 @@ import java.awt.*;
 public enum Direction {
     NO_DIRECTION, UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN;
 
+    private static final Direction[] ALL_DIRECTIONS = new Direction[] {UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN};
+    private static final Direction[] COMPOSITE_DIRECTIONS = new Direction[] {LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN};
+    private static final Direction[] ATOMIC_DIRECTIONS = new Direction[] {UP, DOWN, LEFT, RIGHT};
+
     /**
      * @return all directions but 'NO_DIRECTION', which are [UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN]
      */
     public static Direction[] allDirections() {
-        return new Direction[] {UP, DOWN, LEFT, RIGHT, LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN};
+        return ALL_DIRECTIONS;
     }
 
     /**
      * @return [LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN]
      */
     public static Direction[] allCompositeDirections() {
-        return new Direction[] {LEFT_UP, LEFT_DOWN, RIGHT_UP, RIGHT_DOWN};
+        return COMPOSITE_DIRECTIONS;
     }
 
     /**
      * @return [UP, DOWN, LEFT, RIGHT]
      */
     public static Direction[] allAtomicDirections() {
-        return new Direction[] {UP, DOWN, LEFT, RIGHT};
+        return ATOMIC_DIRECTIONS;
     }
 
     /**

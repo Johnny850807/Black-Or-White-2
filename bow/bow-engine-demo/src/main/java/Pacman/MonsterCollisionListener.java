@@ -16,14 +16,12 @@ public class MonsterCollisionListener extends CollisionListenerComponent.Listene
     public void onUpdate(double timePerFrame, Sprite ownerSprite) {
         loopTime = (loopTime + 1) % Long.MAX_VALUE;
 
-        if ((loopTime - latestRigidCollisionTime) % 28 == 0)
+        if ((loopTime - latestRigidCollisionTime) >= 28)
             injuryEnabled = true;
     }
 
     @Override
-    public void onRigidCollisionEvent(Sprite ownerSprite, GameEngineFacade gameEngineFacade) {
-        latestRigidCollisionTime = System.currentTimeMillis();
-    }
+    public void onRigidCollisionEvent(Sprite ownerSprite, GameEngineFacade gameEngineFacade) { }
 
     @Override
     public void onRigidCollisionWithSprite(Sprite ownerSprite, Sprite thatSprite, GameEngineFacade gameEngineFacade) {
