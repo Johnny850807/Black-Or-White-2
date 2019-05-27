@@ -1,39 +1,49 @@
 package com.pokewords.framework.sprites.parsing;
 
-import org.jetbrains.annotations.Nullable;
+import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- *  @author nyngwang
+ * @author nyngwang
  */
-public interface Segment {
-    Segment addElement(Element element);
+public abstract class Segment extends Element {
+    private List<Element> elements;
 
-    default @Nullable Element getElement(String elementName) {
-        List<Element> elements = getElementsByName(elementName);
-        return elements.isEmpty() ? null : elements.get(0);
+    public Segment(Node parent, String name, KeyValuePairs keyValuePairs, List<Element> elements) {
+        super(parent, name, keyValuePairs);
+        this.elements = elements;
     }
 
-    List<Element> getElementsByName(String elementName);
-    List<Element> getElements();
+    public void addElement(Element element) {
+        elements.add(element);
+        element.setParent(this);
+    }
 
-    boolean containsKey(String key);
-    Segment put(String key, String value);
-    Segment put(String key, int value);
+    public boolean containsElement(String name) {
+        for (Element element : elements)
+            if (element.getName().equals(name))
+                return true;
+        return false;
+    }
 
-    Optional<String> getStringByKeyOptional(String key);
-    OptionalInt getIntByKeyOptional(String key);
+    public List<Element> getElements() {
+        return elements;
+    }
 
-    String getSegmentName();
-    String getSegmentDescription();
-    int getId();
-    String getStringByKey(String key);
-    Integer getIntByKey(String key);
+    public List<Element> getElements(String name) {
+        return elements.stream()
+                .filter(element -> element.getName().equals(name))
+                .collect(Collectors.toList());
+    }
 
-    Segment setParentScript(Script parentScript);
-    Script getParentScript();
+    public Element getFirstElement(String name) {
+        return containsElement(name)? getElements(name).get(0) : null;
+    }
 
-    String toString(int indentation);
+    public Optional<Element> getFirstElementOptional(String name) {
+        return containsElement(name)? Optional.of(getElements(name).get(0)) : Optional.empty();
+    }
+
 }

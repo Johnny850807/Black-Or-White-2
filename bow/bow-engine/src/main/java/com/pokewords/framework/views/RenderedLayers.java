@@ -1,24 +1,88 @@
 package com.pokewords.framework.views;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+
+import com.pokewords.framework.commons.NullIterator;
 import com.pokewords.framework.sprites.components.frames.Frame;
+import org.jetbrains.annotations.NotNull;
 
-public class RenderedLayers {
-	public List<List<Frame>> layers = Collections.EMPTY_LIST;
+/**
+ * @author johnny850807 (waterball)
+ */
+public class RenderedLayers implements Iterable<Frame> {
+	private Map<Integer, Collection<Frame>> layers = new TreeMap<>();
 
-	public RenderedLayers() {
-	}
 
-	public RenderedLayers(List<List<Frame>> layers) {
-		this.layers = layers;
-	}
-
-	public List<List<Frame>> getLayers() {
+	public Map<Integer, Collection<Frame>> getLayers() {
 		return layers;
 	}
 
-	public void setLayers(List<List<Frame>> layers) {
-		this.layers = layers;
+	public void clear() {
+		layers.clear();
+	}
+
+	public void clearEachLayer() {
+		layers.values().forEach(Collection::clear);
+	}
+
+    /**
+     * Add the frame to the rendered layer.
+     * @param frame The Frame.
+     */
+    public void addFrame(Frame frame) {
+    	if (!layers.containsKey(frame.getLayerIndex()))
+    		layers.put(frame.getLayerIndex(), new CopyOnWriteArrayList<>());
+		layers.get(frame.getLayerIndex()).add(frame);
+    }
+
+    public void addFrames(Collection<? extends Frame> frames) {
+    	frames.forEach(this::addFrame);
+	}
+
+	public Collection<Frame> getLayer(int layerIndex) {
+    	return layers.get(layerIndex);
+	}
+
+	public Collection<Frame> getAllFrames() {
+    	return layers.values().stream()
+					.flatMap(Collection::stream)
+					.collect(Collectors.toList());
+	}
+
+	@NotNull
+	@Override
+	public Iterator<Frame> iterator() {
+		return new LayersIterator();
+	}
+
+	private class LayersIterator implements Iterator<Frame> {
+		private Iterator<Collection<Frame>> layersIterator;
+		private Iterator<Frame> currentLayerIterator;
+
+		public LayersIterator() {
+			layersIterator = layers.values().iterator();
+			currentLayerIterator = layersIterator.hasNext() ? layersIterator.next().iterator() : new NullIterator<>();
+		}
+
+		@Override
+		public boolean hasNext() {
+			return currentLayerIterator.hasNext() || findNextNonEmptyLayer();
+		}
+
+		private boolean findNextNonEmptyLayer() {
+			if (layersIterator.hasNext())
+			{
+				currentLayerIterator = layersIterator.next().iterator();
+				return currentLayerIterator.hasNext() || findNextNonEmptyLayer();
+			}
+			return false;
+		}
+
+		@Override
+		public Frame next() {
+			return currentLayerIterator.next();
+		}
 	}
 }

@@ -1,9 +1,8 @@
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.AbstractTest;
-import com.pokewords.framework.engine.utils.StubFactory;
+import com.pokewords.framework.commons.utils.StubFactory;
 import com.pokewords.framework.sprites.components.mocks.MockEffectFrame;
-import com.pokewords.framework.sprites.components.mocks.MockPositionListener;
 import org.junit.Test;
 
 import java.awt.*;
@@ -15,57 +14,38 @@ import static org.junit.Assert.*;
  */
 public class ComponentsTest extends AbstractTest {
 
-    @Test
-    public void testPropertiesComponentPositionListener() {
-        PropertiesComponent pc = new PropertiesComponent("Type");
-        MockPositionListener listener = new MockPositionListener();
-        pc.addPositionListener(listener);
-
-        pc.setPosition(50, 100);
-        assertMockPositionListenerTriggered(listener, 1, 50, 100);
-
-        pc.setBody(100, 200, 500, 500);
-        assertMockPositionListenerTriggered(listener, 2, 100, 200);
-
-        pc.setPosition(new Point(1, 2));
-        assertMockPositionListenerTriggered(listener, 3, 1, 2);
-
-        pc.setBody(new Rectangle(400, 500, 500, 500));
-        assertMockPositionListenerTriggered(listener, 4, 400, 500);
-    }
-
-    private void assertMockPositionListenerTriggered(MockPositionListener listener, int triggeredCount, int x, int y) {
-        assertEquals(triggeredCount, listener.getTriggerCount());
-        assertEquals(x, listener.getX());
-        assertEquals(y, listener.getY());
-    }
-
 
     @Test
     public void testPropertiesComponentAccessors() {
-        PropertiesComponent pc = new PropertiesComponent("Type");
-        pc.setBody(50, 50, 50, 50);
-        pc.setCenter(200, 200);
+        PropertiesComponent pc = new PropertiesComponent("TargetPair");
+        assertEquals("TargetPair", pc.getType());
 
-        assertEquals("Type", pc.getType());
+        pc.setArea(50, 50, 50, 50);
         assertEquals(50, pc.getX());
         assertEquals(50, pc.getY());
-        assertEquals(50, pc.getW());
-        assertEquals(50, pc.getH());
+        assertEquals(50, pc.getWidth());
+        assertEquals(50, pc.getHeight());
         assertEquals(new Rectangle(50, 50, 50, 50), pc.getBody());
+        assertEquals(new Point(75, 75), pc.getCenter());
+
+        pc.setCenter(200, 200);
         assertEquals(new Point(200, 200), pc.getCenter());
-
-        pc.setBody(new Rectangle(100, 100, 100, 100));
-        assertEquals(new Rectangle(100, 100, 100, 100), pc.getBody());
-
-        pc.setPosition(20, 20);
-        assertEquals(new Rectangle(20, 20, 100, 100), pc.getBody());
-
         pc.setCenter(new Point(300, 300));
         assertEquals(new Point(300, 300), pc.getCenter());
 
-        pc.setType("Set-Type");
-        assertEquals("Set-Type", pc.getType());
+        pc.setBody(new Rectangle(20, 20, 20, 20));
+        assertEquals(new Rectangle(70, 70, 20, 20), pc.getBody());
+        pc.setBody(30, 30, 30, 30);
+        assertEquals(new Rectangle(80, 80, 30, 30), pc.getBody());
+
+        pc.setPosition(20, 20);
+        assertEquals(new Rectangle(20, 20, 50, 50), pc.getArea());
+        assertEquals(new Rectangle(50, 50, 30, 30), pc.getBody());
+        assertEquals(new Point(300, 300), pc.getCenter());
+
+
+        pc.setType("Set-TargetPair");
+        assertEquals("Set-TargetPair", pc.getType());
     }
 
     @Test
@@ -82,7 +62,7 @@ public class ComponentsTest extends AbstractTest {
     }
 
     private PropertiesComponent givenPropertiesComponent() {
-        PropertiesComponent pc = new PropertiesComponent("Type");
+        PropertiesComponent pc = new PropertiesComponent("TargetPair");
         pc.setBody(50, 50, 50, 50);
         pc.setCenter(100, 100);
         return pc;
@@ -90,22 +70,22 @@ public class ComponentsTest extends AbstractTest {
 
     @Test
     public void testPropertiesComponentClone() {
-        PropertiesComponent propertiesComponent = new PropertiesComponent("Type");
+        PropertiesComponent propertiesComponent = new PropertiesComponent("TargetPair");
         PropertiesComponent clone = propertiesComponent.clone();
-        assertNotSame(propertiesComponent.getBody(), clone.getBody());
-        assertSame(propertiesComponent.getType(), clone.getType());
 
-        // listeners should be re-initialized
-        assertNotSame(propertiesComponent.getPositionListeners(), clone.getPositionListeners());
+        assertSame(propertiesComponent.getType(), clone.getType());
+        assertNotSameButEquals(propertiesComponent.getBody(), clone.getBody());
+        assertNotSameButEquals(propertiesComponent.getCenter(), clone.getCenter());
+        assertNotSameButEquals(propertiesComponent.getPosition(), clone.getPosition());
     }
 
     @Test
     public void testFrameStateMachineComponentGetCurrentFrames() {
         FrameStateMachineComponent fsmc = new FrameStateMachineComponent();
-        MockEffectFrame currentFrame = new MockEffectFrame("A");
+        MockEffectFrame currentFrame = new MockEffectFrame(0, "A");
         fsmc.addFrame(currentFrame);
-        fsmc.addFrame(new MockEffectFrame("B"));
-        fsmc.addFrame(new MockEffectFrame("C"));
+        fsmc.addFrame(new MockEffectFrame(1, "B"));
+        fsmc.addFrame(new MockEffectFrame(2, "C"));
         fsmc.setCurrentFrame(currentFrame);
 
         assertSame(currentFrame, fsmc.getCurrentFrame());
@@ -114,10 +94,16 @@ public class ComponentsTest extends AbstractTest {
     @Test
     public void testFrameStateMachineComponentClone() {
         FrameStateMachineComponent fsmComponent = new FrameStateMachineComponent();
+        MockEffectFrame mockEffectFrame = new MockEffectFrame(0, "Mock");
+        fsmComponent.addFrame(mockEffectFrame);
+        fsmComponent.setCurrentFrame(mockEffectFrame);
+
         FrameStateMachineComponent clone = fsmComponent.clone();
-        assertSame(fsmComponent.getFiniteStateMachine(), clone.getFiniteStateMachine());
-        assertSame(fsmComponent.world, clone.world);
-        assertSame(fsmComponent.sprite, clone.sprite);
+
+        assertNotSameButEquals(fsmComponent.getFiniteStateMachine(), clone.getFiniteStateMachine());
+        assertNotSameButEquals(fsmComponent.getCurrentFrame(), clone.getCurrentFrame());
+        assertDeepNotSameButEquals(fsmComponent.renderedFrameCollection, clone.renderedFrameCollection);
+        assertDeepNotSameButEquals(fsmComponent.effectFrameMap, clone.effectFrameMap);
     }
 
     @Test
@@ -128,7 +114,7 @@ public class ComponentsTest extends AbstractTest {
         assertEquals(fscm1.hashCode(), fscm2.hashCode());
 
         // after fscm2's been changed, they should no longer be equal
-        fscm2.addFrame(new MockEffectFrame("mock"));
+        fscm2.addFrame(new MockEffectFrame(0, "mock"));
         assertNotEquals(fscm1, fscm2);
         assertNotEquals(fscm1.hashCode(), fscm2.hashCode());
     }

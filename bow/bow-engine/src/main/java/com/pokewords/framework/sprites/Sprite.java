@@ -7,15 +7,13 @@ import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
+import java.util.Optional;
 
 /**
  * A sprite is the fundamental unit in AppStateGameWorld.
@@ -30,7 +28,6 @@ import java.util.Set;
 public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	protected @Nullable AppStateWorld world;
 	protected ComponentMap components = new ComponentMap();
-	private int timePerFrame;
 
 
 	protected Sprite(String type) {
@@ -45,8 +42,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		components.forEach(this::addComponent);
 	}
 
-	public void setWorld(@Nullable AppStateWorld world) {
+	public void attachToWorld(AppStateWorld world) {
 		this.world = world;
+		components.foreachCloneableComponent(c -> c.onComponentAttachedWorld(world));
+	}
+
+	public void detachFromWorld(AppStateWorld world) {
+		assert this.world == world;
+		components.foreachCloneableComponent(c -> c.onComponentDetachedWorld(world));
 	}
 
 	@Nullable
@@ -80,20 +83,17 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return getComponent(PropertiesComponent.class);
 	}
 
-	public CollidableComponent getCollidableComponent() {
-		return getComponent(CollidableComponent.class);
-	}
-
-	public ClickableComponent getClickableComponent() {
-		return getComponent(ClickableComponent.class);
-	}
-
-	public boolean isCollidable() {
-		return hasComponent(CollidableComponent.class);
-	}
 
 	public boolean hasComponent(Class<? extends Component> type) {
 		return components.containsKey(type);
+	}
+
+	public boolean isRigidBody() {
+		return hasComponent(RigidBodyComponent.class);
+	}
+
+	public <T extends Component> Optional<T> getComponentOptional(Class<T> type) {
+		return hasComponent(type) ? Optional.of(getComponent(type)) : Optional.empty();
 	}
 
 	/**
@@ -102,6 +102,8 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @return the component's instance if exists, otherwise null.
 	 */
 	public <T extends Component> T getComponent(Class<T> type) {
+		if (!hasComponent(type))
+			throw new IllegalArgumentException("The sprite doesn't have component of the type " + type.getSimpleName() + ".");
 		return type.cast(components.get(type));
 	}
 
@@ -111,8 +113,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public <T extends Component> void addComponent(@NotNull Component component) {
 		components.put(component.getClass(), component);
-		component.onComponentAdded();
-		ComponentInjector.inject(this, component);
+
+		if (component instanceof CloneableComponent)
+			((CloneableComponent)component).onComponentAttachedSprite(this);
 	}
 
 	/**
@@ -121,7 +124,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 * @return the removed component if the name exist, null-object otherwise.
 	 */
 	public <T extends Component> void removeComponent(Class<T> type) {
-		components.remove(type).onComponentRemoved();
+		Component component = components.remove(type);
+		if (component instanceof CloneableComponent)
+			((CloneableComponent)component).onComponentDetachedSprite(this);
 	}
 
 	@Override
@@ -131,8 +136,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	@Override
-	public void onUpdate(int timePerFrame) {
-		this.timePerFrame = timePerFrame;
+	public void onUpdate(double timePerFrame) {
         for (Component component : components.values())
             component.onUpdate(timePerFrame);
 	}
@@ -155,6 +159,14 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 			component.onAppStateDestroy();
 	}
 
+	public void addPositionChangedListener(PropertiesComponent.SpritePositionChangedListener positionChangedListener) {
+		getPropertiesComponent().addPositionListener(positionChangedListener);
+	}
+
+	public void removePositionChangedListener(PropertiesComponent.SpritePositionChangedListener positionChangedListener) {
+		getPropertiesComponent().removePositionChangedListener(positionChangedListener);
+	}
+
 	public void setBody(int x, int y, int w, int h) {
         getPropertiesComponent().setBody(x, y, w, h);
     }
@@ -166,6 +178,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     public Rectangle getBody() {
         return getPropertiesComponent().getBody();
     }
+
+    public Dimension getBodySize() {
+		return getPropertiesComponent().getBodySize();
+	}
 
     public void setPosition(Point position) {
         getPropertiesComponent().setPosition(position);
@@ -180,19 +196,37 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     }
 
     public int getX() {
-        return (int) getPosition().getX();
+        return getPropertiesComponent().getX();
     }
 
     public int getY() {
-        return (int) getPosition().getY();
+        return getPropertiesComponent().getY();
     }
 
+    public void setArea(int x, int y, int width, int height) {
+        getPropertiesComponent().setArea(x, y, width, height);
+    }
+    public void setArea(Rectangle area) {
+		getPropertiesComponent().setArea(area);
+	}
+
+	public Dimension getAreaSize() {
+		return getPropertiesComponent().getAreaSize();
+	}
+
+    public Rectangle getArea() {
+		return getPropertiesComponent().getArea();
+	}
+
+	public void setAreaSize(Dimension size) {
+		getPropertiesComponent().setAreaSize(size);
+	}
     public int getWidth() {
-        return (int) getBody().getWidth();
+        return getPropertiesComponent().getWidth();
     }
 
     public int getHeight() {
-        return (int) getBody().getHeight();
+        return getPropertiesComponent().getHeight();
     }
 
     public void setType(String type) {
@@ -203,7 +237,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         return getPropertiesComponent().getType();
     }
 
-    public Point2D getCenter() {
+    public Point getCenter() {
         return getPropertiesComponent().getCenter();
     }
 
@@ -215,26 +249,39 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         getPropertiesComponent().setCenter(point);
     }
 
+	public void move(Point point) {
+		getPropertiesComponent().move(point);
+	}
+
     public void move(int velocityX, int velocityY) {
-		getPosition().translate(velocityX*timePerFrame, velocityY*timePerFrame);
+		getPropertiesComponent().move(velocityX, velocityY);
 	}
     public void moveX(int velocityX) {
-		getPosition().translate(velocityX*timePerFrame, 0);
+		getPropertiesComponent().moveX(velocityX);
 	}
 
 	public void moveY(int velocityY) {
-		getPosition().translate(0, velocityY*timePerFrame);
+		getPropertiesComponent().moveY(velocityY);
 	}
 
-	public boolean isType(Object obj) {
-		return getType().equals(obj.toString());
+	public boolean isType(Object type) {
+		return  getPropertiesComponent().isType(type);
+	}
+
+	public boolean anyType(Object ...types) {
+	    return getPropertiesComponent().anyType(types);
+    }
+
+
+	public void resumeToLatestPosition() {
+		getPropertiesComponent().resumeToLatestPosition();
 	}
 
 	public Sprite clone(){
 		try {
 			Sprite clone = (Sprite) super.clone();
 			clone.components = this.components.clone();
-			clone.injectComponents();
+			clone.components.foreachCloneableComponent((c) -> c.onComponentAttachedSprite(clone));
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
@@ -244,6 +291,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	/**
 	 * Make the components injected.
 	 * @see ComponentInjector#inject(Sprite)
+	 * @deprecated
 	 */
 	protected void injectComponents(){
 		ComponentInjector.inject(this);
@@ -265,24 +313,9 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return components.getRenderableComponents();
 	}
 
-
-	/**
-	 * @return all components not marked by Shareable interface
-	 * @see Shareable
-	 */
-	public Set<Component> getNonshareableComponents(){
-		return components.getNonshareableComponents();
+	public Collection<CloneableComponent> getCloneableComponents() {
+		return components.getCloneableComponents();
 	}
-
-	/**
-	 * @return all components marked by Shareable interface
-	 * @see Shareable
-	 */
-	public Set<Component> getShareableComponents(){
-		return components.getShareableComponents();
-	}
-
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -298,10 +331,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	@Override
 	public String toString() {
-		StringBuilder stringBuilder = new StringBuilder("----- Sprite(").append(getType()).append("-----");
+		StringBuilder stringBuilder = new StringBuilder("** Sprite (").append(getType()).append(") @").append(super.toString());
 		for (Class componentType : components.keySet()) {
-			stringBuilder.append("\n== Component: ").append(componentType.getSimpleName());
-			stringBuilder.append(" ==\n").append(components.get(componentType));
+			stringBuilder.append("\n**** ").append(componentType.getSimpleName()).append(" :\n");
+			stringBuilder.append(components.get(componentType));
 		}
 		return stringBuilder.toString();
 	}

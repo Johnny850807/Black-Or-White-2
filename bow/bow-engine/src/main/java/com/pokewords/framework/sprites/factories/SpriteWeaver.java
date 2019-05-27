@@ -1,24 +1,23 @@
 package com.pokewords.framework.sprites.factories;
 
-import com.pokewords.framework.ioc.IocFactory;
-import com.pokewords.framework.engine.GameEngineWeaverNode;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.parsing.Script;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * Chain of responsibility. Each node within the weaver is interested in parsing certain parts of Script.
+ * @author nyngwang
+ */
 public class SpriteWeaver {
-    private IocFactory iocFactory;
+    private IocContainer iocContainer;
     private LinkedList<SpriteWeaver.Node> weaverNodes;
 
-    public SpriteWeaver(IocFactory iocFactory) {
-        init();
-        this.iocFactory = iocFactory;
-    }
-
-    private void init() {
+    public SpriteWeaver(IocContainer iocContainer) {
         weaverNodes = new LinkedList<>();
+        this.iocContainer = iocContainer;
     }
 
     public void addWeaverNode(SpriteWeaver.Node node) {
@@ -33,9 +32,13 @@ public class SpriteWeaver {
         weaverNodes.remove(node);
     }
 
+    public void clear() {
+        weaverNodes.clear();
+    }
+
     public void weave(Script script, Sprite sprite) {
         for (Node weaverNode : weaverNodes) {
-            weaverNode.onWeaving(script, sprite);
+            weaverNode.onWeaving(script, sprite, iocContainer);
         }
     }
 
@@ -46,6 +49,6 @@ public class SpriteWeaver {
          * @param sprite the sprite
          * @param script the sprite's declaration script.
          */
-        void onWeaving(Script script, Sprite sprite);
+        void onWeaving(Script script, Sprite sprite, IocContainer iocContainer);
     }
 }

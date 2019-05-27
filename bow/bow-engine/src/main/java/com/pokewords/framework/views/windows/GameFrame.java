@@ -2,9 +2,14 @@ package com.pokewords.framework.views.windows;
 
 import com.pokewords.framework.views.AppView;
 import com.pokewords.framework.views.RenderedLayers;
+import com.pokewords.framework.views.inputs.InputManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * @author johnny850807 (waterball)
@@ -16,6 +21,7 @@ public class GameFrame extends JFrame implements AppView {
     public GameFrame(GamePanel gamePanel) throws HeadlessException {
         this.gamePanel = gamePanel;
         setContentPane(gamePanel);
+        pack();
     }
 
     @Override
@@ -23,6 +29,7 @@ public class GameFrame extends JFrame implements AppView {
         gamePanel.onAppInit();
         setVisible(true);
     }
+
 
     @Override
     public void onAppLoading() {
@@ -45,5 +52,13 @@ public class GameFrame extends JFrame implements AppView {
 
     public GameWindowDefinition getGameWindowDefinition() {
         return gameWindowDefinition;
+    }
+
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
+
+    public int getTitleBarHeight() {
+        return getInsets().top;
     }
 }

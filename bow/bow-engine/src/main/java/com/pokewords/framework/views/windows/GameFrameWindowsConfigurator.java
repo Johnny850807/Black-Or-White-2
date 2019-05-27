@@ -17,7 +17,7 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
 
     private void defaultConfig() {
         this.name("Default")
-                .size(50, 50)
+                .gameSize(50, 50)
                 .location(0, 0)
                 .gamePanelBackground(Color.black);
 
@@ -25,8 +25,6 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-
-    //TODO more config methods
 
     @Override
     public GameWindowsConfigurator name(String windowName){
@@ -36,9 +34,10 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
     }
 
     @Override
-    public GameWindowsConfigurator size(int width, int height){
-        gameWindowDefinition.size = new Point(width, height);
-        gameFrame.setSize(width, height);
+    public GameWindowsConfigurator gameSize(int width, int height){
+        gameWindowDefinition.size = new Dimension(width, height);
+        gameFrame.getGamePanel().setPreferredSize(new Dimension(width, height));
+        gameFrame.pack();
         return this;
     }
 
@@ -60,7 +59,6 @@ public class GameFrameWindowsConfigurator implements GameWindowsConfigurator {
     public GameWindowsConfigurator gamePanelBackground(Color color){
         gameWindowDefinition.gamePanelBackground = color;
         gameFrame.setGamePanelBackground(color);
-        gameFrame.repaint();
         return this;
     }
 

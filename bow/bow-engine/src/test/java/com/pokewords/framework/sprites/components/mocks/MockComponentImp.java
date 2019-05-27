@@ -2,7 +2,6 @@ package com.pokewords.framework.sprites.components.mocks;
 
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 
 /**
  * @author johnny850807 (waterball)
@@ -16,7 +15,7 @@ public class MockComponentImp extends Component implements MockComponent {
     private int exitCount;
     private int updateCount = 0;
 
-    public Sprite getSprite() {
+    public Sprite getOwnerSprite() {
         return sprite;
     }
 
@@ -45,7 +44,7 @@ public class MockComponentImp extends Component implements MockComponent {
     }
 
     @Override
-    public void onUpdate(int timePerFrame) {
+    public void onUpdate(double timePerFrame) {
         assert isRunning : "onUpdate() should be triggered after onAppStateEnter().";
         updateCount++;
     }

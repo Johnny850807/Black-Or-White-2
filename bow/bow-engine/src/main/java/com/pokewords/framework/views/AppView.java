@@ -1,13 +1,10 @@
 package com.pokewords.framework.views;
 
-public interface AppView {
-
+public interface AppView extends GameView {
 	void onAppInit();
 
 	void onAppLoading();
 
 	void onAppStarted();
-
-	void onRender(RenderedLayers renderedLayers);
 
 }

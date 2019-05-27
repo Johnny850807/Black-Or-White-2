@@ -17,16 +17,16 @@ public class ComponentInjectorTest {
         MockComponent1 mockComponent1 = new MockComponent1();
         MockComponent2 mockComponent2 = new MockComponent2();
         MockComponent3 mockComponent3 = new MockComponent3();
-        Sprite sprite = new Sprite("Type");
+        Sprite sprite = new Sprite("TargetPair");
 
         sprite.addComponent(mockComponent1);
         sprite.addComponent(mockComponent2);
         sprite.addComponent(mockComponent3);
 
         sprite.injectComponents();
-        assertSame(sprite, mockComponent1.getSprite());
-        assertSame(sprite, mockComponent2.getSprite());
-        assertSame(sprite, mockComponent3.getSprite());
+        assertSame(sprite, mockComponent1.getOwnerSprite());
+        assertSame(sprite, mockComponent2.getOwnerSprite());
+        assertSame(sprite, mockComponent3.getOwnerSprite());
     }
 
 }

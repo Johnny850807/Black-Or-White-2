@@ -7,7 +7,6 @@ import com.pokewords.framework.sprites.Sprite;
  * @author johnny850807 (waterball)
  */
 public interface MockComponent extends AppStateLifeCycleListener {
-    Sprite getSprite();
     boolean hasStarted();
     boolean hasDestroyed();
     boolean isRunning();
