@@ -1,12 +1,13 @@
 package com.pokewords.framework.sprites.parsing;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author nyngwang
  */
 public class AngularBracketElement extends Element {
-    public AngularBracketElement(Node parent, String name, KeyValuePairs keyValuePairs) {
+    public AngularBracketElement(Node parent, String name, @NotNull KeyValuePairs keyValuePairs) {
         super(parent, name, keyValuePairs);
-        keyValuePairs.setParent(this);
     }
 
     public AngularBracketElement(String name) {

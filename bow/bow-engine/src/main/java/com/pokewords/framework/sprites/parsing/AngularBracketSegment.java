@@ -1,25 +1,20 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ScriptParsingException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class AngularBracketSegment extends Segment {
-    private int id;
-    private Optional<String> description;
-
-    public AngularBracketSegment(Node parent, String name, KeyValuePairs keyValuePairs, List<Element> elements,
-                                 int id, String description) {
-        super(parent, name, keyValuePairs, elements);
-        this.id = id;
-        this.description = Optional.ofNullable(description);
+    public AngularBracketSegment(Node parent, String name, @NotNull KeyValuePairs keyValuePairs,
+                                 int id, String description, List<Element> elements) {
+        super(parent, name, keyValuePairs, id, description, elements);
     }
 
     public AngularBracketSegment(String name, int id, String description) {
-        this(null, name, null, new ArrayList<>(), id, description);
-        keyValuePairs = new NoCommaPairs(this);
+        this(null, name, new NoCommaPairs(), id, description, new ArrayList<>());
     }
 
     public AngularBracketSegment(String name, int id) {
@@ -30,61 +25,53 @@ public class AngularBracketSegment extends Segment {
         this(null, Integer.MIN_VALUE);
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public Optional<String> getDescription() {
-        return description;
-    }
-
     @Override
     public void parse(Context context) {
-        if (!context.peekToken().matches("<[^/\\s]\\S+>"))
-            return;
-        String openTag = context.fetchNextToken();
+        String openTag = context.fetchNextToken(
+                "<[^/\\s]\\S+>", "Invalid open tag: " + context.peekToken());
         setName(deTag(openTag));
-        String id = context.hasNextToken()?
-                context.fetchNextToken(
-                        "0|[1-9]\\d*",
-                        "Invalid id: " + context.peekToken())
-                : context.fetchNextToken("Run out of token before reaching: id");
+
+        String id = context.fetchNextToken("0|[1-9]\\d*", "Invalid id: " + context.peekToken());
         this.id = Integer.parseInt(id);
-        String at1AfterId = context.fetchNextToken("Run out of token before reaching: </" + getName() + ">");
-        if (at1AfterId.equals("</" + getName() + ">")) {
+
+        String at1AfterId = context.fetchNextToken();
+        if (at1AfterId.equals(getCloseTag())) {
             description = Optional.empty();
             return;
         }
-        String at2AfterId = context.fetchNextToken("Run out of token before reaching: </" + getName() + ">");
-        if (at2AfterId.equals("</" + getName() + ">")) {
+
+        String at2AfterId = context.fetchNextToken();
+        if (at2AfterId.equals(getCloseTag())) {
             description = Optional.of(at1AfterId);
             return;
         }
-        if (at2AfterId.matches("[^\\s:<>]+")) { // it's key
+
+        if (at1AfterId.matches("<[^/\\s]\\S+>") || at2AfterId.matches(":")) {
+            description = Optional.empty();
+            context.putBack(at2AfterId);
+            context.putBack(at1AfterId);
+        } else { // has description
             description = Optional.of(at1AfterId);
             context.putBack(at2AfterId);
         }
-        while (context.hasNextToken()) { // Either some key-value pairs or an element.
-            if (context.peekToken().equals("</" + getName() + ">")) {
+
+        do {
+            if (context.peekToken().equals(getCloseTag())) {
                 context.consumeOneToken();
                 return;
             }
-            int beforeKeyValuePairsAndOrElement = context.getRemainingTokensCount();
-            keyValuePairs.parse(context);
-            if (context.hasNextToken()) {
-                int beforeElement = context.getRemainingTokensCount();
+            if (context.peekToken().matches("<[^/\\s]\\S+>")) { // It's element
                 Element element = new AngularBracketElement();
                 element.parse(context);
-                int afterElement = context.getRemainingTokensCount();
-                if (beforeElement > afterElement)
-                    addElement(element);
+                addElement(element);
+                continue;
             }
-            int afterKeyValuePairsAndOrElement = context.getRemainingTokensCount();
-            if (beforeKeyValuePairsAndOrElement == afterKeyValuePairsAndOrElement)
-                throw new ScriptParsingException(
-                        "Segment body containsSprite something that is neither key-value pair nor element");
-        }
-        throw new ScriptParsingException("Run out of token before reaching: </" + getName() + ">");
+            if (context.peekToken().matches("[^\\s:<>]+")) { //It's key
+                getKeyValuePairs().parse(context);
+                continue;
+            }
+            throw new ScriptParsingException("Segment body contains something neither key-value pair nor element.");
+        } while (true);
     }
 
     @Override
@@ -95,13 +82,13 @@ public class AngularBracketSegment extends Segment {
                 getName(),
                 id > Integer.MIN_VALUE? String.format(" %s", String.valueOf(id)) : "",
                 description.isPresent()? String.format(" %s", description.get()) : ""));
-        resultBuilder.append(keyValuePairs.toString(indent).replaceAll(
+        resultBuilder.append(getKeyValuePairs().toString(indent).replaceAll(
                 "([^\n]*\n)",
-                indent + "$1"));
-        getElements().forEach(element ->
-                resultBuilder.append(element
-                        .toString(indent)
-                        .replaceAll("([^\n]*\n)", indent + "$1")));
+                spaces + "$1"));
+        getElements().forEach(
+                element -> resultBuilder.append(element.toString(indent).replaceAll(
+                        "([^\n]*\n)",
+                        spaces + "$1")));
         resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
     }
@@ -109,4 +96,6 @@ public class AngularBracketSegment extends Segment {
     private String deTag(String tag) {
         return tag.replaceAll("</?(\\S+)>", "$1");
     }
+
+    private String getCloseTag() { return "</" + getName() + ">"; }
 }

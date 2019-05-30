@@ -1,6 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -9,11 +10,24 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public abstract class Segment extends Element {
+    protected int id;
+    protected Optional<String> description;
     private List<Element> elements;
 
-    public Segment(Node parent, String name, KeyValuePairs keyValuePairs, List<Element> elements) {
+    public Segment(Node parent, String name, @NotNull KeyValuePairs keyValuePairs,
+                   int id, String description, List<Element> elements) {
         super(parent, name, keyValuePairs);
-        this.elements = elements;
+        this.id = id;
+        this.description = Optional.ofNullable(description);
+        elements.forEach(this::addElement);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Optional<String> getDescription() {
+        return description;
     }
 
     public void addElement(Element element) {

@@ -16,10 +16,11 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
     private String name;
     private KeyValuePairs keyValuePairs;
 
-    public Element(Node parent, String name, KeyValuePairs keyValuePairs) {
+    public Element(Node parent, String name, @NotNull KeyValuePairs keyValuePairs) {
         this.parent = parent;
         this.name = name;
         this.keyValuePairs = keyValuePairs;
+        keyValuePairs.setParent(this);
     }
 
     @Override
