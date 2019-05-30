@@ -27,13 +27,13 @@ public class Context {
     }
 
     private List<String> tokens;
-    private int lineNumber;
-    private int bufferedLineNumber;
+    private int currentLineNumber;
+    private int bufferedLinesCount;
 
     private Context(String scriptText) {
         tokens = new ArrayList<>();
-        lineNumber = 1;
-        bufferedLineNumber = 0;
+        currentLineNumber = 1;
+        bufferedLinesCount = 0;
         tokenize(scriptText);
     }
 
@@ -56,7 +56,7 @@ public class Context {
 
     public boolean hasNextToken() {
         while (!tokens.isEmpty() && tokens.get(0).equals("\n")) {
-            bufferedLineNumber++;
+            bufferedLinesCount++;
             tokens.remove(0);
         }
         return !tokens.isEmpty();
@@ -64,9 +64,9 @@ public class Context {
 
     public void consumeOneToken(String noMoreToken) {
         if (!hasNextToken())
-            throw new ScriptParsingException(noMoreToken);
-        lineNumber += bufferedLineNumber;
-        bufferedLineNumber = 0;
+            throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMoreToken));
+        currentLineNumber += bufferedLinesCount;
+        bufferedLinesCount = 0;
         tokens.remove(0);
     }
 
@@ -90,7 +90,7 @@ public class Context {
         String token = peekToken();
         consumeOneToken("Should check hasNextToken() before fetchNextToken() or parse()");
         if (!token.matches(regex))
-            throw new ScriptParsingException(noMatch);
+            throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMatch));
         return token;
     }
 
@@ -102,8 +102,8 @@ public class Context {
         return tokens.size();
     }
 
-    public int getLineNumber() {
-        return lineNumber;
+    public int getCurrentLineNumber() {
+        return currentLineNumber;
     }
 
     public static void main(String[] args) {

@@ -18,22 +18,17 @@ public class NoCommaPairs extends KeyValuePairs {
     public void parse(Context context) {
         do {
             String key = context.fetchNextToken(
-                    "[a-zA-Z]\\w+",
-                    "Invalid key: " + context.peekToken());
+                    "[^\\s:<>]+", "Invalid key format: " + context.peekToken());
             String colon = context.hasNextToken()?
-                    context.fetchNextToken(
-                            ":",
-                            "The colon is missing: " + key + " " + context.peekToken())
-                    : context.fetchNextToken("Run out of token after: " + key);
+                    context.fetchNextToken(":", "Expected: " + key + ": " + context.peekToken())
+                    : context.fetchNextToken();
             String value = context.hasNextToken()?
-                    context.fetchNextToken(
-                            "[^\\s:<>]+",
-                            "Invalid value: " + context.peekToken())
-                    : context.fetchNextToken("Run out of token after: colon(:)");
+                    context.fetchNextToken("[^\\s:<>]+", "Invalid value: " + context.peekToken())
+                    : context.fetchNextToken();
             put(key, value);
             if (!context.peekToken().matches("[^\\s:<>]+"))
                 return;
-        } while (context.hasNextToken());
+        } while (true);
     }
 
     @Override
