@@ -98,18 +98,7 @@ public class Context {
         tokens.add(0, token);
     }
 
-    public int getRemainingTokensCount() {
-        return tokens.size();
-    }
-
     public int getCurrentLineNumber() {
         return currentLineNumber;
-    }
-
-    public static void main(String[] args) {
-        Context context = Context.fromText(SCRIPT_TEXT);
-        while (context.hasNextToken()) {
-            String openTag = context.fetchNextToken("Can fetch openTag: run out of token");
-        }
     }
 }

@@ -16,31 +16,28 @@ public class LinScript extends Script {
     }
 
     public boolean containsSegmentId(int id) {
-        for (Segment segment : getSegments()) {
-            if (((AngularBracketSegment) segment).getId() == id)
+        for (Segment segment : getSegments())
+            if (segment.getId() == id)
                 return true;
-        }
         return false;
     }
 
     public boolean containsSegmentDescription(String description) {
-        for (Segment segment : getSegments()) {
-            if (((AngularBracketSegment) segment).getDescription().orElse("").equals(description))
+        for (Segment segment : getSegments())
+            if (segment.getDescription().orElse("").equals(description))
                 return true;
-        }
         return false;
     }
 
     public List<Segment> getSegmentsById(int id) {
         return getSegments().stream()
-                .filter(segment -> ((AngularBracketSegment) segment).getId() == id)
+                .filter(segment -> segment.getId() == id)
                 .collect(Collectors.toList());
     }
 
     public List<Segment> getSegmentsByDescription(String description) {
         return getSegments().stream()
-                .filter(segment -> ((AngularBracketSegment) segment)
-                        .getDescription().orElse("").equals(description))
+                .filter(segment -> segment.getDescription().orElse("").equals(description))
                 .collect(Collectors.toList());
     }
 
@@ -51,19 +48,18 @@ public class LinScript extends Script {
 
     @Override
     public void parse(Context context) {
-        if (!context.peekToken().matches("<[^/\\s]\\S+>"))
-            return;
-        while (context.hasNextToken()) {
-            int beforeSegment = context.getRemainingTokensCount();
-            Segment segment = new AngularBracketSegment();
-            segment.parse(context);
-            int afterSegment = context.getRemainingTokensCount();
-            if (beforeSegment > afterSegment)
+        if (!context.hasNextToken())
+            throw new ScriptParsingException("Empty script is not allowed.");
+
+        do {
+            if (context.peekToken().matches("<[^/\\s]\\S+>")) {
+                Segment segment = new AngularBracketSegment();
+                segment.parse(context);
                 addSegment(segment);
-            if (beforeSegment == afterSegment)
-                throw new ScriptParsingException(
-                        "Script body contains something that is not segment");
-        }
+                continue;
+            }
+            throw new ScriptParsingException("Script body cannot contain: " + context.peekToken());
+        } while (true);
     }
 
     @Override
@@ -73,14 +69,15 @@ public class LinScript extends Script {
         getSegments().sort((o1, o2) -> {
             String leftName = o1.getName();
             String rightName = o2.getName();
-            int leftId = ((AngularBracketSegment) o1).getId();
-            int rightId = ((AngularBracketSegment) o2).getId();
+            int leftId = o1.getId();
+            int rightId = o2.getId();
             return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
                     : leftName.compareTo(rightName);
         });
-        getSegments().forEach(segment ->
-                resultBuilder.append(segment.toString(indent)
-                        .replaceAll("([^\n]*\n)", indent + "$1")));
+        getSegments().forEach(
+                segment -> resultBuilder.append(segment.toString(indent).replaceAll(
+                        "([^\n]*\n)",
+                        spaces + "$1")));
         return resultBuilder.toString();
     }
 }

@@ -11,7 +11,7 @@ public abstract class Script implements Node {
     private List<Segment> segments;
 
     public Script(List<Segment> segments) {
-        this.segments = segments;
+        segments.forEach(this::addSegment);
     }
 
     public void addSegment(Segment segment) {
