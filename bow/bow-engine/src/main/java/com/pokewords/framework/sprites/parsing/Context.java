@@ -27,14 +27,18 @@ public class Context {
     }
 
     private List<String> tokens;
+    private int lineNumber;
+    private int bufferedLineNumber;
 
     private Context(String scriptText) {
         tokens = new ArrayList<>();
+        lineNumber = 1;
+        bufferedLineNumber = 0;
         tokenize(scriptText);
     }
 
     private void tokenize(String scriptText) {
-        Pattern pattern = Pattern.compile("(<\\S+>|[^:\\s]+|:)|(\\S+)");
+        Pattern pattern = Pattern.compile("(<\\S+>|[^:\\s]+|:|\\n)|(\\S+)");
         Matcher matcher = pattern.matcher(scriptText);
 
         while (matcher.find()) {
@@ -51,12 +55,18 @@ public class Context {
     }
 
     public boolean hasNextToken() {
+        while (!tokens.isEmpty() && tokens.get(0).equals("\n")) {
+            bufferedLineNumber++;
+            tokens.remove(0);
+        }
         return !tokens.isEmpty();
     }
 
     public void consumeOneToken(String noMoreToken) {
         if (!hasNextToken())
             throw new ScriptParsingException(noMoreToken);
+        lineNumber += bufferedLineNumber;
+        bufferedLineNumber = 0;
         tokens.remove(0);
     }
 
@@ -90,6 +100,10 @@ public class Context {
 
     public int getRemainingTokensCount() {
         return tokens.size();
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
     }
 
     public static void main(String[] args) {

@@ -1,8 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.engine.exceptions.KeyValuePairsException;
-import com.pokewords.framework.engine.exceptions.ScriptParsingException;
-
 import java.util.Map;
 
 /**
@@ -20,13 +17,13 @@ public class NoCommaPairs extends KeyValuePairs {
     @Override
     public void parse(Context context) {
         do {
-            if (!context.peekToken().matches("[^\\s:<>]+"))
-                return;
-            String key = context.fetchNextToken();
+            String key = context.fetchNextToken(
+                    "[a-zA-Z]\\w+",
+                    "Invalid key: " + context.peekToken());
             String colon = context.hasNextToken()?
                     context.fetchNextToken(
                             ":",
-                            "Expect a colon between: " + key + " " + context.peekToken())
+                            "The colon is missing: " + key + " " + context.peekToken())
                     : context.fetchNextToken("Run out of token after: " + key);
             String value = context.hasNextToken()?
                     context.fetchNextToken(
@@ -34,6 +31,8 @@ public class NoCommaPairs extends KeyValuePairs {
                             "Invalid value: " + context.peekToken())
                     : context.fetchNextToken("Run out of token after: colon(:)");
             put(key, value);
+            if (!context.peekToken().matches("[^\\s:<>]+"))
+                return;
         } while (context.hasNextToken());
     }
 
