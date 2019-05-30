@@ -19,12 +19,9 @@ public class NoCommaPairs extends KeyValuePairs {
         do {
             String key = context.fetchNextToken(
                     "[^\\s:<>]+", "Invalid key format: " + context.peekToken());
-            String colon = context.hasNextToken()?
-                    context.fetchNextToken(":", "Expected: " + key + ": " + context.peekToken())
-                    : context.fetchNextToken();
-            String value = context.hasNextToken()?
-                    context.fetchNextToken("[^\\s:<>]+", "Invalid value: " + context.peekToken())
-                    : context.fetchNextToken();
+            String colon = context.fetchNextToken(
+                    ":", "Expect: " + key + ": " + context.peekToken());
+            String value = context.fetchNextToken("[^\\s:<>]+", "Invalid value: " + context.peekToken());
             put(key, value);
             if (!context.peekToken().matches("[^\\s:<>]+"))
                 return;

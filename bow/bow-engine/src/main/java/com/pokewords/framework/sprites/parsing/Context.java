@@ -88,7 +88,7 @@ public class Context {
 
     public String fetchNextToken(String regex, String noMatch) {
         String token = peekToken();
-        consumeOneToken("Should check hasNextToken() before fetchNextToken() or parse()");
+        consumeOneToken();
         if (!token.matches(regex))
             throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMatch));
         return token;

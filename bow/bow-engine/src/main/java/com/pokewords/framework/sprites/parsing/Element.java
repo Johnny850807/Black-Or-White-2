@@ -14,7 +14,7 @@ import java.util.Iterator;
 public abstract class Element implements Node, Packable, Iterable<Pair<String, String>> {
     private Node parent;
     private String name;
-    protected KeyValuePairs keyValuePairs;
+    private KeyValuePairs keyValuePairs;
 
     public Element(Node parent, String name, KeyValuePairs keyValuePairs) {
         this.parent = parent;
