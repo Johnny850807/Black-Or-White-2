@@ -1,53 +1,25 @@
 package basics;
 
 
-import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.engine.GameEngineFacade;
+import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
-import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.sprites.parsing.*;
+import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
 
-public class MainAppState extends AppState {
+public class MainAppState extends EmptyAppState {
 
     enum Sprites {
         CHARACTER
     }
-    @Override
-    protected void onAppStateCreating(AppStateWorld world) {
-    }
-
-
-
 
     @Override
-    public void onAppStateEntering() {
-
+    protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
+        return new ContainerAppStateWorld(this);
     }
 
     @Override
-    public void onAppStateExiting() {
-        getAppStateWorld().clearSprites();
-    }
-
-    @Override
-    protected void onAppStateDestroying() {
-
-    }
-
-
-    @Override
-    public void onAppStateUpdating(double timePerFrame) {
-    }
-
-    private void moveUp(){
-
-    }
-    private void moveLeft(){
-
-    }
-    private void moveDown(){
-
-    }
-    private void moveRight(){
-
+    protected void onAppStateCreating(AppStateWorld world) {
+        getGameWindowsConfigurator().gameSize(800, 600);
+        world.spawn(createSprite(Sprites.CHARACTER));
     }
 }

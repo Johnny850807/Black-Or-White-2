@@ -19,6 +19,7 @@ public abstract class Segment extends Element {
         super(parent, name, keyValuePairs);
         this.id = id;
         this.description = Optional.ofNullable(description);
+        this.elements = new ArrayList<>();
         elements.forEach(this::addElement);
     }
 

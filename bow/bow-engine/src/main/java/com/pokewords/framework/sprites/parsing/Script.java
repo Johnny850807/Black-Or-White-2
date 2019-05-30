@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ public abstract class Script implements Node {
     private List<Segment> segments;
 
     public Script(List<Segment> segments) {
+        this.segments = new ArrayList<>();
         segments.forEach(this::addSegment);
     }
 

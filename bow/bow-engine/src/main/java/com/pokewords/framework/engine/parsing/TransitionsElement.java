@@ -20,7 +20,8 @@ public class TransitionsElement {
         Collection<String> keys = element.getKeyValuePairs().getKeys();
 
         for (String event : keys) {
-            transitionMap.put(EnumUtility.evalEnum(enumType, event), element.getKeyValuePairs().getInt(event));
+            if (!event.equals("classType"))
+                transitionMap.put(EnumUtility.evalEnum(enumType, event), element.getInt(event));
         }
     }
 

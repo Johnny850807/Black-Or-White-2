@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static com.pokewords.framework.sprites.parsing.ScriptSample.LinScript.*;
 
 /**
  * @author nyngwang

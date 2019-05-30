@@ -3,11 +3,14 @@ package basics;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.ioc.ReleaseIocContainer;
+import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.KeyListenerComponent;
+import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.sprites.factories.SpriteWeaver;
+import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
-
-import static com.pokewords.framework.sprites.factories.SpriteInitializer.InitializationMode.NON_LAZY;
 
 public class BasicsDemo extends GameApplication {
 
@@ -17,23 +20,32 @@ public class BasicsDemo extends GameApplication {
 
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
-        gameWindowsConfigurator.name("Basic App Demo")
-                            .atCenter();
+        gameWindowsConfigurator
+                .name("Basic App Demo")
+                .atCenter();
     }
 
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
-        spriteInitializer.setInitializationMode(NON_LAZY);
-        spriteInitializer.declare(basics.MainAppState.Sprites.CHARACTER)
+        spriteInitializer
+                .declare(basics.MainAppState.Sprites.CHARACTER)
                 .position(getGameWindowDefinition().center())
                 .with("scripts/character.bow")
+                .with(KeyListenerComponent.ofListener(new PlayerKeyListener()))
+                .areaSize(67, 77)
+                .weaver(new SpriteWeaver.Node() {
+                    @Override
+                    public void onWeaving(Script script, Sprite sprite, IocContainer iocContainer) {
+                        EffectFrame frame = sprite.getFrameStateMachineComponent().getFrame(999);
+                        sprite.getFrameStateMachineComponent().setCurrentFrame(frame);
+                    }
+                })
                 .commit();
     }
 
     @Override
     protected void onAppStatesConfiguration(AppStateMachine asm) {
-        MainAppState mainAppState = asm.createState(MainAppState.class);
-        asm.setGameInitialState(mainAppState);
+        asm.setGameInitialState(asm.createState(MainAppState.class));
     }
 
 

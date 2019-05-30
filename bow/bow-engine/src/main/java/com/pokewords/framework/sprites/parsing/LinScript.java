@@ -50,16 +50,13 @@ public class LinScript extends Script {
     public void parse(Context context) {
         if (!context.hasNextToken())
             throw new ScriptParsingException("Empty script is not allowed.");
-
         do {
-            if (context.peekToken().matches("<[^/\\s]\\S+>")) {
-                Segment segment = new AngularBracketSegment();
-                segment.parse(context);
-                addSegment(segment);
-                continue;
-            }
-            throw new ScriptParsingException("Script body cannot contain: " + context.peekToken());
-        } while (true);
+            if (!context.peekToken().matches("<[^/\\s]\\S+>"))
+                throw new ScriptParsingException("Script body cannot contain: " + context.peekToken());
+            Segment segment = new AngularBracketSegment();
+            segment.parse(context);
+            addSegment(segment);
+        } while (context.hasNextToken());
     }
 
     @Override
@@ -75,9 +72,12 @@ public class LinScript extends Script {
                     : leftName.compareTo(rightName);
         });
         getSegments().forEach(
-                segment -> resultBuilder.append(segment.toString(indent).replaceAll(
-                        "([^\n]*\n)",
-                        spaces + "$1")));
+                segment -> resultBuilder.append(segment.toString(indent)));
         return resultBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toString(4);
     }
 }
