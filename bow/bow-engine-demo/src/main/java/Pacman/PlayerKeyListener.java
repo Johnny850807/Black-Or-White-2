@@ -50,6 +50,8 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
 
     private void move(Sprite sprite, Direction direction) {
         sprite.getComponent(MovingComponent.class).move(direction);
+
+        sprite.trigger("walkLeft");
     }
 
     private void clearMovement(Sprite sprite, Direction direction) {

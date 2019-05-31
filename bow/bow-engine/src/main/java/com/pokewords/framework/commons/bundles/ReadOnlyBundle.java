@@ -2,6 +2,7 @@ package com.pokewords.framework.commons.bundles;
 
 /**
  * A read only version of bundle.
+ * If you want to setup a ReadOnlyBundle, use @code{new ReadOnlyBundle.Builder()}.
  * @author johnny850807 (waterball)
  */
 public class ReadOnlyBundle extends Bundle {

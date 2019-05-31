@@ -188,7 +188,7 @@ public enum Direction {
      * @param speed moving speed
      * @return the movement point according to the Direction
      */
-    public Point move(int speed) {
+    public Point getMovement(int speed) {
         switch (this) {
             case NO_DIRECTION:
                 return new Point(0, 0);

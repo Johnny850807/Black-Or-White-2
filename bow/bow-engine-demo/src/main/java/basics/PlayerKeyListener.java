@@ -7,20 +7,24 @@ import com.pokewords.framework.sprites.components.KeyListenerComponent;
 import java.awt.event.KeyEvent;
 
 public class PlayerKeyListener extends KeyListenerComponent.Listener {
-
+    private Direction currentDirection = Direction.NO_DIRECTION;
     @Override
     public void onKeyPressed(Sprite sprite, int keyCode) {
         switch (keyCode) {
             case KeyEvent.VK_UP:
+                currentDirection = Direction.UP;
                 sprite.trigger(WalkEvent.walkUp);
                 break;
             case KeyEvent.VK_DOWN:
+                currentDirection = Direction.DOWN;
                 sprite.trigger(WalkEvent.walkDown);
                 break;
             case KeyEvent.VK_LEFT:
+                currentDirection = Direction.LEFT;
                 sprite.trigger(WalkEvent.walkLeft);
                 break;
             case KeyEvent.VK_RIGHT:
+                currentDirection = Direction.RIGHT;
                 sprite.trigger(WalkEvent.walkRight);
                 break;
         }
@@ -30,22 +34,29 @@ public class PlayerKeyListener extends KeyListenerComponent.Listener {
     public void onKeyReleased(Sprite sprite, int keyCode) {
         switch (keyCode) {
             case KeyEvent.VK_UP:
-                clearMovement(sprite, Direction.UP);
+                if (currentDirection == Direction.UP) {
+                    currentDirection = Direction.NO_DIRECTION;
+                    sprite.trigger(WalkEvent.halt);
+                }
                 break;
             case KeyEvent.VK_DOWN:
-                clearMovement(sprite, Direction.DOWN);
+                if (currentDirection == Direction.DOWN){
+                    currentDirection = Direction.NO_DIRECTION;
+                    sprite.trigger(WalkEvent.halt);
+                }
                 break;
             case KeyEvent.VK_LEFT:
-                clearMovement(sprite, Direction.LEFT);
+                if (currentDirection == Direction.LEFT){
+                    currentDirection = Direction.NO_DIRECTION;
+                    sprite.trigger(WalkEvent.halt);
+                }
                 break;
             case KeyEvent.VK_RIGHT:
-                clearMovement(sprite, Direction.RIGHT);
+                if (currentDirection == Direction.RIGHT){
+                    currentDirection = Direction.NO_DIRECTION;
+                    sprite.trigger(WalkEvent.halt);
+                }
                 break;
         }
     }
-
-    private void clearMovement(Sprite sprite, Direction direction) {
-    }
-
-
 }

@@ -15,7 +15,7 @@ public class MovingComponent extends CloneableComponent {
     @Override
     public void onUpdate(double timePerFrame) {
         if (direction != null)
-            getOwnerSprite().move(direction.move(speed));
+            getOwnerSprite().move(direction.getMovement(speed));
     }
 
     public void move(Direction direction) {

@@ -42,7 +42,7 @@ public class CollisionListenerComponent extends CloneableComponent {
          * This method will be triggered during the owner Sprite is being moved and
          * if this movement causes a collision event to the owner Sprite.
          *
-         * Note that this method will be triggered only once in every move despite the number
+         * Note that this method will be triggered only once in every getMovement despite the number
          * of rigid sprites it collides with.
          * @param ownerSprite the owner sprite of the listener
          */

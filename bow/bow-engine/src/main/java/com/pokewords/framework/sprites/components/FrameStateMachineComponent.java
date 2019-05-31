@@ -72,7 +72,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     }
 
     public EffectFrame trigger(Object event){
-        return fsm.trigger(event.toString());
+        return fsm.trigger(event);
     }
 
     public EffectFrame getCurrentFrame(){
