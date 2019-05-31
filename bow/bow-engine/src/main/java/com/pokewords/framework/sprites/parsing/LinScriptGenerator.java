@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class LinScriptGenerator extends Script {
-    public static Script fromContext(Context context) {
+    public static Script fromShortHand(String path) {
         LinScriptGenerator generator = new LinScriptGenerator();
-        generator.parse(context);
+        generator.parse(Context.fromFile(path));
         return generator.getScript();
     }
 
@@ -112,8 +112,8 @@ public class LinScriptGenerator extends Script {
     }
 
     public static void main(String[] args) {
-        Script LinScript = LinScriptGenerator
-                .fromContext(Context.fromFile("bow-engine/src/main/resources/assets/scripts/templateTest.bow"));
+        Script LinScript = LinScriptGenerator.fromShortHand(
+                "bow-engine/src/main/resources/assets/scripts/templateTest.bow");
         System.out.println(LinScript);
     }
 }

@@ -18,7 +18,7 @@ public class Context {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return new Context("");
     }
 
     public static Context fromText(String text) {
