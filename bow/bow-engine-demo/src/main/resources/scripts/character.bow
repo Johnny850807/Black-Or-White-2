@@ -49,9 +49,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
         moveX: -8
-    </effect>
+    </move>
 </frame>
 
 <frame> 1 walkLeft
@@ -67,9 +67,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
         moveX: -8
-    </effect>
+    </move>
 
 </frame>
 
@@ -86,9 +86,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
         moveX: -8
-    </effect>
+    </move>
 </frame>
 
 
@@ -105,9 +105,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveX: 8
-    </effect>
+    </move>
 </frame>
 
 <frame> 4 walkRight
@@ -123,9 +123,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveX: 8
-    </effect>
+    </move>
 </frame>
 
 <frame> 5 walkRight
@@ -141,9 +141,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveX: 8
-    </effect>
+    </move>
 </frame>
 
 
@@ -160,9 +160,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
         moveY: -7
-    </effect>
+    </move>
 </frame>
 
 <frame> 7 walkLeftUp
@@ -178,9 +178,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
 		moveY: -7
-    </effect>
+    </move>
 </frame>
 
 <frame> 8 walkLeftUp
@@ -196,9 +196,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
         moveY: -7
-    </effect>
+    </move>
 </frame>
 
 
@@ -215,9 +215,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
         moveY: 7
-    </effect>
+    </move>
 </frame>
 
 <frame> 10 walkLeftDown
@@ -233,9 +233,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
         moveY: 7
-    </effect>
+    </move>
 </frame>
 
 <frame> 11 walkLeftDown
@@ -251,9 +251,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
-    <effect>
+    <move>
         moveY: 7
-    </effect>
+    </move>
 </frame>
 
 <frame> 12 walkRightUp
@@ -269,9 +269,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveY: -7
-    </effect>
+    </move>
 </frame>
 
 <frame> 13 walkRightUp
@@ -287,9 +287,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveY: -7
-    </effect>
+    </move>
 </frame>
 
 <frame> 14 walkRightUp
@@ -305,9 +305,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveY: -7
-    </effect>
+    </move>
 </frame>
 
 <frame> 15 walkRightDown
@@ -323,9 +323,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveY: 7
-    </effect>
+    </move>
 </frame>
 
 <frame> 16 walkRightUp
@@ -341,9 +341,9 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveY: 7
-    </effect>
+    </move>
 </frame>
 
 <frame> 17 walkRightUp
@@ -359,7 +359,7 @@ duration: 8 next: 998 pic: 0 layer: 2
     <body>
         x: 9 y: 11 w: 44 h: 64
     </body>
-    <effect>
+    <move>
         moveY: 7
-    </effect>
+    </move>
 </frame>

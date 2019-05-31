@@ -17,7 +17,7 @@ public class FrameSegment {
     private int duration;
     private int next;
     private Optional<BodyElement> bodyElement;
-    private Optional<EffectElement> effectElement;
+    private Optional<MoveElement> moveElement;
     private Optional<TransitionsElement> transitionsElement;
 
     public FrameSegment(Segment frameSegment) {
@@ -30,9 +30,9 @@ public class FrameSegment {
         this.bodyElement = Optional.ofNullable(
                 frameSegment.containsElement("body")?
                 new BodyElement(frameSegment.getFirstElement("body")) : null);
-        this.effectElement = Optional.ofNullable(
-                frameSegment.containsElement("effect")?
-                new EffectElement(frameSegment.getFirstElement("effect")) : null);
+        this.moveElement = Optional.ofNullable(
+                frameSegment.containsElement("move")?
+                new MoveElement(frameSegment.getFirstElement("move")) : null);
         this.transitionsElement = Optional.ofNullable(
                 frameSegment.containsElement("transitions") ?
                         new TransitionsElement(frameSegment.getFirstElement("transitions")) : null
@@ -68,8 +68,8 @@ public class FrameSegment {
         return bodyElement;
     }
 
-    public Optional<EffectElement> getEffectElement() {
-        return effectElement;
+    public Optional<MoveElement> getMoveElement() {
+        return moveElement;
     }
 
     public Optional<TransitionsElement> getTransitionsElement() {
