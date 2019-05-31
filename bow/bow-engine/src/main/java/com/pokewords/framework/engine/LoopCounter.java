@@ -5,6 +5,7 @@ import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * The public common Loop number updater.
@@ -25,12 +26,18 @@ public class LoopCounter implements GameLoopingListener {
         }
     }
 
-    public void doAfterLoopCountDown(long countDownLoopNumber, Runnable action) {
+    public void addLoopCountdownHook(long countDownLoopNumber, Runnable hook) {
         countDownLoopNumber = countDownLoopNumber == 0 ? 1 : countDownLoopNumber;
         long loop = loopNumber + countDownLoopNumber;
         if (!actionMap.containsKey(loop))
-            actionMap.put(loop, new HashSet<>());
-        actionMap.get(loop).add(action);
+            actionMap.put(loop, new CopyOnWriteArraySet<>());
+        actionMap.get(loop).add(hook);
+    }
+
+    public void removeLoopCountdownHook(Runnable action) {
+        for (Long loop : actionMap.keySet()) {
+            actionMap.get(loop).remove(action);
+        }
     }
 
     public long getCurrentLoopNumber() {

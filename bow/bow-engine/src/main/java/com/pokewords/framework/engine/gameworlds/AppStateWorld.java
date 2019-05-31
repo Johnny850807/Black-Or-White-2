@@ -130,6 +130,7 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     public void onAppStateEnter() {
         for (Sprite sprite: sprites) {
             sprite.onAppStateEnter();
+            sprite.attachToWorld(this);
         }
     }
 
@@ -137,6 +138,7 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     public void onAppStateExit() {
         for (Sprite sprite: sprites) {
             sprite.onAppStateExit();
+            sprite.detachFromWorld(this);
         }
     }
 

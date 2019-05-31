@@ -2,7 +2,6 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.engine.Events;
-import com.pokewords.framework.engine.LoopCounter;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
@@ -39,7 +38,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     @Override
     public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
         super.onComponentAttachedWorld(appStateWorld);
-        arrangeNextUpdateTask();
+        arrangeNextUpdateCountdownHookIfAvailable();
     }
 
     public void addFrame(EffectFrame frame){
@@ -54,13 +53,20 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
         fsm.getStates().forEach(frame -> frame.boundToSprite(null));
     }
 
-    private void arrangeNextUpdateTask() {
-        getGameEngineFacade().doAfterLoopCountDown(currentFrameDuration, () -> {
-            trigger(Events.UPDATE);
-            currentFrameDuration = getCurrentFrame().getDuration();
-            if (isAttachedToWorld())
-                arrangeNextUpdateTask();
-        });
+    private Runnable updateCountdownHook = this::triggerUpdateEvent;
+
+    private void triggerUpdateEvent() {
+        EffectFrame nextFrame = trigger(Events.UPDATE);
+        currentFrameDuration = nextFrame.getDuration();
+        arrangeNextUpdateCountdownHookIfAvailable();
+    }
+
+    private void arrangeNextUpdateCountdownHookIfAvailable() {
+        if (getCurrentFrame() != null && isAttachedToWorld())
+        {
+            getGameEngineFacade().removeLoopCountdownHook(updateCountdownHook);
+            getGameEngineFacade().addLoopCountdownHook(currentFrameDuration, updateCountdownHook);
+        }
     }
 
     @Override
@@ -81,7 +87,10 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     }
 
     public EffectFrame trigger(Object event){
-        return fsm.trigger(event);
+        EffectFrame nextFrame = fsm.trigger(event);
+        currentFrameDuration = nextFrame.getDuration();
+        arrangeNextUpdateCountdownHookIfAvailable();
+        return nextFrame;
     }
 
     public EffectFrame getCurrentFrame(){
@@ -92,6 +101,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
         this.fsm.setCurrentState(frame);
         renderedFrameCollection.clear();
         renderedFrameCollection.add(frame);
+        arrangeNextUpdateCountdownHookIfAvailable();
     }
 
 
@@ -110,6 +120,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
         FrameStateMachineComponent clone = (FrameStateMachineComponent) super.clone();
         clone.fsm = this.fsm.clone();
         cloneRenderedFrameCollectionWithEffectFrameMap(clone);
+        clone.updateCountdownHook = clone::triggerUpdateEvent;
         return clone;
     }
 

@@ -27,4 +27,11 @@ public interface GameEffect {
         return (world, sprite) -> {};
     }
 
+    static GameEffect assemble(GameEffect ...orderedGameEffects) {
+        return (world, sprite) -> {
+            for (GameEffect orderedGameEffect : orderedGameEffects) {
+                orderedGameEffect.apply(world, sprite);
+            }
+        };
+    }
 }

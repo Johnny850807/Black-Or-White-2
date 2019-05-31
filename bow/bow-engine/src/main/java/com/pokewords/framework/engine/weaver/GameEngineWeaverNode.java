@@ -5,10 +5,7 @@ import com.pokewords.framework.engine.parsing.*;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
-import com.pokewords.framework.sprites.components.frames.EffectFrame;
-import com.pokewords.framework.sprites.components.frames.EffectFrameFactory;
-import com.pokewords.framework.sprites.components.frames.ImageFrame;
-import com.pokewords.framework.sprites.components.frames.ImageFrameFactory;
+import com.pokewords.framework.sprites.components.frames.*;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
 import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.Script;
@@ -16,7 +13,6 @@ import com.pokewords.framework.sprites.parsing.Segment;
 import com.pokewords.framework.views.helpers.galleries.Gallery;
 import com.pokewords.framework.views.helpers.galleries.GalleryFactory;
 
-import java.awt.*;
 import java.util.List;
 import java.util.*;
 
@@ -112,9 +108,12 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         public EffectFrame createFrame(Segment segment) {
             setupGalleryMapIfNotExists((Script) segment.getParent());
             FrameSegment frameSegment = new FrameSegment(segment);
-            EffectFrame effectFrame = createAndPutImageEffectFrame(frameSegment, segment);
-            parseBodyElement(frameSegment, effectFrame);
-            parseEffectElement(frameSegment, effectFrame);
+            EffectFrame effectFrame = createAndPutImageEffectFrame(frameSegment);
+            GameEffect assembledGameEffect = GameEffect.assemble(
+                    parseEffectElementGameEffect(frameSegment),
+                    parseBodyElementGameEffect(frameSegment)
+            );
+            effectFrame.addEffect(assembledGameEffect);
             return effectFrame;
         }
 
@@ -138,7 +137,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
             }
         }
 
-        private EffectFrame createAndPutImageEffectFrame(FrameSegment frameSegment, Segment segment) {
+        private EffectFrame createAndPutImageEffectFrame(FrameSegment frameSegment) {
             frameSegmentMap.put(frameSegment.getId(), frameSegment);
             Gallery targetGallery = locateGallery(frameSegment.getPic());
             ImageFrame imageFrame = ImageFrameFactory.fromGallery(frameSegment.getLayer(),
@@ -154,36 +153,38 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
                     .orElseThrow(()-> new IllegalArgumentException("The pic number " + pic + " is not found in any gallery range."));
         }
 
-    }
+        private GameEffect parseBodyElementGameEffect(FrameSegment frameSegment) {
+            if (frameSegment.getBodyElement().isPresent())
+            {
+                BodyElement bodyElement = frameSegment.getBodyElement().get();
+                return (world, sprite) -> {
+                    int x = bodyElement.getX().orElse(sprite.getX());
+                    int y = bodyElement.getY().orElse(sprite.getY());
+                    int w = bodyElement.getW().orElse(sprite.getWidth());
+                    int h = bodyElement.getH().orElse(sprite.getHeight());
+                    int centerX = bodyElement.getCenterX().orElse((int) sprite.getCenter().getX());
+                    int centerY = bodyElement.getCenterY().orElse((int) sprite.getCenter().getY());
+                    sprite.setBody(x, y, w, h);
+                    sprite.setCenter(centerX, centerY);
+                };
+            }
+            else
+                return GameEffect.empty();
+        }
 
-    private void parseBodyElement(FrameSegment frameSegment, EffectFrame effectFrame) {
-        frameSegment.getBodyElement()
-                .ifPresent(p -> applyBodyElement(p, effectFrame));
-    }
 
-    private void applyBodyElement(BodyElement element, EffectFrame effectFrame) {
-        effectFrame.addEffect((world, sprite) -> {
-            int x = element.getX().orElse(sprite.getX());
-            int y = element.getY().orElse(sprite.getY());
-            int w = element.getW().orElse(sprite.getWidth());
-            int h = element.getH().orElse(sprite.getHeight());
-            int centerX = element.getCenterX().orElse((int) sprite.getCenter().getX());
-            int centerY = element.getCenterY().orElse((int) sprite.getCenter().getY());
-            sprite.setBody(x, y, w, h);
-            sprite.setCenter(centerX, centerY);
-        });
-    }
-
-    private void parseEffectElement(FrameSegment frameSegment, EffectFrame effectFrame) {
-        frameSegment.getEffectElement()
-                .ifPresent(e -> applyEffectElement(e, effectFrame));
-    }
-
-    private void applyEffectElement(EffectElement element, EffectFrame effectFrame) {
-        effectFrame.addEffect((world, sprite) -> {
-            element.getMoveX().ifPresent(sprite::moveX);
-            element.getMoveY().ifPresent(sprite::moveY);
-        });
+        private GameEffect parseEffectElementGameEffect(FrameSegment frameSegment) {
+            if (frameSegment.getEffectElement().isPresent())
+            {
+                EffectElement effectElement = frameSegment.getEffectElement().get();
+                return (world, sprite) -> {
+                    effectElement.getMoveX().ifPresent(sprite::moveX);
+                    effectElement.getMoveY().ifPresent(sprite::moveY);
+                };
+            }
+            else
+                return GameEffect.empty();
+        }
     }
 
 }
