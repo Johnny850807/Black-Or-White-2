@@ -29,7 +29,7 @@ public class AngularBracketSegment extends Segment {
     public void parse(Context context) {
         String openTag = context.fetchNextToken(
                 "<[^/\\s]\\S+>", "Invalid open tag: " + context.peekToken());
-        setName(deTag(openTag));
+        setName(deTag(openTag, "<", ">"));
 
         String id = context.fetchNextToken("0|[1-9]\\d*", "Invalid id: " + context.peekToken());
         this.id = Integer.parseInt(id);
@@ -91,10 +91,6 @@ public class AngularBracketSegment extends Segment {
                         spaces + "$1")));
         resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
-    }
-
-    private String deTag(String tag) {
-        return tag.replaceAll("</?(\\S+)>", "$1");
     }
 
     private String getCloseTag() { return "</" + getName() + ">"; }

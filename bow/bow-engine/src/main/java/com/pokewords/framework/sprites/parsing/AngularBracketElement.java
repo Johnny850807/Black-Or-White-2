@@ -23,7 +23,7 @@ public class AngularBracketElement extends Element {
         String openTag = context.fetchNextToken(
                 "<[^/\\s]\\S+>",
                 "Invalid open tag: " + context.peekToken());
-        setName(deTag(openTag));
+        setName(deTag(openTag, "<", ">"));
         if (context.peekToken().matches("[^\\s:<>]+"))
             getKeyValuePairs().parse(context);
         String closeTag = context.fetchNextToken(
@@ -39,9 +39,5 @@ public class AngularBracketElement extends Element {
         resultBuilder.append(getKeyValuePairs().toString(indent).replaceAll("([^\n]*\n)", spaces + "$1"));
         resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
-    }
-
-    private String deTag(String tag) {
-        return tag.replaceAll("</?(\\S+)>", "$1");
     }
 }

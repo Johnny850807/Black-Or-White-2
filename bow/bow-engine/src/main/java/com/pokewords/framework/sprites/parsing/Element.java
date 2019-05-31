@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 
 /**
@@ -61,5 +62,9 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
     @Override
     public Iterator<Pair<String, String>> iterator() {
         return keyValuePairs.iterator();
+    }
+
+    protected String deTag(String tag, String leftToken, String rightToken) {
+        return tag.replaceAll(Pattern.quote(leftToken) + "/?(\\S+)" + Pattern.quote(rightToken), "$1");
     }
 }
