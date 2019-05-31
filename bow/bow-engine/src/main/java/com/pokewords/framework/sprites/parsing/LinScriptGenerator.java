@@ -9,13 +9,13 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class LinScriptGenerator extends Script {
-    public static Script fromShortHand(String path) {
+    public static LinScript fromShortHand(String path) {
         LinScriptGenerator generator = new LinScriptGenerator();
         generator.parse(Context.fromFile(path));
         return generator.getScript();
     }
 
-    private Script script;
+    private LinScript script;
     private Map<String, KeyValuePairs> nameToForAllPairs;
     private Map<String, Map<Integer, KeyValuePairs>> nameToTargetPairs;
     private Map<String, List<Element>> nameToForAllElements;
@@ -29,7 +29,7 @@ public class LinScriptGenerator extends Script {
         script = new LinScript();
     }
 
-    private Script getScript() {
+    private LinScript getScript() {
         return script;
     }
 
@@ -95,7 +95,60 @@ public class LinScriptGenerator extends Script {
 
         script.parse(context);
 
+        // Map<String, KeyValuePairs> nameToForAllPairs;
+        nameToForAllPairs.forEach((name, keyValuePairs) -> {
+            checkSegmentNameDoesExist(name);
+            script.getSegments(name).forEach(segment -> {
+                keyValuePairs.forEach(pair -> {
+                    if (!segment.getKeyValuePairs().containsKey(pair.getKey()))
+                        segment.getKeyValuePairs().put(pair.getKey(), pair.getValue());
+                });
+            });
+        });
 
+        // Map<String, Map<Integer, KeyValuePairs>> nameToTargetPairs;
+        nameToTargetPairs.forEach((name, map) -> {
+            checkSegmentNameDoesExist(name);
+            // Should be rewrite if all id's among different names are unique.
+            map.forEach((id, keyValuePairs) -> {
+                // Match id
+                script.getSegmentsById(id).forEach(segment -> {
+                    // Then match name, since different names can have the same id
+                    if (segment.getName().equals(name))
+                        keyValuePairs.forEach(pair -> {
+                            if (!segment.getKeyValuePairs().containsKey(pair.getKey()))
+                                segment.getKeyValuePairs().put(pair.getKey(), pair.getValue());
+                        });
+                });
+            });
+        });
+
+        // Map<String, List<Element>> nameToForAllElements;
+        nameToForAllElements.forEach((name, elements) -> {
+            checkSegmentNameDoesExist(name);
+            // TODO: If need to modify script after script built, change to deep copy version
+            // If no modification after script built, no need to do deep copy
+            script.getSegments(name).forEach(segment -> {
+                elements.forEach(segment::addElement);
+            });
+        });
+
+        // Map<String, Map<Integer, List<Element>>> nameToTargetElements;
+        nameToTargetElements.forEach((name, map) -> {
+            checkSegmentNameDoesExist(name);
+            map.forEach((id, elements) -> {
+                script.getSegmentsById(id).forEach(segment -> {
+                    if (segment.getName().equals(name))
+                        elements.forEach(segment::addElement);
+                });
+            });
+        });
+    }
+
+    private void checkSegmentNameDoesExist(String generatorName) {
+        if (!script.containsSegment(generatorName))
+            throw new ScriptParsingException(String.format(
+                    "No target for generator [] <%s>", generatorName));
     }
 
     @Override
