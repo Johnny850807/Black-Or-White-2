@@ -41,7 +41,7 @@ public class BreakerIconLoadingState extends AppState {
                 getSpriteInitializer().declare(Types.BreakerIconLoadingState)
                         .area(0, 0, getGameWindowDefinition().size)
                         .with(GifFrameStateMachineComponentMaker.fromSequence( "assets/sequences/BreakerLoadingIcon",
-                                new Range(0, 249), 0, 249, 30, 0))
+                                new Range(0, 249), 0, 249, 0, 0))
                         .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                         .commit()
                         .create()

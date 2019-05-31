@@ -11,4 +11,6 @@ public interface GameEngine {
     void launchEngine();
 
     AppView getAppView();
+
+    LoopCounter getLoopCounter();
 }

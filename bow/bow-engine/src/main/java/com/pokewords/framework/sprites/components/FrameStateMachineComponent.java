@@ -2,6 +2,8 @@ package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.engine.Events;
+import com.pokewords.framework.engine.LoopCounter;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.Frame;
@@ -14,9 +16,9 @@ import java.util.stream.Collectors;
  * @author johnny850807
  */
 public class FrameStateMachineComponent extends CloneableComponent implements Renderable {
+    private long latestUpdateLoop = 0;
     protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>(); // <Frame's event, Frame>
-    protected long latestUpdateTimestamp = System.currentTimeMillis();
-    protected int frameDurationCountdown = 0;
+    protected int currentFrameDuration = 0;
 
     protected FiniteStateMachine<EffectFrame> fsm = new FiniteStateMachine<>();
     protected LinkedList<EffectFrame> renderedFrameCollection = new LinkedList<>();
@@ -34,6 +36,12 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
         fsm.getStates().forEach(frame -> frame.boundToSprite(sprite));
     }
 
+    @Override
+    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
+        super.onComponentAttachedWorld(appStateWorld);
+        arrangeNextUpdateTask();
+    }
+
     public void addFrame(EffectFrame frame){
         fsm.addState(frame);
         if (hasOwnerSprite())
@@ -46,20 +54,21 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
         fsm.getStates().forEach(frame -> frame.boundToSprite(null));
     }
 
+    private void arrangeNextUpdateTask() {
+        getGameEngineFacade().doAfterLoopCountDown(currentFrameDuration, () -> {
+            trigger(Events.UPDATE);
+            currentFrameDuration = getCurrentFrame().getDuration();
+            if (isAttachedToWorld())
+                arrangeNextUpdateTask();
+        });
+    }
+
     @Override
     public void onUpdate(double timePerFrame) {
-        frameDurationCountdown -= System.currentTimeMillis() - latestUpdateTimestamp;
-        if (frameDurationCountdown <= 0)
-        {
-            trigger(Events.UPDATE);
-            frameDurationCountdown = getCurrentFrame().getDuration();
-        }
         EffectFrame frame = getCurrentFrame();
         frame.apply(getAttachedWorld(), getOwnerSprite());
         renderedFrameCollection.clear();
         renderedFrameCollection.add(frame);
-
-        latestUpdateTimestamp = System.currentTimeMillis();
     }
 
 

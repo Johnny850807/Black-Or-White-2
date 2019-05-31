@@ -41,7 +41,7 @@ public class BlackOrWhite extends GameApplication {
         spriteInitializer.declare(SpriteTypes.MENU)
                 .area(0, 0, 800, 600)
                 .with(GifScriptMaker.createSequenceScript("assets/sequences/menu",
-                        new Range(0, 57), 0, 57, 30, 58))
+                        new Range(0, 57), 0, 57, 0, 58))
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .commit();
     }
