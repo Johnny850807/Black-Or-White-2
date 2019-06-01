@@ -43,7 +43,7 @@ public class NoCommaPairs extends KeyValuePairs {
                             counter == width? "\n": ""));
         }
 
-        if (counter != width)
+        if (counter > 0 && counter != width)
             resultBuilder.append('\n');
 
         return resultBuilder.toString();
