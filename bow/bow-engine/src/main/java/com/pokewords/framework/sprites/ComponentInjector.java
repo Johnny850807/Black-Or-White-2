@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 /**
  * @author nyngwang
- * @deprecated
+ * @deprecated we use explicit instance setting instead of reflective injecting.
  */
 public class ComponentInjector {
 	/**

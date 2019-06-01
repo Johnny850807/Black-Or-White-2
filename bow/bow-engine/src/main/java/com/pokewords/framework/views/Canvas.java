@@ -1,18 +1,19 @@
 package com.pokewords.framework.views;
 
+import com.pokewords.framework.sprites.components.frames.ImageFrame;
+import com.pokewords.framework.sprites.components.frames.RectangleFrame;
+import com.pokewords.framework.sprites.components.frames.RoundedRectangleFrame;
+import com.pokewords.framework.sprites.components.frames.StringFrame;
+
 import java.awt.*;
 
+/**
+ * Canvas for rendering different type of Frame, which applies visitor pattern.
+ * @author johnny850807 (waterball)
+ */
 public interface Canvas {
-	void renderImage(int x, int y, Image image);
-	void renderImage(int x, int y, int width, int height, Image image);
-
-	default void renderImageWithCenterAdjusted(int x, int y, int width, int height, Image image) {
-		renderImage(x-width/2, y-height/2, width, height, image);
-	}
-
-	void renderText(int x, int y, String text, Color color, Font font);
-	void renderImageWithCenterAdjusted(int x, int y, Image image);
-	void renderTextWithCenterAdjusted(int x, int y, String text, Color color, Font font);
-
-	void renderRectangle(Rectangle rectangle, Color color);
+	Dimension render(StringFrame stringFrame);
+	void render(ImageFrame imageFrame);
+	void render(RectangleFrame rectangleFrame);
+    void render(RoundedRectangleFrame roundedRectangleFrame);
 }

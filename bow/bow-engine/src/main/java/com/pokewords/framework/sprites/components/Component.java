@@ -1,12 +1,21 @@
 package com.pokewords.framework.sprites.components;
 
 
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
-import com.pokewords.framework.sprites.Sprite;
 
+/**
+ * A Component is a set of behaviors or data of a Sprite.
+ * Component will not be cloned, hence it should be functional and immutable.
+ * if you want your component to be cloned, use CloneableComponent instead.
+ * @author johnny850807 (waterball)
+ */
 public abstract class Component implements AppStateLifeCycleListener {
+    protected GameEngineFacade gameEngineFacade;
 
+    public void setGameEngineFacade(GameEngineFacade gameEngineFacade) {
+        this.gameEngineFacade = gameEngineFacade;
+    }
 
     @Override
     public void onAppStateCreate() {
@@ -15,14 +24,6 @@ public abstract class Component implements AppStateLifeCycleListener {
 
     @Override
     public void onAppStateEnter() {
-        //hook
-    }
-
-    public void onComponentAttachedSprite(Sprite sprite) {
-        //hook
-    }
-
-    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
         //hook
     }
 
@@ -41,9 +42,7 @@ public abstract class Component implements AppStateLifeCycleListener {
         //hook
     }
 
-
-
-    public void onComponentRemoved() {
-        //hook
+    public GameEngineFacade getGameEngineFacade() {
+        return gameEngineFacade;
     }
 }

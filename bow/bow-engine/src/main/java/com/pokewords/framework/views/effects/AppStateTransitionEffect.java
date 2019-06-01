@@ -1,12 +1,13 @@
 package com.pokewords.framework.views.effects;
 
 import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.sprites.factories.SpriteBuilder;
 
 /**
  * @author johnny850807 (waterball)
  */
 public interface AppStateTransitionEffect {
-    void effect(AppState from, AppState to, Listener ...transitionEffectListener);
+    void effect(SpriteBuilder spriteBuilder, AppState from, AppState to, Listener ...transitionEffectListener);
 
     default void notifyOnExitingAppStateEffectEnd(Listener ...transitionEffectListeners) {
         for (Listener transitionEffectListener : transitionEffectListeners) {
@@ -32,4 +33,5 @@ public interface AppStateTransitionEffect {
         void onExitingAppStateEffectEnd();
         void onEnteringAppStateEffectEnd();
     }
+
 }

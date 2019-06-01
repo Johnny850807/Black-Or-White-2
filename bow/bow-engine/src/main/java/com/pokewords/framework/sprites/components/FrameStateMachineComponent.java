@@ -1,14 +1,12 @@
 package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.commons.FiniteStateMachine;
+import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.components.marks.Renderable;
 
-import java.io.Console;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,14 +14,13 @@ import java.util.stream.Collectors;
  * @author johnny850807
  */
 public class FrameStateMachineComponent extends CloneableComponent implements Renderable {
-    protected Sprite sprite;
-    protected AppStateWorld world;
     protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>(); // <Frame's event, Frame>
     protected long latestUpdateTimestamp = System.currentTimeMillis();
     protected int frameDurationCountdown = 0;
 
     protected FiniteStateMachine<EffectFrame> fsm = new FiniteStateMachine<>();
     protected LinkedList<EffectFrame> renderedFrameCollection = new LinkedList<>();
+
 
 
     public EffectFrame getFrame(int id) {
@@ -33,18 +30,20 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
 
     @Override
     public void onComponentAttachedSprite(Sprite sprite) {
-        this.sprite = sprite;
-        fsm.getStates().forEach(frame -> frame.setSprite(sprite));
+        super.onComponentAttachedSprite(sprite);
+        fsm.getStates().forEach(frame -> frame.boundToSprite(sprite));
+    }
+
+    public void addFrame(EffectFrame frame){
+        fsm.addState(frame);
+        if (hasOwnerSprite())
+            frame.boundToSprite(getOwnerSprite());
+        this.effectFrameMap.put(frame.getId(), frame);
     }
 
     @Override
-    public void onComponentAttachedWorld(AppStateWorld appStateWorld) {
-        this.world = appStateWorld;
-    }
-
-    @Override
-    public void onComponentRemoved() {
-        fsm.getStates().forEach(frame -> frame.setSprite(null));
+    public void onComponentDetachedSprite(Sprite sprite) {
+        fsm.getStates().forEach(frame -> frame.boundToSprite(null));
     }
 
     @Override
@@ -56,19 +55,13 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
             frameDurationCountdown = getCurrentFrame().getDuration();
         }
         EffectFrame frame = getCurrentFrame();
-        frame.apply(world, sprite);
+        frame.apply(getAttachedWorld(), getOwnerSprite());
         renderedFrameCollection.clear();
         renderedFrameCollection.add(frame);
 
         latestUpdateTimestamp = System.currentTimeMillis();
     }
 
-
-    public void addFrame(EffectFrame frame){
-        fsm.addState(frame);
-        frame.setSprite(sprite);
-        this.effectFrameMap.put(frame.getId(), frame);
-    }
 
     public void addTransition(EffectFrame from, Object event, EffectFrame to){
         fsm.addTransition(from, event, to);
@@ -94,7 +87,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
 
 
     /**
-     * @return the actual inner finite state machine which contains the frames and transitions
+     * @return the actual inner finite state machine which containsSprite the frames and transitions
      */
     public FiniteStateMachine<EffectFrame> getFiniteStateMachine(){
         return fsm;
@@ -106,8 +99,8 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     @Override
     public FrameStateMachineComponent clone() {
         FrameStateMachineComponent clone = (FrameStateMachineComponent) super.clone();
-        cloneRenderedFrameCollectionWithEffectFrameMap(clone);
         clone.fsm = this.fsm.clone();
+        cloneRenderedFrameCollectionWithEffectFrameMap(clone);
         return clone;
     }
 

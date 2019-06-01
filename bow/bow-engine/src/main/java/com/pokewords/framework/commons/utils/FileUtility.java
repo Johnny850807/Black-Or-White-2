@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 
 public class FileUtility {
     public static String read(String path) throws IOException {
-        byte[] bytes = Files.readAllBytes(Paths.get(path));
-        return new String(bytes);
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 }

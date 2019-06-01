@@ -27,12 +27,14 @@ public class FrameComponent<T extends Frame> extends CloneableComponent implemen
 
     @Override
     public void onComponentAttachedSprite(Sprite sprite) {
-        frame.setSprite(sprite);
+        super.onComponentAttachedSprite(sprite);
+        frame.boundToSprite(sprite);
     }
 
     @Override
-    public void onComponentRemoved() {
-        frame.setSprite(null);
+    public void onComponentDetachedSprite(Sprite sprite) {
+        super.onComponentDetachedSprite(sprite);
+        frame.boundToSprite(null);
     }
 
     @Override
@@ -57,5 +59,13 @@ public class FrameComponent<T extends Frame> extends CloneableComponent implemen
     @Override
     public int hashCode() {
         return Objects.hash(frame, frameSingletonCollection);
+    }
+
+    @Override
+    public FrameComponent clone() {
+        FrameComponent clone = (FrameComponent) super.clone();
+        clone.frame = this.frame.clone();
+        clone.frameSingletonCollection = Collections.singleton(clone.frame);
+        return clone;
     }
 }

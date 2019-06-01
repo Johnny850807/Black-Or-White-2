@@ -11,6 +11,11 @@ import org.jetbrains.annotations.Nullable;
 public interface EffectFrame extends Frame {
 
     /**
+     * @return get the event of frame's
+     */
+    int getId();
+
+    /**
      * Actually effect the AppStateWorld from all of the effects added by addEffect(Consumer<AppStateWorld>) method.
      * @param gameWorld the effected AppStateWorld
      */
@@ -28,9 +33,13 @@ public interface EffectFrame extends Frame {
      */
     int getDuration();
 
-    static EffectFrame wrap(Frame frame, int duration) {
-        return new EffectWrappedFrame(frame, duration);
+    /**
+     * Wrap a frame with EffectFrame interface.
+     */
+    static EffectFrame wrap(SerializableFrame frame, int id, int duration) {
+        return new EffectWrappedFrame(frame, id, duration);
     }
+
 
     @Override
     EffectFrame clone();

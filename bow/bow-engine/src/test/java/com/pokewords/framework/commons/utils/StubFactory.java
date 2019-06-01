@@ -1,7 +1,6 @@
 package com.pokewords.framework.commons.utils;
 
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.CollidableComponent;
 import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.components.mocks.*;
@@ -12,7 +11,7 @@ import java.awt.*;
 import static com.pokewords.framework.commons.utils.StubFactory.FrameStateMachineComponents.createFrameStateMachineComponentStub;
 
 /**
- * This utility contains all the util methods for creating Stubs that can easily be tested.
+ * This utility containsSprite all the util methods for creating Stubs that can easily be tested.
  * @author johnny850807
  */
 public interface StubFactory {
@@ -20,7 +19,6 @@ public interface StubFactory {
         interface SimpleSprite {
             Rectangle BODY = new Rectangle(50, 50, 100, 100);
             String TYPE = "Stub";
-            CollidableComponent COLLIDABLE_COMPONENT = new CollidableComponent();
 
             /**
              * @return Sprite spec:
@@ -34,16 +32,13 @@ public interface StubFactory {
              * - FrameStateMachineComponent
              *      @see FrameStateMachineComponents#createFrameStateMachineComponentStub()
              *
-             * - CollidableComponent
              */
             static Sprite createSimpleSprite(){
-                PropertiesComponent propertiesComponent = new PropertiesComponent();
+                PropertiesComponent propertiesComponent = new PropertiesComponent(TYPE);
                 FrameStateMachineComponent frameStateMachineComponent = createFrameStateMachineComponentStub();
                 Sprite spriteStub = new Sprite(propertiesComponent);
                 spriteStub.addComponent(frameStateMachineComponent);
                 spriteStub.setBody(BODY);
-                spriteStub.setType(TYPE);
-                spriteStub.addComponent(COLLIDABLE_COMPONENT);
                 return spriteStub;
             }
         }
@@ -57,7 +52,7 @@ public interface StubFactory {
              * MockComponent2,
              * MockComponent3
              * MockPropertiesComponent :
-             *      - type: 'Type'
+             *      - type: 'TargetPair'
              * MockFrameStateMachineComponent : empty
              */
             static Sprite createSpriteWithOnlyMockComponents() {

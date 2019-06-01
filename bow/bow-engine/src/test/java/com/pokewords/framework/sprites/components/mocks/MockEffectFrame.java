@@ -20,10 +20,17 @@ public class MockEffectFrame extends AbstractFrame implements EffectFrame {
     public Map<GameEffect, Integer> effectAppliedCount = new HashMap<>();
     public int applyCount = 0;
     public int renderCount = 0;
+    public int id;
 
     public MockEffectFrame(int id, String name) {
-        super(id, 0);
+        super(0);
         this.name = name;
+        this.id = id;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override
@@ -70,7 +77,12 @@ public class MockEffectFrame extends AbstractFrame implements EffectFrame {
     }
 
     @Override
-    public EffectFrame clone() {
-        return (EffectFrame) super.clone();
+    public MockEffectFrame clone() {
+        return (MockEffectFrame) super.clone();
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

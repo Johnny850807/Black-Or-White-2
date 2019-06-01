@@ -2,11 +2,14 @@ package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.commons.FiniteStateMachine;
 import com.pokewords.framework.commons.Triple;
+import com.pokewords.framework.commons.bundles.Bundle;
+import com.pokewords.framework.commons.bundles.EmptyReadOnlyBundle;
+import com.pokewords.framework.commons.bundles.InputEventsDelegator;
+import com.pokewords.framework.engine.GameEngineFacade;
+import com.pokewords.framework.engine.asm.states.BreakerIconLoadingState;
+import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
-import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.KeyListenerComponent;
-import com.pokewords.framework.sprites.components.MouseListenerComponent;
-import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.engine.listeners.GameLoopingListener;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.views.SoundPlayer;
@@ -15,11 +18,7 @@ import com.pokewords.framework.views.effects.AppStateTransitionEffectListenersWr
 import com.pokewords.framework.views.effects.CrossFadingTransitionEffect;
 import com.pokewords.framework.views.effects.NoTransitionEffect;
 import com.pokewords.framework.views.inputs.InputManager;
-import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,14 +28,18 @@ import java.util.Map;
  * Built-in transitions:
  * EmptyState --(EVENT_LOADING)--> LoadingState --(EVENT_GAME_STARTED)--> #gameInitialState (Set your gameInitialState)
  *
- * Use AppStateMachine#createState(appStateType) to create your app state.
+ * Use AppStateMachine#createState(appStateType) to fromGallery your app state.
  * @author johnny850807 (waterball)
  */
 public class AppStateMachine implements GameLoopingListener {
 	public static final String EVENT_LOADING = "Start Loading";
 	public static final String EVENT_GAME_STARTED = "Game Started";
 
+	private IocContainer iocContainer;
+	private GameEngineFacade gameEngineFacade;
+
 	private Map<Transition, AppStateTransitionEffect> transitionEffectMap = new HashMap<>();
+	private boolean transitionEffecting = false;
 
 	/**
 	 * We should use this currentState reference instead of finite state machine's,
@@ -45,10 +48,8 @@ public class AppStateMachine implements GameLoopingListener {
 	 */
 	private AppState currentState;
 	private FiniteStateMachine<AppState> fsm = new FiniteStateMachine<>();
-	private SpriteInitializer spriteInitializer;
-	private GameWindowsConfigurator gameWindowsConfigurator;
-	private SoundPlayer soundPlayer;
 	private InputManager inputManager;
+	private SoundPlayer soundPlayer;
 	private AppState loadingState;
 	private AppState gameInitialState;
 
@@ -56,41 +57,15 @@ public class AppStateMachine implements GameLoopingListener {
 		TRANSITION
 	}
 
-	public AppStateMachine(InputManager inputManager, SpriteInitializer spriteInitializer, GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
-		this.inputManager = inputManager;
-		this.spriteInitializer = spriteInitializer;
-		this.gameWindowsConfigurator = gameWindowsConfigurator;
-		this.soundPlayer = soundPlayer;
+	public AppStateMachine(IocContainer iocContainer, GameEngineFacade gameEngineFacade) {
+		this.iocContainer = iocContainer;
+		this.inputManager = iocContainer.inputManager();
+		this.soundPlayer = iocContainer.soundPlayer();
+		this.gameEngineFacade = gameEngineFacade;
 		soundPlayer.addSound(SoundTypes.TRANSITION, "assets/sounds/chimeTransitionSound.wav");
-		bindRootInputListeners();
+		InputEventsDelegator.delegateToInputEventsListenerComponents(inputManager, this::getCurrentStateWorld);
 		setupStates();
 	}
-
-	private void bindRootInputListeners() {
-
-		inputManager.bindKeyEventForRoot(KeyEvent.KEY_PRESSED, keyCode ->
-						getCurrentStateWorld().getKeyListenerComponents()
-							.forEach(c -> c.getListener().onKeyPressed(c.getSprite(), keyCode)));
-
-		inputManager.bindKeyEventForRoot(KeyEvent.KEY_RELEASED, keyCode ->
-				getCurrentStateWorld().getKeyListenerComponents()
-						.forEach(c -> c.getListener().onKeyReleased(c.getSprite(), keyCode)));
-
-		inputManager.bindKeyEventForRoot(KeyEvent.KEY_TYPED, keyCode ->
-				getCurrentStateWorld().getKeyListenerComponents()
-						.forEach(c -> c.getListener().onKeyClicked(c.getSprite(), keyCode)));
-
-		inputManager.bindMouseEventForRoot(MouseEvent.MOUSE_PRESSED, mousePosition ->
-			getCurrentStateWorld().getMouseListenerComponents()
-					.forEach(c -> {
-						Sprite sprite = c.getSprite();
-						mousePosition.translate(-1*sprite.getX(), -1*sprite.getY());
-						c.getListener().onMousePressed(sprite, mousePosition);
-					})
-		);
-
-	}
-
 
 	private void setupStates() {
 		AppState initialState = createState(EmptyAppState.class);
@@ -110,7 +85,7 @@ public class AppStateMachine implements GameLoopingListener {
 		T state;
 		try {
 			state = appStateType.newInstance();
-			state.inject(inputManager, this, spriteInitializer, gameWindowsConfigurator, soundPlayer);
+			state.inject(iocContainer, this, gameEngineFacade);
 			fsm.addState(state);
 			state.onAppStateCreate();
 			return state;
@@ -121,32 +96,47 @@ public class AppStateMachine implements GameLoopingListener {
 	}
 
 	public AppState trigger(Object event) {
+		return trigger(event, EmptyReadOnlyBundle.getInstance());
+	}
+
+	public AppState trigger(Object event, Bundle message) {
 		AppState from = currentState;
-		AppState to = fsm.trigger(event.toString());
+		AppState to = fsm.trigger(event);
 		if (from != to)
 		{
 			AppStateTransitionEffect transitionEffect =
 					transitionEffectMap.getOrDefault(new Transition(from, event, to), NoTransitionEffect.getInstance());
+			to.onReceiveMessageBundle(message);
 			handleTransition(from, to, transitionEffect);
 		}
 		return to;
 	}
 
-	public AppState trigger(Object event, AppStateTransitionEffect transitionEffect) {
-		AppState from = fsm.getCurrentState();
-		AppState to = fsm.trigger(event.toString());
+	public AppState trigger(Object event, AppStateTransitionEffect transitionEffect, AppStateTransitionEffect.Listener ...listeners) {
+		return trigger(event, EmptyReadOnlyBundle.getInstance(), transitionEffect, listeners);
+	}
+
+	public AppState trigger(Object event, Bundle message, AppStateTransitionEffect transitionEffect, AppStateTransitionEffect.Listener ...listeners) {
+		AppState from = currentState;
+		AppState to = fsm.trigger(event);
 		if (from != to)
-			handleTransition(from, to, transitionEffect);
+		{
+			to.onReceiveMessageBundle(message);
+			handleTransition(from, to, new AppStateTransitionEffectListenersWrapper(transitionEffect, listeners));
+		}
 		return to;
 	}
 
 	private void handleTransition(AppState from, AppState to, AppStateTransitionEffect transitionEffect) {
-		transitionEffect.effect(from, to, new AppStateTransitionEffect.DefaultListener() {
+		transitionEffecting = true;
+
+		transitionEffect.effect(iocContainer.spriteBuilder(), from, to, new AppStateTransitionEffect.DefaultListener() {
 			@Override
 			public void onExitingAppStateEffectEnd() {
 				from.onAppStateExit();
 				currentState = to;
 				to.onAppStateEnter();
+				transitionEffecting = false;
 			}
 		});
 	}
@@ -154,20 +144,23 @@ public class AppStateMachine implements GameLoopingListener {
 
 	@Override
 	public void onUpdate(double timePerFrame) {
-		getCurrentState().onUpdate(timePerFrame);
+		if (transitionEffecting)
+			getCurrentStateWorld().onUpdate(timePerFrame);
+		else
+			getCurrentState().onUpdate(timePerFrame);
+	}
+
+
+	public void setGameInitialState(AppState gameInitialState, AppStateTransitionEffect.Listener ...listeners) {
+		setGameInitialState(gameInitialState, new CrossFadingTransitionEffect(SoundTypes.TRANSITION), listeners);
 	}
 
 	public void setGameInitialState(AppState gameInitialState, AppStateTransitionEffect transitionEffect, AppStateTransitionEffect.Listener ...listeners) {
 		if (this.gameInitialState != null)
 			throw new GameEngineException("You can only set the GameInitialState once.");
 		this.gameInitialState = gameInitialState;
-		this.fsm.addState(this.gameInitialState);
 		addTransition(loadingState, EVENT_GAME_STARTED, this.gameInitialState,
 				transitionEffect, listeners);
-	}
-
-	public void setGameInitialState(AppState gameInitialState, AppStateTransitionEffect.Listener ...listeners) {
-		setGameInitialState(gameInitialState, new CrossFadingTransitionEffect(SoundTypes.TRANSITION), listeners);
 	}
 
 	public AppState getCurrentState() {

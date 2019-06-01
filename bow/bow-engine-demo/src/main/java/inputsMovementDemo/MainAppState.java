@@ -1,22 +1,22 @@
 package inputsMovementDemo;
 
 
+import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 
 import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
 
+@SuppressWarnings("Duplicates")
 public class MainAppState extends AppState {
     private Sprite face;
     private Sprite dinosaur;
-    private boolean moving = false;
-    private Direction direction;
+    private Set<Direction> directions = new HashSet<>();
 
-    enum Direction {
-        UP, DOWN, LEFT, RIGHT
-    }
-
+    @SuppressWarnings("Duplicates")
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
         face = createSprite(Types.SMILE);
@@ -54,56 +54,33 @@ public class MainAppState extends AppState {
         }
     }
 
+    private void move(Direction direction) {
+        directions.remove(direction.getOppositeDirection());
+        directions.add(direction);
+    }
+
     private void onKeyReleased(int keyCode) {
         switch (keyCode)
         {
             case KeyEvent.VK_W:
-                clearMovement(Direction.UP);
+                directions.remove(Direction.UP);
                 break;
             case KeyEvent.VK_S:
-                clearMovement(Direction.DOWN);
+                directions.remove(Direction.DOWN);
                 break;
             case KeyEvent.VK_A:
-                clearMovement(Direction.LEFT);
+                directions.remove(Direction.LEFT);
                 break;
             case KeyEvent.VK_D:
-                clearMovement(Direction.RIGHT);
+                directions.remove(Direction.RIGHT);
                 break;
         }
-    }
-
-    private void clearMovement(Direction direction) {
-        if (this.direction == direction) {
-            moving = false;
-            this.direction = null;
-        }
-    }
-
-    private void move(Direction direction) {
-        moving = true;
-        this.direction = direction;
     }
 
     @Override
     public void onAppStateUpdating(double timePerFrame) {
-        if (moving)
-        {
-            switch (direction)
-            {
-                case UP:
-                    face.moveY(-8);
-                    break;
-                case DOWN:
-                    face.moveY(8);
-                    break;
-                case LEFT:
-                    face.moveX(-8);
-                    break;
-                case RIGHT:
-                    face.moveX(8);
-                    break;
-            }
-        }
+        for (Direction direction : directions)
+            face.move(direction.move(8));
     }
 
     @Override

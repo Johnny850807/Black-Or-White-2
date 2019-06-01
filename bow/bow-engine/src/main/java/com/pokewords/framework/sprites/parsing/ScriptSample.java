@@ -9,13 +9,9 @@ import java.io.IOException;
  * @author nyngwang
  */
 public interface ScriptSample {
-    interface LinScript {
+    interface LINSCRIPT {
         String SCRIPT_TEXT =
-                "<parameters>\n" +
-                "    speed: 8\n" +
-                "</parameters>\n" +
-                "\n" +
-                "<galleries>\n" +
+                "<galleries> 0\n" +
                 "    <sheet>\n" +
                 "        startPic: 0 endPic: 6 path: sheets/character.png\n" +
                 "    </sheet>\n" +
@@ -34,7 +30,7 @@ public interface ScriptSample {
                 "        x: 16 y: 10 w: 49 h: 67\n" +
                 "    </body>\n" +
                 "    <effect>\n" +
-                "        moveX: -$speed\n" +
+                "        moveX: -8\n" +
                 "    </effect>\n" +
                 "</frame>\n" +
                 "\n" +
@@ -329,5 +325,45 @@ public interface ScriptSample {
                 "        moveY: 7\n" +
                 "    </effect>\n" +
                 "</frame>";
+        String SCRIPT_RULES_TEXT =
+                "Segment\n" +
+                "    galleries\n" +
+                "    frame\n" +
+                "        segment-event ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        segment-description \\S+.*?\\S+ String\n" +
+                "        pic ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        duration ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        next ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        layer ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "    test\n" +
+                "        noRegex Integer\n" +
+                "Element\n" +
+                "    sheet\n" +
+                "        padding ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        startPic ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        endPic ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        path \\S+.*?\\S+ String\n" +
+                "        row ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        col ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "    sequence\n" +
+                "        startPic ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        endPic ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        path \\S+.*?\\S+ String\n" +
+                "        \n" +
+                "    properties\n" +
+                "        x ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        y ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        w ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        h ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        centerX ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        centerY ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "    effect\n" +
+                "        moveX ([1-9][0-9]+)|([0-9]) Integer\n" +
+                "        moveY ([1-9][0-9]+)|([0-9]) Integer";
+    }
+    static void main(String[] args) {
+        Script linScript = new LinScript();
+        linScript.parse(Context.fromText(LINSCRIPT.SCRIPT_TEXT));
+        System.out.println(linScript);
     }
 }

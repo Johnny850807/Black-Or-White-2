@@ -1,161 +1,236 @@
 package com.pokewords.framework.sprites.components;
 
+import com.pokewords.framework.sprites.Sprite;
+
 import java.awt.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.List;
 
 /**
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
-	private double timePerFrame;
-	private Rectangle area = new Rectangle(0, 0, 0, 0);
-	private Rectangle body = new Rectangle(0, 0, 0, 0);
-	private Point center = new Point();
-	private Object type;
+    private Rectangle area = new Rectangle();
+    private Point latestPosition = new Point();
+    private Rectangle body = new Rectangle();
+    private Point center = new Point();
+    private boolean hasBody = false;
+    private boolean hasCenter = false;
+    private Object type;
 
-	public PropertiesComponent() {
-	}
+    private HashSet<SpritePositionChangedListener> positionChangedListeners = new HashSet<>();
 
-	public PropertiesComponent(Object type) {
-		this.type = type;
-	}
+    public interface SpritePositionChangedListener {
+        void onSpritePositionChanged(Sprite sprite);
+    }
 
-	@Override
-	public void onUpdate(double timePerFrame) {
-		this.timePerFrame = timePerFrame;
-	}
-
-	@Override
-	public PropertiesComponent clone() {
-		PropertiesComponent clone = (PropertiesComponent) super.clone();
-		clone.body = (Rectangle) this.body.clone();
-		clone.center = (Point) this.center.clone();
-		return clone;
-	}
+    public PropertiesComponent(Object type) {
+        this.type = Objects.requireNonNull(type);
+    }
 
 
-	public Rectangle getBody() {
-		return body;
-	}
+    @Override
+    public void onAppStateEnter() {
+        Objects.requireNonNull(type);
+    }
 
-	public void setBody(int x, int y, int w, int h){
-		this.body.setBounds(x, y, w, h);
-	}
+    public void addPositionListener(SpritePositionChangedListener positionChangedListener) {
+        positionChangedListeners.add(positionChangedListener);
+    }
 
-	public void setBody(Rectangle body) {
-		this.body.setBounds(body);
-	}
-
-	public void move(int velocityX, int velocityY) {
-		getArea().translate(velocityX, velocityY);
-	}
-
-	public void moveX(int velocityX) {
-		getArea().translate( velocityX, 0);
-	}
-
-	public void moveY(int velocityY) {
-		getArea().translate(0, velocityY);
-	}
+    public void removePositionChangedListener(SpritePositionChangedListener positionChangedListener) {
+        positionChangedListeners.remove(positionChangedListener);
+    }
 
 
-	public int getX(){
-		return (int) getPosition().getX();
-	}
-	public int getY(){
-		return (int) getPosition().getY();
-	}
-	public int getWidth(){
-		return (int) getArea().getWidth();
-	}
-	public int getHeight(){
-		return (int) getArea().getHeight();
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public PropertiesComponent clone() {
+        PropertiesComponent clone = (PropertiesComponent) super.clone();
+        clone.area = (Rectangle) this.area.clone();
+        clone.latestPosition = this.area.getLocation();
+        clone.positionChangedListeners = new HashSet<>();
+        if (hasBody)
+            clone.body = (Rectangle) this.body.clone();
+        if (hasCenter)
+            clone.center = (Point) this.center.clone();
+        return clone;
+    }
 
-	public Point getPosition(){
-		return area.getLocation();
-	}
 
-	public void setPosition(Point position) {
-		this.area.setLocation(position);
-	}
+    public Rectangle getBody() {
+        return hasBody ? new Rectangle(area.x + body.x, area.y + body.y, body.width, body.height ) : area;
+    }
 
-	public void setPosition(int x, int y) {
-		this.area.setLocation(x, y);
-	}
+    public void setBody(Rectangle body) {
+        Objects.requireNonNull(body);
+        setBody(body.x, body.y, body.width, body.height);
+    }
 
-	public Rectangle getArea() {
-		return area;
-	}
+    public void setBody(int x, int y, int w, int h) {
+        this.body.setBounds(x, y, w, h);
+        hasBody = true;
+    }
 
-	public void setArea(Rectangle area) {
-		this.area.setBounds(area);
-	}
+    public void move(Point point) {
+        move(point.x, point.y);
+    }
 
-	public void setArea(int x, int y, int w, int h) {
-		this.area.setBounds(x, y, w, h);
-	}
+    public void moveX(int velocityX) {
+        move(velocityX, 0);
+    }
 
-	public Dimension getAreaSize() {
-		return getArea().getSize();
-	}
+    public void moveY(int velocityY) {
+        move(0, velocityY);
+    }
 
-	public Dimension getBodySize() {
-		return getBody().getSize();
-	}
+    public void move(int velocityX, int velocityY) {
+        recordLatestPosition();
+        getArea().translate(velocityX, velocityY);
+        notifyPositionChangedListeners();
+    }
 
-	public boolean isType(Object type) {
-		return getType() == type;
-	}
+    public int getX() {
+        return (int) getPosition().getX();
+    }
 
-	public Object getType() {
-		return type;
-	}
+    public int getY() {
+        return (int) getPosition().getY();
+    }
 
-	public void setType(Object type) {
-		this.type = type;
-	}
+    public int getWidth() {
+        return (int) getArea().getWidth();
+    }
 
-	public void setCenter(int x, int y) {
-		this.setCenter(new Point(x, y));
-	}
+    public int getHeight() {
+        return (int) getArea().getHeight();
+    }
 
-	public void setCenter(Point center) {
-		this.center.setLocation(center);
-	}
+    public Point getPosition() {
+        return area.getLocation();
+    }
 
-	public Point getCenter() {
-		return center;
-	}
+    public void setPosition(Point position) {
+        setPosition(position.x, position.y);
+    }
 
-	@Override
-	public void onAppStateCreate() {
-		Objects.requireNonNull(type);
-	}
+    public void setPosition(int x, int y) {
+        recordLatestPosition();
+        getArea().setLocation(x, y);
+        notifyPositionChangedListeners();
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		PropertiesComponent that = (PropertiesComponent) o;
-		return area.equals(that.area) &&
-				body.equals(that.body) &&
-				center.equals(that.center) &&
-				type.equals(that.type);
-	}
+    public Rectangle getArea() {
+        return area;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(area, body, center, type);
-	}
+    public void setArea(Rectangle area) {
+        setArea(area.x, area.y,area.width,area.height);
+    }
 
-	@Override
-	public String toString() {
-		return "PropertiesComponent{" +
-				"area=" + area +
-				", body=" + body +
-				", center=" + center +
-				", type=" + type +
-				'}';
-	}
+    public void setArea(int x, int y, int w, int h) {
+        recordLatestPosition();
+        boolean positionChanged = getArea().x != x || getArea().y != y;
+        getArea().setBounds(x, y, w, h);
+
+        if (positionChanged)
+            notifyPositionChangedListeners();
+    }
+
+    public void setAreaSize(int w, int h) {
+        getArea().setSize(w, h);
+    }
+
+    public void setAreaSize(Dimension area) {
+        getArea().setSize(area);
+    }
+
+    public Dimension getAreaSize() {
+        return getArea().getSize();
+    }
+
+    public Dimension getBodySize() {
+        return getBody().getSize();
+    }
+
+    public boolean isType(Object type) {
+        return getType() == type;
+    }
+
+    public boolean anyType(Object ...types) {
+        for (Object t : types) {
+            if (isType(t))
+                return true;
+        }
+        return false;
+    }
+
+    public Object getType() {
+        return type;
+    }
+
+    public void setType(Object type) {
+        this.type = type;
+    }
+
+    public void setCenter(Point center) {
+        setCenter(center.x, center.y);
+    }
+
+    public void setCenter(int x, int y) {
+        center.setLocation(x, y);
+        hasCenter = true;
+    }
+
+    public Point getCenter() {
+        if (!hasCenter)
+        {
+            int bodyX = (int) getBody().getX();
+            int bodyY = (int) getBody().getY();
+            center = new Point(bodyX + getBody().width / 2, bodyY + getBody().height / 2);
+        }
+        return center;
+    }
+
+    private void recordLatestPosition() {
+        latestPosition.setLocation(area.getX(), area.getY());
+    }
+
+    public void resumeToLatestPosition() {
+        area.setLocation(latestPosition.x, latestPosition.y);
+    }
+
+    public void notifyPositionChangedListeners() {
+        positionChangedListeners.forEach(p -> p.onSpritePositionChanged(getOwnerSprite()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PropertiesComponent that = (PropertiesComponent) o;
+        return getArea().equals(that.getArea()) &&
+                getBody().equals(that.getBody()) &&
+                getCenter().equals(that.getCenter()) &&
+                getType().equals(that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getArea(), getBody(), getCenter(), getType());
+    }
+
+    @Override
+    public String toString() {
+        return "PropertiesComponent{" +
+                "area=" + getArea() +
+                ", body=" + getBody() +
+                ", center=" + getCenter() +
+                ", type=" + getType() +
+                '}';
+    }
+
 }

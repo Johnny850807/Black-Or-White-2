@@ -1,9 +1,16 @@
 package com.pokewords.framework.engine;
 
-public class TxtUserConfig implements UserConfig {
+import java.io.Serializable;
+
+public class TxtDataSaver implements DataSaver {
 	
 	@Override
 	public void set(String key, String value) {
+
+	}
+
+	@Override
+	public void set(String key, Serializable serializableObject) {
 
 	}
 

@@ -6,8 +6,7 @@ package com.pokewords.framework.sprites.parsing;
 public interface Node {
     Node getParent();
 
-    // Should check context.hasNextToken() before call.
-    // Do nothing if mismatch at first token.
+    // should check the first token correct before call.
     void parse(Context context);
 
     String toString(int indent);

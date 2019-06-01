@@ -1,100 +1,113 @@
 package com.pokewords.framework.engine.gameworlds;
 
+import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.asm.AppState;
+import com.pokewords.framework.engine.gameworlds.CollisionHandler.TargetPair;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
 import com.pokewords.framework.sprites.Sprite;
-import com.pokewords.framework.sprites.components.KeyListenerComponent;
-import com.pokewords.framework.sprites.components.MouseListenerComponent;
+import com.pokewords.framework.sprites.components.*;
 import com.pokewords.framework.views.RenderedLayers;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * @author Joanna
+ * @author Joanna, johnny850807 (waterball)
  */
-public class AppStateWorld implements AppStateLifeCycleListener {
-    private AppState appState;
+public class AppStateWorld implements AppStateLifeCycleListener, PropertiesComponent.SpritePositionChangedListener {
+    private final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+    protected AppState appState;
     private List<Sprite> sprites;
-    private AtomicInteger spriteCount;
-    private Map<Integer, Sprite> idSpriteMap;
-    private Map<Sprite, Integer> spriteIdMap;
     private RenderedLayers renderedLayers;
-    private Map<CollisionHandler.Type, List<CollisionHandler>> collisionHandlerMap;
+    private Map<TargetPair, List<CollisionHandler>> collisionHandlerMap;
+
+    private Collection<Sprite> readyToBeSpawnedSprites = new LinkedList<>();
+    private Collection<Sprite> readyToBeRemovedSprites = new LinkedList<>();
 
     public AppStateWorld(AppState appState) {
         this.appState = appState;
-        sprites = new ArrayList<>();
-        spriteCount = new AtomicInteger(0);
+        sprites = new ArrayList<>(30);
         renderedLayers = new RenderedLayers();
         collisionHandlerMap = new HashMap<>();
-        idSpriteMap = new HashMap<>();
-        spriteIdMap = new IdentityHashMap<>();
+    }
+
+    public AppState getAppState() {
+        return appState;
+    }
+
+    public GameEngineFacade getGameEngineFacade() {
+        return getAppState().getGameEngineFacade();
     }
 
     /**
+     * Add a Sprite into the spawn-list, the sprite will be added in the next game loop.
      * @param sprite the spawned sprite to be added into the world
-     * @return the Sprite's unique event
      */
-    public int spawn(Sprite sprite) {
-        int id = spriteCount.incrementAndGet();
-        addSpriteIntoWorld(id, sprite);
-        sprite.setWorld(this);
-        return id;
-    }
-
-    private void addSpriteIntoWorld(int id, Sprite sprite) {
-        sprites.add(sprite);
-        idSpriteMap.put(id, sprite);
-        spriteIdMap.put(sprite, id);
+    public void spawn(Sprite sprite) {
+        readyToBeSpawnedSprites.add(sprite);
     }
 
     /**
-     * TODO Executors.schedule....
+     * Spawn a sprite after certain time.
      * @param sprite the spawned sprite to be added into the world
      * @param time the time-delay to spawn
-     * @param timeUnit the time unit of
-     * @param callback the callback receives the spawned sprite's event when the sprite is actually spawned
+     * @param timeUnit the time unit
      */
-    public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, @Nullable Consumer<Integer> callback) {
-        new Thread(() -> {
-            try {
-                timeUnit.sleep(time);
-                int id = spawn(sprite);
-                if (callback != null) {
-                    callback.accept(id);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+    public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit) {
+        spawnDelay(sprite, time, timeUnit, ()->{});
     }
 
+    /**
+     * Spawn a sprite after certain time.
+     * @param sprite the spawned sprite to be added into the world
+     * @param time the time-delay to spawn
+     * @param timeUnit the time unit
+     * @param spawnCallback the callback when the sprite is actually spawned
+     */
+    public void spawnDelay(Sprite sprite, int time, TimeUnit timeUnit, Runnable spawnCallback) {
+        scheduler.schedule(() -> {
+            spawn(sprite);
+            spawnCallback.run();
+        }, time, timeUnit);
+    }
+
+    /**
+     * @return the pre-produced renderedLayers
+     */
     public RenderedLayers getRenderedLayers() {
         return renderedLayers;
     }
 
     public void addCollisionHandler(CollisionHandler collisionHandler) {
-        CollisionHandler.Type collisionHandlerType = new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType());
-        List<CollisionHandler> collisionHandlers = (collisionHandlerMap.containsKey(collisionHandlerType))?
-                collisionHandlerMap.get(collisionHandlerType) : new ArrayList<>();
-        collisionHandlers.add(collisionHandler);
-        collisionHandlerMap.put(collisionHandlerType, collisionHandlers);
+        TargetPair collisionHandlerType = collisionHandler.getTargetPair();
+        if (!collisionHandlerMap.containsKey(collisionHandlerType))
+            collisionHandlerMap.put(collisionHandlerType, new ArrayList<>());
+
+        collisionHandlerMap.get(collisionHandlerType).add(collisionHandler);
     }
 
     public void removeCollisionHandler(CollisionHandler collisionHandler) {
-        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(collisionHandler.getFirstType(), collisionHandler.getSecondType()));
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(collisionHandler.getTargetPair());
         collisionHandlers.remove(collisionHandler);
     }
 
-    public List<Sprite> getSprites() {
+    /**
+     * @return whether the sprite is in the world
+     */
+    public boolean containsSprite(Sprite sprite) {
+        return getSprites().contains(sprite) || readyToBeSpawnedSprites.contains(sprite);
+    }
+
+    /**
+     * @return all the sprites in the world
+     */
+    public Collection<Sprite> getSprites() {
         return sprites;
     }
 
@@ -137,37 +150,48 @@ public class AppStateWorld implements AppStateLifeCycleListener {
 
     @Override
     public void onUpdate(double timePerFrame) {
+        handleReadyToBeSpawnedOrRemovedSprites();
+
         for (Sprite sprite: sprites) {
             sprite.onUpdate(timePerFrame);
         }
-        rejoinRenderedLayers();
-        findCollidedSpritesAndNotifyCollisionHandlers();
+
+        reproduceRenderedLayers();
+        detectAndHandleCollisions();
     }
 
-    private void rejoinRenderedLayers() {
+    private void handleReadyToBeSpawnedOrRemovedSprites() {
+        sprites.addAll(readyToBeSpawnedSprites);
+        readyToBeSpawnedSprites.stream()
+                .flatMap(s -> s.getComponents().stream())
+                .forEach(c -> c.setGameEngineFacade(getGameEngineFacade()));
+        readyToBeSpawnedSprites.forEach(s -> s.addPositionChangedListener(this));
+        readyToBeSpawnedSprites.forEach(s-> s.attachToWorld(this) );
+        readyToBeSpawnedSprites.clear();
+
+        sprites.removeAll(readyToBeRemovedSprites);
+        readyToBeRemovedSprites.forEach(s -> s.removePositionChangedListener(this));
+        readyToBeRemovedSprites.forEach(s-> s.detachFromWorld(this) );
+        readyToBeRemovedSprites.clear();
+    }
+
+    private void reproduceRenderedLayers() {
         renderedLayers.clearEachLayer();
         sprites.forEach( sprite -> renderedLayers.addFrames(sprite.getRenderedFrames()));
     }
 
-    private void findCollidedSpritesAndNotifyCollisionHandlers() {
+    private void detectAndHandleCollisions() {
         for (int i = 0; i < sprites.size(); i++) {
             for (int j = i + 1; j < sprites.size(); j++) {
                 Sprite sprite1 = sprites.get(i);
                 Sprite sprite2 = sprites.get(j);
-                if (sprite1 != sprite2 && isCollided(sprite1, sprite2)) {
-                    notifyCollisionHandlers(sprite1, sprite2);
+
+                assert sprite1 != sprite2;
+
+                if (isCollided(sprite1, sprite2)) {
+                    notifyCollisionListeners(sprite1, sprite2);
                 }
             }
-        }
-    }
-
-    /**
-     * To notify sprites if they have collided
-     */
-    private void notifyCollisionHandlers(Sprite sprite1, Sprite sprite2) {
-        List<CollisionHandler> collisionHandlers = collisionHandlerMap.get(new CollisionHandler.Type(sprite1.getType(), sprite2.getType()));
-        for (CollisionHandler collisionHandler: collisionHandlers) {
-            collisionHandler.onCollision(sprite1, sprite2);
         }
     }
 
@@ -178,120 +202,161 @@ public class AppStateWorld implements AppStateLifeCycleListener {
      * @return true if two sprites have a collision.
      */
     private boolean isCollided(Sprite sprite1, Sprite sprite2) {
-        if (!sprite1.isCollidable() || !sprite2.isCollidable())
-            return false;
-        if (sprite1.getCollidableComponent().isIgnored(sprite2) &&
-                sprite2.getCollidableComponent().isIgnored(sprite1))
-            return false;
         return sprite1.getBody().intersects(sprite2.getBody());
     }
 
-    /**
-     * @return if the sprite is in the world
-     */
-    public boolean contains(Sprite sprite) {
-        return spriteIdMap.containsKey(sprite);
+    private void notifyCollisionListeners(Sprite sprite1, Sprite sprite2) {
+        notifyGlobalCollisionHandlers(sprite1, sprite2);
+        notifySpriteCollisionListenerComponents(sprite1, sprite2);
+    }
+
+    private void notifyGlobalCollisionHandlers(Sprite sprite1, Sprite sprite2) {
+        List<CollisionHandler> collisionHandlers = collisionHandlerMap.getOrDefault(
+                        new TargetPair(sprite1.getType(), sprite2.getType()), Collections.emptyList());
+        for (CollisionHandler collisionHandler: collisionHandlers) {
+            collisionHandler.onCollision(sprite1, sprite2);
+        }
+    }
+
+    private void notifySpriteCollisionListenerComponents(Sprite sprite1, Sprite sprite2) {
+        sprite1.getComponentOptional(CollisionListenerComponent.class)
+                .ifPresent(c -> c.notifyCollisionWithSprite(sprite2));
+        sprite2.getComponentOptional(CollisionListenerComponent.class)
+                .ifPresent(c -> c.notifyCollisionWithSprite(sprite1));
+    }
+
+    @Override
+    public void onSpritePositionChanged(Sprite sprite) {
+        blockTheSpriteIfRigidCollisionOccurs(sprite);
+    }
+
+    private void blockTheSpriteIfRigidCollisionOccurs(Sprite sprite) {
+        Collection<Sprite> rigidlyCollidedSprites = getSpritesRigidlyCollidedWith(sprite);
+
+        if (!rigidlyCollidedSprites.isEmpty()) {
+            notifySpriteRigidCollisionListener(sprite, rigidlyCollidedSprites);
+            sprite.resumeToLatestPosition();  //block the sprite, equivalent to resuming it from the current movement
+        }
     }
 
     /**
-     * @return if the sprite who owns the event is in the world
+     * @return a set of sprites that rigidly collided with the given sprite
      */
-    public boolean contains(int spriteId) {
-        return idSpriteMap.containsKey(spriteId);
+    public Collection<Sprite> getSpritesRigidlyCollidedWith(Sprite sprite) {
+        if (!sprite.isRigidBody())  //the sprite is not rigid-body then it won't have any rigid collisions with any sprites
+            return Collections.emptySet();
+
+        Collection<Sprite> rigidCollidedSprites = getSpritesIntersectWithArea(sprite.getBody())
+                .stream().filter(Sprite::isRigidBody)
+                .collect(Collectors.toList());
+
+        rigidCollidedSprites.remove(sprite);
+        return rigidCollidedSprites;
+    }
+
+    private void notifySpriteRigidCollisionListener(Sprite collidingSprite, Collection<Sprite> rigidlyCollidedSprites) {
+        collidingSprite.getComponentOptional(CollisionListenerComponent.class)
+                .ifPresent(CollisionListenerComponent::notifyRigidCollisionEvent);
+
+        for (Sprite rigidCollidedSprite : rigidlyCollidedSprites) {
+            rigidCollidedSprite.getComponentOptional(CollisionListenerComponent.class)
+                    .ifPresent(CollisionListenerComponent::notifyRigidCollisionEvent);
+
+            collidingSprite.getComponentOptional(CollisionListenerComponent.class)
+                    .ifPresent(c -> c.notifyRigidCollisionWithSprite(rigidCollidedSprite));
+
+            rigidCollidedSprite.getComponentOptional(CollisionListenerComponent.class)
+                    .ifPresent(c -> c.notifyRigidCollisionWithSprite(collidingSprite));
+        }
+    }
+
+
+    /**
+     * @return a set of sprites with the area (w, h) from the center point of the given sprite
+     */
+    public Collection<Sprite> getSpritesIntersectWithArea(Sprite sprite, Dimension dimension) {
+        return getSpritesIntersectWithArea(sprite, dimension.width, dimension.height);
     }
 
     /**
-     * @return the sprite's event
+     * @return a set of sprites within the area (w, h) from the center point of the given sprite
      */
-    public int getId(Sprite sprite) {
-        return spriteIdMap.get(sprite);
+    public Collection<Sprite> getSpritesIntersectWithArea(Sprite sprite, int w, int h) {
+        Point2D center = sprite.getCenter();
+        int x = (int) center.getX() - w / 2;
+        int y = (int) center.getY() - h / 2;
+        Collection<Sprite> collidedSprites = getSpritesIntersectWithArea(new Rectangle(x, y, w, h));
+        collidedSprites.remove(sprite);
+        return collidedSprites;
     }
 
     /**
-     * @return the sprite who owns the event
+     * @return a set of sprites intersect with the area (x, y, w, h)
      */
-    public Sprite getSprite(int spriteId) {
-        return idSpriteMap.get(spriteId);
+    public Collection<Sprite> getSpritesIntersectWithArea(int x, int y, int w, int h) {
+        return getSpritesIntersectWithArea(new Rectangle(x, y, w, h));
     }
 
     /**
-     * @return the sprites within the area (x, y, w, h)
+     * @return a set of sprites intersect with the area (x, y, w, h)
      */
-    public Collection<Sprite> getSpritesCollidedWithinArea(int x, int y, int w, int h) {
-        return getSpritesCollidedWithinArea(new Rectangle(x, y, w, h));
-    }
-
-    /**
-     * @return the sprites within the area (x, y, w, h)
-     */
-    public Collection<Sprite> getSpritesCollidedWithinArea(Rectangle area) {
+    public Collection<Sprite> getSpritesIntersectWithArea(Rectangle area) {
         return sprites.stream()
                 .filter(sprite -> area.intersects(sprite.getBody()))
                 .collect(Collectors.toList());
     }
 
-
     /**
-     * @return the sprites within the area (w, h) from the center point of the given sprite
-     */
-    public Collection<Sprite> getSpritesCollidedWithinArea(Sprite sprite, int w, int h) {
-        Point2D center = sprite.getCenter();
-        int x = (int) center.getX() - w / 2;
-        int y = (int) center.getY() - h / 2;
-        Set<Sprite> sprites = Collections.newSetFromMap( new IdentityHashMap<>());
-        sprites.addAll(getSpritesCollidedWithinArea(new Rectangle(x, y, w, h)));
-        sprites.remove(sprite);
-        return sprites;
-    }
-
-    /**
-     * @return the sprites within the area (w, h) from the center point of the given sprite
-     */
-    public Collection<Sprite> getSpritesCollidedWithinArea(Sprite sprite, Dimension dimension) {
-        return getSpritesCollidedWithinArea(sprite, dimension.width, dimension.height);
-    }
-
-    /**
-     * @return the sprites collided with the given sprite
+     * @return a set of sprites collided with the given sprite
      */
     public Collection<Sprite> getSpritesCollidedWith(Sprite sprite) {
-        Set<Sprite> sprites = Collections.newSetFromMap(new IdentityHashMap<>());
-        sprites.addAll(getSpritesCollidedWithinArea(sprite.getBody()));
-        sprites.remove(sprite);
-        return sprites;
+        Collection<Sprite> collidedSprites = getSpritesIntersectWithArea(sprite.getBody());
+        collidedSprites.remove(sprite);
+        return collidedSprites;
     }
 
 
     /**
-     * Clear the world. This method will remove all the sprites and the states within the world.
+     * Remove all the sprites.
      */
     public void clearSprites() {
         sprites.forEach(this::removeSprite);
-        spriteCount = new AtomicInteger(0);
+        readyToBeSpawnedSprites.clear();
+        readyToBeRemovedSprites.clear();
         renderedLayers.clear();
-        idSpriteMap.clear();
-        spriteIdMap.clear();
         System.gc();
     }
 
+    /**
+     * Detach the sprite from the world instantly and remove the given sprite in the next game-loop.
+     */
     public void removeSprite(Sprite sprite) {
-        sprites.remove(sprite);
-        sprite.setWorld(null);
+        readyToBeRemovedSprites.add(sprite);
     }
 
+    /**
+     * Clear the global collision handlers.
+     */
     public void clearCollisionHandlers() {
         collisionHandlerMap.clear();
     }
 
+    /**
+     * @return a set of MouseListenerComponents each owned by a certain Sprite in the world.
+     */
     public Collection<MouseListenerComponent> getMouseListenerComponents() {
         return sprites.stream().filter(s -> s.hasComponent(MouseListenerComponent.class))
                         .map(s -> s.getComponent(MouseListenerComponent.class))
                         .collect(Collectors.toList());
     }
 
+    /**
+     * @return a set of KeyListenerComponent each owned by a certain Sprite in the world.
+     */
     public Collection<KeyListenerComponent> getKeyListenerComponents() {
         return sprites.stream().filter(s -> s.hasComponent(KeyListenerComponent.class))
                 .map(s -> s.getComponent(KeyListenerComponent.class))
                 .collect(Collectors.toList());
     }
+
 }

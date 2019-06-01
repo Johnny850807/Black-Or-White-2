@@ -54,4 +54,9 @@ public class Triple<X, Y, Z> {
     public int hashCode() {
         return Objects.hash(first, second, third);
     }
+
+    @Override
+    public String toString() {
+        return String.format("<%s, %s, %s>", first, second, third);
+    }
 }

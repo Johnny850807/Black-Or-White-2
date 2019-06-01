@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class LinScript extends Script {
+    protected Node parent;
 
     public boolean containsSegmentId(int id) {
         for (Segment segment : getSegments()) {
@@ -34,14 +35,19 @@ public class LinScript extends Script {
 
     public List<Segment> getSegmentsByDescription(String description) {
         return getSegments().stream()
-                .filter(segment -> ((AngularBracketSegment) segment)
+                .filter(segment -> segment
                         .getDescription().orElse("").equals(description))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Node getParent() {
-        return null;
+        return parent;
+    }
+
+    @Override
+    public void setParent(Node parent) {
+        this.parent = parent;
     }
 
     @Override

@@ -15,4 +15,5 @@ public class GameWindowDefinition {
     public Point center(Point relativeToSize) {
         return new Point((int) size.getWidth() / 2 - relativeToSize.x / 2, (int) size.getHeight() / 2 - relativeToSize.y / 2);
     }
+
 }

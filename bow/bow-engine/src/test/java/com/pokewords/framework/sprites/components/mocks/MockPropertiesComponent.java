@@ -51,7 +51,7 @@ public class MockPropertiesComponent extends PropertiesComponent implements Mock
 
 
     @Override
-    public Sprite getSprite() {
+    public Sprite getOwnerSprite() {
         return sprite;
     }
 

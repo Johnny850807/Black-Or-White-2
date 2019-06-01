@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static com.pokewords.framework.sprites.parsing.ScriptSample.LinScript.*;
 
 /**
  * @author nyngwang
@@ -27,14 +26,18 @@ public class Context {
     }
 
     private List<String> tokens;
+    private int currentLineNumber;
+    private int bufferedLinesCount;
 
     private Context(String scriptText) {
         tokens = new ArrayList<>();
+        currentLineNumber = 1;
+        bufferedLinesCount = 0;
         tokenize(scriptText);
     }
 
     private void tokenize(String scriptText) {
-        Pattern pattern = Pattern.compile("(<\\S+>|[^:\\s]+|:)|(\\S+)");
+        Pattern pattern = Pattern.compile("(<\\S+>|[^:\\s]+|:|\\n)|(\\S+)");
         Matcher matcher = pattern.matcher(scriptText);
 
         while (matcher.find()) {
@@ -51,12 +54,18 @@ public class Context {
     }
 
     public boolean hasNextToken() {
+        while (!tokens.isEmpty() && tokens.get(0).equals("\n")) {
+            bufferedLinesCount++;
+            tokens.remove(0);
+        }
         return !tokens.isEmpty();
     }
 
     public void consumeOneToken(String noMoreToken) {
         if (!hasNextToken())
-            throw new ScriptParsingException(noMoreToken);
+            throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMoreToken));
+        currentLineNumber += bufferedLinesCount;
+        bufferedLinesCount = 0;
         tokens.remove(0);
     }
 
@@ -78,9 +87,9 @@ public class Context {
 
     public String fetchNextToken(String regex, String noMatch) {
         String token = peekToken();
-        consumeOneToken("Should check hasNextToken() before fetchNextToken() or parse()");
+        consumeOneToken();
         if (!token.matches(regex))
-            throw new ScriptParsingException(noMatch);
+            throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMatch));
         return token;
     }
 
@@ -88,14 +97,7 @@ public class Context {
         tokens.add(0, token);
     }
 
-    public int getRemainingTokensCount() {
-        return tokens.size();
-    }
-
-    public static void main(String[] args) {
-        Context context = Context.fromText(SCRIPT_TEXT);
-        while (context.hasNextToken()) {
-            String openTag = context.fetchNextToken("Can fetch openTag: run out of token");
-        }
+    public int getCurrentLineNumber() {
+        return currentLineNumber;
     }
 }

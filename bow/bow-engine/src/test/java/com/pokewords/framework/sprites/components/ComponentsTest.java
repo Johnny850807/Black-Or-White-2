@@ -17,29 +17,35 @@ public class ComponentsTest extends AbstractTest {
 
     @Test
     public void testPropertiesComponentAccessors() {
-        PropertiesComponent pc = new PropertiesComponent("Type");
-        pc.setBody(50, 50, 50, 50);
-        pc.setCenter(200, 200);
+        PropertiesComponent pc = new PropertiesComponent("TargetPair");
+        assertEquals("TargetPair", pc.getType());
 
-        assertEquals("Type", pc.getType());
+        pc.setArea(50, 50, 50, 50);
         assertEquals(50, pc.getX());
         assertEquals(50, pc.getY());
         assertEquals(50, pc.getWidth());
         assertEquals(50, pc.getHeight());
         assertEquals(new Rectangle(50, 50, 50, 50), pc.getBody());
+        assertEquals(new Point(75, 75), pc.getCenter());
+
+        pc.setCenter(200, 200);
         assertEquals(new Point(200, 200), pc.getCenter());
-
-        pc.setBody(new Rectangle(100, 100, 100, 100));
-        assertEquals(new Rectangle(100, 100, 100, 100), pc.getBody());
-
-        pc.setPosition(20, 20);
-        assertEquals(new Rectangle(20, 20, 100, 100), pc.getBody());
-
         pc.setCenter(new Point(300, 300));
         assertEquals(new Point(300, 300), pc.getCenter());
 
-        pc.setType("Set-Type");
-        assertEquals("Set-Type", pc.getType());
+        pc.setBody(new Rectangle(20, 20, 20, 20));
+        assertEquals(new Rectangle(70, 70, 20, 20), pc.getBody());
+        pc.setBody(30, 30, 30, 30);
+        assertEquals(new Rectangle(80, 80, 30, 30), pc.getBody());
+
+        pc.setPosition(20, 20);
+        assertEquals(new Rectangle(20, 20, 50, 50), pc.getArea());
+        assertEquals(new Rectangle(50, 50, 30, 30), pc.getBody());
+        assertEquals(new Point(300, 300), pc.getCenter());
+
+
+        pc.setType("Set-TargetPair");
+        assertEquals("Set-TargetPair", pc.getType());
     }
 
     @Test
@@ -56,7 +62,7 @@ public class ComponentsTest extends AbstractTest {
     }
 
     private PropertiesComponent givenPropertiesComponent() {
-        PropertiesComponent pc = new PropertiesComponent("Type");
+        PropertiesComponent pc = new PropertiesComponent("TargetPair");
         pc.setBody(50, 50, 50, 50);
         pc.setCenter(100, 100);
         return pc;
@@ -64,7 +70,7 @@ public class ComponentsTest extends AbstractTest {
 
     @Test
     public void testPropertiesComponentClone() {
-        PropertiesComponent propertiesComponent = new PropertiesComponent("Type");
+        PropertiesComponent propertiesComponent = new PropertiesComponent("TargetPair");
         PropertiesComponent clone = propertiesComponent.clone();
 
         assertSame(propertiesComponent.getType(), clone.getType());
@@ -95,11 +101,9 @@ public class ComponentsTest extends AbstractTest {
         FrameStateMachineComponent clone = fsmComponent.clone();
 
         assertNotSameButEquals(fsmComponent.getFiniteStateMachine(), clone.getFiniteStateMachine());
-        assertSame(fsmComponent.getCurrentFrame(), clone.getCurrentFrame());
+        assertNotSameButEquals(fsmComponent.getCurrentFrame(), clone.getCurrentFrame());
         assertDeepNotSameButEquals(fsmComponent.renderedFrameCollection, clone.renderedFrameCollection);
         assertDeepNotSameButEquals(fsmComponent.effectFrameMap, clone.effectFrameMap);
-        assertSame(fsmComponent.world, clone.world);
-        assertSame(fsmComponent.sprite, clone.sprite);
     }
 
     @Test

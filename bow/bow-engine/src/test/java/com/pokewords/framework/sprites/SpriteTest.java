@@ -2,15 +2,14 @@ package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.AbstractTest;
 import com.pokewords.framework.commons.utils.StubFactory;
+import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.ComponentMap;
 import com.pokewords.framework.sprites.components.frames.Frame;
-import com.pokewords.framework.sprites.components.marks.Shareable;
 import com.pokewords.framework.sprites.components.mocks.*;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.pokewords.framework.commons.utils.StubFactory.Sprites.SimpleSprite.createSimpleSprite;
@@ -23,24 +22,6 @@ import static org.junit.Assert.*;
 public class SpriteTest extends AbstractTest {
 
     @Test
-    public void testGetAllShareableComponents() {
-        Sprite sprite = createSimpleSprite();
-        Set<Component> components = sprite.getShareableComponents();
-        for (Component component : components) {
-            assertTrue(component instanceof Shareable);
-        }
-    }
-
-    @Test
-    public void testGetAllNonshareableComponents() {
-        Sprite sprite = createSimpleSprite();
-        Set<Component> components = sprite.getNonshareableComponents();
-        for (Component component : components) {
-            assertFalse(component instanceof Shareable);
-        }
-    }
-
-    @Test
     public void testSpriteClone() {
         Sprite sprite = createSimpleSprite();
         Sprite clone = sprite.clone();
@@ -48,11 +29,10 @@ public class SpriteTest extends AbstractTest {
     }
 
     private void testSpriteFieldsCloned(Sprite spriteStub, Sprite clone) {
-        assertNotSameButEquals(spriteStub, clone);
-        assertNotSameButEquals(spriteStub.components, clone.components);
         assertNotSameButEquals(spriteStub.getPropertiesComponent(), clone.getPropertiesComponent());
         assertNotSameButEquals(spriteStub.getFrameStateMachineComponent(), clone.getFrameStateMachineComponent());
-        assertSame(spriteStub.getCollidableComponent(), clone.getCollidableComponent());
+        assertNotSameButEquals(spriteStub.components, clone.components);
+        assertNotSameButEquals(spriteStub, clone);
 
         testComponentsShareability(spriteStub.components, clone.components);
     }
@@ -61,10 +41,10 @@ public class SpriteTest extends AbstractTest {
         for (Class<? extends Component> type : stubComponents.keySet()) {
             Component stubComponent = stubComponents.get(type);
             Component cloneComponent = clonedComponents.get(type);
-            if (stubComponent instanceof Shareable)
-                assertSame(stubComponent, cloneComponent);
-            else
+            if (stubComponent instanceof CloneableComponent)
                 assertNotSameButEquals(stubComponent, cloneComponent);
+            else
+                assertSame(stubComponent, cloneComponent);
         }
     }
 

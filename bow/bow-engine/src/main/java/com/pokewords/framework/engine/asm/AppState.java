@@ -1,5 +1,8 @@
 package com.pokewords.framework.engine.asm;
 
+import com.pokewords.framework.commons.bundles.Bundle;
+import com.pokewords.framework.engine.GameEngineFacade;
+import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.engine.listeners.AppStateLifeCycleListener;
@@ -22,6 +25,7 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	private SpriteInitializer spriteInitializer;
 	private InputManager inputManager;
 	private AppStateWorld appStateWorld;
+	private GameEngineFacade gameEngineFacade;
 	private GameWindowsConfigurator gameWindowsConfigurator;
 	private SoundPlayer soundPlayer;
 
@@ -31,18 +35,22 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * this method is expected to be used by the AppStateMachine for initializing injection.
 	 * @see AppStateMachine#createState(Class)
 	 */
-	protected void inject(InputManager inputManager, AppStateMachine asm, SpriteInitializer spriteInitializer,
-						  GameWindowsConfigurator gameWindowsConfigurator, SoundPlayer soundPlayer) {
+	protected void inject(IocContainer iocContainer, AppStateMachine asm, GameEngineFacade gameEngineFacade) {
 		this.asm = asm;
-		this.spriteInitializer = spriteInitializer;
-		this.inputManager = inputManager;
-		this.gameWindowsConfigurator = gameWindowsConfigurator;
-		this.soundPlayer = soundPlayer;
+		this.inputManager = iocContainer.inputManager();
+		this.gameEngineFacade = gameEngineFacade;
+		this.gameWindowsConfigurator = gameEngineFacade.getGameWindowsConfigurator();
+		this.spriteInitializer = iocContainer.spriteInitializer();
+		this.soundPlayer = iocContainer.soundPlayer();
+	}
+
+	public GameEngineFacade getGameEngineFacade() {
+		return gameEngineFacade;
 	}
 
 	@Override
 	public void onAppStateCreate() {
-		this.appStateWorld = onCreateAppStateWorld();
+		this.appStateWorld = onCreateAppStateWorld(gameEngineFacade);
 		onAppStateCreating(appStateWorld);
 		this.appStateWorld.onAppStateCreate();
 	}
@@ -122,8 +130,19 @@ public abstract class AppState implements AppStateLifeCycleListener {
 	 * For customizing your AppStateWorld, overwrite this method.
 	 * @return the created app state world
 	 */
-	protected AppStateWorld onCreateAppStateWorld() {
+	protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
 		return new AppStateWorld(this);
+	}
+
+	/**
+	 * This method will be triggered before #onAppStateEntering.
+	 * If there is no bundle for the transition, the EmptyReadOnlyBundle will be passed in.
+	 * In the normal situation, you should not operate on the EmptyReadOnlyBundle,
+	 * hence only override this method only if you know there will be certain bundle.
+	 * @param bundle
+	 */
+	public void onReceiveMessageBundle(Bundle bundle) {
+		// hook
 	}
 
 	@Override
@@ -173,6 +192,16 @@ public abstract class AppState implements AppStateLifeCycleListener {
 		return spriteInitializer.createSprite(type);
 	}
 
+	protected Sprite createSprite(Object type, Point position) {
+		return createSprite(type, position.x, position.y);
+	}
+
+	protected Sprite createSprite(Object type, int x, int y) {
+		Sprite sprite = createSprite(type);
+		sprite.setPosition(x, y);
+		return sprite;
+	}
+
 	public SpriteInitializer getSpriteInitializer() {
 		return spriteInitializer;
 	}
@@ -199,5 +228,10 @@ public abstract class AppState implements AppStateLifeCycleListener {
 
 	public SoundPlayer getSoundPlayer() {
 		return soundPlayer;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s @(%s)", getClass().getSimpleName(), super.toString());
 	}
 }

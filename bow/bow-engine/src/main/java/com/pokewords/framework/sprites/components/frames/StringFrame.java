@@ -1,67 +1,84 @@
 package com.pokewords.framework.sprites.components.frames;
 
 import com.pokewords.framework.views.Canvas;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 /**
  * A frame rendered as a text.
- *
+ * <p>
  * Note that The width, and height of the text are determined by the font-areaSize at runtime rather than by sprite.
  * So you cannot get its width and height.
+ *
  * @author johnny850807 (waterball)
  */
-public class StringFrame extends AbstractFrame {
+public class StringFrame extends SerializableFrame {
+    /**
+     * the stringFrame's rendered point will be seen as its center point.
+     */
+    public final static int CANVAS_FLAG_RENDER_BY_CENTER = 1;
+
+    /**
+     * the stringFrame will update the sprite's
+     * area size fitting to the text every time its rendered.
+     */
+    public final static int FLAG_STICK_SPRITE_AREA = 1 << 1;
+
     protected String text;
-    protected Color color;
-    protected Font font;
-    protected boolean renderByCenter;
+    protected Color color = Color.black;
+    protected Font font = new Font("微軟正黑體", Font.PLAIN, 15);
+    protected Dimension size;
 
-    public StringFrame(int id, int layerIndex, String text, boolean renderByCenter) {
-        this(id, layerIndex, text, Color.black, new Font("微軟正黑體", Font.PLAIN, 15), renderByCenter);
-    }
-
-    public StringFrame(int id, int layerIndex, String text, Color color, boolean renderByCenter) {
-        this(id, layerIndex, text, color, new Font("微軟正黑體", Font.PLAIN, 15), renderByCenter);
-    }
-
-    public StringFrame(int id, int layerIndex, String text, Font font, boolean renderByCenter) {
-        this(id, layerIndex, text, Color.black, font, renderByCenter);
-    }
-
-    public StringFrame(int id, int layerIndex, String text, Color color, Font font, boolean renderByCenter) {
-        super(id, layerIndex);
+    public StringFrame(int layerIndex, String text) {
+        super(layerIndex);
+        Objects.requireNonNull(text);
         this.text = text;
-        this.color = color;
-        this.font = font;
-        this.renderByCenter = renderByCenter;
     }
 
     @Override
     public void renderItself(Canvas canvas) {
         Objects.requireNonNull(sprite);
+        this.size = canvas.render(this);
 
-        if (renderByCenter)
-            canvas.renderTextWithCenterAdjusted(sprite.getX(), sprite.getY(), text, color, font);
-        else
-            canvas.renderText(sprite.getX(), sprite.getY(), text, color, font);
+        if (hasFlag(FLAG_STICK_SPRITE_AREA))
+            sprite.setAreaSize(size);
     }
 
-    public void setText(String text) {
+    public StringFrame text(String text) {
+        Objects.requireNonNull(text);
         this.text = text;
+        return this;
+    }
+    public StringFrame flags(int flags) {
+        this.flags = flags;
+        return this;
     }
 
-    public void setColor(Color color) {
+    public StringFrame color(@NotNull Color color) {
+        Objects.requireNonNull(color);
         this.color = color;
+        return this;
     }
 
-    public void setFont(Font font) {
+    public StringFrame font(@NotNull Font font) {
+        Objects.requireNonNull(font);
         this.font = font;
+        return this;
     }
 
-    public void setRenderByCenter(boolean renderByCenter) {
-        this.renderByCenter = renderByCenter;
+    public StringFrame fontStyle(int style) {
+        this.font = this.font.deriveFont(style);
+        return this;
+    }
+
+    public StringFrame fontSize(float pt) {
+        this.font = this.font.deriveFont(pt);
+        return this;
     }
 
     public String getText() {
@@ -76,8 +93,26 @@ public class StringFrame extends AbstractFrame {
         return font;
     }
 
-    public boolean isRenderByCenter() {
-        return renderByCenter;
+    public Dimension getSize() {
+        validateSizeNotNull();
+        return size;
+    }
+
+    @Override
+    public int getWidth() {
+        validateSizeNotNull();
+        return (int) getSize().getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        validateSizeNotNull();
+        return (int) getSize().getHeight();
+    }
+
+    private void validateSizeNotNull() {
+        if (size == null)
+            throw new IllegalStateException("The StringFrame can only know its size after it's been rendered at least once.");
     }
 
     @Override
@@ -86,14 +121,38 @@ public class StringFrame extends AbstractFrame {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         StringFrame that = (StringFrame) o;
-        return renderByCenter == that.renderByCenter &&
-                text.equals(that.text) &&
+        return text.equals(that.text) &&
                 color.equals(that.color) &&
                 font.equals(that.font);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), text, color, font, renderByCenter);
+        return Objects.hash(super.hashCode(), text, color, font);
+    }
+
+    @Override
+    public StringFrame clone() {
+        StringFrame clone = (StringFrame) super.clone();
+        clone.color = new Color(color.getRGB());
+        clone.font = new Font(font.getName(), font.getStyle(), font.getSize());
+        clone.size = size == null ? null : (Dimension) size.clone();
+        return clone;
+    }
+
+    @Override
+    protected void onDeserializing(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        this.text = in.readUTF();
+        this.color = new Color(in.readInt());
+        this.font = (Font) in.readObject();
+        this.size = (Dimension) in.readObject();
+    }
+
+    @Override
+    protected void onSerializing(ObjectOutputStream out) throws IOException, ClassNotFoundException {
+        out.writeUTF(text);
+        out.writeInt(color.getRGB());
+        out.writeObject(font);
+        out.writeObject(size);
     }
 }

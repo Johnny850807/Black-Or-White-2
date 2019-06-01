@@ -1,16 +1,17 @@
 package com.pokewords.framework.sprites.parsing;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author nyngwang
  */
 public class AngularBracketElement extends Element {
-    public AngularBracketElement(Node parent, String name, KeyValuePairs keyValuePairs) {
+    public AngularBracketElement(Node parent, String name, @NotNull KeyValuePairs keyValuePairs) {
         super(parent, name, keyValuePairs);
     }
 
     public AngularBracketElement(String name) {
-        this(null, name, null);
-        keyValuePairs = new NoCommaPairs(this);
+        this(null, name, new NoCommaPairs());
     }
 
     public AngularBracketElement() {
@@ -19,17 +20,15 @@ public class AngularBracketElement extends Element {
 
     @Override
     public void parse(Context context) {
-        if (!context.peekToken().matches("<[^/\\s]\\S+>"))
-            return;
-        String openTag = context.fetchNextToken();
+        String openTag = context.fetchNextToken(
+                "<[^/\\s]\\S+>",
+                "Invalid open tag: " + context.peekToken());
         setName(deTag(openTag));
-        if (context.hasNextToken())
-            keyValuePairs.parse(context);
-        String closeTag = context.hasNextToken()?
-                context.fetchNextToken(
-                        "</" + getName() + ">",
-                        "Expect </" + getName() + "> but get: " + context.peekToken())
-                : context.fetchNextToken("Run out of token before reaching: </" + getName() + ">");
+        if (context.peekToken().matches("[^\\s:<>]+"))
+            getKeyValuePairs().parse(context);
+        String closeTag = context.fetchNextToken(
+                "</" + getName() + ">",
+                "Expect </" + getName() + "> but get: " + context.peekToken());
     }
 
     @Override
@@ -37,7 +36,7 @@ public class AngularBracketElement extends Element {
         StringBuilder resultBuilder = new StringBuilder();
         String spaces = new String(new char[indent]).replace("\0", " ");
         resultBuilder.append(String.format("<%s>\n", getName()));
-        resultBuilder.append(keyValuePairs.toString(indent).replaceAll("([^\n]*\n)", spaces + "$1"));
+        resultBuilder.append(getKeyValuePairs().toString(indent).replaceAll("([^\n]*\n)", spaces + "$1"));
         resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
     }

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 
-//TODO
+//TODO make it complete
 public class MockSoundPlayer implements SoundPlayer {
     private Map<Object, String> soundsMap = new HashMap<>();
     private HashSet<Object> loopingSounds = new HashSet<>();
@@ -31,6 +31,11 @@ public class MockSoundPlayer implements SoundPlayer {
     }
 
     @Override
+    public boolean isPlayingSound(Object name) {
+        return false;
+    }
+
+    @Override
     public void playSoundLooping(Object name, int loop) {
 
     }
@@ -41,12 +46,12 @@ public class MockSoundPlayer implements SoundPlayer {
     }
 
     @Override
-    public void pause(Object name) {
+    public void pauseSound(Object name) {
 
     }
 
     @Override
-    public void stop(Object name) {
+    public void stopSound(Object name) {
 
     }
 
