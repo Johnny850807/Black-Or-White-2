@@ -2,8 +2,6 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ScriptParsingException;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,9 +9,6 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class LinScript extends Script {
-    public LinScript() {
-        super(new ArrayList<>());
-    }
 
     public boolean containsSegmentId(int id) {
         for (Segment segment : getSegments()) {
@@ -51,19 +46,29 @@ public class LinScript extends Script {
 
     @Override
     public void parse(Context context) {
-        if (!context.peekToken().matches("<[^/\\s]\\S+>"))
-            return;
-        while (context.hasNextToken()) {
-            int beforeSegment = context.getRemainingTokensCount();
+        if (!context.hasNextToken())
+            throw new ScriptParsingException("Empty script is not allowed.");
+        do {
+            parseAndAddNextNodeByToken(context);
+        } while (context.hasNextToken());
+    }
+
+    private void parseAndAddNextNodeByToken(Context context) {
+        String nextToken = context.peekToken();
+        if (nextToken.matches("<[^/\\s]\\S+>"))
+        {
             Segment segment = new AngularBracketSegment();
             segment.parse(context);
-            int afterSegment = context.getRemainingTokensCount();
-            if (beforeSegment > afterSegment)
-                addSegment(segment);
-            if (beforeSegment == afterSegment)
-                throw new ScriptParsingException(
-                        "Script body contains something that is not segment");
+            addSegment(segment);
         }
+        else if (nextToken.matches("@\\w+"))
+        {
+            ListNode listNode = new LinListNode();
+            listNode.parse(context);
+            addListNode(listNode);
+        }
+        else
+            throw new ScriptParsingException("Script body cannot contain: " + nextToken);
     }
 
     @Override

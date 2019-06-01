@@ -20,6 +20,7 @@ public abstract class Element implements Node {
         return parent;
     }
 
+    @Override
     public void setParent(Node parent) {
         this.parent = parent;
     }
@@ -35,4 +36,5 @@ public abstract class Element implements Node {
     public KeyValuePairs getKeyValuePairs() {
         return keyValuePairs;
     }
+
 }

@@ -1,5 +1,6 @@
 package com.pokewords.framework.commons.utils;
 
+import java.util.List;
 import java.util.Map;
 
 public class StringUtility {
@@ -72,5 +73,18 @@ public class StringUtility {
         }
         mapAsString.delete(mapAsString.length()-2, mapAsString.length()).append("}");
         return mapAsString.toString();
+    }
+
+    public static String toString(List<String> list) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[");
+        for (int i = 0; i < list.size(); i++) {
+            stringBuilder.append(list.get(i));
+            if (i != list.size()-1) {
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append("]");
+        return stringBuilder.toString();
     }
 }
