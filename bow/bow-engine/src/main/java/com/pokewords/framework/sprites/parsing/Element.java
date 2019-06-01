@@ -45,8 +45,6 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
         return keyValuePairs;
     }
 
-<<<<<<< HEAD
-=======
     public int getInt(String key) {
         return keyValuePairs.getInt(key);
     }
@@ -65,5 +63,4 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
     public Iterator<Pair<String, String>> iterator() {
         return keyValuePairs.iterator();
     }
->>>>>>> 8be2b0230e81d0154ee54f59d4149ad04195c0e3
 }
