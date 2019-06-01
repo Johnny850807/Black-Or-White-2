@@ -19,9 +19,10 @@ public class FrameSegment {
     private Optional<BodyElement> bodyElement;
     private Optional<MoveElement> moveElement;
     private Optional<TransitionsElement> transitionsElement;
+    private Optional<SpawnElement> spawnElement;
 
     public FrameSegment(Segment frameSegment) {
-        this.id = ((AngularBracketSegment) frameSegment).getId();
+        this.id = frameSegment.getId();
         this.description = frameSegment.getName();
         this.pic = frameSegment.getKeyValuePairs().getInt("pic");
         this.layer = frameSegment.getKeyValuePairs().getInt("layer");
@@ -36,6 +37,10 @@ public class FrameSegment {
         this.transitionsElement = Optional.ofNullable(
                 frameSegment.containsElement("transitions") ?
                         new TransitionsElement(frameSegment.getFirstElement("transitions")) : null
+        );
+        this.spawnElement = Optional.ofNullable(
+            frameSegment.containsElement("spawn") ?
+                    new SpawnElement(frameSegment.getFirstElement("spawn")) : null
         );
     }
 

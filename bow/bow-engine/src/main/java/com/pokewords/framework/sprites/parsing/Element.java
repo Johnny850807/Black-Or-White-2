@@ -28,6 +28,7 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
         return parent;
     }
 
+    @Override
     public void setParent(Node parent) {
         this.parent = parent;
     }
