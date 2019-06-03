@@ -17,11 +17,12 @@ public class FrameSegment {
     private int duration;
     private int next;
     private Optional<BodyElement> bodyElement;
-    private Optional<EffectElement> effectElement;
+    private Optional<MoveElement> moveElement;
     private Optional<TransitionsElement> transitionsElement;
+    private Optional<SpawnElement> spawnElement;
 
     public FrameSegment(Segment frameSegment) {
-        this.id = ((AngularBracketSegment) frameSegment).getId();
+        this.id = frameSegment.getId();
         this.description = frameSegment.getName();
         this.pic = frameSegment.getKeyValuePairs().getInt("pic");
         this.layer = frameSegment.getKeyValuePairs().getInt("layer");
@@ -30,12 +31,16 @@ public class FrameSegment {
         this.bodyElement = Optional.ofNullable(
                 frameSegment.containsElement("body")?
                 new BodyElement(frameSegment.getFirstElement("body")) : null);
-        this.effectElement = Optional.ofNullable(
-                frameSegment.containsElement("effect")?
-                new EffectElement(frameSegment.getFirstElement("effect")) : null);
+        this.moveElement = Optional.ofNullable(
+                frameSegment.containsElement("move")?
+                new MoveElement(frameSegment.getFirstElement("move")) : null);
         this.transitionsElement = Optional.ofNullable(
                 frameSegment.containsElement("transitions") ?
                         new TransitionsElement(frameSegment.getFirstElement("transitions")) : null
+        );
+        this.spawnElement = Optional.ofNullable(
+            frameSegment.containsElement("spawn") ?
+                    new SpawnElement(frameSegment.getFirstElement("spawn")) : null
         );
     }
 
@@ -68,8 +73,8 @@ public class FrameSegment {
         return bodyElement;
     }
 
-    public Optional<EffectElement> getEffectElement() {
-        return effectElement;
+    public Optional<MoveElement> getMoveElement() {
+        return moveElement;
     }
 
     public Optional<TransitionsElement> getTransitionsElement() {

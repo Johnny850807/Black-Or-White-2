@@ -10,4 +10,6 @@ public interface Node {
     void parse(Context context);
 
     String toString(int indent);
+
+    void setParent(Node parent);
 }

@@ -110,7 +110,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
             FrameSegment frameSegment = new FrameSegment(segment);
             EffectFrame effectFrame = createAndPutImageEffectFrame(frameSegment);
             GameEffect assembledGameEffect = GameEffect.assemble(
-                    parseEffectElementGameEffect(frameSegment),
+                    parseMoveElementGameEffect(frameSegment),
                     parseBodyElementGameEffect(frameSegment)
             );
             effectFrame.addEffect(assembledGameEffect);
@@ -173,13 +173,13 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         }
 
 
-        private GameEffect parseEffectElementGameEffect(FrameSegment frameSegment) {
-            if (frameSegment.getEffectElement().isPresent())
+        private GameEffect parseMoveElementGameEffect(FrameSegment frameSegment) {
+            if (frameSegment.getMoveElement().isPresent())
             {
-                EffectElement effectElement = frameSegment.getEffectElement().get();
+                MoveElement moveElement = frameSegment.getMoveElement().get();
                 return (world, sprite) -> {
-                    effectElement.getMoveX().ifPresent(sprite::moveX);
-                    effectElement.getMoveY().ifPresent(sprite::moveY);
+                    moveElement.getMoveX().ifPresent(sprite::moveX);
+                    moveElement.getMoveY().ifPresent(sprite::moveY);
                 };
             }
             else

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class AngularBracketSegment extends Segment {
     public AngularBracketSegment(Node parent, String name, @NotNull KeyValuePairs keyValuePairs,
                                  int id, String description, List<Element> elements) {
@@ -20,6 +21,7 @@ public class AngularBracketSegment extends Segment {
     public AngularBracketSegment(String name, int id) {
         this(name, id, null);
     }
+
 
     public AngularBracketSegment() {
         this(null, Integer.MIN_VALUE);

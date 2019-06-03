@@ -9,11 +9,18 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public abstract class Script implements Node {
-    private List<Segment> segments;
+    private List<ListNode> listNodes = new ArrayList<>();
+    private List<Segment> segments = new ArrayList<>();
 
-    public Script(List<Segment> segments) {
-        this.segments = new ArrayList<>();
-        segments.forEach(this::addSegment);
+    public Script() { }
+
+    public void addListNode(ListNode listNode) {
+        listNodes.add(listNode);
+        listNode.setParent(this);
+    }
+
+    public List<ListNode> getListNodes() {
+        return listNodes;
     }
 
     public void addSegment(Segment segment) {
