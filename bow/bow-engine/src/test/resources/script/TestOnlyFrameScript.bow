@@ -1,0 +1,40 @@
+<frame> 0
+    duration: 80
+    <transitions>
+     walkUp: 6
+       walkDown: 9
+       shoot: 1500
+        classType: com.demo.Types
+      walkLeft: 0
+        walkRight: 3
+
+    </transitions>
+
+    next: 1 pic: 0 layer: 2
+    <body>
+        x: 16 y: 10
+        w: 49
+        h: 67
+    </body>
+    <effect>
+        moveX: -8
+    </effect>
+</frame>
+
+<frame> 1 walkRight
+    duration: 100 next: 2 pic: 1 layer: 2
+    <transitions>
+        classType: com.demo.Types
+        walkLeft: 0
+        walkRight: 3
+        walkUp: 6
+        walkDown: 9
+        run: 9527
+    </transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveX: -8
+    </effect>
+</frame>

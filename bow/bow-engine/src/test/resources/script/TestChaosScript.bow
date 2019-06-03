@@ -1,0 +1,49 @@
+<frame> 1 walkRight
+    <transitions>
+        classType: com.demo.Types
+        walkLeft: 0
+        walkRight: 3
+        walkUp: 6
+        walkDown: 9
+        run: 9527
+    </transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    pic: 1 layer: 2
+    <effect>
+        moveX: -8
+    </effect>
+     duration: 100 next: 2
+</frame>
+
+<frame> 0 walkLeft
+    duration: 80
+        <effect>
+        moveX: -8
+        </effect>
+    next: 1
+        <transitions>
+            walkUp: 6
+            walkDown: 9
+            shoot: 1500
+            classType: com.demo.Types
+            walkLeft: 0
+            walkRight: 3
+        </transitions>
+    pic: 0
+        <body>
+            x: 16 y: 10
+            w: 49
+            h: 67
+        </body>
+    layer: 2
+</frame>
+
+
+<galleries>
+    <sheet>
+        startPic: 0 endPic: 6 row: 3 col: 3
+        path: sheets/character.png
+    </sheet>
+</galleries>
