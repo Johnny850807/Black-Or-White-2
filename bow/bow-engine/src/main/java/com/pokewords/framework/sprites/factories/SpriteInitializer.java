@@ -130,6 +130,8 @@ public class SpriteInitializer {
         }
 
         public SpriteDeclarator with(@NotNull Component component) {
+            if (component instanceof PropertiesComponent)
+                return with((PropertiesComponent) component);
             declaration.components.put(component.getClass(), component);
             return this;
         }

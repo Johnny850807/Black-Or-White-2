@@ -1,4 +1,7 @@
 
+<meta>
+    include: /path/to/parent.bow
+</meta>
 
 <galleries> 0
     <sheet>
