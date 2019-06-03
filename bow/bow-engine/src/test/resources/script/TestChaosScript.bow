@@ -41,7 +41,7 @@
 </frame>
 
 
-<galleries>
+<galleries> 0
     <sheet>
         startPic: 0 endPic: 6 row: 3 col: 3
         path: sheets/character.png

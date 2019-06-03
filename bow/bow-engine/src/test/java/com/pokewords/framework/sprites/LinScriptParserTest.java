@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites;
 
+import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.sprites.parsing.*;
 import org.junit.Test;
 
@@ -8,12 +9,14 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author shawn
+ */
 public class LinScriptParserTest {
-
     @Test
     public void testParserOnlyFrame(){
         Script script = new LinScript();
-        script.parse(Context.fromFile("/Users/shawnwu4mac/IdeaProjects/Black-Or-White-2/Black-Or-White-2/bow/bow-engine/src/test/resources/script/TestOnlyFrameScript.bow"));
+        script.parse(Context.fromFile(Resources.get("script/TestOnlyFrameScript.bow")));
 
         String transitionsName = "transitions";
         String bodyName = "body";
@@ -110,13 +113,13 @@ public class LinScriptParserTest {
     @Test
     public void testParametersAndGalleriesParser(){
         Script script = new LinScript();
-        script.parse(Context.fromFile("/Users/shawnwu4mac/IdeaProjects/Black-Or-White-2/Black-Or-White-2/bow/bow-engine/src/test/resources/script/TestGalleriesScript.bow"));
+        script.parse(Context.fromFile(Resources.get("script/TestGalleriesScript.bow")));
 
 
         Segment parametersSegment = script.getFirstSegment("parameters");
         Map<String, String> parametersPairs = parametersSegment.getKeyValuePairs().getMap();
-        String speed = "8";
-        assertEquals(parametersPairs.get("speed"), speed);
+        String speed = "10";
+        assertEquals(speed, parametersPairs.get("speed"));
 
         String galleriesName = "galleries";
         String sheetName = "sheet";
@@ -142,7 +145,7 @@ public class LinScriptParserTest {
     @Test
     public void testGetSegmentsAndElementsThroughName(){
         Script script = new LinScript();
-        script.parse(Context.fromFile("/Users/shawnwu4mac/IdeaProjects/Black-Or-White-2/Black-Or-White-2/bow/bow-engine/src/test/resources/script/TestChaosScript.bow"));
+        script.parse(Context.fromFile(Resources.get("script/TestChaosScript.bow")));
 
         List<Segment> frameSegments = script.getSegments("frame");
 
@@ -172,7 +175,6 @@ public class LinScriptParserTest {
         assertEquals(sheetPairs.get("row"), sheetRow);
         assertEquals(sheetPairs.get("col"), sheetCol);
         assertEquals(sheetPairs.get("path"), sheetPath);
-
 
     }
 
