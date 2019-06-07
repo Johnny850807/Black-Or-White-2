@@ -5,6 +5,7 @@ import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.ioc.ReleaseIocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.KeyListenerComponent;
+import com.pokewords.framework.sprites.components.RigidBodyComponent;
 import com.pokewords.framework.sprites.components.frames.EffectFrame;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
@@ -31,6 +32,7 @@ public class BasicsDemo extends GameApplication {
                 .declare(basics.MainAppState.Sprites.CHARACTER)
                 .position(getGameWindowDefinition().center())
                 .with("scripts/character.bow")
+                .with(RigidBodyComponent.getInstance())
                 .with(KeyListenerComponent.ofListener(new PlayerKeyListener()))
                 .areaSize(67, 77)
                 .weaver(new SpriteWeaver.Node() {

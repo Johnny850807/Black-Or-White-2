@@ -3,6 +3,7 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.commons.utils.FileUtility;
 import com.pokewords.framework.engine.exceptions.ScriptParsingException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -12,13 +13,20 @@ import java.util.regex.Pattern;
  * @author nyngwang
  */
 public class Context {
+    public static Context fromFile(File file) {
+        try {
+            return new Context(FileUtility.read(file));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Context fromFile(String path) {
         try {
             return new Context(FileUtility.read(path));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public static Context fromText(String text) {

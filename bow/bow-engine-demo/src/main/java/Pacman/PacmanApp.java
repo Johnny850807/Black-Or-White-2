@@ -45,7 +45,7 @@ public class PacmanApp extends GameApplication {
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI1)
                 .with(GifFrameStateMachineComponentMaker.fromSheet("sheets/pacManSheet.png",
-                        8, 8, 22, 23, 120, 1))
+                        8, 8, 22, 23, 8, 1))
                 .with(new MovingComponent(5))
                 .with(new GunComponent(20, 8))
                 .with(new HpComponent(5))
@@ -53,7 +53,7 @@ public class PacmanApp extends GameApplication {
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI2)
                 .with(GifFrameStateMachineComponentMaker.fromSheet("sheets/pacManSheet.png",
-                        8, 8, 30, 31, 120, 1))
+                        8, 8, 30, 31, 8, 1))
                 .with(new MovingComponent(8))
                 .with(new GunComponent(10, 14))
                 .with(new HpComponent(8))
@@ -61,7 +61,7 @@ public class PacmanApp extends GameApplication {
 
         spriteInitializer.declareFromParent(Types.AI_PARENT, Types.AI3)
                 .with(GifFrameStateMachineComponentMaker.fromSheet("sheets/pacManSheet.png",
-                        8, 8, 38, 39, 120, 1))
+                        8, 8, 38, 39, 8, 1))
                 .with(new MovingComponent(12))
                 .with(new GunComponent(3, 22))
                 .with(new HpComponent(10))

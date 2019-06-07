@@ -39,7 +39,7 @@ public class BulletComponent extends CloneableComponent implements Renderable {
 
     @Override
     public void onUpdate(double timePerFrame) {
-        getOwnerSprite().move(direction.move(speed));
+        getOwnerSprite().move(direction.getMovement(speed));
     }
 
     public void setDirection(Direction direction) {

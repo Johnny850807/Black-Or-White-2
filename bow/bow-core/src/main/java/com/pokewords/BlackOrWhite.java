@@ -1,6 +1,7 @@
 package com.pokewords;
 
 import com.pokewords.appstates.MenuAppState;
+import com.pokewords.appstates.MyMultiplayerRoomState;
 import com.pokewords.constants.Events;
 import com.pokewords.constants.SoundTypes;
 import com.pokewords.constants.SpriteTypes;
@@ -40,7 +41,7 @@ public class BlackOrWhite extends GameApplication {
         spriteInitializer.declare(SpriteTypes.MENU)
                 .area(0, 0, 800, 600)
                 .with(GifScriptMaker.createSequenceScript("assets/sequences/menu",
-                        new Range(0, 57), 0, 57, 30, 58))
+                        new Range(0, 57), 0, 57, 0, 58))
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .commit();
     }
@@ -55,7 +56,7 @@ public class BlackOrWhite extends GameApplication {
             }
         });
 
-        MultiplayerRoomState multiplayerRoomState = asm.createState(MultiplayerRoomState.class);
+        MyMultiplayerRoomState multiplayerRoomState = asm.createState(MyMultiplayerRoomState.class);
         asm.addTransition(menuAppState, Events.TO_MULTIPLAYER, multiplayerRoomState, new CrossFadingTransitionEffect());
     }
 

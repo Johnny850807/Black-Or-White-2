@@ -92,7 +92,7 @@ public interface InputManager extends GameLoopingListener {
 
     /**
      * Add an event moving the mouse (updating the mouse's position)
-     * @param point the point where the mouse move to
+     * @param point the point where the mouse getMovement to
      */
     void onMouseMoved(Point point);
 

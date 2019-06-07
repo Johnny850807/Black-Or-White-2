@@ -1,13 +1,9 @@
 package com.pokewords.framework.engine.asm;
 
 import com.pokewords.framework.AbstractTest;
-import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.MockGameEngine;
-import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.effects.NoTransitionEffect;
-import com.pokewords.framework.views.sound.MockSoundPlayer;
-import com.pokewords.framework.views.windows.GameFrameWindowsConfigurator;
 import com.pokewords.framework.views.windows.MockGameWindowsConfigurator;
 import org.junit.Before;
 import org.junit.Test;

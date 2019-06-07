@@ -99,4 +99,16 @@ public class GameEngineFacade implements SoundPlayer {
     public GameEngine getGameEngine() {
         return gameEngine;
     }
+
+    public long getCurrentLoopNumber() {
+        return gameEngine.getLoopCounter().getCurrentLoopNumber();
+    }
+
+    public void addLoopCountdownHook(long countDownLoopNumber, Runnable hook) {
+        gameEngine.getLoopCounter().addLoopCountdownHook(countDownLoopNumber, hook);
+    }
+
+    public void removeLoopCountdownHook(Runnable hook) {
+        gameEngine.getLoopCounter().removeLoopCountdownHook(hook);
+    }
 }

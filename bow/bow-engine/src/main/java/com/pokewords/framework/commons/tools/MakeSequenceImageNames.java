@@ -18,6 +18,6 @@ public class MakeSequenceImageNames {
 
     public static void main(String[] args) {
         MakeSequenceImageNames.make(
-                new File("D:\\NativeGit\\Black-Or-White-2\\bow\\bow-core\\src\\main\\resources\\assets\\sequences\\menu"));
+                new File("D:\\NativeGit\\Black-Or-White-Java\\BlackOrWhite\\pics\\AI\\Black\\Halt"));
     }
 }

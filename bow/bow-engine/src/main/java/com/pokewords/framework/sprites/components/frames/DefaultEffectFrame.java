@@ -72,6 +72,11 @@ public abstract class DefaultEffectFrame extends SerializableFrame implements Ef
         return clone;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(getId());
+    }
+
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         this.id = in.readInt();
         this.duration = in.readInt();  //only rendering-relevant variables will be serialized

@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.OptionalInt;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-public class EffectElement {
+public class MoveElement {
         private OptionalInt moveX;
         private OptionalInt moveY;
 
-    public EffectElement(int moveX, int moveY) {
+    public MoveElement(int moveX, int moveY) {
         this.moveX = OptionalInt.of(moveX);
         this.moveY = OptionalInt.of(moveY);
     }
 
-    public EffectElement(@NotNull Element element) {
+    public MoveElement(@NotNull Element element) {
         this.moveX = element.getKeyValuePairs().getIntOptional("moveX");
         this.moveY = element.getKeyValuePairs().getIntOptional("moveY");
     }

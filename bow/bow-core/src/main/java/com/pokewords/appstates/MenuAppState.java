@@ -36,9 +36,7 @@ public class MenuAppState extends AppState {
     }
 
     @Override
-    protected void onAppStateDestroying() {
-
-    }
+    protected void onAppStateDestroying() { }
 
     @Override
     protected void onAppStateUpdating(double timePerFrame) {

@@ -120,4 +120,5 @@ public class EffectWrappedFrame extends DefaultEffectFrame {
     protected void onSerializing(ObjectOutputStream out) throws IOException, ClassNotFoundException {
         out.writeObject(frame);
     }
+
 }

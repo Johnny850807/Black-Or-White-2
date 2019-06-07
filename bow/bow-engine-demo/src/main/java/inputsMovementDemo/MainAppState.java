@@ -80,7 +80,7 @@ public class MainAppState extends AppState {
     @Override
     public void onAppStateUpdating(double timePerFrame) {
         for (Direction direction : directions)
-            face.move(direction.move(8));
+            face.move(direction.getMovement(8));
     }
 
     @Override

@@ -70,7 +70,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	 */
 	public void trigger(Object event) throws SpriteException {
 		if (hasComponent(FrameStateMachineComponent.class))
-			getComponent(FrameStateMachineComponent.class).trigger(event.toString());
+			getComponent(FrameStateMachineComponent.class).trigger(event);
 		else
 			throw new SpriteException("The sprite doesn't have the FrameStateMachineComponent, it cannot be triggered.");
 	}
