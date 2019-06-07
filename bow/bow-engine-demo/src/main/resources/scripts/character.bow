@@ -1,7 +1,4 @@
 
-<meta>
-    include: /path/to/parent.bow
-</meta>
 
 <galleries> 0
     <sheet>
@@ -39,7 +36,7 @@ duration: 8 next: 998 pic: 0 layer: 2
 </frame>
 
 <frame> 0 walkLeft
-    duration: 8 next: 1
+    duration: 8 next: 1 pic: 0 layer: 2
 	<transitions>
         classType: basics.WalkEvent
 		walkLeft: 0
@@ -48,7 +45,6 @@ duration: 8 next: 998 pic: 0 layer: 2
 		walkDown: 9
 		halt: 998
 	</transitions>
-	pic: 0 layer: 2
     <body>
         x: 16 y: 10 w: 49 h: 67
     </body>
