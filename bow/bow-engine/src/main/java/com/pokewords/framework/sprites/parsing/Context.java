@@ -15,15 +15,15 @@ import java.util.regex.Pattern;
 public class Context {
     public static Context fromFile(File file) {
         try {
-            return new Context(FileUtility.read(file));
+            return fromText(FileUtility.read(file));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static Context fromFile(String path) {
+    public static Context fromPath(String path) {
         try {
-            return new Context(FileUtility.read(path));
+            return fromText(FileUtility.read(path));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
