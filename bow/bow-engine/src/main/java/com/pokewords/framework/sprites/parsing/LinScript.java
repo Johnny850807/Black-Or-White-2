@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class LinScript extends Script {
-    protected Node parent;
-
     public boolean containsSegmentId(int id) {
         for (Segment segment : getSegments()) {
-            if (((AngularBracketSegment) segment).getId() == id)
+            if (segment.getId() == id)
                 return true;
         }
         return false;
@@ -21,7 +19,7 @@ public class LinScript extends Script {
 
     public boolean containsSegmentDescription(String description) {
         for (Segment segment : getSegments()) {
-            if (((AngularBracketSegment) segment).getDescription().orElse("").equals(description))
+            if (segment.getDescription().orElse("").equals(description))
                 return true;
         }
         return false;
@@ -29,7 +27,7 @@ public class LinScript extends Script {
 
     public List<Segment> getSegmentsById(int id) {
         return getSegments().stream()
-                .filter(segment -> ((AngularBracketSegment) segment).getId() == id)
+                .filter(segment -> segment.getId() == id)
                 .collect(Collectors.toList());
     }
 
@@ -38,16 +36,6 @@ public class LinScript extends Script {
                 .filter(segment -> segment
                         .getDescription().orElse("").equals(description))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Node getParent() {
-        return parent;
-    }
-
-    @Override
-    public void setParent(Node parent) {
-        this.parent = parent;
     }
 
     @Override
@@ -84,14 +72,14 @@ public class LinScript extends Script {
         getSegments().sort((o1, o2) -> {
             String leftName = o1.getName();
             String rightName = o2.getName();
-            int leftId = ((AngularBracketSegment) o1).getId();
-            int rightId = ((AngularBracketSegment) o2).getId();
+            int leftId = o1.getId();
+            int rightId = o2.getId();
             return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
                     : leftName.compareTo(rightName);
         });
         getSegments().forEach(segment ->
                 resultBuilder.append(segment.toString(indent)
-                        .replaceAll("([^\n]*\n)", indent + "$1")));
+                        .replaceAll("([^\n]*\n)", spaces + "$1")));
         return resultBuilder.toString();
     }
 }
