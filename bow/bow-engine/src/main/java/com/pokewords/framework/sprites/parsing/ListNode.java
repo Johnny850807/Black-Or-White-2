@@ -9,9 +9,9 @@ import java.util.List;
  * @author johnny850807 (waterball)
  */
 public abstract class ListNode implements Node {
-    protected Node parent;
-    protected ArrayList<String> elements = new ArrayList<>();
-    protected String name;
+    private Node parent;
+    private String name;
+    private List<String> elements = new ArrayList<>();
 
     public ListNode() { }
 
