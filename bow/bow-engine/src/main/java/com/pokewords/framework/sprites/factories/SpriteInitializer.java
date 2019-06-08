@@ -32,13 +32,13 @@ public class SpriteInitializer {
     private InitializationMode initializationMode;
 
     /**
-     * Use this reference to indicate which type of sprite the client is declaring.
+     * Use this reference to indicate which concreteType of sprite the client is declaring.
      * Whenever the client commit the sprite, this reference should be set null.
      * Hence we can see if the client forgot to commit the sprite, then throw an exception.
      */
     private CompositeType declaringType;
 
-    // <sprite's type, the sprite>
+    // <sprite's concreteType, the sprite>
     private final Map<Object, Declaration> declarationMap = new HashMap<>();
 
     public enum InitializationMode {
@@ -53,7 +53,7 @@ public class SpriteInitializer {
         NON_LAZY,
 
         /**
-         * The sprite declarator will not init sprites at any time, it's waiting for your invocation of the method SpriteInitializer#init(type),
+         * The sprite declarator will not init sprites at any time, it's waiting for your invocation of the method SpriteInitializer#init(concreteType),
          * the sprite is init only when you invoke that method. So you can customize when to init, and in which AppState. Notice, anytime, if a sprite
          * you are going to fromGallery has not been init, it will help you init then fromGallery it. If you want to strictly expect all inits are by yourself,
          * and raise an explicit error message at such situation, use CUSTOM_STRICT instead.
@@ -61,7 +61,7 @@ public class SpriteInitializer {
         CUSTOM,
 
         /**
-         * The sprite declarator will not init sprites at any time, it's waiting for your invocation of the method SpriteInitializer#init(type),
+         * The sprite declarator will not init sprites at any time, it's waiting for your invocation of the method SpriteInitializer#init(concreteType),
          * the sprite is init only when you invoke that method. So you can customize when to init, and in which AppState. Notice, anytime, a sprite
          * you are going to fromGallery has not been init, this will throw the GameEngineException. If you want this to help you init rather than error,
          * use CUSTOM instead.
@@ -126,7 +126,7 @@ public class SpriteInitializer {
 
             Declaration parentDeclaration = declarationMap.get(parentType);
             this.declaration.propertiesComponent = parentDeclaration.propertiesComponent.clone();
-            this.declaration.propertiesComponent.setType(parentType, subtype);
+            this.declaration.propertiesComponent.getType().addSubtype(subtype);
             this.declaration.components = parentDeclaration.components.clone();
         }
 
@@ -245,7 +245,7 @@ public class SpriteInitializer {
 
             if (!declaration.propertiesComponent.isType(type))
                 throw new SpriteDeclarationException(String.format("Error occurs during declaring the sprite '%s', " +
-                                "your propertiesComponent's type is '%s', but your sprite's type is declared '%s'.",
+                                "your propertiesComponent's concreteType is '%s', but your sprite's concreteType is declared '%s'.",
                         type, declaration.propertiesComponent.getType(), type));
         }
 
@@ -278,7 +278,7 @@ public class SpriteInitializer {
     private void validateSpriteHasBeenDeclared(Object type) {
         if (!hasDeclared(type)) {
             throw new SpriteDeclarationException(String.format("You haven't declared the sprite '%s', " +
-                    "use declare(type) to start your declarations. (Did you commit your declaration?)", type));
+                    "use declare(concreteType) to start your declarations. (Did you commit your declaration?)", type));
         }
     }
 
@@ -311,12 +311,12 @@ public class SpriteInitializer {
 
     private void validateOnlyCustomInitModeCanUseThisMethod() {
         if (initializationMode != InitializationMode.CUSTOM && initializationMode != InitializationMode.CUSTOM_STRICT)
-            throw new SpriteDeclarationException(String.format("You are invoking initSprite(type) under %s mode, " +
+            throw new SpriteDeclarationException(String.format("You are invoking initSprite(concreteType) under %s mode, " +
                     "you should set the initialization mode to the CUSTOM mode to enable this method.", initializationMode));
     }
 
     private class Declaration {
-        Object type;
+        Object concreteType;
         PropertiesComponent propertiesComponent;
         ComponentMap components = new ComponentMap();
 
@@ -325,9 +325,14 @@ public class SpriteInitializer {
 
         LinkedList<SpriteWeaver.Node> weaverNodes = new LinkedList<>();
 
-        public Declaration(Object type) {
-            this.type = type;
-            this.propertiesComponent = new PropertiesComponent(type);
+        public Declaration(Object parentType, Object subtype) {
+            this.concreteType = subtype;
+            this.propertiesComponent = new PropertiesComponent(parentType, subtype);
+        }
+
+        public Declaration(Object concreteType) {
+            this.concreteType = concreteType;
+            this.propertiesComponent = new PropertiesComponent(concreteType);
         }
 
         protected void startInitializingSprite() {
@@ -337,7 +342,7 @@ public class SpriteInitializer {
             components.foreachComponent(spriteBuilder::addComponent);
             weaverNodes.forEach(spriteBuilder::addWeaverNode);
             Sprite sprite = spriteBuilder.build();
-            prototypeFactory.addPrototype(type, sprite);
+            prototypeFactory.addPrototype(concreteType, sprite);
         }
 
         private void setFrameStateMachineComponent() {

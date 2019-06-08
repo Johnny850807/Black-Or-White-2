@@ -3,7 +3,6 @@ package com.pokewords.framework.sprites.components;
 import com.pokewords.framework.commons.utils.StringUtility;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -21,8 +20,11 @@ public class CompositeType {
         this.types = new LinkedList<>(Arrays.asList(types));
     }
 
-    public void inherit(Object type) {
+    public void addParentType(Object type) {
         types.addFirst(type);
+    }
+    public void addSubtype(Object type) {
+        types.addLast(type);
     }
 
     public void removeType(Object type) {

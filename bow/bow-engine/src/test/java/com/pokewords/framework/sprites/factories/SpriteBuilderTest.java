@@ -25,7 +25,7 @@ public class SpriteBuilderTest extends AbstractTest {
 
     @Test
     public void testEmptySpriteBuilt() {
-        PropertiesComponent propertiesComponent = new PropertiesComponent("type");
+        PropertiesComponent propertiesComponent = new PropertiesComponent("concreteType");
         Sprite sprite = mockDefaultSpriteBuilder.setPropertiesComponent(propertiesComponent).build();
 
         assertEquals(1,sprite.getComponents().size());
@@ -53,7 +53,7 @@ public class SpriteBuilderTest extends AbstractTest {
     public void testWeavingFromLinScript() {
         LinScript script = new LinScript();
         MockSpriteWeaverNode mockSpriteWeaverNode = new MockSpriteWeaverNode();
-        PropertiesComponent propertiesComponent = new PropertiesComponent("type");
+        PropertiesComponent propertiesComponent = new PropertiesComponent("concreteType");
         Sprite sprite = mockDefaultSpriteBuilder.addWeaverNode(mockSpriteWeaverNode)
                                 .setPropertiesComponent(propertiesComponent)
                                 .setScript(script)
