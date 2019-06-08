@@ -11,8 +11,6 @@ public abstract class ListNode implements Node {
     private String name;
     private List<String> list = new ArrayList<>();
 
-    public ListNode() {}
-
     public ListNode(String name) {
         this.name = name;
     }
