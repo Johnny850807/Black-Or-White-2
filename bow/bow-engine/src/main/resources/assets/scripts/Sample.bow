@@ -1,14 +1,16 @@
 <meta> 0
-    include: path/to/another/script.bow
+    @include [
+        path/to/another/script.bow,
+        path/to/another/script2.bow
+    ]
+    <parameters> 0
+        speed: 8
+    </parameters>
 </meta>
 
 @enumSpace [
     5, 12, 34, apple
 ]
-
-<parameters> 0
-    speed: 8
-</parameters>
 
 <galleries> 0
     <sheet>

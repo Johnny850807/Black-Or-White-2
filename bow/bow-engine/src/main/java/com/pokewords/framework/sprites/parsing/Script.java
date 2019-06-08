@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public abstract class Script implements Node {
-    private Node parent;
     private List<ListNode> listNodes = new ArrayList<>();
     private List<Segment> segments = new ArrayList<>();
 
@@ -52,15 +51,5 @@ public abstract class Script implements Node {
 
     public Optional<Segment> getFirstSegmentOptional(String name) {
         return containsSegment(name)? Optional.of(getSegments(name).get(0)) : Optional.empty();
-    }
-
-    @Override
-    public Node getParent() {
-        return parent;
-    }
-
-    @Override
-    public void setParent(Node parent) {
-        this.parent = parent;
     }
 }

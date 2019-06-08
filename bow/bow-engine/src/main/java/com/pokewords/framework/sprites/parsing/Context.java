@@ -45,7 +45,7 @@ public class Context {
     }
 
     private void tokenize(String scriptText) {
-        Pattern pattern = Pattern.compile("(<\\S+>|\\[.+?\\]|[^:\\s]+|:|\\n)|(\\S+)");
+        Pattern pattern = Pattern.compile("(<\\S+>|\\[[^,]+?]|[^:,\\s]+|:|,|\\[|]|\\n)|(\\S+)");
         Matcher matcher = pattern.matcher(scriptText);
 
         while (matcher.find()) {

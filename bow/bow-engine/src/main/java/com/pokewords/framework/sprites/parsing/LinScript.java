@@ -57,7 +57,7 @@ public class LinScript extends Script {
         }
         else if (nextToken.matches("@\\w+"))
         {
-            ListNode listNode = new LinListNode();
+            ListNode listNode = new BracketListNode();
             listNode.parse(context);
             addListNode(listNode);
         }
@@ -81,5 +81,13 @@ public class LinScript extends Script {
                 resultBuilder.append(segment.toString(indent)
                         .replaceAll("([^\n]*\n)", spaces + "$1")));
         return resultBuilder.toString();
+    }
+
+    @Override
+    public void setParent(Node parent) { }
+
+    @Override
+    public Node getParent() {
+        return null;
     }
 }
