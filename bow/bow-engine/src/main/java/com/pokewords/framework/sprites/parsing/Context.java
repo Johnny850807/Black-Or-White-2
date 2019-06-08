@@ -45,6 +45,7 @@ public class Context {
     }
 
     private void tokenize(String scriptText) {
+        // TODO: Generator's [1 2 3 4] should be parsed into tokens: [, 1, 2, 3, 4, ]
         Pattern pattern = Pattern.compile("(<\\S+>|\\[[^,]+?]|[^:,\\s]+|:|,|\\[|]|\\n)|(\\S+)");
         Matcher matcher = pattern.matcher(scriptText);
 

@@ -67,6 +67,11 @@ public class BracketListNode extends ListNode {
         return resultBuilder.toString();
     }
 
+    @Override
+    public String toString() {
+        return toString(4);
+    }
+
     public static void main(String[] args) {
         String sample =
                 "@enumSpace [\n" +
@@ -74,6 +79,6 @@ public class BracketListNode extends ListNode {
                 "]";
         ListNode listNode = new BracketListNode();
         listNode.parse(Context.fromText(sample));
-        System.out.println(listNode.toString(4));
+        System.out.println(listNode);
     }
 }

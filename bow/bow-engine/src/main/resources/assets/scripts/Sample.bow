@@ -3,7 +3,7 @@
         path/to/another/script.bow,
         path/to/another/script2.bow
     ]
-    <parameters> 0
+    <parameters>
         speed: 8
     </parameters>
 </meta>

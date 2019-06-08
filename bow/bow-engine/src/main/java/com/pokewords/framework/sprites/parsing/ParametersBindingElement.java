@@ -4,9 +4,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ParametersSegment extends Segment {
-    public ParametersSegment(Node parent, String name, @NotNull KeyValuePairs keyValuePairs, int id, String description, List<Element> elements) {
-        super(parent, name, keyValuePairs, id, description, elements);
+public class ParametersBindingElement extends Element {
+    public ParametersBindingElement(Node parent, String name, @NotNull KeyValuePairs keyValuePairs) {
+        super(parent, name, keyValuePairs);
     }
 
     @Override
