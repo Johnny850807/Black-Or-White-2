@@ -8,6 +8,7 @@ import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.Component;
 import com.pokewords.framework.sprites.components.ComponentMap;
+import com.pokewords.framework.sprites.components.CompositeType;
 import com.pokewords.framework.sprites.components.PropertiesComponent;
 import com.pokewords.framework.sprites.parsing.Script;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +36,7 @@ public class SpriteInitializer {
      * Whenever the client commit the sprite, this reference should be set null.
      * Hence we can see if the client forgot to commit the sprite, then throw an exception.
      */
-    private Object declaringType;
+    private CompositeType declaringType;
 
     // <sprite's type, the sprite>
     private final Map<Object, Declaration> declarationMap = new HashMap<>();
@@ -96,7 +97,7 @@ public class SpriteInitializer {
         if (declaringType != null)
             throw new GameEngineException("You are declaring " + declaringType + ", did you forget to commit it? " +
                     "You should commit it before declaring another sprite.");
-        declaringType = type;
+        declaringType = new CompositeType(type);
         return new SpriteDeclarator(type);
     }
 
@@ -104,7 +105,7 @@ public class SpriteInitializer {
         if (declaringType != null)
             throw new GameEngineException("You are declaring " + declaringType + ", did you forget to commit it? " +
                     "You should commit it before declaring another sprite.");
-        declaringType = subtype;
+        declaringType = new CompositeType(parentType, subtype);
         return new SpriteDeclarator(parentType, subtype);
     }
 
@@ -125,7 +126,7 @@ public class SpriteInitializer {
 
             Declaration parentDeclaration = declarationMap.get(parentType);
             this.declaration.propertiesComponent = parentDeclaration.propertiesComponent.clone();
-            this.declaration.propertiesComponent.setType(subtype);
+            this.declaration.propertiesComponent.setType(parentType, subtype);
             this.declaration.components = parentDeclaration.components.clone();
         }
 
@@ -242,7 +243,7 @@ public class SpriteInitializer {
                 throw new SpriteDeclarationException(String.format("Error occurs during declaring the sprite '%s', " +
                         "'PropertiesComponent' should not be set (or it should not be null).", type));
 
-            if (!declaration.propertiesComponent.getType().equals(type))
+            if (!declaration.propertiesComponent.isType(type))
                 throw new SpriteDeclarationException(String.format("Error occurs during declaring the sprite '%s', " +
                                 "your propertiesComponent's type is '%s', but your sprite's type is declared '%s'.",
                         type, declaration.propertiesComponent.getType(), type));

@@ -229,13 +229,13 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
         return getPropertiesComponent().getHeight();
     }
 
-    public void setType(String type) {
-        getPropertiesComponent().setType(type);
-    }
-
-    public Object getType() {
+    public CompositeType getType() {
         return getPropertiesComponent().getType();
     }
+
+    public Object getConcreteType() {
+		return getPropertiesComponent().getConcreteType();
+	}
 
     public Point getCenter() {
         return getPropertiesComponent().getCenter();

@@ -18,7 +18,7 @@ public class ComponentsTest extends AbstractTest {
     @Test
     public void testPropertiesComponentAccessors() {
         PropertiesComponent pc = new PropertiesComponent("TargetPair");
-        assertEquals("TargetPair", pc.getType());
+        assertEquals("TargetPair", pc.getConcreteType());
 
         pc.setArea(50, 50, 50, 50);
         assertEquals(50, pc.getX());
@@ -45,7 +45,7 @@ public class ComponentsTest extends AbstractTest {
 
 
         pc.setType("Set-TargetPair");
-        assertEquals("Set-TargetPair", pc.getType());
+        assertEquals("Set-TargetPair", pc.getConcreteType());
     }
 
     @Test

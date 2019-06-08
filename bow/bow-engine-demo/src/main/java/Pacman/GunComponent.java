@@ -24,7 +24,7 @@ public class GunComponent extends CloneableComponent {
         bullet.setPosition(getOwnerSprite().getCenter());
         BulletComponent bulletComponent = bullet.getComponent(BulletComponent.class);
         bulletComponent.setDirection(direction);
-        bulletComponent.setBulletOwnerType(getOwnerSprite().getType());
+        bulletComponent.setBulletOwnerType(getOwnerSprite().getConcreteType());
         bulletComponent.setSpeed(bulletSpeed);
         getAttachedWorld().spawn(bullet);
 

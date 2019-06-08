@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * The table implementation of FiniteStateMachine.
  *
- * @author Shawn
+ * @author johnny850807 (waterball)
  */
 public class FiniteStateMachine<T> implements Cloneable {
     private T currentState;
@@ -70,7 +70,7 @@ public class FiniteStateMachine<T> implements Cloneable {
         validateStateExists(to);
 
         int fromStateId = stateIdMap.get(from);
-        int eventId = getOrCreateEventId(event);
+        int eventId = getOrCreateEventWithId(event);
         int toStateId = stateIdMap.get(to);
 
         transitionTable.put(new Point(fromStateId, eventId), toStateId);
@@ -81,7 +81,7 @@ public class FiniteStateMachine<T> implements Cloneable {
             throw new FiniteStateMachineException("The state " + state + " doesn't exist.");
     }
 
-    private int getOrCreateEventId(Object event) {
+    private int getOrCreateEventWithId(Object event) {
         if (eventIdMap.containsKey(event))
             return eventIdMap.get(event);
 
@@ -162,11 +162,10 @@ public class FiniteStateMachine<T> implements Cloneable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FiniteStateMachine<?> that = (FiniteStateMachine<?>) o;
-        boolean a = Objects.equals(currentState, that.currentState) ;
-        boolean b =        stateIdMap.equals(that.stateIdMap) ;
-        boolean c =        eventIdMap.equals(that.eventIdMap);
-        boolean d =       transitionTable.equals(that.transitionTable);
-        return a && b && c && d;
+        return Objects.equals(currentState, that.currentState) &&
+                stateIdMap.equals(that.stateIdMap) &&
+                eventIdMap.equals(that.eventIdMap) &&
+                transitionTable.equals(that.transitionTable);
     }
 
     @Override

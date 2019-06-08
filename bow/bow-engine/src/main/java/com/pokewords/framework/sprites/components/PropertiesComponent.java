@@ -4,10 +4,8 @@ import com.pokewords.framework.sprites.Sprite;
 
 import java.awt.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.List;
 
 /**
  * @author johnny850807 (waterball)
@@ -19,7 +17,7 @@ public class PropertiesComponent extends CloneableComponent {
     private Point center = new Point();
     private boolean hasBody = false;
     private boolean hasCenter = false;
-    private Object type;
+    private CompositeType compositeType;
 
     private HashSet<SpritePositionChangedListener> positionChangedListeners = new HashSet<>();
 
@@ -27,14 +25,14 @@ public class PropertiesComponent extends CloneableComponent {
         void onSpritePositionChanged(Sprite sprite);
     }
 
-    public PropertiesComponent(Object type) {
-        this.type = Objects.requireNonNull(type);
+    public PropertiesComponent(Object ...types) {
+        this.compositeType = new CompositeType(types);
     }
 
 
     @Override
     public void onAppStateEnter() {
-        Objects.requireNonNull(type);
+        Objects.requireNonNull(compositeType);
     }
 
     public void addPositionListener(SpritePositionChangedListener positionChangedListener) {
@@ -59,7 +57,6 @@ public class PropertiesComponent extends CloneableComponent {
             clone.center = (Point) this.center.clone();
         return clone;
     }
-
 
     public Rectangle getBody() {
         return hasBody ? new Rectangle(area.x + body.x, area.y + body.y, body.width, body.height ) : area;
@@ -157,7 +154,7 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public boolean isType(Object type) {
-        return getType() == type;
+        return getType().isType(type);
     }
 
     public boolean anyType(Object ...types) {
@@ -168,12 +165,20 @@ public class PropertiesComponent extends CloneableComponent {
         return false;
     }
 
-    public Object getType() {
-        return type;
+    public void setType(CompositeType type) {
+        this.compositeType = type;
     }
 
-    public void setType(Object type) {
-        this.type = type;
+    public void setType(Object ...types) {
+        this.compositeType = new CompositeType(types);
+    }
+
+    public CompositeType getType() {
+        return compositeType;
+    }
+
+    public Object getConcreteType() {
+        return compositeType.getConcreteType();
     }
 
     public void setCenter(Point center) {
@@ -229,7 +234,7 @@ public class PropertiesComponent extends CloneableComponent {
                 "area=" + getArea() +
                 ", body=" + getBody() +
                 ", center=" + getCenter() +
-                ", type=" + getType() +
+                ", compositeType=" + getType() +
                 '}';
     }
 
