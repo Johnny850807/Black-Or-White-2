@@ -12,7 +12,7 @@ import com.pokewords.framework.sprites.Sprite;
 public class PickComponent extends ActionComponent {
 
     @Override
-    protected void action() {
+    public void action() {
         getAttachedWorld().getSpritesCollidedWith(getOwnerSprite())
                             .stream()
                             .filter(s -> s.isType(SpriteTypes.PICKABLE_ITEM))
