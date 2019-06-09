@@ -35,14 +35,12 @@ public class Context {
 
     private List<String> tokens;
     private int currentLineNumber;
-    private int bufferedLinesCount;
-    private int currentLineNumberCache;
+    private int recentContinuousNewlinesCount;
 
     private Context(String scriptText) {
         tokens = new ArrayList<>();
         currentLineNumber = 1;
-        bufferedLinesCount = 0;
-        currentLineNumberCache = 1;
+        recentContinuousNewlinesCount = 0;
         tokenize(scriptText);
     }
 
@@ -58,25 +56,46 @@ public class Context {
         }
     }
 
+    /**
+     * Will not return '\n' to client
+     */
     public String peekToken() {
-        if (hasNextToken())
-            return tokens.get(0);
+        if (hasNextToken()) {
+            int index = 0;
+            while (tokens.get(index).equals("\n"))
+                index++;
+            return tokens.get(index);
+        }
         return "";
     }
 
     public boolean hasNextToken() {
+        int newlinesCount = 0;
         while (!tokens.isEmpty() && tokens.get(0).equals("\n")) {
-            bufferedLinesCount++;
+            newlinesCount++;
             tokens.remove(0);
         }
-        return !tokens.isEmpty();
+
+        boolean result = !tokens.isEmpty();
+
+        for (int i = 1; i <= newlinesCount; i++)
+            tokens.add(0, "\n");
+
+        return result;
     }
 
     public void consumeOneToken(String noMoreToken) {
         if (!hasNextToken())
             throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMoreToken));
-        currentLineNumber += bufferedLinesCount;
-        bufferedLinesCount = 0;
+
+        recentContinuousNewlinesCount = 0;
+
+        while (tokens.get(0).equals("\n")) {
+            tokens.remove(0);
+            currentLineNumber++;
+            recentContinuousNewlinesCount++;
+        }
+
         tokens.remove(0);
     }
 
@@ -105,7 +124,10 @@ public class Context {
     }
 
     public void putBack(String token) {
+        for (int i = 1; i <= recentContinuousNewlinesCount; i++)
+            tokens.add(0, "\n");
         tokens.add(0, token);
+        recentContinuousNewlinesCount = 0;
     }
 
     public int getCurrentLineNumber() {
