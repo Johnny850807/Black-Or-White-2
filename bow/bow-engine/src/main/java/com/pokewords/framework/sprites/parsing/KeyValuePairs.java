@@ -11,11 +11,22 @@ import java.util.*;
  * @author nyngwang
  */
 public abstract class KeyValuePairs implements Node, Packable, Iterable<Pair<String, String>> {
-    private Map<String, String> map;
     private Node parent;
+    private Map<String, String> map = new HashMap<>();
 
     public KeyValuePairs(Node parent) {
-        this.map = new HashMap<>();
+        this.parent = parent;
+    }
+
+    public KeyValuePairs() {}
+
+    @Override
+    public Node getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(Node parent) {
         this.parent = parent;
     }
 
@@ -53,15 +64,6 @@ public abstract class KeyValuePairs implements Node, Packable, Iterable<Pair<Str
 
     public Map<String, String> getMap() {
         return map;
-    }
-
-    @Override
-    public Node getParent() {
-        return parent;
-    }
-
-    public void setParent(Node parent) {
-        this.parent = parent;
     }
 
     @Override
