@@ -1,15 +1,18 @@
 package com.pokewords.framework.sprites.parsing;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author nyngwang
  */
-public class BracketListNode extends ListNode {
-    public BracketListNode(String name) {
-        super(name);
-    }
+public class BracketCommaListNode extends ListNode {
+    private List<String> list = new ArrayList<>();
 
-    public BracketListNode() {
-        this(null);
+    public BracketCommaListNode() {}
+
+    public BracketCommaListNode(String name) {
+        super(name);
     }
 
     @Override
@@ -29,7 +32,7 @@ public class BracketListNode extends ListNode {
                 context.fetchNextToken(
                         ",", "Expect a comma before list element" + context.peekToken());
             String element = context.fetchNextToken(
-                    "[^,\\s]+", "Invalid list element " + context.peekToken());
+                    "[^,\\s]+", "Invalid list content " + context.peekToken());
             add(element);
         }
 
@@ -42,13 +45,13 @@ public class BracketListNode extends ListNode {
         StringBuilder resultBuilder = new StringBuilder();
         String spaces = new String(new char[indent]).replace("\0", " ");
         resultBuilder.append(String.format("@%s [", getName()));
-        if (getList().size() == 0) {
+        if (list.size() == 0) {
             resultBuilder.append("]\n");
             return resultBuilder.toString();
         }
         resultBuilder.append("\n");
         int NthElement = 0;
-        for (String element : getList()) {
+        for (String element : list) {
             int widthCounter = NthElement % 5 + 1;
             NthElement++;
             if (widthCounter == 1 && NthElement > 1) {
@@ -77,8 +80,38 @@ public class BracketListNode extends ListNode {
                 "@enumSpace [\n" +
                 "    5, 12, 34, apple, orange, bubble, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n" +
                 "]";
-        ListNode listNode = new BracketListNode();
+        ListNode listNode = new BracketCommaListNode();
         listNode.parse(Context.fromText(sample));
         System.out.println(listNode);
+    }
+
+    @Override
+    public int getInt(int index) {
+        return 0;
+    }
+
+    @Override
+    public String getString(int index) {
+        return null;
+    }
+
+    @Override
+    public List<String> getList() {
+        return list;
+    }
+
+    @Override
+    public void add(Object object) {
+        list.add(String.valueOf(object));
+    }
+
+    @Override
+    public void remove(Object object) {
+        list.remove(String.valueOf(object));
+    }
+
+    @Override
+    public void clear() {
+        list.clear();
     }
 }

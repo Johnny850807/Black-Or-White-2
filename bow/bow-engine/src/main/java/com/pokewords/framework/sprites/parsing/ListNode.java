@@ -1,14 +1,21 @@
 package com.pokewords.framework.sprites.parsing;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author johnny850807 (waterball)
+ * @author nyngwang
  */
 public abstract class ListNode implements Node {
     private Node parent;
     private String name;
+
+    public ListNode() {
+        this.name = "undefined";
+    }
+
+    public ListNode(String name) {
+        this.name = name;
+    }
 
     @Override
     public Node getParent() {
@@ -33,16 +40,5 @@ public abstract class ListNode implements Node {
     public abstract List<String> getList();
     public abstract void add(Object object);
     public abstract void remove(Object object);
-
-//    public void remove(Object object) {
-//        for (int i = 0; i < list.size(); i++) {
-//            String s = list.get(i);
-//            if (s == object || s.equals(String.valueOf(object))) {
-//                list.remove(i);
-//                return;
-//            }
-//        }
-//    }
-
     public abstract void clear();
 }
