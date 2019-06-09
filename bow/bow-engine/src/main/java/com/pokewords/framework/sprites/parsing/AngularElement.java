@@ -12,10 +12,13 @@ import java.util.Iterator;
 public class AngularElement extends Element {
     private KeyValuePairs keyValuePairs = new NoCommaPairs();
 
-    public AngularElement() {}
+    public AngularElement() {
+        keyValuePairs.setParent(this);
+    }
 
     public AngularElement(String name) {
         super(name);
+        keyValuePairs.setParent(this);
     }
 
     @Override

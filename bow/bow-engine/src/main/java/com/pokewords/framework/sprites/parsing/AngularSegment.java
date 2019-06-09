@@ -20,10 +20,13 @@ public class AngularSegment extends Segment {
     private KeyValuePairs keyValuePairs = new NoCommaPairs();
     private List<Element> elements = new ArrayList<>();
 
-    public AngularSegment() {}
+    public AngularSegment() {
+        keyValuePairs.setParent(this);
+    }
 
     public AngularSegment(String name, int id, @Nullable String description) {
         super(name, id, description);
+        keyValuePairs.setParent(this);
     }
 
     @Override
@@ -68,8 +71,8 @@ public class AngularSegment extends Segment {
                 addElement(element);
                 continue;
             }
-            if (context.peekToken().matches("[^\\s:<>]+")) { //It's key
-                getKeyValuePairs().parse(context);
+            if (context.peekToken().matches("[^\\s:<>\\[\\]]+")) { //It's key
+                keyValuePairs.parse(context);
                 continue;
             }
             throw new ScriptParsingException("Segment body contains something neither key-value pair nor element.");
@@ -80,15 +83,15 @@ public class AngularSegment extends Segment {
     public String toString(int indent) {
         StringBuilder resultBuilder = new StringBuilder();
         String spaces = new String(new char[indent]).replace("\0", " ");
-        resultBuilder.append(String.format("<%s>%s%s\n",
+        resultBuilder.append(String.format("<%s> %s%s\n",
                 getName(),
-                id > Integer.MIN_VALUE? String.format(" %s", String.valueOf(id)) : "",
-                description.isPresent()? String.format(" %s", description.get()) : ""));
-        resultBuilder.append(getKeyValuePairs().toString(indent).replaceAll(
+                getId() > Integer.MIN_VALUE? getId() : "undefined",
+                getDescription().isPresent()? " " + getDescription().get() : ""));
+        resultBuilder.append(keyValuePairs.toString(indent).replaceAll(
                 "([^\n]*\n)",
                 spaces + "$1"));
-        getElements().forEach(
-                element -> resultBuilder.append(element.toString(indent).replaceAll(
+        elements.forEach(element ->
+                resultBuilder.append(element.toString(indent).replaceAll(
                         "([^\n]*\n)",
                         spaces + "$1")));
         resultBuilder.append(String.format("</%s>\n", getName()));
