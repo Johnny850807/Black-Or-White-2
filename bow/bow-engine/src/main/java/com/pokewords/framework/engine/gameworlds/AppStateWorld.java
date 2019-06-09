@@ -237,7 +237,7 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
 
         if (!rigidlyCollidedSprites.isEmpty()) {
             notifySpriteRigidCollisionListener(sprite, rigidlyCollidedSprites);
-            sprite.resumeToLatestPosition();  //block the sprite, equivalent to resuming it from the current movement
+            sprite.resumeToLatestPosition();
         }
     }
 
@@ -269,8 +269,30 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
 
             rigidCollidedSprite.locateComponents(CollisionListenerComponent.class)
                     .forEach(c -> c.onRigidCollisionWithSprite(collidingSprite));
+
+//            resolveRigidCollisionPositions(collidingSprite, rigidCollidedSprite);
         }
     }
+
+/* TODO rigid collision resolving algorithm
+
+    private void resolveRigidCollisionPositions(Sprite collidingSprite, Sprite collidedSprite) {
+        Rectangle intersection = collidingSprite.getBody().intersection(collidedSprite.getBody());
+        if (intersection.width < intersection.height)
+        {
+            if (collidingSprite.getX() < collidedSprite.getX())
+                collidingSprite.moveX((-1) * intersection.width);
+            else
+                collidingSprite.moveX(intersection.width);
+        }
+        else
+        {
+            if (collidingSprite.getY() < collidedSprite.getY())
+                collidingSprite.moveY((-1) * intersection.height);
+            else
+                collidingSprite.moveY(intersection.height);
+        }
+    }*/
 
 
     /**

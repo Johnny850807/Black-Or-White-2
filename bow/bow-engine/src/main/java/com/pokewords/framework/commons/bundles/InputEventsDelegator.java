@@ -1,7 +1,6 @@
 package com.pokewords.framework.commons.bundles;
 
 import com.pokewords.framework.commons.TernaryConsumer;
-import com.pokewords.framework.commons.tools.QuaternaryConsumer;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.MouseListenerComponent;
@@ -72,7 +71,7 @@ public class InputEventsDelegator {
                 .forEach(c -> {
                     Sprite sprite = c.getOwnerSprite();
                     Point positionInArea = new Point((int) mousePosition.getX() - sprite.getX(), (int) mousePosition.getY() - sprite.getY());
-                    firing.accpet(c, mousePosition, positionInArea);
+                    firing.accept(c, mousePosition, positionInArea);
                 });
     }
 
