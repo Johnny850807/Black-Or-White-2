@@ -24,6 +24,46 @@ public class ComponentMap extends HashMap<Class<? extends Component>, Component>
         values().forEach(consumer);
     }
 
+    /**
+     * Get all components whose type is assignable to the given type, i.e.  either is a subclass
+     * or is equal to the given type.
+     * @param type the component's class
+     * @return the component's instance
+     */
+    public <T extends Component> Set<T> locate(Class<T> type) {
+        return keySet().stream()
+                .filter(type::isAssignableFrom)
+                .map(this::get)
+                .map(type::cast)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Get the first component found whose type is assignable to the given type, i.e. either is a subclass
+     * or is equal to the given type.
+     * @param type the component's class
+     * @return the component's instance
+     */
+    public <T extends Component> T locateFirst(Class<T> type) {
+        return type.cast(
+                keySet().stream()
+                .filter(type::isAssignableFrom)
+                .map(this::get)
+                .findFirst()
+                .orElseThrow(()-> new IllegalArgumentException("The located component of the type " + type.getSimpleName() + " is not found."))
+            );
+    }
+
+    /**
+     * @param type the component's class
+     * @return Whether there is a component whose type is assignable to the given type, i.e. either is a subclass
+     *      * or is equal to the given type.
+     */
+    public boolean containsComponent(Class<? extends Component> type) {
+        return keySet().stream()
+                .anyMatch(type::isAssignableFrom);
+    }
+
     @Override
     public boolean remove(Object type, Object component) {
         if (!containsKey(type))

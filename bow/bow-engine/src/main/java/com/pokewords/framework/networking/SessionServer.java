@@ -1,5 +1,7 @@
 package com.pokewords.framework.networking;
 
+import com.pokewords.framework.commons.utils.NetUtility;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -21,11 +23,7 @@ public class SessionServer {
 
     public SessionServer(int port) {
         this.port = port;
-        try {
-            this.ip = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        this.ip = NetUtility.getIp();
     }
 
     public void addClientListener(ClientListener clientListener) {

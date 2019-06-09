@@ -1,6 +1,5 @@
-package Pacman;
+package com.pokewords.framework.sprites.components;
 
-import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.frames.Frame;
 import com.pokewords.framework.sprites.components.frames.RectangleFrame;
 import com.pokewords.framework.sprites.components.marks.Renderable;
@@ -10,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class HpComponent extends CloneableComponent implements Renderable {
     private final static int hpFrameHeight = 6;
     private final static int hpFrameGapHeightFromSprite = 12;

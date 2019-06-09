@@ -14,6 +14,8 @@ import java.awt.*;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A sprite is the fundamental unit in AppStateGameWorld.
@@ -85,7 +87,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 
 	public boolean hasComponent(Class<? extends Component> type) {
-		return components.containsKey(type);
+		return components.containsComponent(type);
 	}
 
 	public boolean isRigidBody() {
@@ -97,14 +99,36 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 	}
 
 	/**
-	 * Get the component.
+	 * Get the component by the given class, the component returned will be the first one found
+	 * whose type is assignable to the given class, i.e. the component's class is a subclass
+	 * or is same to the given class.
 	 * @param type the component's class
-	 * @return the component's instance if exists, otherwise null.
+	 * @return the component's instance
 	 */
 	public <T extends Component> T getComponent(Class<T> type) {
 		if (!hasComponent(type))
 			throw new IllegalArgumentException("The sprite doesn't have component of the type " + type.getSimpleName() + ".");
 		return type.cast(components.get(type));
+	}
+
+	/**
+	 * Get all components whose type is assignable to the given type, i.e.  either is a subclass
+	 * or is equal to the given type.
+	 * @param type the component's class
+	 * @return the component's instance
+	 */
+	public <T extends Component> Set<T> locateComponents(Class<T> type) {
+		return components.locate(type);
+	}
+
+	/**
+	 * Get the first component found whose type is assignable to the given type, i.e. either is a subclass
+	 * or is equal to the given type.
+	 * @param type the component's class
+	 * @return the component's instance
+	 */
+	public <T extends Component> T locateFirstComponent(Class<T> type) {
+		return components.locateFirst(type);
 	}
 
 	/**
