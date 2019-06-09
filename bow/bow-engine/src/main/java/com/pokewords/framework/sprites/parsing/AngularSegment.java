@@ -1,59 +1,59 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
+import com.pokewords.framework.engine.exceptions.NodeException;
 import com.pokewords.framework.engine.exceptions.ScriptParsingException;
+import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-public class AngularBracketSegment extends Segment {
-    public AngularBracketSegment(Node parent, String name, @NotNull KeyValuePairs keyValuePairs,
-                                 int id, String description, List<Element> elements) {
-        super(parent, name, keyValuePairs, id, description, elements);
-    }
+/**
+ * @author nyngwang
+ */
+public class AngularSegment extends Segment {
+    private KeyValuePairs keyValuePairs = new NoCommaPairs();
+    private List<Element> elements = new ArrayList<>();
 
-    public AngularBracketSegment(String name, int id, String description) {
-        this(null, name, new NoCommaPairs(), id, description, new ArrayList<>());
-    }
+    public AngularSegment() {}
 
-    public AngularBracketSegment(String name, int id) {
-        this(name, id, null);
-    }
-
-
-    public AngularBracketSegment() {
-        this(null, Integer.MIN_VALUE);
+    public AngularSegment(String name, int id, @Nullable String description) {
+        super(name, id, description);
     }
 
     @Override
     public void parse(Context context) {
         String openTag = context.fetchNextToken(
                 "<[^/\\s]\\S+>", "Invalid open tag: " + context.peekToken());
-        setName(deTag(openTag, "<", ">"));
+        setName(openTag.replaceAll("<(\\S+)>", "$1"));
 
         String id = context.fetchNextToken("0|[1-9]\\d*", "Invalid id: " + context.peekToken());
-        this.id = Integer.parseInt(id);
+        setId(Integer.parseInt(id));
 
         String at1AfterId = context.fetchNextToken();
         if (at1AfterId.equals(getCloseTag())) {
-            description = Optional.empty();
+            setDescription(null);
             return;
         }
 
         String at2AfterId = context.fetchNextToken();
         if (at2AfterId.equals(getCloseTag())) {
-            description = Optional.of(at1AfterId);
+            setDescription(at1AfterId);
             return;
         }
 
+        // No description: (1) key : (2) <element> ?
         if (at1AfterId.matches("<[^/\\s]\\S+>") || at2AfterId.matches(":")) {
-            description = Optional.empty();
+            setDescription(null);
             context.putBack(at2AfterId);
             context.putBack(at1AfterId);
-        } else { // has description
-            description = Optional.of(at1AfterId);
+        } else { // Has description: (1) desc key (2) desc <element>
+            setDescription(at1AfterId);
             context.putBack(at2AfterId);
         }
 
@@ -96,4 +96,70 @@ public class AngularBracketSegment extends Segment {
     }
 
     private String getCloseTag() { return "</" + getName() + ">"; }
+
+    @Override
+    public KeyValuePairs getKeyValuePairs() {
+        return keyValuePairs;
+    }
+
+    @Override
+    public int getInt(String key) {
+        return keyValuePairs.getInt(key);
+    }
+
+    @Override
+    public String getString(String key) {
+        return keyValuePairs.getString(key);
+    }
+
+    @Override
+    public ReadOnlyBundle pack() {
+        return keyValuePairs.pack();
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Pair<String, String>> iterator() {
+        return keyValuePairs.iterator();
+    }
+
+    @Override
+    public void addElement(Element element) {
+        if (element == null)
+            throw new NodeException("Try to add null as an element to segment.");
+        elements.add(element);
+        element.setParent(this);
+    }
+
+    @Override
+    public boolean containsElement(String name) {
+        for (Element element : elements)
+            if (element.getName().equals(name))
+                return true;
+        return false;
+    }
+
+    @Override
+    public List<Element> getElements() {
+        return elements;
+    }
+
+    @Override
+    public List<Element> getElements(String name) {
+        return elements.stream()
+                .filter(element -> element.getName().equals(name))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Element getFirstElement(String name) {
+        List<Element> result = getElements(name);
+        return result.size() > 0? result.get(0) : null;
+    }
+
+    @Override
+    public Optional<Element> getFirstElementOptional(String name) {
+        List<Element> result = getElements(name);
+        return result.size() > 0? Optional.of(result.get(0)) : Optional.empty();
+    }
 }

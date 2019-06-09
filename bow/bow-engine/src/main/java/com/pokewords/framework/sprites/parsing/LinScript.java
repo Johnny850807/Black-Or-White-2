@@ -51,7 +51,7 @@ public class LinScript extends Script {
         String nextToken = context.peekToken();
         if (nextToken.matches("<[^/\\s]\\S+>"))
         {
-            Segment segment = new AngularBracketSegment();
+            Segment segment = new AngularSegment();
             segment.parse(context);
             addSegment(segment);
         }

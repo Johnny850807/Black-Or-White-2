@@ -36,11 +36,13 @@ public class Context {
     private List<String> tokens;
     private int currentLineNumber;
     private int bufferedLinesCount;
+    private int currentLineNumberCache;
 
     private Context(String scriptText) {
         tokens = new ArrayList<>();
         currentLineNumber = 1;
         bufferedLinesCount = 0;
+        currentLineNumberCache = 1;
         tokenize(scriptText);
     }
 
