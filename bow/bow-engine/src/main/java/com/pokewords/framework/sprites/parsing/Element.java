@@ -15,13 +15,13 @@ import java.util.regex.Pattern;
 public abstract class Element implements Node, Packable, Iterable<Pair<String, String>> {
     private Node parent;
     private String name;
-    private KeyValuePairs keyValuePairs;
 
-    public Element(Node parent, String name, @NotNull KeyValuePairs keyValuePairs) {
-        this.parent = parent;
+    public Element() {
+        this.name = "undefined";
+    }
+
+    public Element(String name) {
         this.name = name;
-        this.keyValuePairs = keyValuePairs;
-        keyValuePairs.setParent(this);
     }
 
     @Override
@@ -42,30 +42,7 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
         this.name = name;
     }
 
-    public KeyValuePairs getKeyValuePairs() {
-        return keyValuePairs;
-    }
-
-    public int getInt(String key) {
-        return keyValuePairs.getInt(key);
-    }
-
-    public String getString(String key) {
-        return keyValuePairs.getString(key);
-    }
-
-    @Override
-    public ReadOnlyBundle pack() {
-        return keyValuePairs.pack();
-    }
-
-    @NotNull
-    @Override
-    public Iterator<Pair<String, String>> iterator() {
-        return keyValuePairs.iterator();
-    }
-
-    protected String deTag(String tag, String leftToken, String rightToken) {
-        return tag.replaceAll(Pattern.quote(leftToken) + "/?(\\S+)" + Pattern.quote(rightToken), "$1");
-    }
+    public abstract KeyValuePairs getKeyValuePairs();
+    public abstract int getInt(String key);
+    public abstract String getString(String key);
 }

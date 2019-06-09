@@ -74,7 +74,7 @@ public class LinScriptGenerator extends Script {
                             nameToTargetPairs.get(name).put(Integer.parseInt(id), keyValuePairs);
                     }
                 } else if (context.peekToken().matches("<[^/\\s]\\S+>")) { // It's element
-                    Element element = new AngularBracketElement();
+                    Element element = new AngularElement();
                     element.parse(context);
                     if (repeat.equals("*"))
                         nameToForAllElements.get(name).add(element);

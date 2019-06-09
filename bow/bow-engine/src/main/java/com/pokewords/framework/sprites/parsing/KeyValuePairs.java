@@ -14,12 +14,6 @@ public abstract class KeyValuePairs implements Node, Packable, Iterable<Pair<Str
     private Node parent;
     private Map<String, String> map = new HashMap<>();
 
-    public KeyValuePairs(Node parent) {
-        this.parent = parent;
-    }
-
-    public KeyValuePairs() {}
-
     @Override
     public Node getParent() {
         return parent;

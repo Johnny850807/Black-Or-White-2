@@ -63,7 +63,7 @@ public class AngularBracketSegment extends Segment {
                 return;
             }
             if (context.peekToken().matches("<[^/\\s]\\S+>")) { // It's element
-                Element element = new AngularBracketElement();
+                Element element = new AngularElement();
                 element.parse(context);
                 addElement(element);
                 continue;

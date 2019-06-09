@@ -6,14 +6,6 @@ import java.util.Map;
  * @author nyngwang
  */
 public class NoCommaPairs extends KeyValuePairs {
-    public NoCommaPairs(Node parent) {
-        super(parent);
-    }
-
-    public NoCommaPairs() {
-        super(null);
-    }
-
     @Override
     public void parse(Context context) {
         do {
