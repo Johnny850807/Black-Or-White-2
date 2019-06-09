@@ -6,65 +6,65 @@ import com.pokewords.framework.sprites.components.KeyListenerComponent;
 
 import java.awt.event.KeyEvent;
 
-public class PlayerKeyListener extends KeyListenerComponent.Listener {
+public class PlayerKeyListenerComponent extends KeyListenerComponent {
     private Direction currentDirection = Direction.NO_DIRECTION;
 
     @Override
-    public void onKeyPressed(Sprite sprite, int keyCode) {
+    public void onKeyPressed(int keyCode) {
         switch (keyCode) {
             case KeyEvent.VK_UP:
                 if (currentDirection != Direction.UP)
                 {
                     currentDirection = Direction.UP;
-                    sprite.trigger(WalkEvent.walkUp);
+                    getOwnerSprite().trigger(WalkEvent.walkUp);
                 }
                 break;
             case KeyEvent.VK_DOWN:
                 if (currentDirection != Direction.DOWN) {
                     currentDirection = Direction.DOWN;
-                    sprite.trigger(WalkEvent.walkDown);
+                    getOwnerSprite().trigger(WalkEvent.walkDown);
                 }
                 break;
             case KeyEvent.VK_LEFT:
                 if (currentDirection != Direction.LEFT) {
                     currentDirection = Direction.LEFT;
-                    sprite.trigger(WalkEvent.walkLeft);
+                    getOwnerSprite().trigger(WalkEvent.walkLeft);
                 }
                 break;
             case KeyEvent.VK_RIGHT:
                 if (currentDirection != Direction.RIGHT) {
                     currentDirection = Direction.RIGHT;
-                    sprite.trigger(WalkEvent.walkRight);
+                    getOwnerSprite().trigger(WalkEvent.walkRight);
                 }
                 break;
         }
     }
 
     @Override
-    public void onKeyReleased(Sprite sprite, int keyCode) {
+    public void onKeyReleased(int keyCode) {
         switch (keyCode) {
             case KeyEvent.VK_UP:
                 if (currentDirection == Direction.UP) {
                     currentDirection = Direction.NO_DIRECTION;
-                    sprite.trigger(WalkEvent.halt);
+                    getOwnerSprite().trigger(WalkEvent.halt);
                 }
                 break;
             case KeyEvent.VK_DOWN:
                 if (currentDirection == Direction.DOWN) {
                     currentDirection = Direction.NO_DIRECTION;
-                    sprite.trigger(WalkEvent.halt);
+                    getOwnerSprite().trigger(WalkEvent.halt);
                 }
                 break;
             case KeyEvent.VK_LEFT:
                 if (currentDirection == Direction.LEFT) {
                     currentDirection = Direction.NO_DIRECTION;
-                    sprite.trigger(WalkEvent.halt);
+                    getOwnerSprite().trigger(WalkEvent.halt);
                 }
                 break;
             case KeyEvent.VK_RIGHT:
                 if (currentDirection == Direction.RIGHT) {
                     currentDirection = Direction.NO_DIRECTION;
-                    sprite.trigger(WalkEvent.halt);
+                    getOwnerSprite().trigger(WalkEvent.halt);
                 }
                 break;
         }

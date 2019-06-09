@@ -221,10 +221,10 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     }
 
     private void notifySpriteCollisionListenerComponents(Sprite sprite1, Sprite sprite2) {
-        sprite1.getComponentOptional(CollisionListenerComponent.class)
-                .ifPresent(c -> c.notifyCollisionWithSprite(sprite2));
-        sprite2.getComponentOptional(CollisionListenerComponent.class)
-                .ifPresent(c -> c.notifyCollisionWithSprite(sprite1));
+        sprite1.locateComponents(CollisionListenerComponent.class)
+                .forEach(c -> c.onCollisionWithSprite(sprite2));
+        sprite2.locateComponents(CollisionListenerComponent.class)
+                .forEach(c -> c.onCollisionWithSprite(sprite1));
     }
 
     @Override
@@ -257,18 +257,18 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     }
 
     private void notifySpriteRigidCollisionListener(Sprite collidingSprite, Collection<Sprite> rigidlyCollidedSprites) {
-        collidingSprite.getComponentOptional(CollisionListenerComponent.class)
-                .ifPresent(CollisionListenerComponent::notifyRigidCollisionEvent);
+        collidingSprite.locateComponents(CollisionListenerComponent.class)
+                .forEach(CollisionListenerComponent::onRigidCollisionEvent);
 
         for (Sprite rigidCollidedSprite : rigidlyCollidedSprites) {
-            rigidCollidedSprite.getComponentOptional(CollisionListenerComponent.class)
-                    .ifPresent(CollisionListenerComponent::notifyRigidCollisionEvent);
+            rigidCollidedSprite.locateComponents(CollisionListenerComponent.class)
+                    .forEach(CollisionListenerComponent::onRigidCollisionEvent);
 
-            collidingSprite.getComponentOptional(CollisionListenerComponent.class)
-                    .ifPresent(c -> c.notifyRigidCollisionWithSprite(rigidCollidedSprite));
+            collidingSprite.locateComponents(CollisionListenerComponent.class)
+                    .forEach(c -> c.onRigidCollisionWithSprite(rigidCollidedSprite));
 
-            rigidCollidedSprite.getComponentOptional(CollisionListenerComponent.class)
-                    .ifPresent(c -> c.notifyRigidCollisionWithSprite(collidingSprite));
+            rigidCollidedSprite.locateComponents(CollisionListenerComponent.class)
+                    .forEach(c -> c.onRigidCollisionWithSprite(collidingSprite));
         }
     }
 
@@ -347,8 +347,8 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
      * @return a set of MouseListenerComponents each owned by a certain Sprite in the world.
      */
     public Collection<MouseListenerComponent> getMouseListenerComponents() {
-        return sprites.stream().filter(s -> s.hasComponent(MouseListenerComponent.class))
-                        .map(s -> s.getComponent(MouseListenerComponent.class))
+        return sprites.stream()
+                        .flatMap(s -> s.locateComponents(MouseListenerComponent.class).stream())
                         .collect(Collectors.toList());
     }
 
@@ -356,8 +356,8 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
      * @return a set of KeyListenerComponent each owned by a certain Sprite in the world.
      */
     public Collection<KeyListenerComponent> getKeyListenerComponents() {
-        return sprites.stream().filter(s -> s.hasComponent(KeyListenerComponent.class))
-                .map(s -> s.getComponent(KeyListenerComponent.class))
+        return sprites.stream()
+                .flatMap(s -> s.locateComponents(KeyListenerComponent.class).stream())
                 .collect(Collectors.toList());
     }
 

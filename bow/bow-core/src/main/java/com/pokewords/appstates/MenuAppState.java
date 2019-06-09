@@ -1,6 +1,6 @@
 package com.pokewords.appstates;
 
-import com.pokewords.constants.Events;
+import com.pokewords.constants.AsmEvents;
 import com.pokewords.constants.SoundTypes;
 import com.pokewords.constants.SpriteTypes;
 import com.pokewords.constants.Theme;
@@ -44,8 +44,7 @@ public class MenuAppState extends AppState {
         {
             Bundle message = new Bundle();
             message.put(MultiplayerRoomState.KEY_PLAYER_NAME_STRING, "水球");
-            message.put(MultiplayerRoomState.KEY_PLAYER_IP_STRING, "125.37.1.65");
-            getAppStateMachine().trigger(Events.TO_MULTIPLAYER, message);
+            getAppStateMachine().trigger(AsmEvents.TO_MULTIPLAYER, message);
         }
     }
 }
