@@ -9,47 +9,14 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public abstract class Script implements Node {
-    private List<ListNode> listNodes = new ArrayList<>();
-    private List<Segment> segments = new ArrayList<>();
+    
+    public abstract void addListNode(ListNode listNode);
+    public abstract List<ListNode> getListNodes();
 
-    public Script() { }
-
-    public void addListNode(ListNode listNode) {
-        listNodes.add(listNode);
-        listNode.setParent(this);
-    }
-
-    public List<ListNode> getListNodes() {
-        return listNodes;
-    }
-
-    public void addSegment(Segment segment) {
-        segments.add(segment);
-        segment.setParent(this);
-    }
-
-    public List<Segment> getSegments() {
-        return segments;
-    }
-
-    public boolean containsSegment(String name) {
-        for (Segment segment : segments)
-            if (segment.getName().equals(name))
-                return true;
-        return false;
-    }
-
-    public List<Segment> getSegments(String name) {
-        return segments.stream()
-                .filter(segment -> segment.getName().equals(name))
-                .collect(Collectors.toList());
-    }
-
-    public Segment getFirstSegment(String name) {
-        return containsSegment(name)? getSegments(name).get(0) : null;
-    }
-
-    public Optional<Segment> getFirstSegmentOptional(String name) {
-        return containsSegment(name)? Optional.of(getSegments(name).get(0)) : Optional.empty();
-    }
+    public abstract void addSegment(Segment segment);
+    public abstract List<Segment> getSegments();
+    public abstract boolean containsSegment(String name);
+    public abstract List<Segment> getSegments(String name);
+    public abstract Segment getFirstSegment(String name);
+    public abstract Optional<Segment> getFirstSegmentOptional(String name);
 }
