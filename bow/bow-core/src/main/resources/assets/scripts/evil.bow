@@ -16,10 +16,6 @@
 	defense: 35
 </capability>
 
-@actions [
-	pursue
-]
-
 <galleries> 0
     <sequence>
         startPic: 0 endPic: 7

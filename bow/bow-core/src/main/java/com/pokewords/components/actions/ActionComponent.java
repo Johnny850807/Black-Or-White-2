@@ -4,5 +4,5 @@ import com.pokewords.framework.sprites.components.CloneableComponent;
 
 public abstract class ActionComponent extends CloneableComponent {
 
-    protected abstract void action();
+    public abstract void action();
 }
