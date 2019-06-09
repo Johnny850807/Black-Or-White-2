@@ -63,7 +63,7 @@ public abstract class MultiplayerRoomState extends AppState implements SessionSe
     private void arrangeStateScene() {
         configWindows();
         getSpriteInitializer().declare(Types.CARD)
-                .with(MouseListenerComponent.ofListener(new CardMouseListener()))
+                .with(new CardMouseListenerComponent())
                 .area(30, 30, 150, 80).commit();
         host.ready = true;
         spawnPlayerCard(host);
