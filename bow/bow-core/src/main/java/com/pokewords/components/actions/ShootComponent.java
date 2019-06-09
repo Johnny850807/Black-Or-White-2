@@ -1,4 +1,7 @@
-package com.pokewords.components;
+package com.pokewords.components.actions;
+
+import com.pokewords.components.GunComponent;
+import com.pokewords.components.actions.ActionComponent;
 
 /**
  * @author johnny850807 (waterball)

@@ -1,0 +1,9 @@
+
+
+<binding>
+    characterLayer: 2
+</binding>
+
+@enumSpace [
+        com.pokewords.constants.FsmcEvents
+]

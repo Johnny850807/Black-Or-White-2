@@ -1,5 +1,8 @@
-package com.pokewords.components;
+package com.pokewords.components.actions;
 
+import com.pokewords.components.GunComponent;
+import com.pokewords.components.ItemComponent;
+import com.pokewords.components.PackageComponent;
 import com.pokewords.constants.SpriteTypes;
 import com.pokewords.framework.sprites.Sprite;
 
