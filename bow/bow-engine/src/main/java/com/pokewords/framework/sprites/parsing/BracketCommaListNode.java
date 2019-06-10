@@ -71,21 +71,6 @@ public class BracketCommaListNode extends ListNode {
     }
 
     @Override
-    public String toString() {
-        return toString(4);
-    }
-
-    public static void main(String[] args) {
-        String sample =
-                "@enumSpace [\n" +
-                "    5, 12, 34, apple, orange, bubble, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n" +
-                "]";
-        ListNode listNode = new BracketCommaListNode();
-        listNode.parse(Context.fromText(sample));
-        System.out.println(listNode);
-    }
-
-    @Override
     public int getInt(int index) {
         return 0;
     }
@@ -113,5 +98,15 @@ public class BracketCommaListNode extends ListNode {
     @Override
     public void clear() {
         list.clear();
+    }
+
+    public static void main(String[] args) {
+        String sample =
+                "@enumSpace [\n" +
+                        "    5, 12, 34, apple, orange, bubble, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n" +
+                        "]";
+        ListNode listNode = new BracketCommaListNode();
+        listNode.parse(Context.fromText(sample));
+        System.out.println(listNode.toString(4));
     }
 }

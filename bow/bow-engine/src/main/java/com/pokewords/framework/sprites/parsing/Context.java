@@ -130,6 +130,17 @@ public class Context {
         recentContinuousNewlinesCount = 0;
     }
 
+    public void bind(Map<String, String> map) {
+        StringBuilder builder = new StringBuilder();
+        tokens.forEach(token -> builder.append(" ").append(token));
+        String remainingText = builder.toString();
+        map.forEach((key, value) ->
+            remainingText.replaceAll(
+                    "([-+]?)[$]" + Pattern.quote(key),
+                    "$1" + value));
+        tokenize(remainingText);
+    }
+
     public int getCurrentLineNumber() {
         return currentLineNumber;
     }

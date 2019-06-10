@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 /**
+ * TODO: Merge NoCommaPairs into this?
  * @author nyngwang
  */
 public abstract class KeyValuePairs implements Node, Packable, Iterable<Pair<String, String>> {
