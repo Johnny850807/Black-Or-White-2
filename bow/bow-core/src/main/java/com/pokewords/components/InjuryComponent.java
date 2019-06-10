@@ -4,6 +4,9 @@ import com.pokewords.constants.InjuryTypes;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 import com.pokewords.framework.sprites.components.HpComponent;
 
+/**
+ * @author johnny850807 (waterball)
+ */
 public class InjuryComponent extends CloneableComponent {
 
     public void injure(InjuryTypes type, int damage) {
@@ -12,6 +15,8 @@ public class InjuryComponent extends CloneableComponent {
     }
 
     private int countDamage(InjuryTypes type, int damage) {
+        if (getOwnerSprite().hasComponent(DefenseComponent.class))
+            return getOwnerSprite().getComponent(DefenseComponent.class).defenseFromInjury(type, damage);
         //TODO
         return damage;
     }

@@ -1,5 +1,6 @@
 package com.pokewords.components;
 
+import com.pokewords.components.actions.ShootComponent;
 import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 

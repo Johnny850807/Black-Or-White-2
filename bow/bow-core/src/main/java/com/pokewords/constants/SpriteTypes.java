@@ -1,6 +1,8 @@
 package com.pokewords.constants;
 
 public enum  SpriteTypes {
+    ROOT,  // the root of all types
+
     MENU,
 
     CHARACTER,

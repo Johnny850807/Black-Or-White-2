@@ -1,4 +1,5 @@
 package com.pokewords.constants;
 
-public class InjuryTypes {
+public enum InjuryTypes {
+    NORMAL
 }

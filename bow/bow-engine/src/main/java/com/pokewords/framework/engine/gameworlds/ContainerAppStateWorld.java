@@ -24,14 +24,24 @@ import java.awt.*;
  */
 public class ContainerAppStateWorld extends AppStateWorld {
     public static final Object TYPE_WALL = new Object();
+    private int wallThickness;
+
+    public ContainerAppStateWorld(AppState appState) {
+        super(appState);
+        this.wallThickness = 1000;
+    }
+
+    public ContainerAppStateWorld(AppState appState, int wallThickness) {
+        super(appState);
+        this.wallThickness = wallThickness;
+    }
+
+
     private Sprite topWall;
     private Sprite leftWall;
     private Sprite rightWall;
     private Sprite bottomWall;
 
-    public ContainerAppStateWorld(AppState appState) {
-        super(appState);
-    }
 
     @Override
     public void onAppStateCreate() {
@@ -42,16 +52,16 @@ public class ContainerAppStateWorld extends AppStateWorld {
 
         Dimension windowsSize = getGameEngineFacade().getGameWindowDefinition().size;
         topWall = getGameEngineFacade().createSprite(TYPE_WALL);
-        topWall.setArea(0, -1, windowsSize.width, 1);
+        topWall.setArea(0, (-1)*wallThickness, windowsSize.width, wallThickness);
 
         leftWall = getGameEngineFacade().createSprite(TYPE_WALL);
-        leftWall.setArea(-1, 0, 1, windowsSize.height);
+        leftWall.setArea((-1)*wallThickness, 0, wallThickness, windowsSize.height);
 
         rightWall = getGameEngineFacade().createSprite(TYPE_WALL);
-        rightWall.setArea(windowsSize.width, 0, 1, windowsSize.height);
+        rightWall.setArea(windowsSize.width, 0, wallThickness, windowsSize.height);
 
         bottomWall = getGameEngineFacade().createSprite(TYPE_WALL);
-        bottomWall.setArea(0, windowsSize.height, windowsSize.width, 1);
+        bottomWall.setArea(0, windowsSize.height, windowsSize.width, wallThickness);
 
         spawn(topWall);
         spawn(leftWall);

@@ -19,6 +19,7 @@ import com.pokewords.framework.views.SoundPlayer;
 import com.pokewords.framework.views.effects.AppStateTransitionEffect;
 import com.pokewords.framework.views.effects.CrossFadingTransitionEffect;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
+import com.pokewords.weaving.BlackOrWhiteWeaverNode;
 
 public class BlackOrWhite extends GameApplication {
 
@@ -39,12 +40,19 @@ public class BlackOrWhite extends GameApplication {
 
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
+        declareRootType(spriteInitializer);
         declareForMenuState(spriteInitializer);
         declareForGameState(spriteInitializer);
     }
 
+    private void declareRootType(SpriteInitializer spriteInitializer) {
+        spriteInitializer.declare(SpriteTypes.ROOT)
+                .weaver(new BlackOrWhiteWeaverNode())
+                .commit();
+    }
+
     private void declareForMenuState(SpriteInitializer spriteInitializer) {
-        spriteInitializer.declare(SpriteTypes.MENU)
+        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.MENU)
                 .area(0, 0, 800, 600)
                 .with(GifScriptMaker.createSequenceScript("assets/sequences/menu",
                         new Range(0, 57), 0, 57, 0, 58))
@@ -54,15 +62,21 @@ public class BlackOrWhite extends GameApplication {
 
     private void declareForGameState(SpriteInitializer spriteInitializer) {
         declareForGameLayout(spriteInitializer);
-        declareForGameSprites(spriteInitializer);
+        declareGameSprites(spriteInitializer);
     }
 
     private void declareForGameLayout(SpriteInitializer spriteInitializer) {
 
     }
 
-    private void declareForGameSprites(SpriteInitializer spriteInitializer) {
-        spriteInitializer.declare(SpriteTypes.CHARACTER)
+    private void declareGameSprites(SpriteInitializer spriteInitializer) {
+        declareCharacters(spriteInitializer);
+        declareBullets(spriteInitializer);
+        declarePickables(spriteInitializer);
+    }
+
+    private void declareCharacters(SpriteInitializer spriteInitializer) {
+        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.CHARACTER)
                 .with(new CharacterComponent())
                 .commit();
 
@@ -72,11 +86,20 @@ public class BlackOrWhite extends GameApplication {
 
         spriteInitializer.declareFromParent(SpriteTypes.CHARACTER, SpriteTypes.MONSTER)
                 .commit();
+    }
 
-        spriteInitializer.declare(SpriteTypes.BULLET).commit();
+    private void declareBullets(SpriteInitializer spriteInitializer) {
 
-        spriteInitializer.declare(SpriteTypes.PICKABLE_ITEM).commit();
-        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_ITEM, SpriteTypes.PICKABLE_GUN).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.BULLET).commit();
+    }
+
+    private void declarePickables(SpriteInitializer spriteInitializer) {
+        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.PICKABLE_ITEM).commit();
+
+        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.PICKABLE_GUN).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_MACHINE_GUN).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_PISTOL).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_SNIPER_RIFLE).commit();
     }
 
     @Override

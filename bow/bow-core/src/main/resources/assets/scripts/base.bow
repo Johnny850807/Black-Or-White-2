@@ -1,0 +1,15 @@
+
+
+<binding>
+    characterLayer: 2
+</binding>
+
+@enumSpace [
+        com.pokewords.constants.FsmcEvents
+]
+
+<actions>
+    pick: com.pokewords.components.actions.PickComponent
+    shoot: com.pokewords.components.actions.ShootComponent
+    pursue: com.pokewords.components.actions.PursueComponent
+</actions>

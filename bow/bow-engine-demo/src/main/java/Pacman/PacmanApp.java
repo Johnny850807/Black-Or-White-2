@@ -36,7 +36,7 @@ public class PacmanApp extends GameApplication {
 
         spriteInitializer.declare(Types.AI_PARENT)
                 .with(new AiComponent())
-                .with(CollisionListenerComponent.ofListener(new MonsterCollisionListener()))
+                .with(new MonsterCollisionListenerComponent())
                 .with(RigidBodyComponent.getInstance())
                 .weaver(new Set0FrameAsCurrentNodeWeaverNode())
                 .areaSize(35, 35)
@@ -69,13 +69,13 @@ public class PacmanApp extends GameApplication {
 
         spriteInitializer.declare(Types.PLAYER)
                 .with(new ImageComponent(ImageFrameFactory.fromPath(1, "images/smile.png")))
-                .with(KeyListenerComponent.ofListener(new PlayerKeyListener()))
-                .with(CollisionListenerComponent.ofListener(new PacmanCollisionListener()))
+                .with(new PlayerKeyListenerComponent())
+                .with(new PacmanCollisionListenerComponent())
                 .with(new GunComponent(7, 20))
                 .with(new MovingComponent(12))
                 .with(new HpComponent(8))
                 .with(RigidBodyComponent.getInstance())
-                .with(MouseListenerComponent.ofListener(new PlayerMouseListener()))
+                .with(new PlayerMouseListenerComponent())
                 .areaSize( 50, 50)
                 .body(1, 1, 49, 49)
                 .commit();
@@ -86,7 +86,7 @@ public class PacmanApp extends GameApplication {
                                 .font(new Font("微軟正黑體", Font.PLAIN, 25))
                                 .color(Color.black)
                                 .flags(StringFrame.FLAG_STICK_SPRITE_AREA)))
-                .with(MouseListenerComponent.ofListener(new TextMouseListener()))
+                .with(new TextMouseListenerComponent())
                 .position(0, 0)
                 .commit();
 
@@ -94,7 +94,7 @@ public class PacmanApp extends GameApplication {
                 .areaSize(5, 5)
                 .with(new BulletComponent())
                 .with(new RemoveSelfIfOutOfScreen())
-                .with(CollisionListenerComponent.ofListener(new BulletCollisionListener()))
+                .with(new BulletCollisionListenerComponent())
                 .commit();
     }
 
