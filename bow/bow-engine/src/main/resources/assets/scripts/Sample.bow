@@ -1,7 +1,6 @@
 <meta> 0
     @include [
-        bow-engine/src/main/resources/assets/scripts/loadingText.bow,
-        bow-engine/src/main/resources/assets/scripts/BreakerLoadingIcon.bow
+        bow-engine/src/main/resources/assets/scripts/loadingText.bow
     ]
     <parameters>
         speed: 8

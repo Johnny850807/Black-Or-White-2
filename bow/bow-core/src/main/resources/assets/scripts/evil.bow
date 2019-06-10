@@ -1,17 +1,17 @@
 
 
-<meta>
-    @inclusion [
+<meta> 0
+    @include [
         assets/scripts/base.bow
     ]
-    <binding>
+    <parameters>
         walkDuration: 8
         speed: 8
 		damage: 120
-    </binding>
+    </parameters>
 </meta>
 
-<capability>
+<capability> 0
 	hp: 450
 	defense: 35
 </capability>

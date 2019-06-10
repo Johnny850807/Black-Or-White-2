@@ -325,6 +325,7 @@ public interface ScriptSample {
                 "        moveY: 7\n" +
                 "    </effect>\n" +
                 "</frame>";
+
         String SCRIPT_RULES_TEXT =
                 "Segment\n" +
                 "    galleries\n" +

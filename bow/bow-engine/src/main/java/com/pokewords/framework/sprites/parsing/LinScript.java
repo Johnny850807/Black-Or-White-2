@@ -1,5 +1,6 @@
 package com.pokewords.framework.sprites.parsing;
 
+import com.pokewords.framework.commons.utils.Resources;
 import com.pokewords.framework.engine.exceptions.NodeException;
 import com.pokewords.framework.engine.exceptions.ScriptParsingException;
 
@@ -31,12 +32,15 @@ public class LinScript extends Script {
     private void parseMetaSegment(Context context) {
         Segment metaSegment = new AngularSegment();
         metaSegment.parse(context);
-        for (String path : metaSegment.getListNode("include").getList()) {
-            Script script = new LinScript();
-            script.parse(Context.fromPath(path));
-            script.getListNodes().forEach(this::addListNode);
-            script.getSegments().forEach(this::addSegment);
-        }
+        metaSegment.getListNodeOptional("include").ifPresent(listNode -> {
+            for (String path : listNode.getList()) {
+                Script script = new LinScript();
+                script.parse(Context.fromFile(Resources.get(path)));
+                script.getListNodes().forEach(this::addListNode);
+                script.getSegments().forEach(this::addSegment);
+            }
+        });
+
         context.updateTokens(metaSegment.getFirstElement("parameters").getMap());
     }
 
