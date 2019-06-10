@@ -11,6 +11,7 @@ import java.util.Objects;
  * The Shawn's implementation of FiniteStateMachine.
  *
  * @author Shawn
+ * @deprecated
  */
 public class ShawnFiniteStateMachine<T> implements Cloneable {
     private T currentState;

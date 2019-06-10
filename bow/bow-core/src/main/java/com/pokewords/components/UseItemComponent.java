@@ -3,13 +3,17 @@ package com.pokewords.components;
 import com.pokewords.framework.sprites.components.CloneableComponent;
 
 public class UseItemComponent extends CloneableComponent {
-    private Class<? extends ItemComponent> item;
+    private Class<? extends ItemComponent> itemType;
 
-    public void setItem(Class<? extends ItemComponent> item) {
-        this.item = item;
+    public Class<? extends ItemComponent> getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(Class<? extends ItemComponent> itemType) {
+        this.itemType = itemType;
     }
 
     private void use() {
-
+        getOwnerSprite().getComponent(itemType).use();
     }
 }

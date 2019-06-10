@@ -1,5 +1,6 @@
 package com.pokewords.framework.engine.asm.states.multiplayer;
 
+import com.pokewords.framework.commons.utils.NetUtility;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.commons.bundles.Bundle;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
@@ -20,7 +21,6 @@ import java.util.Map;
  * @author johnny850807 (waterball)
  */
 public abstract class MultiplayerRoomState extends AppState implements SessionServer.ClientListener {
-    public final static String KEY_PLAYER_IP_STRING = "playerIp";
     public final static String KEY_PLAYER_NAME_STRING = "playerName";
     public final static String KEY_THEME = "theme";
     public final static String KEY_SERVER_PORT = "serverPort";
@@ -45,21 +45,19 @@ public abstract class MultiplayerRoomState extends AppState implements SessionSe
     public void onReceiveMessageBundle(Bundle bundle) {
         serverPort = bundle.getIntOptional(KEY_SERVER_PORT).orElse(DEFAULT_SERVER_PORT);
 
-        String ip = bundle.getStringOptional(KEY_PLAYER_IP_STRING)
-                .orElseThrow(() -> new IllegalArgumentException("The bundle toward MultiplayerRoomState should be set key KEY_PLAYER_IP_STRING."));
         String name = bundle.getStringOptional(KEY_PLAYER_NAME_STRING)
                 .orElseThrow(() -> new IllegalArgumentException("The bundle toward MultiplayerRoomState should be set key KEY_PLAYER_NAME_STRING."));
 
         theme = (Theme) bundle.getOptional(KEY_THEME).orElse(theme);
 
 
-        this.host = new Player(ip, name, true);
+        this.host = new Player(NetUtility.getIp(), name, true);
     }
 
     @Override
     protected void onAppStateEntering() {
         arrangeStateScene();
-        launchSessionServer();
+        //launchSessionServer();
     }
 
     private void arrangeStateScene() {
@@ -69,6 +67,19 @@ public abstract class MultiplayerRoomState extends AppState implements SessionSe
                 .area(30, 30, 150, 80).commit();
         host.ready = true;
         spawnPlayerCard(host);
+    }
+
+    private void spawnPlayerCard(Player player) {
+        Sprite playerCard = createSprite(Types.CARD);
+        playerCards.add(playerCard);
+        playerCard.addComponent(new PlayerComponent(new PlayerCardFrame(1, player)));
+        playerCard.setPosition(computeNextPlayerCardPosition());
+        getAppStateWorld().spawn(playerCard);
+    }
+
+    private void configWindows() {
+        getGameWindowsConfigurator().gamePanelBackground(theme.backgroundColor)
+                .gameSize(800, 600);
     }
 
     private void launchSessionServer() {
@@ -100,18 +111,6 @@ public abstract class MultiplayerRoomState extends AppState implements SessionSe
     protected abstract void onClientDisconnected(PlayerClient playerClient);
     protected abstract void onServerInit(SessionServer sessionServer);
 
-    private void configWindows() {
-        getGameWindowsConfigurator().gamePanelBackground(theme.backgroundColor)
-                .gameSize(800, 600);
-    }
-
-    private void spawnPlayerCard(Player player) {
-        Sprite playerCard = createSprite(Types.CARD);
-        playerCards.add(playerCard);
-        playerCard.addComponent(new PlayerComponent(new PlayerCardFrame(1, player)));
-        playerCard.setPosition(computeNextPlayerCardPosition());
-        getAppStateWorld().spawn(playerCard);
-    }
 
     private Point computeNextPlayerCardPosition() {
         return new Point(30, 30); //TODO

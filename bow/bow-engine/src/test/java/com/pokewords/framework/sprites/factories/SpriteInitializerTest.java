@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 public class SpriteInitializerTest extends AbstractTest {
     MockPrototypeFactory mockPrototypeFactory;
     MockDefaultSpriteBuilder mockSpriteBuilder;
-    final String TYPE = "type";
+    final String TYPE = "concreteType";
     final MockComponentImp mockComponent = new MockComponentImp();
 
     SpriteInitializer spriteInitializer;
@@ -182,6 +182,18 @@ public class SpriteInitializerTest extends AbstractTest {
         }
     }
 
+    @Test
+    public void testCompositeType() {
+        spriteInitializer.declare("A").commit();
+        spriteInitializer.declareFromParent("A", "B").commit();
+        Sprite sprite = spriteInitializer.declareFromParent("B", "C").commit().create();
+
+        assertTrue(sprite.isType("A"));
+        assertTrue(sprite.isType("B"));
+        assertTrue(sprite.isType("C"));
+        assertEquals("C", sprite.getConcreteType());
+
+    }
     private void declareSprite() {
         spriteInitializer.declare(TYPE)
                 .with(mockComponent)

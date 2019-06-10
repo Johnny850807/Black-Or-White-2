@@ -3,6 +3,7 @@ package Pacman;
 import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.CollisionListenerComponent;
+import com.pokewords.framework.sprites.components.HpComponent;
 
 public class MonsterCollisionListener extends CollisionListenerComponent.Listener {
     private long loopTime;

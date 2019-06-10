@@ -14,7 +14,7 @@ public class MockPrototypeFactory implements PrototypeFactory {
     public Sprite cloneSprite(Object type) {
         if (clonedType.equals(type))
             return prototypeSprite.clone();
-        throw new IllegalArgumentException("The type " + type + "not found.");
+        throw new IllegalArgumentException("The concreteType " + type + "not found.");
     }
 
     @Override
