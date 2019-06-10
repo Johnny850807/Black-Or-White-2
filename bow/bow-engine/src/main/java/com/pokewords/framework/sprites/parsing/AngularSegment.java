@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class AngularSegment extends Segment {
     private KeyValuePairs keyValuePairs = new NoCommaPairs();
     private List<Element> elements = new ArrayList<>();
+    private List<ListNode> listNodes = new ArrayList<>();
 
     public AngularSegment() {
         keyValuePairs.setParent(this);
@@ -65,14 +66,20 @@ public class AngularSegment extends Segment {
                 context.consumeOneToken();
                 return;
             }
-            if (context.peekToken().matches("<[^/\\s]\\S+>")) { // It's element
-                Element element = new AngularElement();
-                element.parse(context);
-                addElement(element);
+            if (context.peekToken().matches("")) { // It's listNode
+                ListNode listNode = new BracketCommaListNode();
+                listNode.parse(context);
+                addListNode(listNode);
                 continue;
             }
             if (context.peekToken().matches("[^\\s:<>\\[\\]]+")) { //It's key
                 keyValuePairs.parse(context);
+                continue;
+            }
+            if (context.peekToken().matches("<[^/\\s]\\S+>")) { // It's element
+                Element element = new AngularElement();
+                element.parse(context);
+                addElement(element);
                 continue;
             }
             throw new ScriptParsingException("Segment body contains something neither key-value pair nor element.");
@@ -90,6 +97,10 @@ public class AngularSegment extends Segment {
         resultBuilder.append(keyValuePairs.toString(indent).replaceAll(
                 "([^\n]*\n)",
                 spaces + "$1"));
+        listNodes.forEach(listNode ->
+                resultBuilder.append(listNode.toString(indent).replaceAll(
+                        "([^\n]*\n)",
+                        spaces + "$1")));
         elements.forEach(element ->
                 resultBuilder.append(element.toString(indent).replaceAll(
                         "([^\n]*\n)",
@@ -164,5 +175,37 @@ public class AngularSegment extends Segment {
     public Optional<Element> getFirstElementOptional(String name) {
         List<Element> result = getElements(name);
         return result.size() > 0? Optional.of(result.get(0)) : Optional.empty();
+    }
+
+    @Override
+    public void addListNode(ListNode listNode) {
+        if (listNode == null)
+            throw new NodeException("Cannot add null list node.");
+        if (containsListNode(listNode.getName()))
+            throw new NodeException("List node name duplicated: " + listNode.getName());
+        listNodes.add(listNode);
+        listNode.setParent(this);
+    }
+
+    @Override
+    public boolean containsListNode(String name) {
+        for (ListNode listNode : listNodes)
+            if (listNode.getName().equals(name))
+                return true;
+        return false;
+    }
+
+    @Override
+    public ListNode getListNode(String name) {
+        for (ListNode listNode : listNodes)
+            if (listNode.getName().equals(name))
+                return listNode;
+        return null;
+    }
+
+    @Override
+    public Optional<ListNode> getListNodeOptional(String name) {
+        ListNode result = getListNode(name);
+        return result == null? Optional.empty() : Optional.of(result);
     }
 }

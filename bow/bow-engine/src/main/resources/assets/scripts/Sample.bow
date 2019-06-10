@@ -1,4 +1,4 @@
-<meta>
+<meta> 0
     @include [
         path/to/another/script.bow,
         path/to/another/script2.bow

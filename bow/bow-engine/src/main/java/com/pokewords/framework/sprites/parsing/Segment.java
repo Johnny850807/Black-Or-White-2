@@ -44,4 +44,9 @@ public abstract class Segment extends Element {
     public abstract List<Element> getElements(String name);
     public abstract Element getFirstElement(String name);
     public abstract Optional<Element> getFirstElementOptional(String name);
+
+    public abstract void addListNode(ListNode listNode);
+    public abstract boolean containsListNode(String name);
+    public abstract ListNode getListNode(String name);
+    public abstract Optional<ListNode> getListNodeOptional(String name);
 }
