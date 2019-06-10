@@ -35,13 +35,16 @@ public class LinScript extends Script {
         metaSegment.getListNodeOptional("include").ifPresent(listNode -> {
             for (String path : listNode.getList()) {
                 Script script = new LinScript();
-                script.parse(Context.fromFile(Resources.get(path)));
+                Context newContext = Context.fromFile(Resources.get(path));
+                script.parse(newContext);
+                context.inheritBindingsFrom(newContext);
                 script.getListNodes().forEach(this::addListNode);
                 script.getSegments().forEach(this::addSegment);
             }
         });
-
-        context.updateTokens(metaSegment.getFirstElement("parameters").getMap());
+        metaSegment.getFirstElementOptional("parameters")
+                .ifPresent(element -> context.registerBindings(element.getMap()));
+        context.applyBinding();
     }
 
     private void parseOneNode(Context context) {

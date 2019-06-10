@@ -37,6 +37,7 @@ public class Context {
     private int currentLineNumber;
     private int recentContinuousNewlinesCount;
     private String source;
+    private Map<String, String> globalBindings = new HashMap<>();
 
     private Context(String scriptText, File file) {
         this(scriptText);
@@ -146,16 +147,22 @@ public class Context {
         recentContinuousNewlinesCount = 0;
     }
 
-    public void updateTokens(Map<String, String> map) {
+    public void inheritBindingsFrom(Context context) {
+        context.globalBindings.forEach(globalBindings::put);
+    }
+
+    public void registerBindings(Map<String, String> bindings) {
+        bindings.forEach(globalBindings::put);
+    }
+
+    public void applyBinding() {
         StringBuilder builder = new StringBuilder();
         tokens.forEach(token -> builder.append(" ").append(token));
-        tokens.clear();
         String remainingText = builder.toString();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            remainingText = remainingText.replaceAll(
-                    "[$]" + Pattern.quote(entry.getKey()),
-                    entry.getValue());
-        }
+        for (Map.Entry<String, String> entry : globalBindings.entrySet())
+            remainingText = remainingText
+                    .replaceAll("[$]" + Pattern.quote(entry.getKey()), entry.getValue());
+        tokens.clear();
         tokenize(remainingText);
     }
 
