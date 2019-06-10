@@ -3,12 +3,11 @@ package com.pokewords.framework.sprites.parsing;
 import com.pokewords.framework.engine.exceptions.NodeException;
 import com.pokewords.framework.engine.exceptions.ScriptParsingException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * WARNING: No detection of inclusion conflict.
  * @author nyngwang
  */
 public class LinScript extends Script {
@@ -19,26 +18,35 @@ public class LinScript extends Script {
     public void parse(Context context) {
         if (!context.hasNextToken())
             throw new ScriptParsingException("Empty script is not allowed.");
+        if (context.peekToken().equals("<meta>"))
+            parseMetaSegment(context);
+        do {
+            if (context.peekToken().equals("<meta>"))
+                throw new ScriptParsingException(
+                        "Meta segment should appear at the beginning of the script.");
+            parseOneNode(context);
+        } while (context.hasNextToken());
+    }
 
-        while (true) {
-            if (!context.peekToken().matches("<meta>")) {
-                do {
-                    parseOneNode(context);
-                } while (context.hasNextToken());
-                return;
-            }
-            MetaSegment metaSegment = new MetaSegment();
-            metaSegment.parse(context);
+    private void parseMetaSegment(Context context) {
+        Segment metaSegment = new AngularSegment();
+        metaSegment.parse(context);
+        for (String path : metaSegment.getListNode("include").getList()) {
+            Script script = new LinScript();
+            script.parse(Context.fromPath(path));
+            script.getListNodes().forEach(this::addListNode);
+            script.getSegments().forEach(this::addSegment);
         }
+        context.updateTokens(metaSegment.getFirstElement("parameters").getMap());
     }
 
     private void parseOneNode(Context context) {
         String nextToken = context.peekToken();
-        if (nextToken.matches("<[^/\\s]\\S+>")) {
+        if (nextToken.matches("<[^/\\s]\\S+>")) { // Segment
             Segment segment = new AngularSegment();
             segment.parse(context);
             addSegment(segment);
-        } else if (nextToken.matches("@\\w+")) {
+        } else if (nextToken.matches("@\\w+")) { // ListNode
             ListNode listNode = new BracketCommaListNode();
             listNode.parse(context);
             addListNode(listNode);
@@ -50,6 +58,9 @@ public class LinScript extends Script {
     public String toString(int indent) {
         StringBuilder resultBuilder = new StringBuilder();
         String spaces = new String(new char[indent]).replace("\0", " ");
+        listNodes.forEach(listNode ->
+                resultBuilder.append(
+                        listNode.toString(indent).replaceAll("([^\n]*\n)", spaces + "$1")));
         segments.sort((o1, o2) -> {
             String leftName = o1.getName();
             String rightName = o2.getName();

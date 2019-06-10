@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 public class Context {
     public static Context fromFile(File file) {
         try {
-            return fromText(FileUtility.read(file));
+            return new Context(FileUtility.read(file), file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -23,7 +23,7 @@ public class Context {
 
     public static Context fromPath(String path) {
         try {
-            return fromText(FileUtility.read(path));
+            return new Context(FileUtility.read(path), path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -36,11 +36,23 @@ public class Context {
     private List<String> tokens;
     private int currentLineNumber;
     private int recentContinuousNewlinesCount;
+    private String source;
+
+    private Context(String scriptText, File file) {
+        this(scriptText);
+        source = file.getPath();
+    }
+
+    private Context(String scriptText, String path) {
+        this(scriptText);
+        source = path;
+    }
 
     private Context(String scriptText) {
         tokens = new ArrayList<>();
         currentLineNumber = 1;
         recentContinuousNewlinesCount = 0;
+        source = "String";
         tokenize(scriptText);
     }
 
@@ -54,6 +66,10 @@ public class Context {
                 throw new ScriptParsingException(String.format("Cannot tokenize the symbol: %s", matcher.group(2)));
             tokens.add(matcher.group(1));
         }
+    }
+
+    public String getErrorHeader() {
+        return String.format("%s: %s", source, currentLineNumber);
     }
 
     /**
@@ -86,7 +102,7 @@ public class Context {
 
     public void consumeOneToken(String noMoreToken) {
         if (!hasNextToken())
-            throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMoreToken));
+            throw new ScriptParsingException(String.format("(%s) %s", getErrorHeader(), noMoreToken));
 
         recentContinuousNewlinesCount = 0;
 
@@ -119,7 +135,7 @@ public class Context {
         String token = peekToken();
         consumeOneToken();
         if (!token.matches(regex))
-            throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMatch));
+            throw new ScriptParsingException(String.format("(%s) %s", getErrorHeader(), noMatch));
         return token;
     }
 
@@ -130,7 +146,7 @@ public class Context {
         recentContinuousNewlinesCount = 0;
     }
 
-    public void applyBinding(Map<String, String> map) {
+    public void updateTokens(Map<String, String> map) {
         StringBuilder builder = new StringBuilder();
         tokens.forEach(token -> builder.append(" ").append(token));
         String remainingText = builder.toString();
@@ -140,10 +156,6 @@ public class Context {
                     entry.getValue());
         }
         tokenize(remainingText);
-    }
-
-    public void applyInclusion(String path) {
-
     }
 
     public int getCurrentLineNumber() {

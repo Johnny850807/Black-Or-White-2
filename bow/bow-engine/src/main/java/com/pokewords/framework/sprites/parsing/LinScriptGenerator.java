@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * TODO: update with new Script abstract class
+ * @author nyngwang
+ */
 public class LinScriptGenerator extends Script {
     public static LinScript fromPath(String path) {
         LinScriptGenerator generator = new LinScriptGenerator();

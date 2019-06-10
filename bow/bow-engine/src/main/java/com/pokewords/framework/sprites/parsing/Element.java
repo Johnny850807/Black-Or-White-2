@@ -1,12 +1,8 @@
 package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.commons.bundles.Packable;
-import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
 import javafx.util.Pair;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 
 /**
@@ -43,6 +39,7 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
     }
 
     public abstract KeyValuePairs getKeyValuePairs();
+    public abstract Map<String, String> getMap();
     public abstract int getInt(String key);
     public abstract String getString(String key);
 }

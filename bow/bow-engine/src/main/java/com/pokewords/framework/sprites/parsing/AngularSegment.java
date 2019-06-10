@@ -7,10 +7,7 @@ import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -114,6 +111,11 @@ public class AngularSegment extends Segment {
     @Override
     public KeyValuePairs getKeyValuePairs() {
         return keyValuePairs;
+    }
+
+    @Override
+    public Map<String, String> getMap() {
+        return keyValuePairs.getMap();
     }
 
     @Override

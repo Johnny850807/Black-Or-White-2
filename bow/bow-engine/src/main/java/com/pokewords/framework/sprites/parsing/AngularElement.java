@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author nyngwang
@@ -47,6 +48,11 @@ public class AngularElement extends Element {
     @Override
     public KeyValuePairs getKeyValuePairs() {
         return keyValuePairs;
+    }
+
+    @Override
+    public Map<String, String> getMap() {
+        return keyValuePairs.getMap();
     }
 
     @Override
