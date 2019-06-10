@@ -249,11 +249,16 @@ public class PropertiesComponent extends CloneableComponent {
         public Rectangle body = new Rectangle();
         public Point center = new Point();
 
-
         protected void recordStates() {
             this.area.setBounds(getArea());
             this.body.setBounds(getBody());
             this.center.setLocation(getCenter());
+        }
+
+        public void resume() {
+            setArea(area);
+            setBody(body);
+            setCenter(center);
         }
     }
 }

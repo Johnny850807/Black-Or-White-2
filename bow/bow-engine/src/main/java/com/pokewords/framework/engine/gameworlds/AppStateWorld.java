@@ -283,16 +283,16 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
             case NO_DIRECTION:
                 break;
             case RIGHT:
-                collidingSprite.moveX((-1) * intersection.width);
+                collidingSprite.getArea().translate((-1) * intersection.width, 0);
                 break;
             case LEFT:
-                collidingSprite.moveX(intersection.width);
+                collidingSprite.getArea().translate(intersection.width, 0);
                 break;
             case UP:
-                collidingSprite.moveY(intersection.height);
+                collidingSprite.getArea().translate(0, intersection.height);
                 break;
             case DOWN:
-                collidingSprite.moveY((-1) * intersection.height);
+                collidingSprite.getArea().translate(0, (-1) * intersection.height);
                 break;
             default:
                 throw new InternalError("The bodyMovingDirection is atomic.");
