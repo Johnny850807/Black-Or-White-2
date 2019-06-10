@@ -1,21 +1,24 @@
 package com.pokewords.framework.sprites.parsing;
 
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+/**
+ * @author nyngwang
+ */
+public class MetaSegment extends AngularSegment {
+    private ListNode include = new BracketCommaListNode();
+    private Element parameters = new AngularElement();
 
-public class MetaSegment extends Segment {
-    public MetaSegment(Node parent, String name, @NotNull KeyValuePairs keyValuePairs, int id, String description, List<Element> elements) {
-        super(parent, name, keyValuePairs, id, description, elements);
+    public MetaSegment() {
+        setName("<meta>");
     }
 
     @Override
     public void parse(Context context) {
-
-    }
-
-    @Override
-    public String toString(int indent) {
-        return null;
+        String openTag = context.fetchNextToken(
+                "<meta>", "Invalid meta open tag: " + context.peekToken());
+        include.parse(context);
+        parameters.parse(context);
+        String closeTag = context.fetchNextToken(
+                "</meta>", "Invalid meta close tag: " + context.peekToken());
     }
 }

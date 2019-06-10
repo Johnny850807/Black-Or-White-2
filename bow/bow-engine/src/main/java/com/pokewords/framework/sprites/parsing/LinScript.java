@@ -20,28 +20,29 @@ public class LinScript extends Script {
         if (!context.hasNextToken())
             throw new ScriptParsingException("Empty script is not allowed.");
 
-
-
-        do {
-            parseAndAddNextNodeByToken(context);
-        } while (context.hasNextToken());
+        while (true) {
+            if (!context.peekToken().matches("<meta>")) {
+                do {
+                    parseOneNode(context);
+                } while (context.hasNextToken());
+                return;
+            }
+            MetaSegment metaSegment = new MetaSegment();
+            metaSegment.parse(context);
+        }
     }
 
-    private void parseAndAddNextNodeByToken(Context context) {
+    private void parseOneNode(Context context) {
         String nextToken = context.peekToken();
-        if (nextToken.matches("<[^/\\s]\\S+>"))
-        {
+        if (nextToken.matches("<[^/\\s]\\S+>")) {
             Segment segment = new AngularSegment();
             segment.parse(context);
             addSegment(segment);
-        }
-        else if (nextToken.matches("@\\w+"))
-        {
+        } else if (nextToken.matches("@\\w+")) {
             ListNode listNode = new BracketCommaListNode();
             listNode.parse(context);
             addListNode(listNode);
-        }
-        else
+        } else
             throw new ScriptParsingException("Script body cannot contain: " + nextToken);
     }
 
@@ -49,7 +50,7 @@ public class LinScript extends Script {
     public String toString(int indent) {
         StringBuilder resultBuilder = new StringBuilder();
         String spaces = new String(new char[indent]).replace("\0", " ");
-        getSegments().sort((o1, o2) -> {
+        segments.sort((o1, o2) -> {
             String leftName = o1.getName();
             String rightName = o2.getName();
             int leftId = o1.getId();
@@ -57,9 +58,9 @@ public class LinScript extends Script {
             return leftName.compareTo(rightName) == 0? Integer.compare(leftId, rightId)
                     : leftName.compareTo(rightName);
         });
-        getSegments().forEach(segment ->
-                resultBuilder.append(segment.toString(indent)
-                        .replaceAll("([^\n]*\n)", spaces + "$1")));
+        segments.forEach(segment ->
+                resultBuilder.append(
+                        segment.toString(indent).replaceAll("([^\n]*\n)", spaces + "$1")));
         return resultBuilder.toString();
     }
 

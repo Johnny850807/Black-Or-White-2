@@ -130,15 +130,20 @@ public class Context {
         recentContinuousNewlinesCount = 0;
     }
 
-    public void bind(Map<String, String> map) {
+    public void applyBinding(Map<String, String> map) {
         StringBuilder builder = new StringBuilder();
         tokens.forEach(token -> builder.append(" ").append(token));
         String remainingText = builder.toString();
-        map.forEach((key, value) ->
-            remainingText.replaceAll(
-                    "([-+]?)[$]" + Pattern.quote(key),
-                    "$1" + value));
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            remainingText = remainingText.replaceAll(
+                    "[$]" + Pattern.quote(entry.getKey()),
+                    entry.getValue());
+        }
         tokenize(remainingText);
+    }
+
+    public void applyInclusion(String path) {
+
     }
 
     public int getCurrentLineNumber() {
