@@ -46,7 +46,7 @@ public class LinScript extends Script {
             Segment segment = new AngularSegment();
             segment.parse(context);
             addSegment(segment);
-        } else if (nextToken.matches("@\\w+")) { // ListNode
+        } else if (nextToken.matches("@\\S+")) { // ListNode
             ListNode listNode = new BracketCommaListNode();
             listNode.parse(context);
             addListNode(listNode);

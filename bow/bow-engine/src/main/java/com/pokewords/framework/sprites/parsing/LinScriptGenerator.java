@@ -2,14 +2,11 @@ package com.pokewords.framework.sprites.parsing;
 
 import com.pokewords.framework.engine.exceptions.ScriptParsingException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * TODO: update with new Script abstract class
+ * TODO: Should check it again.
  * @author nyngwang
  */
 public class LinScriptGenerator extends Script {
@@ -177,5 +174,85 @@ public class LinScriptGenerator extends Script {
         Script LinScript = LinScriptGenerator.fromPath(
                 "bow-engine/src/main/resources/assets/scripts/templateTest.bow");
         System.out.println(LinScript);
+    }
+
+    @Override
+    public void addListNode(ListNode listNode) {
+
+    }
+
+    @Override
+    public List<ListNode> getListNodes() {
+        return null;
+    }
+
+    @Override
+    public boolean containsListNode(String name) {
+        return false;
+    }
+
+    @Override
+    public List<ListNode> getListNodes(String name) {
+        return null;
+    }
+
+    @Override
+    public ListNode getFirstListNode(String name) {
+        return null;
+    }
+
+    @Override
+    public Optional<ListNode> getFirstListNodeOptional(String name) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void addSegment(Segment segment) {
+
+    }
+
+    @Override
+    public List<Segment> getSegments() {
+        return null;
+    }
+
+    @Override
+    public boolean containsSegment(String name) {
+        return false;
+    }
+
+    @Override
+    public boolean containsSegmentId(int id) {
+        return false;
+    }
+
+    @Override
+    public boolean containsSegmentDescription(String description) {
+        return false;
+    }
+
+    @Override
+    public List<Segment> getSegments(String name) {
+        return null;
+    }
+
+    @Override
+    public List<Segment> getSegmentsById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Segment> getSegmentsByDescription(String description) {
+        return null;
+    }
+
+    @Override
+    public Segment getFirstSegment(String name) {
+        return null;
+    }
+
+    @Override
+    public Optional<Segment> getFirstSegmentOptional(String name) {
+        return Optional.empty();
     }
 }

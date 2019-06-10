@@ -58,7 +58,7 @@ public class Context {
 
     private void tokenize(String scriptText) {
         // TODO: Generator's [1 2 3 4] should be parsed into tokens: [, 1, 2, 3, 4, ]
-        Pattern pattern = Pattern.compile("(<\\S+>|\\[[^,]+?]|[^:,\\s]+|:|,|\\[|]|\\n)|(\\S+)");
+        Pattern pattern = Pattern.compile("(<\\S+>|[^:,\\s]+|:|,|\\[|]|\\n)|(\\S+)");
         Matcher matcher = pattern.matcher(scriptText);
 
         while (matcher.find()) {
@@ -149,6 +149,7 @@ public class Context {
     public void updateTokens(Map<String, String> map) {
         StringBuilder builder = new StringBuilder();
         tokens.forEach(token -> builder.append(" ").append(token));
+        tokens.clear();
         String remainingText = builder.toString();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             remainingText = remainingText.replaceAll(
@@ -156,6 +157,12 @@ public class Context {
                     entry.getValue());
         }
         tokenize(remainingText);
+    }
+
+    public String getString() {
+        StringBuilder builder = new StringBuilder();
+        tokens.forEach(token -> builder.append(" ").append(token));
+        return builder.toString();
     }
 
     public int getCurrentLineNumber() {

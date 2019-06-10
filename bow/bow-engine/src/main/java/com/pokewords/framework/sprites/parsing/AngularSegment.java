@@ -27,6 +27,10 @@ public class AngularSegment extends Segment {
         keyValuePairs.setParent(this);
     }
 
+    public AngularSegment(String name, int id) {
+        this(name, id, null);
+    }
+
     @Override
     public void parse(Context context) {
         String openTag = context.fetchNextToken(
@@ -49,7 +53,8 @@ public class AngularSegment extends Segment {
         }
 
         // No description: (1) key : (2) <element> ?
-        if (at1AfterId.matches("<[^/\\s]\\S+>") || at2AfterId.matches(":")) {
+        if (at1AfterId.matches("<[^/\\s]\\S+>")
+                || at2AfterId.matches(":") || at2AfterId.matches("\\[")) {
             setDescription(null);
             context.putBack(at2AfterId);
             context.putBack(at1AfterId);
@@ -63,7 +68,7 @@ public class AngularSegment extends Segment {
                 context.consumeOneToken();
                 return;
             }
-            if (context.peekToken().matches("")) { // It's listNode
+            if (context.peekToken().matches("@\\S+")) { // It's listNode
                 ListNode listNode = new BracketCommaListNode();
                 listNode.parse(context);
                 addListNode(listNode);
@@ -79,7 +84,8 @@ public class AngularSegment extends Segment {
                 addElement(element);
                 continue;
             }
-            throw new ScriptParsingException("Segment body contains something neither key-value pair nor element.");
+            throw new ScriptParsingException(
+                    "Cannot recognize symbol in segment body: " + context.peekToken());
         } while (true);
     }
 

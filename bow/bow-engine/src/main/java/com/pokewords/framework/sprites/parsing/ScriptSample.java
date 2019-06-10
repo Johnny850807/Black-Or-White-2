@@ -363,7 +363,7 @@ public interface ScriptSample {
     }
     static void main(String[] args) {
         Script linScript = new LinScript();
-        linScript.parse(Context.fromText(LINSCRIPT.SCRIPT_TEXT));
-        System.out.println(linScript);
+        linScript.parse(Context.fromPath("bow-engine/src/main/resources/assets/scripts/Sample.bow"));
+        System.out.println(linScript.toString(4));
     }
 }
