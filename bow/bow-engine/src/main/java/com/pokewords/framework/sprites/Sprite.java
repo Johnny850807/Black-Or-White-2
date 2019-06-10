@@ -280,6 +280,7 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
     public void move(int velocityX, int velocityY) {
 		getPropertiesComponent().move(velocityX, velocityY);
 	}
+
     public void moveX(int velocityX) {
 		getPropertiesComponent().moveX(velocityX);
 	}
@@ -299,6 +300,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 
 	public void resumeToLatestPosition() {
 		getPropertiesComponent().resumeToLatestPosition();
+	}
+
+	public PropertiesComponent.LatestStates getLatestProperties() {
+		return getPropertiesComponent().getLatestStates();
 	}
 
 	public Sprite clone(){

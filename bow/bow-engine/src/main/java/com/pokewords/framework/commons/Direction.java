@@ -213,9 +213,9 @@ public enum Direction {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "Duplicates"})
     public static Direction getDirectionFromOnePointToAnother(Point fromPoint, Point toPoint) {
-        Point difference = new Point(fromPoint.x - toPoint.x, fromPoint.y - toPoint.y);
+        Point difference = new Point(toPoint.x - fromPoint.x, toPoint.y - fromPoint.y);
         int x = difference.x;
         int y = difference.y;
 
@@ -234,6 +234,39 @@ public enum Direction {
             return LEFT;
         if (x < 0 && y < 0)
             return LEFT_UP;
+        if (x == 0 && y < 0)
+            return UP;
+        if (x == 0 && y > 0)
+            return DOWN;
+
+        throw new InternalError("All possible conditions are listed above, this line should not be reached.");
+    }
+
+    /**
+     * The difference between this method and getDirectionFromOnePointToAnother(), is that this method only
+     * return the atomic direction (left, up, right, down) by looking up the primary direction when it's a composite direction.
+     */
+    @SuppressWarnings({"ConstantConditions", "Duplicates"})
+    public static Direction getAtomicDirectionFromOnePointToAnother(Point fromPoint, Point toPoint) {
+        Point difference = new Point(toPoint.x - fromPoint.x, toPoint.y - fromPoint.y);
+        int x = difference.x;
+        int y = difference.y;
+
+        if (x == 0 && y == 0)
+            return NO_DIRECTION;
+
+        if (x > 0 && y > 0)
+            return x > y ? RIGHT : DOWN;
+        if (x > 0 && y == 0)
+            return RIGHT;
+        if (x > 0 && y < 0)
+            return x > Math.abs(y) ? RIGHT : UP;
+        if (x < 0 && y > 0)
+            return Math.abs(x) > y ? LEFT : DOWN;
+        if (x < 0 && y == 0)
+            return LEFT;
+        if (x < 0 && y < 0)
+            return Math.abs(x) > Math.abs(y) ? LEFT : UP;
         if (x == 0 && y < 0)
             return UP;
         if (x == 0 && y > 0)

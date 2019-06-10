@@ -1,5 +1,6 @@
 package com.pokewords.framework.engine.gameworlds;
 
+import com.pokewords.framework.commons.Direction;
 import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.engine.gameworlds.CollisionHandler.TargetPair;
@@ -237,7 +238,6 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
 
         if (!rigidlyCollidedSprites.isEmpty()) {
             notifySpriteRigidCollisionListener(sprite, rigidlyCollidedSprites);
-            sprite.resumeToLatestPosition();
         }
     }
 
@@ -270,29 +270,34 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
             rigidCollidedSprite.locateComponents(CollisionListenerComponent.class)
                     .forEach(c -> c.onRigidCollisionWithSprite(collidingSprite));
 
-//            resolveRigidCollisionPositions(collidingSprite, rigidCollidedSprite);
+            resolveRigidCollisionPositions(collidingSprite, rigidCollidedSprite);
         }
     }
 
-/* TODO rigid collision resolving algorithm
 
     private void resolveRigidCollisionPositions(Sprite collidingSprite, Sprite collidedSprite) {
+        Direction bodyMovingDirection = Direction.getAtomicDirectionFromOnePointToAnother(
+                collidingSprite.getLatestProperties().body.getLocation(), collidingSprite.getBody().getLocation());
         Rectangle intersection = collidingSprite.getBody().intersection(collidedSprite.getBody());
-        if (intersection.width < intersection.height)
-        {
-            if (collidingSprite.getX() < collidedSprite.getX())
+        switch (bodyMovingDirection) {
+            case NO_DIRECTION:
+                break;
+            case RIGHT:
                 collidingSprite.moveX((-1) * intersection.width);
-            else
+                break;
+            case LEFT:
                 collidingSprite.moveX(intersection.width);
-        }
-        else
-        {
-            if (collidingSprite.getY() < collidedSprite.getY())
-                collidingSprite.moveY((-1) * intersection.height);
-            else
+                break;
+            case UP:
                 collidingSprite.moveY(intersection.height);
+                break;
+            case DOWN:
+                collidingSprite.moveY((-1) * intersection.height);
+                break;
+            default:
+                throw new InternalError("The bodyMovingDirection is atomic.");
         }
-    }*/
+    }
 
 
     /**

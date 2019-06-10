@@ -11,8 +11,8 @@ import java.util.Objects;
  * @author johnny850807 (waterball)
  */
 public class PropertiesComponent extends CloneableComponent {
+    private LatestStates latestStates = new LatestStates();
     private Rectangle area = new Rectangle();
-    private Point latestPosition = new Point();
     private Rectangle body = new Rectangle();
     private Point center = new Point();
     private boolean hasBody = false;
@@ -27,6 +27,7 @@ public class PropertiesComponent extends CloneableComponent {
 
     public PropertiesComponent(Object ...types) {
         this.compositeType = new CompositeType(types);
+        latestStates.recordStates();
     }
 
 
@@ -49,12 +50,13 @@ public class PropertiesComponent extends CloneableComponent {
     public PropertiesComponent clone() {
         PropertiesComponent clone = (PropertiesComponent) super.clone();
         clone.area = (Rectangle) this.area.clone();
-        clone.latestPosition = this.area.getLocation();
         clone.positionChangedListeners = new HashSet<>();
         if (hasBody)
             clone.body = (Rectangle) this.body.clone();
         if (hasCenter)
             clone.center = (Point) this.center.clone();
+        clone.latestStates = clone.new LatestStates();
+        clone.latestStates.recordStates();
         return clone;
     }
 
@@ -68,6 +70,7 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void setBody(int x, int y, int w, int h) {
+        latestStates.recordStates();
         this.body.setBounds(x, y, w, h);
         hasBody = true;
     }
@@ -85,7 +88,7 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void move(int velocityX, int velocityY) {
-        recordLatestPosition();
+        latestStates.recordStates();
         getArea().translate(velocityX, velocityY);
         notifyPositionChangedListeners();
     }
@@ -115,7 +118,7 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void setPosition(int x, int y) {
-        recordLatestPosition();
+        latestStates.recordStates();
         getArea().setLocation(x, y);
         notifyPositionChangedListeners();
     }
@@ -129,7 +132,7 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void setArea(int x, int y, int w, int h) {
-        recordLatestPosition();
+        latestStates.recordStates();
         boolean positionChanged = getArea().x != x || getArea().y != y;
         getArea().setBounds(x, y, w, h);
 
@@ -137,12 +140,13 @@ public class PropertiesComponent extends CloneableComponent {
             notifyPositionChangedListeners();
     }
 
-    public void setAreaSize(int w, int h) {
-        getArea().setSize(w, h);
+    public void setAreaSize(Dimension area) {
+        setAreaSize(area.width, area.height);
     }
 
-    public void setAreaSize(Dimension area) {
-        getArea().setSize(area);
+    public void setAreaSize(int w, int h) {
+        latestStates.recordStates();
+        getArea().setSize(w, h);
     }
 
     public Dimension getAreaSize() {
@@ -165,12 +169,12 @@ public class PropertiesComponent extends CloneableComponent {
         return false;
     }
 
-    public void setType(CompositeType type) {
-        this.compositeType = type;
+    public void setType(Object ...types) {
+        setType(new CompositeType(types));
     }
 
-    public void setType(Object ...types) {
-        this.compositeType = new CompositeType(types);
+    public void setType(CompositeType type) {
+        this.compositeType = type;
     }
 
     public CompositeType getType() {
@@ -186,6 +190,7 @@ public class PropertiesComponent extends CloneableComponent {
     }
 
     public void setCenter(int x, int y) {
+        latestStates.recordStates();
         center.setLocation(x, y);
         hasCenter = true;
     }
@@ -200,12 +205,12 @@ public class PropertiesComponent extends CloneableComponent {
         return center;
     }
 
-    private void recordLatestPosition() {
-        latestPosition.setLocation(area.getX(), area.getY());
+    public void resumeToLatestPosition() {
+        area.setLocation(latestStates.area.getLocation());
     }
 
-    public void resumeToLatestPosition() {
-        area.setLocation(latestPosition.x, latestPosition.y);
+    public LatestStates getLatestStates() {
+        return latestStates;
     }
 
     public void notifyPositionChangedListeners() {
@@ -238,4 +243,17 @@ public class PropertiesComponent extends CloneableComponent {
                 '}';
     }
 
+
+    public class LatestStates {
+        public Rectangle area = new Rectangle();
+        public Rectangle body = new Rectangle();
+        public Point center = new Point();
+
+
+        protected void recordStates() {
+            this.area.setBounds(getArea());
+            this.body.setBounds(getBody());
+            this.center.setLocation(getCenter());
+        }
+    }
 }
