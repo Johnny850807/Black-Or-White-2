@@ -257,7 +257,7 @@ public class PropertiesComponent extends CloneableComponent {
 
         public void resume() {
             setArea(area);
-            setBody(body);
+            setBody(body.x - area.x, body.y - area.y, body.width, body.height);
             setCenter(center);
         }
     }

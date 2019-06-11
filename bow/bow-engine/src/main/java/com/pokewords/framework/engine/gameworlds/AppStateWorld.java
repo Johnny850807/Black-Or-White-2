@@ -230,6 +230,7 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
 
     @Override
     public void onSpritePositionChanged(Sprite sprite) {
+        System.out.println("Latest: " + sprite.getLatestProperties().body + ", Current: " + sprite.getBody());
         blockTheSpriteIfRigidCollisionOccurs(sprite);
     }
 
@@ -276,29 +277,31 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
 
 
     private void resolveRigidCollisionPositions(Sprite collidingSprite, Sprite collidedSprite) {
-        Direction bodyMovingDirection = Direction.getAtomicDirectionFromOnePointToAnother(
-                collidingSprite.getLatestProperties().body.getLocation(), collidingSprite.getBody().getLocation());
         Rectangle intersection = collidingSprite.getBody().intersection(collidedSprite.getBody());
-        switch (bodyMovingDirection) {
-            case NO_DIRECTION:
-                break;
-            case RIGHT:
-                collidingSprite.getArea().translate((-1) * intersection.width, 0);
-                break;
-            case LEFT:
-                collidingSprite.getArea().translate(intersection.width, 0);
-                break;
-            case UP:
-                collidingSprite.getArea().translate(0, intersection.height);
-                break;
-            case DOWN:
-                collidingSprite.getArea().translate(0, (-1) * intersection.height);
-                break;
-            default:
-                throw new InternalError("The bodyMovingDirection is atomic.");
-        }
+        if (collidingSprite.getBody().contains(collidedSprite.getBody()))
+            resolveRigidCollisionPositionsInCompletedCoveringCase(collidingSprite, collidedSprite);
+        else if (intersection.width == intersection.height)
+            resolveRigidCollisionPositionsInAsideSquareIntersectionCase(collidingSprite, collidedSprite, intersection);
+        else
+            resolveRigidCollisionPositionsInAsideRectangularIntersectionCase(collidingSprite, collidedSprite, intersection);
+
     }
 
+    private void resolveRigidCollisionPositionsInCompletedCoveringCase(Sprite collidingSprite, Sprite collidedSprite) {
+
+    }
+
+    private void resolveRigidCollisionPositionsInAsideSquareIntersectionCase(Sprite collidingSprite, Sprite collidedSprite, Rectangle intersectionSquare) {
+
+    }
+
+    private void resolveRigidCollisionPositionsInAsideRectangularIntersectionCase(Sprite collidingSprite, Sprite collidedSprite, Rectangle intersectionRect) {
+
+    }
+
+    private Direction getChangingDirectionBetweenTwoRectangles(Rectangle rect1, Rectangle rect2) {
+
+    }
 
     /**
      * @return a set of sprites with the area (w, h) from the center point of the given sprite

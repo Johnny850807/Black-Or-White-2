@@ -274,4 +274,47 @@ public enum Direction {
 
         throw new InternalError("All possible conditions are listed above, this line should not be reached.");
     }
+
+    @SuppressWarnings("Duplicates")
+    public static Direction getAtomicScalingDirectionBetweenTwoRectangles(Rectangle fromRect, Rectangle toRect) {
+        if (fromRect.equals(toRect))
+            return NO_DIRECTION;
+
+        Point zero = new Point(0, 0);
+        Point topLeftVertexDiff = new Point(toRect.x - fromRect.x, toRect.y - fromRect.y);
+        Point topRightVertexDiff = new Point((toRect.x+toRect.width) - (fromRect.x+fromRect.width), toRect.y - fromRect.y);
+        Point bottomLeftVertexDiff = new Point(toRect.x - fromRect.x, (toRect.y+toRect.height) - (fromRect.y+fromRect.height));
+        Point bottomRightVertexDiff = new Point((toRect.x+toRect.width) - (fromRect.x+fromRect.width), (toRect.y+toRect.height) - (fromRect.y+fromRect.height));
+
+
+        // if any of the four vertices is not changed, then see its opposite vertex's scaling direction
+
+        if (topLeftVertexDiff.equals(zero))
+        {
+            return Math.abs(bottomRightVertexDiff.x) > Math.abs(bottomRightVertexDiff.y) ?
+                    (bottomRightVertexDiff.x > 0 ? LEFT : RIGHT) :
+                    (bottomRightVertexDiff.y > 0 ? LEFT : RIGHT);
+        }
+        if (topRightVertexDiff.equals(zero))
+        {
+            return Math.abs(bottomLeftVertexDiff.x) > Math.abs(bottomLeftVertexDiff.y) ?
+                    (bottomLeftVertexDiff.x > 0 ? LEFT : RIGHT) :
+                    (bottomLeftVertexDiff.y > 0 ? LEFT : RIGHT);
+        }
+        if (bottomLeftVertexDiff.equals(zero))
+        {
+            return Math.abs(topRightVertexDiff.x) > Math.abs(topRightVertexDiff.y) ?
+                    (topRightVertexDiff.x > 0 ? LEFT : RIGHT) :
+                    (topRightVertexDiff.y > 0 ? LEFT : RIGHT);
+        }
+        if (bottomRightVertexDiff.equals(zero))
+        {
+            return Math.abs(topLeftVertexDiff.x) > Math.abs(topLeftVertexDiff.y) ?
+                    (topLeftVertexDiff.x > 0 ? LEFT : RIGHT) :
+                    (topLeftVertexDiff.y > 0 ? LEFT : RIGHT);
+        }
+
+        // if four vertices are all changed, then see two location's changing direction
+        return getAtomicDirectionFromOnePointToAnother(fromRect.getLocation(), toRect.getLocation());
+    }
 }
