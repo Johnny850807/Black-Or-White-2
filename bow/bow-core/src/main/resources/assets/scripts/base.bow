@@ -1,8 +1,8 @@
 
 
-<binding>
+<parameters> 0
     characterLayer: 2
-</binding>
+</parameters>
 
 @enumSpace [
         com.pokewords.constants.FsmcEvents
