@@ -9,6 +9,7 @@ public enum  SpriteTypes {
     HERO,
     MONSTER,
 
+    PICKABLE,
     PICKABLE_ITEM,
     PICKABLE_GUN,
     PICKABLE_PISTOL,
@@ -17,5 +18,5 @@ public enum  SpriteTypes {
 
     BULLET,
     BULLET_BLUE_PELLET,
-    BULLET_FIRE_RIFLE
+    BULLET_FIRE_RIFLE;
 }

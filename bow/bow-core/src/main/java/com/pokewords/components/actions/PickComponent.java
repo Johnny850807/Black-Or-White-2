@@ -15,7 +15,7 @@ public class PickComponent extends ActionComponent {
     public void action() {
         getAttachedWorld().getSpritesCollidedWith(getOwnerSprite())
                             .stream()
-                            .filter(s -> s.isType(SpriteTypes.PICKABLE_ITEM))
+                            .filter(s -> s.isType(SpriteTypes.PICKABLE))  // TODO which sprite should be picked, the top one?
                             .findFirst()
                             .ifPresent(this::pick);
     }

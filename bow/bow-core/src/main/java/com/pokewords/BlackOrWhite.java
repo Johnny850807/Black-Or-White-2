@@ -3,6 +3,9 @@ package com.pokewords;
 import com.pokewords.appstates.MenuAppState;
 import com.pokewords.appstates.MyMultiplayerRoomState;
 import com.pokewords.components.CharacterComponent;
+import com.pokewords.components.MachineGunComponent;
+import com.pokewords.components.PistolComponent;
+import com.pokewords.components.SniperRifleComponent;
 import com.pokewords.constants.AsmEvents;
 import com.pokewords.constants.SoundTypes;
 import com.pokewords.constants.SpriteTypes;
@@ -89,17 +92,25 @@ public class BlackOrWhite extends GameApplication {
     }
 
     private void declareBullets(SpriteInitializer spriteInitializer) {
-
         spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.BULLET).commit();
     }
 
     private void declarePickables(SpriteInitializer spriteInitializer) {
-        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.PICKABLE_ITEM).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.PICKABLE).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE, SpriteTypes.PICKABLE_ITEM).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE, SpriteTypes.PICKABLE_GUN).commit();
 
-        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.PICKABLE_GUN).commit();
-        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_MACHINE_GUN).commit();
-        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_PISTOL).commit();
-        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_SNIPER_RIFLE).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_MACHINE_GUN)
+                .with(new MachineGunComponent())
+                .commit();
+
+        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_PISTOL)
+                .with(new PistolComponent())
+                .commit();
+
+        spriteInitializer.declareFromParent(SpriteTypes.PICKABLE_GUN, SpriteTypes.PICKABLE_SNIPER_RIFLE)
+                .with(new SniperRifleComponent())
+                .commit();
     }
 
     @Override
