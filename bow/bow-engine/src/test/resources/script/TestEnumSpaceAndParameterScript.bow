@@ -1,0 +1,17 @@
+<meta> 0
+    @inclusion [
+        assets/scripts/BaseScriptOfWrappedByInclusion.bow
+    ]
+
+    <parameters>
+        appleID: 1
+        bananaID: 2
+        catID: 9001
+        duck: 1234
+    </parameters
+
+</meta>
+
+    @enumSpace [
+            com.pokewords.framework.sprites.enumspace.AnimalEnum
+    ]

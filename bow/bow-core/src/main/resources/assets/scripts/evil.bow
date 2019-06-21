@@ -1,7 +1,7 @@
 
 
 <meta> 0
-    @inclusion [
+    @include [
         assets/scripts/base.bow
     ]
     <parameters>

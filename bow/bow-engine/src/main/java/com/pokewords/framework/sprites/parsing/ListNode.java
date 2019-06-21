@@ -1,24 +1,21 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.utils.StringUtility;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author johnny850807 (waterball)
+ * @author nyngwang
  */
 public abstract class ListNode implements Node {
-    protected Node parent;
-    protected ArrayList<String> elements = new ArrayList<>();
-    protected String name;
+    private Node parent;
+    private String name;
 
-    public ListNode() { }
+    public ListNode() {
+        this.name = "undefined";
+    }
 
     public ListNode(String name) {
         this.name = name;
     }
-
 
     @Override
     public Node getParent() {
@@ -38,44 +35,10 @@ public abstract class ListNode implements Node {
         this.name = name;
     }
 
-    public int getInt(int index) {
-        return Integer.parseInt(elements.get(index));
-    }
-
-    public String getString(int index) {
-        return elements.get(index);
-    }
-
-    public List<String> getList() {
-        return elements;
-    }
-
-    public void add(Object object) {
-        elements.add(String.valueOf(object));
-    }
-
-    public void remove(Object object) {
-        for (int i = 0; i < elements.size(); i++) {
-            String s = elements.get(i);
-            if (s == object || s.equals(String.valueOf(object))) {
-                elements.remove(i);
-                return;
-            }
-        }
-    }
-
-    public void clear() {
-        elements.clear();
-    }
-
-    @Override
-    public String toString(int indent) {
-        return String.format("%" + indent + "s", this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return String.format("@%s %s", getName(), StringUtility.toString(getList()));
-    }
-
+    public abstract int getInt(int index);
+    public abstract String getString(int index);
+    public abstract List<String> getList();
+    public abstract void add(Object object);
+    public abstract void remove(Object object);
+    public abstract void clear();
 }

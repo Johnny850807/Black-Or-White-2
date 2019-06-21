@@ -178,4 +178,34 @@ public class LinScriptParserTest {
 
     }
 
+    @Test
+    public void testEnumSpaceAndParametersBinding(){
+        Script script = new LinScript();
+        script.parse(Context.fromFile(Resources.get("script/TestEnumSpaceAndParameterScript.bow")));
+
+        Segment metaSegment = script.getFirstSegment("meta");
+        assertEquals(0, metaSegment.getId());
+
+        List<Element> parameterElement = metaSegment.getElements("parameters");
+
+        KeyValuePairs parameterKeyValue = parameterElement.get(0).getKeyValuePairs();
+        Map<String, String> keyValueMap = parameterKeyValue.getMap();
+
+        assertEquals("1", keyValueMap.get("appleID"));
+        assertEquals("2", keyValueMap.get("bananaID"));
+        assertEquals("9001", keyValueMap.get("catID"));
+        assertEquals("1234", keyValueMap.get("duck"));
+
+        String listNodeName = script.getListNodes().get(0).getName();
+        assertEquals("enumSpace", listNodeName);
+        ListNode expectListNode = new BracketCommaListNode();
+        expectListNode.add("APE");
+        expectListNode.add("BEAR");
+        expectListNode.add("CAT");
+        expectListNode.add("DRAGON");
+        expectListNode.add("EAGLE");
+        assertEquals(expectListNode, script.getListNodes());
+
+    }
+
 }

@@ -15,15 +15,15 @@ import java.util.regex.Pattern;
 public class Context {
     public static Context fromFile(File file) {
         try {
-            return new Context(FileUtility.read(file));
+            return new Context(FileUtility.read(file), file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static Context fromFile(String path) {
+    public static Context fromPath(String path) {
         try {
-            return new Context(FileUtility.read(path));
+            return new Context(FileUtility.read(path), path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -35,17 +35,31 @@ public class Context {
 
     private List<String> tokens;
     private int currentLineNumber;
-    private int bufferedLinesCount;
+    private int recentContinuousNewlinesCount;
+    private String source;
+    private Map<String, String> globalBindings = new HashMap<>();
+
+    private Context(String scriptText, File file) {
+        this(scriptText);
+        source = file.getPath();
+    }
+
+    private Context(String scriptText, String path) {
+        this(scriptText);
+        source = path;
+    }
 
     private Context(String scriptText) {
         tokens = new ArrayList<>();
         currentLineNumber = 1;
-        bufferedLinesCount = 0;
+        recentContinuousNewlinesCount = 0;
+        source = "String";
         tokenize(scriptText);
     }
 
     private void tokenize(String scriptText) {
-        Pattern pattern = Pattern.compile("(<\\S+>|[^:\\s]+|:|\\n)|(\\S+)");
+        // TODO: Generator's [1 2 3 4] should be parsed into tokens: [, 1, 2, 3, 4, ]
+        Pattern pattern = Pattern.compile("(<\\S+>|[^:,\\s]+|:|,|\\[|]|\\n)|(\\S+)");
         Matcher matcher = pattern.matcher(scriptText);
 
         while (matcher.find()) {
@@ -55,25 +69,50 @@ public class Context {
         }
     }
 
+    public String getErrorHeader() {
+        return String.format("%s: %s", source, currentLineNumber);
+    }
+
+    /**
+     * Will not return '\n' to client
+     */
     public String peekToken() {
-        if (hasNextToken())
-            return tokens.get(0);
+        if (hasNextToken()) {
+            int index = 0;
+            while (tokens.get(index).equals("\n"))
+                index++;
+            return tokens.get(index);
+        }
         return "";
     }
 
     public boolean hasNextToken() {
+        int newlinesCount = 0;
         while (!tokens.isEmpty() && tokens.get(0).equals("\n")) {
-            bufferedLinesCount++;
+            newlinesCount++;
             tokens.remove(0);
         }
-        return !tokens.isEmpty();
+
+        boolean result = !tokens.isEmpty();
+
+        for (int i = 1; i <= newlinesCount; i++)
+            tokens.add(0, "\n");
+
+        return result;
     }
 
     public void consumeOneToken(String noMoreToken) {
         if (!hasNextToken())
-            throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMoreToken));
-        currentLineNumber += bufferedLinesCount;
-        bufferedLinesCount = 0;
+            throw new ScriptParsingException(String.format("(%s) %s", getErrorHeader(), noMoreToken));
+
+        recentContinuousNewlinesCount = 0;
+
+        while (tokens.get(0).equals("\n")) {
+            tokens.remove(0);
+            currentLineNumber++;
+            recentContinuousNewlinesCount++;
+        }
+
         tokens.remove(0);
     }
 
@@ -97,12 +136,40 @@ public class Context {
         String token = peekToken();
         consumeOneToken();
         if (!token.matches(regex))
-            throw new ScriptParsingException(String.format("(%s) %s", currentLineNumber, noMatch));
+            throw new ScriptParsingException(String.format("(%s) %s", getErrorHeader(), noMatch));
         return token;
     }
 
     public void putBack(String token) {
+        for (int i = 1; i <= recentContinuousNewlinesCount; i++)
+            tokens.add(0, "\n");
         tokens.add(0, token);
+        recentContinuousNewlinesCount = 0;
+    }
+
+    public void inheritBindingsFrom(Context context) {
+        context.globalBindings.forEach(globalBindings::put);
+    }
+
+    public void registerBindings(Map<String, String> bindings) {
+        bindings.forEach(globalBindings::put);
+    }
+
+    public void applyBinding() {
+        StringBuilder builder = new StringBuilder();
+        tokens.forEach(token -> builder.append(" ").append(token));
+        String remainingText = builder.toString();
+        for (Map.Entry<String, String> entry : globalBindings.entrySet())
+            remainingText = remainingText
+                    .replaceAll("[$]" + Pattern.quote(entry.getKey()), entry.getValue());
+        tokens.clear();
+        tokenize(remainingText);
+    }
+
+    public String getString() {
+        StringBuilder builder = new StringBuilder();
+        tokens.forEach(token -> builder.append(" ").append(token));
+        return builder.toString();
     }
 
     public int getCurrentLineNumber() {
