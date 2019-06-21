@@ -1,64 +1,52 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author nyngwang
  */
 public abstract class Segment extends Element {
-    protected int id;
-    protected Optional<String> description;
-    private List<Element> elements;
+    private int id;
+    private Optional<String> description;
 
-    public Segment(Node parent, String name, @NotNull KeyValuePairs keyValuePairs,
-                   int id, String description, List<Element> elements) {
-        super(parent, name, keyValuePairs);
-        this.id = id;
-        this.description = Optional.ofNullable(description);
-        this.elements = new ArrayList<>();
-        elements.forEach(this::addElement);
+    public Segment() {
+        setId(Integer.MIN_VALUE);
+        setDescription(null);
+    }
+
+    public Segment(String name, int id, @Nullable String description) {
+        super(name);
+        setId(id);
+        setDescription(description);
     }
 
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Optional<String> getDescription() {
         return description;
     }
 
-    public void addElement(Element element) {
-        elements.add(element);
-        element.setParent(this);
+    public void setDescription(String description) {
+        this.description = description != null? Optional.of(description) : Optional.empty();
     }
 
-    public boolean containsElement(String name) {
-        for (Element element : elements)
-            if (element.getName().equals(name))
-                return true;
-        return false;
-    }
+    public abstract void addElement(Element element);
+    public abstract boolean containsElement(String name);
+    public abstract List<Element> getElements();
+    public abstract List<Element> getElements(String name);
+    public abstract Element getFirstElement(String name);
+    public abstract Optional<Element> getFirstElementOptional(String name);
 
-    public List<Element> getElements() {
-        return elements;
-    }
-
-    public List<Element> getElements(String name) {
-        return elements.stream()
-                .filter(element -> element.getName().equals(name))
-                .collect(Collectors.toList());
-    }
-
-    public Element getFirstElement(String name) {
-        return containsElement(name)? getElements(name).get(0) : null;
-    }
-
-    public Optional<Element> getFirstElementOptional(String name) {
-        return containsElement(name)? Optional.of(getElements(name).get(0)) : Optional.empty();
-    }
-
+    public abstract void addListNode(ListNode listNode);
+    public abstract boolean containsListNode(String name);
+    public abstract ListNode getListNode(String name);
+    public abstract Optional<ListNode> getListNodeOptional(String name);
 }

@@ -13,8 +13,8 @@ public class GifScriptMaker {
     public static Script createSequenceScript(String galleryPath,  Range galleryPicRange,
                                               int gifStartPic, int gifEndPic, int duration, int layer) {
         Script script = new LinScript();
-        Segment galleriesSegment = new AngularBracketSegment("galleries", 0);
-        Element sequenceElement = new AngularBracketElement("sequence");
+        Segment galleriesSegment = new AngularSegment("galleries", 0);
+        Element sequenceElement = new AngularElement("sequence");
         galleriesSegment.addElement(sequenceElement);
         script.addSegment(galleriesSegment);
         return makeSequentialFrames(galleryPath, galleryPicRange, gifStartPic, gifEndPic, duration, layer, script, sequenceElement);
@@ -23,8 +23,8 @@ public class GifScriptMaker {
     public static Script createSheetScript(String galleryPath, int sheetRow, int sheetCol,
                                            int gifStartPic, int gifEndPic, int duration, int layer) {
         Script script = new LinScript();
-        Segment galleriesSegment = new AngularBracketSegment("galleries", 0);
-        Element sheetElement = new AngularBracketElement("sheet");
+        Segment galleriesSegment = new AngularSegment("galleries", 0);
+        Element sheetElement = new AngularElement("sheet");
         galleriesSegment.addElement(sheetElement);
         script.addSegment(galleriesSegment);
         sheetElement.getKeyValuePairs().put("row", sheetRow);
@@ -40,7 +40,7 @@ public class GifScriptMaker {
 
         int frameTotalNumber = gifEndPic - gifStartPic + 1;
         for (int i = 0; i < frameTotalNumber; i++) {
-            AngularBracketSegment frameSegment = new AngularBracketSegment("frame", i);
+            AngularSegment frameSegment = new AngularSegment("frame", i);
             frameSegment.getKeyValuePairs().put("pic", i+gifStartPic);
             frameSegment.getKeyValuePairs().put("duration", duration);
             frameSegment.getKeyValuePairs().put("next", (i + 1) % frameTotalNumber);

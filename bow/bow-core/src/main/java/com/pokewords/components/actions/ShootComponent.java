@@ -18,7 +18,7 @@ public class ShootComponent extends ActionComponent {
     }
 
     @Override
-    protected void action() {
+    public void action() {
         getOwnerSprite().getComponent(gunType).shootIfAvailable();
     }
 }

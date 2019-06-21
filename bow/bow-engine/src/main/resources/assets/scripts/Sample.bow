@@ -1,0 +1,44 @@
+<meta> 0
+    @include [
+        bow-engine/src/main/resources/assets/scripts/loadingText.bow
+    ]
+    <parameters>
+        speed: 8
+    </parameters>
+</meta>
+
+@enumSpace [
+    5, 12, 34, apple
+]
+
+<galleries> 0
+    <sheet>
+        startPic: 0 endPic: 6 row: 3 col: 3
+        path: sheets/character.png
+    </sheet>
+</galleries>
+
+<frame> 1500 shootLeft
+    duration: 0 next: 0 pic: 0 layer: 2
+    <action>
+        name: shoot
+    </action>
+</frame>
+
+<frame> 0 walkLeft
+    duration: 80 next: 1 pic: 0 layer: 2
+	<transitions>
+        classType: com.demo.Types
+		walkLeft: 0
+		walkRight: 3
+		walkUp: 6
+		walkDown: 9
+        shoot: 1500
+	</transitions>
+    <body>
+        x: 16 y: 10 w: 49 h: 67
+    </body>
+    <effect>
+        moveX: -$speed
+    </effect>
+</frame>

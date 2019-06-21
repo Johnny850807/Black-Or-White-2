@@ -1,6 +1,5 @@
 package com.pokewords.framework.engine.parsing;
 
-import com.pokewords.framework.sprites.parsing.AngularBracketSegment;
 import com.pokewords.framework.sprites.parsing.Segment;
 
 import java.util.Optional;
