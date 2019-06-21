@@ -6,6 +6,8 @@ import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 
 /**
@@ -51,6 +53,18 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
 
     public String getString(String key) {
         return keyValuePairs.getString(key);
+    }
+
+    public Optional<String> getStringOptional(String key) {
+        return keyValuePairs.getStringOptional(key);
+    }
+
+    public OptionalInt getIntOptional(String key) {
+        return keyValuePairs.getIntOptional(key);
+    }
+
+    public boolean containsKey(String key) {
+        return keyValuePairs.containsKey(key);
     }
 
     @Override

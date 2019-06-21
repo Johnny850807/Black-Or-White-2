@@ -1,8 +1,8 @@
-package com.pokewords.components;
+package com.pokewords.components.actions;
 
-import com.pokewords.framework.sprites.components.CloneableComponent;
+import com.pokewords.components.ItemComponent;
 
-public class UseItemComponent extends CloneableComponent {
+public class UseItemComponent extends ActionComponent {
     private Class<? extends ItemComponent> itemType;
 
     public Class<? extends ItemComponent> getItemType() {
@@ -15,5 +15,10 @@ public class UseItemComponent extends CloneableComponent {
 
     private void use() {
         getOwnerSprite().getComponent(itemType).use();
+    }
+
+    @Override
+    public void action() {
+
     }
 }
