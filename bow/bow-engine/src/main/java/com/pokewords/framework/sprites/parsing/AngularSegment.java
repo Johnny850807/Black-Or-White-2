@@ -135,6 +135,11 @@ public class AngularSegment extends Segment {
     }
 
     @Override
+    public boolean containsKey(String key) {
+        return keyValuePairs.containsKey(key);
+    }
+
+    @Override
     public ReadOnlyBundle pack() {
         return keyValuePairs.pack();
     }

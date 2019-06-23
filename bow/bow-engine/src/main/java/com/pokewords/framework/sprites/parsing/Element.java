@@ -42,4 +42,6 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
     public abstract Map<String, String> getMap();
     public abstract int getInt(String key);
     public abstract String getString(String key);
+
+    public abstract boolean containsKey(String key);
 }
