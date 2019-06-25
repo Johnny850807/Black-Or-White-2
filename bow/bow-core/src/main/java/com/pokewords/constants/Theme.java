@@ -13,6 +13,6 @@ public interface Theme {
     static void main(String[] args) {
         Script linScript = new LinScript();
         linScript.parse(Context.fromFile(Resources.get("assets/scripts/evil.bow")));
-        System.out.println(linScript.toString(4));
+        System.out.println(linScript);
     }
 }

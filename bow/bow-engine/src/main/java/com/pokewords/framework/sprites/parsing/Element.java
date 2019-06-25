@@ -105,4 +105,9 @@ public abstract class Element implements Node, Packable, Iterable<Pair<String, S
             }
         };
     }
+
+    @Override
+    public String toString() {
+        return toString(4);
+    }
 }
