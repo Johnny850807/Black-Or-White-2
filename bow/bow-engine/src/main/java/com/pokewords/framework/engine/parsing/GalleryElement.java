@@ -24,8 +24,8 @@ public class GalleryElement {
         this.galleryElement = galleryElement;
         this.galleryType = galleryElement.getName();
         this.range = new Range(
-                galleryElement.getKeyValuePairs().getInt("startPic"),
-                galleryElement.getKeyValuePairs().getInt("endPic"));
+                galleryElement.getInt("startPic"),
+                galleryElement.getInt("endPic"));
     }
 
     public String getGalleryType() {
@@ -46,12 +46,12 @@ public class GalleryElement {
 
             switch (typeName) {
                 case sheet:
-                    return new SheetGallery(galleryElement.getKeyValuePairs().getString("path"), range,
-                            galleryElement.getKeyValuePairs().getInt("row"),
-                            galleryElement.getKeyValuePairs().getInt("col"),
-                            galleryElement.getKeyValuePairs().getIntOptional("padding").orElse(0));
+                    return new SheetGallery(galleryElement.getString("path"), range,
+                            galleryElement.getInt("row"),
+                            galleryElement.getInt("col"),
+                            galleryElement.getIntOptional("padding").orElse(0));
                 case sequence:
-                    return new SequenceGallery(galleryElement.getKeyValuePairs().getString("path"), range);
+                    return new SequenceGallery(galleryElement.getString("path"), range);
                 case mock:
                     return new MockGallery();
                 default:

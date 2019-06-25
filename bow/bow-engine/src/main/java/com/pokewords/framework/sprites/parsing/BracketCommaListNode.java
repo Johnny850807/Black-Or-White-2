@@ -41,9 +41,9 @@ public class BracketCommaListNode extends ListNode {
     }
 
     @Override
-    public String toString(int indent) {
+    public String toString(int contentIndent) {
         StringBuilder resultBuilder = new StringBuilder();
-        String spaces = new String(new char[indent]).replace("\0", " ");
+        String spaces = new String(new char[contentIndent]).replace("\0", " ");
         resultBuilder.append(String.format("@%s [", getName()));
         if (list.size() == 0) {
             resultBuilder.append("]\n");

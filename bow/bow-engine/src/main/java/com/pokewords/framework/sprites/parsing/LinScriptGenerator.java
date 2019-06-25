@@ -8,8 +8,109 @@ import java.util.regex.Pattern;
 /**
  * TODO: Should check it again.
  * @author nyngwang
+ * @deprecated
  */
 public class LinScriptGenerator extends Script {
+    @Override
+    public void addListNode(ListNode listNode) {
+
+    }
+
+    @Override
+    public List<ListNode> getListNodes() {
+        return null;
+    }
+
+    @Override
+    public boolean containsListNode(String name) {
+        return false;
+    }
+
+    @Override
+    public List<ListNode> getListNodes(String name) {
+        return null;
+    }
+
+    @Override
+    public ListNode getFirstListNode(String name) {
+        return null;
+    }
+
+    @Override
+    public Optional<ListNode> getFirstListNodeOptional(String name) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void addSegment(Segment segment) {
+
+    }
+
+    @Override
+    public List<Segment> getSegments() {
+        return null;
+    }
+
+    @Override
+    public boolean containsSegment(String name) {
+        return false;
+    }
+
+    @Override
+    public boolean containsSegmentId(int id) {
+        return false;
+    }
+
+    @Override
+    public boolean containsSegmentDescription(String description) {
+        return false;
+    }
+
+    @Override
+    public List<Segment> getSegments(String name) {
+        return null;
+    }
+
+    @Override
+    public List<Segment> getSegmentsById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Segment> getSegmentsByDescription(String description) {
+        return null;
+    }
+
+    @Override
+    public Segment getFirstSegment(String name) {
+        return null;
+    }
+
+    @Override
+    public Optional<Segment> getFirstSegmentOptional(String name) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void parse(Context context) {
+
+    }
+
+    @Override
+    public String toString(int contentIndent) {
+        return null;
+    }
+
+    @Override
+    public void setParent(Node parent) {
+
+    }
+
+    @Override
+    public Node getParent() {
+        return null;
+    }
+    /*
     public static LinScript fromPath(String path) {
         LinScriptGenerator generator = new LinScriptGenerator();
         generator.parse(Context.fromPath(path));
@@ -106,8 +207,8 @@ public class LinScriptGenerator extends Script {
             checkSegmentNameDoesExist(name);
             script.getSegments(name).forEach(segment -> {
                 keyValuePairs.forEach(pair -> {
-                    if (!segment.getKeyValuePairs().containsKey(pair.getKey()))
-                        segment.getKeyValuePairs().put(pair.getKey(), pair.getValue());
+                    if (!segment.containsKey(pair.getKey()))
+                        segment.put(pair.getKey(), pair.getValue());
                 });
             });
         });
@@ -122,8 +223,8 @@ public class LinScriptGenerator extends Script {
                     // Then match name, since different names can have the same id
                     if (segment.getName().equals(name))
                         keyValuePairs.forEach(pair -> {
-                            if (!segment.getKeyValuePairs().containsKey(pair.getKey()))
-                                segment.getKeyValuePairs().put(pair.getKey(), pair.getValue());
+                            if (!segment.containsKey(pair.getKey()))
+                                segment.put(pair.getKey(), pair.getValue());
                         });
                 });
             });
@@ -158,8 +259,8 @@ public class LinScriptGenerator extends Script {
     }
 
     @Override
-    public String toString(int indent) {
-        return script.toString(indent);
+    public String toString(int contentIndent) {
+        return script.toString(contentIndent);
     }
 
     private String deTag(String tag, String leftToken, String rightToken) {
@@ -254,5 +355,5 @@ public class LinScriptGenerator extends Script {
     @Override
     public Optional<Segment> getFirstSegmentOptional(String name) {
         return Optional.empty();
-    }
+    }*/
 }
