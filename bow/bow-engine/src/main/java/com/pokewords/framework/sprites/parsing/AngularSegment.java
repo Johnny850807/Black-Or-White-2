@@ -14,17 +14,13 @@ import java.util.stream.Collectors;
  * @author nyngwang
  */
 public class AngularSegment extends Segment {
-    private KeyValuePairs keyValuePairs = new NoCommaPairs();
     private List<Element> elements = new ArrayList<>();
     private List<ListNode> listNodes = new ArrayList<>();
 
-    public AngularSegment() {
-        keyValuePairs.setParent(this);
-    }
+    public AngularSegment() {}
 
     public AngularSegment(String name, int id, @Nullable String description) {
         super(name, id, description);
-        keyValuePairs.setParent(this);
     }
 
     public AngularSegment(String name, int id) {
@@ -75,7 +71,14 @@ public class AngularSegment extends Segment {
                 continue;
             }
             if (context.peekToken().matches("[^\\s:<>\\[\\]]+")) { //It's key
-                keyValuePairs.parse(context);
+                do {
+                    String key = context.fetchNextToken(
+                            "[^\\s:<>\\[\\]]+", "Invalid key format: " + context.peekToken());
+                    String colon = context.fetchNextToken(
+                            ":", "Expect: " + key + ": " + context.peekToken());
+                    String value = context.fetchNextToken("[^\\s:<>]+", "Invalid value: " + context.peekToken());
+                    put(key, value);
+                } while (context.peekToken().matches("[^\\s:<>\\[\\]]+"));
                 continue;
             }
             if (context.peekToken().matches("<[^/\\s]\\S+>")) { // It's element
@@ -97,9 +100,20 @@ public class AngularSegment extends Segment {
                 getName(),
                 getId() > Integer.MIN_VALUE? getId() : "undefined",
                 getDescription().isPresent()? " " + getDescription().get() : ""));
-        resultBuilder.append(keyValuePairs.toString(contentIndent).replaceAll(
-                "([^\n]*\n)",
-                spaces + "$1"));
+
+        int counter = 0;
+        int width = 5;
+        for (Map.Entry entry: getMap().entrySet()) {
+            counter = counter % width + 1;
+            resultBuilder.append(spaces).append(
+                    String.format("%s%s: %s%s",
+                            counter > 1? " ": "",
+                            entry.getKey(), entry.getValue(),
+                            counter == width? "\n": ""));
+        }
+        if (counter > 0 && counter != width)
+            resultBuilder.append('\n');
+
         listNodes.forEach(listNode ->
                 resultBuilder.append(listNode.toString(contentIndent).replaceAll(
                         "([^\n]*\n)",
@@ -113,42 +127,6 @@ public class AngularSegment extends Segment {
     }
 
     private String getCloseTag() { return "</" + getName() + ">"; }
-
-    @Override
-    public KeyValuePairs getKeyValuePairs() {
-        return keyValuePairs;
-    }
-
-    @Override
-    public Map<String, String> getMap() {
-        return keyValuePairs.getMap();
-    }
-
-    @Override
-    public int getInt(String key) {
-        return keyValuePairs.getInt(key);
-    }
-
-    @Override
-    public String getString(String key) {
-        return keyValuePairs.getString(key);
-    }
-
-    @Override
-    public boolean containsKey(String key) {
-        return keyValuePairs.containsKey(key);
-    }
-
-    @Override
-    public ReadOnlyBundle pack() {
-        return keyValuePairs.pack();
-    }
-
-    @NotNull
-    @Override
-    public Iterator<Pair<String, String>> iterator() {
-        return keyValuePairs.iterator();
-    }
 
     @Override
     public void addElement(Element element) {
