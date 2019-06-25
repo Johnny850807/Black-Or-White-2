@@ -44,19 +44,23 @@ public class AngularElement extends Element {
         String spaces = new String(new char[contentIndent]).replace("\0", " ");
         resultBuilder.append(String.format("<%s>\n", getName()));
 
+        StringBuilder resultBuilder2 = new StringBuilder();
         int counter = 0;
         int width = 5;
         for (Map.Entry entry: getMap().entrySet()) {
             counter = counter % width + 1;
-            resultBuilder.append(spaces).append(
+            if (counter == 0)
+                resultBuilder2.append(spaces);
+            resultBuilder2.append(
                     String.format("%s%s: %s%s",
                             counter > 1? " ": "",
                             entry.getKey(), entry.getValue(),
                             counter == width? "\n": ""));
         }
         if (counter > 0 && counter != width)
-            resultBuilder.append('\n');
+            resultBuilder2.append('\n');
 
+        resultBuilder.append(resultBuilder2.toString().replaceAll("([^\n]*\n)", spaces + "$1"));
         resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
     }
