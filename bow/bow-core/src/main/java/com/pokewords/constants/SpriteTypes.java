@@ -4,6 +4,8 @@ public enum  SpriteTypes {
     ROOT,  // the root of all types
 
     MENU,
+    MENU_PLAY_BUTTON,
+    MENU_MULTIPLAYER_BUTTON,
 
     CHARACTER,
     HERO,
