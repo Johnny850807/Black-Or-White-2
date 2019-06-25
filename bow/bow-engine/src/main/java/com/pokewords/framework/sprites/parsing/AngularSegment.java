@@ -106,8 +106,6 @@ public class AngularSegment extends Segment {
         int width = 5;
         for (Map.Entry entry: getMap().entrySet()) {
             counter = counter % width + 1;
-            if (counter == 0)
-                resultBuilder2.append(spaces);
             resultBuilder2.append(
                     String.format("%s%s: %s%s",
                             counter > 1? " ": "",
