@@ -90,22 +90,22 @@ public class AngularSegment extends Segment {
     }
 
     @Override
-    public String toString(int indent) {
+    public String toString(int contentIndent) {
         StringBuilder resultBuilder = new StringBuilder();
-        String spaces = new String(new char[indent]).replace("\0", " ");
+        String spaces = new String(new char[contentIndent]).replace("\0", " ");
         resultBuilder.append(String.format("<%s> %s%s\n",
                 getName(),
                 getId() > Integer.MIN_VALUE? getId() : "undefined",
                 getDescription().isPresent()? " " + getDescription().get() : ""));
-        resultBuilder.append(keyValuePairs.toString(indent).replaceAll(
+        resultBuilder.append(keyValuePairs.toString(contentIndent).replaceAll(
                 "([^\n]*\n)",
                 spaces + "$1"));
         listNodes.forEach(listNode ->
-                resultBuilder.append(listNode.toString(indent).replaceAll(
+                resultBuilder.append(listNode.toString(contentIndent).replaceAll(
                         "([^\n]*\n)",
                         spaces + "$1")));
         elements.forEach(element ->
-                resultBuilder.append(element.toString(indent).replaceAll(
+                resultBuilder.append(element.toString(contentIndent).replaceAll(
                         "([^\n]*\n)",
                         spaces + "$1")));
         resultBuilder.append(String.format("</%s>\n", getName()));

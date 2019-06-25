@@ -36,11 +36,11 @@ public class AngularElement extends Element {
     }
 
     @Override
-    public String toString(int indent) {
+    public String toString(int contentIndent) {
         StringBuilder resultBuilder = new StringBuilder();
-        String spaces = new String(new char[indent]).replace("\0", " ");
+        String spaces = new String(new char[contentIndent]).replace("\0", " ");
         resultBuilder.append(String.format("<%s>\n", getName()));
-        resultBuilder.append(keyValuePairs.toString(indent).replaceAll("([^\n]*\n)", spaces + "$1"));
+        resultBuilder.append(keyValuePairs.toString(contentIndent).replaceAll("([^\n]*\n)", spaces + "$1"));
         resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
     }

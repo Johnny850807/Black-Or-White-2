@@ -21,7 +21,7 @@ public class NoCommaPairs extends KeyValuePairs {
     }
 
     @Override
-    public String toString(int indent) {
+    public String toString(int contentIndent) {
         StringBuilder resultBuilder = new StringBuilder();
         int counter = 0;
         int width = 5;

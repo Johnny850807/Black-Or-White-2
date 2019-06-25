@@ -158,8 +158,8 @@ public class LinScriptGenerator extends Script {
     }
 
     @Override
-    public String toString(int indent) {
-        return script.toString(indent);
+    public String toString(int contentIndent) {
+        return script.toString(contentIndent);
     }
 
     private String deTag(String tag, String leftToken, String rightToken) {
