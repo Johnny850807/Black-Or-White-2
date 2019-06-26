@@ -1,10 +1,7 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
 import com.pokewords.framework.engine.exceptions.NodeException;
 import com.pokewords.framework.engine.exceptions.ScriptParsingException;
-import javafx.util.Pair;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

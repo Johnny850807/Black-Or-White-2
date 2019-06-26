@@ -1,10 +1,5 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
-import javafx.util.Pair;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 import java.util.Map;
 
 /**

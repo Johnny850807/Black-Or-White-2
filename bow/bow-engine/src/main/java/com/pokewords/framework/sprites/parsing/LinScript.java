@@ -24,7 +24,9 @@ public class LinScript extends Script {
         do {
             if (context.peekToken().equals("<meta>"))
                 throw new ScriptParsingException(
-                        "Meta segment should appear at the beginning of the script.");
+                        String.format(
+                                "(%s) Meta segment should appear at the beginning of the script.",
+                                context.getErrorHeader()));
             parseOneNode(context);
         } while (context.hasNextToken());
     }
@@ -58,7 +60,8 @@ public class LinScript extends Script {
             listNode.parse(context);
             addListNode(listNode);
         } else
-            throw new ScriptParsingException("Script body cannot contain: " + nextToken);
+            throw new ScriptParsingException(
+                    String.format("(%s) Script body cannot contain: %s", context.getErrorHeader(), nextToken));
     }
 
     @Override
