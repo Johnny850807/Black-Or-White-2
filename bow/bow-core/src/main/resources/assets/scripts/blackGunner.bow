@@ -6,25 +6,25 @@
     ]
     <parameters>
         walkDuration: 8
-        speed: 8
-		damage: 120
+        speed: 5
+		damage: 50
     </parameters>
 </meta>
 
 <capability> 0
-	hp: 450
-	defense: 35
+	hp: 600
+	defense: 70
 </capability>
 
 <galleries> 0
     <sequence>
-        startPic: 0 endPic: 7
-        path: pics/evil
+        startPic: 0 endPic: 3
+        path: pics/ai/blackGunner
     </sequence>
 </galleries>
 
 <frame> 0 haltLeft
-duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
+    duration: $walkDuration next: 0 pic: 3 layer: $characterLayer
     <transitions>
     	walkLeft: 0
     	walkRight: 3
@@ -32,13 +32,13 @@ duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
     	walkDown: 9
     </transitions>
     <body>
-		x: 15 y: 58 w: 27 h: 13
+		x: 19 y: 64 w: 28 h: 15
 		injury: $damage
     </body>
 </frame>
 
 <frame> 1 haltRight
-    duration: 8 next: 1 pic: 2 layer: $characterLayer
+    duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
 	<transitions>
 		walkLeft: 0
 		walkRight: 3
@@ -46,13 +46,13 @@ duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
 		walkDown: 15
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 8 y: 65 w: 28 h: 14
 		injury: $damage
     </body>
 </frame>
 
 <frame> 2 walkLeft
-    duration: 8 next: 3 pic: 4 layer: $characterLayer
+    duration: $walkDuration next: 3 pic: 2 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -61,7 +61,7 @@ duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 76 w: 17 h: 14
 		injury: $damage
     </body>
     <move>
@@ -70,7 +70,7 @@ duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
 </frame>
 
 <frame> 3 walkLeft
-    duration: 8 next: 4 pic: 5 layer: $characterLayer
+    duration: $walkDuration next: 4 pic: 3 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -79,7 +79,7 @@ duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 64 w: 28 h: 15
 		injury: $damage
     </body>
     <move>
@@ -89,7 +89,7 @@ duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
 </frame>
 
 <frame> 4 walkLeft
-    duration: 8 next: 5 pic: 6 layer: $characterLayer
+    duration: $walkDuration next: 5 pic: 2 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -98,7 +98,7 @@ duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 76 w: 17 h: 14
 		injury: $damage
     </body>
     <move>
@@ -107,7 +107,7 @@ duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
 </frame>
 
 <frame> 5 walkLeft
-duration: 8 next: 2 pic: 7 layer: $characterLayer
+duration: $walkDuration next: 2 pic: 3 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -116,7 +116,7 @@ duration: 8 next: 2 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
 	<body>
-		x: 15 y: 58 w: 27 h: 13
+		x: 19 y: 64 w: 28 h: 15
 		injury: $damage
 	</body>
 	<move>
@@ -125,7 +125,7 @@ duration: 8 next: 2 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 6 walkLeftUp
-    duration: 8 next: 7 pic: 4 layer: $characterLayer
+    duration: $walkDuration next: 7 pic: 2 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -134,7 +134,7 @@ duration: 8 next: 2 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 76 w: 17 h: 14
 		injury: $damage
     </body>
     <move>
@@ -143,7 +143,7 @@ duration: 8 next: 2 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 7 walkLeftUp
-    duration: 8 next: 8 pic: 5 layer: $characterLayer
+    duration: $walkDuration next: 8 pic: 3 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -152,7 +152,7 @@ duration: 8 next: 2 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 64 w: 28 h: 15
 		injury: $damage
     </body>
     <move>
@@ -162,7 +162,7 @@ duration: 8 next: 2 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 8 walkLeftUp
-    duration: 8 next: 9 pic: 6 layer: $characterLayer
+    duration: $walkDuration next: 9 pic: 2 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -171,7 +171,7 @@ duration: 8 next: 2 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 76 w: 17 h: 14
 		injury: $damage
     </body>
     <move>
@@ -180,7 +180,7 @@ duration: 8 next: 2 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 9 walkLeftUp
-duration: 8 next: 6 pic: 7 layer: $characterLayer
+duration: $walkDuration next: 6 pic: 3 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -189,7 +189,7 @@ duration: 8 next: 6 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
 	<body>
-		x: 15 y: 58 w: 27 h: 13
+		x: 19 y: 64 w: 28 h: 15
 		injury: $damage
 	</body>
 	<move>
@@ -198,7 +198,7 @@ duration: 8 next: 6 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 10 walkLeftDown
-    duration: 8 next: 11 pic: 4 layer: $characterLayer
+    duration: $walkDuration next: 11 pic: 2 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -207,7 +207,7 @@ duration: 8 next: 6 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 76 w: 17 h: 14
 		injury: $damage
     </body>
     <move>
@@ -216,7 +216,7 @@ duration: 8 next: 6 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 11 walkLeftDown
-    duration: 8 next: 12 pic: 5 layer: $characterLayer
+    duration: $walkDuration next: 12 pic: 3 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -225,7 +225,7 @@ duration: 8 next: 6 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 64 w: 28 h: 15
 		injury: $damage
     </body>
     <move>
@@ -235,7 +235,7 @@ duration: 8 next: 6 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 12 walkLeftDown
-    duration: 8 next: 13 pic: 6 layer: $characterLayer
+    duration: $walkDuration next: 13 pic: 2 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -244,7 +244,7 @@ duration: 8 next: 6 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
     <body>
-        x: 15 y: 58 w: 27 h: 13
+        x: 19 y: 76 w: 17 h: 14
 		injury: $damage
     </body>
     <move>
@@ -253,7 +253,7 @@ duration: 8 next: 6 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 13 walkLeftDown
-duration: 8 next: 10 pic: 7 layer: $characterLayer
+duration: $walkDuration next: 10 pic: 3 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -262,7 +262,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 0
 	</transitions>
 	<body>
-		x: 15 y: 58 w: 27 h: 13
+		x: 19 y: 64 w: 28 h: 15
 		injury: $damage
 	</body>
 	<move>
@@ -271,7 +271,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 14 walkRight
-    duration: 8 next: 15 pic: 0 layer: $characterLayer
+    duration: $walkDuration next: 15 pic: 1 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -289,7 +289,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 15 walkRight
-    duration: 8 next: 16 pic: 1 layer: $characterLayer
+    duration: $walkDuration next: 16 pic: 0 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -298,7 +298,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 8 y: 65 w: 28 h: 14
 		injury: $damage
     </body>
     <move>
@@ -307,7 +307,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 16 walkRight
-    duration: 8 next: 17 pic: 2 layer: $characterLayer
+    duration: $walkDuration next: 17 pic: 1 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -316,7 +316,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 17 y: 79 w: 16 h: 11
 		injury: $damage
     </body>
     <move>
@@ -325,7 +325,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 17 walkRight
-    duration: 8 next: 14 pic: 3 layer: $characterLayer
+    duration: $walkDuration next: 14 pic: 0 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -334,7 +334,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 8 y: 65 w: 28 h: 14
 		injury: $damage
     </body>
     <move>
@@ -343,7 +343,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 18 walkRightUp
-    duration: 8 next: 19 pic: 0 layer: $characterLayer
+    duration: $walkDuration next: 19 pic: 1 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -352,7 +352,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 17 y: 79 w: 16 h: 11
 		injury: $damage
     </body>
     <move>
@@ -361,7 +361,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 19 walkRightUp
-    duration: 8 next: 20 pic: 1 layer: $characterLayer
+    duration: $walkDuration next: 20 pic: 0 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -370,7 +370,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 8 y: 65 w: 28 h: 14
 		injury: $damage
     </body>
     <move>
@@ -379,7 +379,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 20 walkRightUp
-    duration: 8 next: 21 pic: 2 layer: $characterLayer
+    duration: $walkDuration next: 21 pic: 1 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -388,7 +388,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 17 y: 79 w: 16 h: 11
 		injury: $damage
     </body>
     <move>
@@ -397,7 +397,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 21 walkRightUp
-    duration: 8 next: 18 pic: 3 layer: $characterLayer
+    duration: $walkDuration next: 18 pic: 0 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -406,7 +406,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 8 y: 65 w: 28 h: 14
 		injury: $damage
     </body>
     <move>
@@ -415,7 +415,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 22 walkRightDown
-    duration: 8 next: 23 pic: 0 layer: $characterLayer
+    duration: $walkDuration next: 23 pic: 1 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -424,7 +424,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 17 y: 79 w: 16 h: 11
 		injury: $damage
     </body>
     <move>
@@ -433,7 +433,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 23 walkRightDown
-    duration: 8 next: 24 pic: 1 layer: $characterLayer
+    duration: $walkDuration next: 24 pic: 0 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -442,7 +442,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 8 y: 65 w: 28 h: 14
 		injury: $damage
     </body>
     <move>
@@ -451,7 +451,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 24 walkRightDown
-    duration: 8 next: 25 pic: 2 layer: $characterLayer
+    duration: $walkDuration next: 25 pic: 1 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -460,7 +460,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 17 y: 79 w: 16 h: 11
 		injury: $damage
     </body>
     <move>
@@ -469,7 +469,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 </frame>
 
 <frame> 25 walkRightDown
-    duration: 8 next: 22 pic: 3 layer: $characterLayer
+    duration: $walkDuration next: 22 pic: 0 layer: $characterLayer
 	<transitions>
 		walkLeft: 2
 		walkRight: 14
@@ -478,7 +478,7 @@ duration: 8 next: 10 pic: 7 layer: $characterLayer
 		halt: 1
 	</transitions>
     <body>
-        x: 21 y: 57 w: 26 h: 14
+        x: 8 y: 65 w: 28 h: 14
 		injury: $damage
     </body>
     <move>
