@@ -186,15 +186,15 @@ public class LinScriptParserTest {
         Segment metaSegment = script.getFirstSegment("meta");
         assertEquals(0, metaSegment.getId());
 
-        List<Element> parameterElement = metaSegment.getElements("parameters");
+        List<Element> parameterElements = metaSegment.getElements("parameters");
 
-        KeyValuePairs parameterKeyValue = parameterElement.get(0).getKeyValuePairs();
-        Map<String, String> keyValueMap = parameterKeyValue.getMap();
+        Element firstElement = parameterElements.get(0);
+        Map<String, String> enumSpaceMap = firstElement.getMap();
 
-        assertEquals("1", keyValueMap.get("appleID"));
-        assertEquals("2", keyValueMap.get("bananaID"));
-        assertEquals("9001", keyValueMap.get("catID"));
-        assertEquals("1234", keyValueMap.get("duck"));
+        assertEquals("1", enumSpaceMap.get("appleID"));
+        assertEquals("2", enumSpaceMap.get("bananaID"));
+        assertEquals("9001", enumSpaceMap.get("catID"));
+        assertEquals("1234", enumSpaceMap.get("duck"));
 
         String listNodeName = script.getListNodes().get(0).getName();
         assertEquals("enumSpace", listNodeName);
