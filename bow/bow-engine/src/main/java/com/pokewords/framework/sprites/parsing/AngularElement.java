@@ -1,25 +1,15 @@
 package com.pokewords.framework.sprites.parsing;
 
-import com.pokewords.framework.commons.bundles.ReadOnlyBundle;
-import javafx.util.Pair;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
 import java.util.Map;
 
 /**
  * @author nyngwang
  */
 public class AngularElement extends Element {
-    private KeyValuePairs keyValuePairs = new NoCommaPairs();
-
-    public AngularElement() {
-        keyValuePairs.setParent(this);
-    }
+    public AngularElement() {}
 
     public AngularElement(String name) {
         super(name);
-        keyValuePairs.setParent(this);
     }
 
     @Override
@@ -28,51 +18,43 @@ public class AngularElement extends Element {
                 "<[^/\\s]\\S+>",
                 "Invalid open tag: " + context.peekToken());
         setName(openTag.replaceAll("<(\\S+)>", "$1"));
-        if (context.peekToken().matches("[^\\s:<>\\[\\]]+"))
-            keyValuePairs.parse(context);
+
+        while (context.peekToken().matches("[^\\s:<>\\[\\]]+")) {
+            String key = context.fetchNextToken(
+                    "[^\\s:<>\\[\\]]+", "Invalid key format: " + context.peekToken());
+            String colon = context.fetchNextToken(
+                    ":", "Expect: " + key + ": " + context.peekToken());
+            String value = context.fetchNextToken("[^\\s:<>]+", "Invalid value: " + context.peekToken());
+            put(key, value);
+        }
+
         String closeTag = context.fetchNextToken(
                 "</" + getName() + ">",
                 "Expect </" + getName() + "> but get: " + context.peekToken());
     }
 
     @Override
-    public String toString(int indent) {
+    public String toString(int contentIndent) {
         StringBuilder resultBuilder = new StringBuilder();
-        String spaces = new String(new char[indent]).replace("\0", " ");
+        String spaces = new String(new char[contentIndent]).replace("\0", " ");
         resultBuilder.append(String.format("<%s>\n", getName()));
-        resultBuilder.append(keyValuePairs.toString(indent).replaceAll("([^\n]*\n)", spaces + "$1"));
+
+        StringBuilder resultBuilder2 = new StringBuilder();
+        int counter = 0;
+        int width = 5;
+        for (Map.Entry entry: getMap().entrySet()) {
+            counter = counter % width + 1;
+            resultBuilder2.append(
+                    String.format("%s%s: %s%s",
+                            counter > 1? " ": "",
+                            entry.getKey(), entry.getValue(),
+                            counter == width? "\n": ""));
+        }
+        if (counter > 0 && counter != width)
+            resultBuilder2.append('\n');
+
+        resultBuilder.append(resultBuilder2.toString().replaceAll("([^\n]*\n)", spaces + "$1"));
         resultBuilder.append(String.format("</%s>\n", getName()));
         return resultBuilder.toString();
-    }
-
-    @Override
-    public KeyValuePairs getKeyValuePairs() {
-        return keyValuePairs;
-    }
-
-    @Override
-    public Map<String, String> getMap() {
-        return keyValuePairs.getMap();
-    }
-
-    @Override
-    public int getInt(String key) {
-        return keyValuePairs.getInt(key);
-    }
-
-    @Override
-    public String getString(String key) {
-        return keyValuePairs.getString(key);
-    }
-
-    @Override
-    public ReadOnlyBundle pack() {
-        return keyValuePairs.pack();
-    }
-
-    @NotNull
-    @Override
-    public Iterator<Pair<String, String>> iterator() {
-        return keyValuePairs.iterator();
     }
 }

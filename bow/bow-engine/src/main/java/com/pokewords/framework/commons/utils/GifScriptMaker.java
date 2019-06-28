@@ -27,24 +27,24 @@ public class GifScriptMaker {
         Element sheetElement = new AngularElement("sheet");
         galleriesSegment.addElement(sheetElement);
         script.addSegment(galleriesSegment);
-        sheetElement.getKeyValuePairs().put("row", sheetRow);
-        sheetElement.getKeyValuePairs().put("col", sheetCol);
+        sheetElement.put("row", sheetRow);
+        sheetElement.put("col", sheetCol);
         return makeSequentialFrames(galleryPath, new Range(0, sheetRow*sheetCol-1), gifStartPic, gifEndPic, duration, layer, script, sheetElement);
     }
 
     private static Script makeSequentialFrames(String galleryPath, Range galleryPicRange, int gifStartPic, int gifEndPic,
                                                int duration, int layer, Script script, Element sheetElement) {
-        sheetElement.getKeyValuePairs().put("startPic", galleryPicRange.getStart());
-        sheetElement.getKeyValuePairs().put("endPic", galleryPicRange.getEnd());
-        sheetElement.getKeyValuePairs().put("path", galleryPath);
+        sheetElement.put("startPic", galleryPicRange.getStart());
+        sheetElement.put("endPic", galleryPicRange.getEnd());
+        sheetElement.put("path", galleryPath);
 
         int frameTotalNumber = gifEndPic - gifStartPic + 1;
         for (int i = 0; i < frameTotalNumber; i++) {
             AngularSegment frameSegment = new AngularSegment("frame", i);
-            frameSegment.getKeyValuePairs().put("pic", i+gifStartPic);
-            frameSegment.getKeyValuePairs().put("duration", duration);
-            frameSegment.getKeyValuePairs().put("next", (i + 1) % frameTotalNumber);
-            frameSegment.getKeyValuePairs().put("layer", layer);
+            frameSegment.put("pic", i+gifStartPic);
+            frameSegment.put("duration", duration);
+            frameSegment.put("next", (i + 1) % frameTotalNumber);
+            frameSegment.put("layer", layer);
             script.addSegment(frameSegment);
         }
         return script;

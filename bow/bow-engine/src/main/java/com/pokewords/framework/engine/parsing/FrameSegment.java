@@ -23,10 +23,10 @@ public class FrameSegment {
     public FrameSegment(Segment frameSegment) {
         this.id = frameSegment.getId();
         this.description = frameSegment.getName();
-        this.pic = frameSegment.getKeyValuePairs().getInt("pic");
-        this.layer = frameSegment.getKeyValuePairs().getInt("layer");
-        this.duration = frameSegment.getKeyValuePairs().getInt("duration");
-        this.next = frameSegment.getKeyValuePairs().getInt("next");
+        this.pic = frameSegment.getInt("pic");
+        this.layer = frameSegment.getInt("layer");
+        this.duration = frameSegment.getInt("duration");
+        this.next = frameSegment.getInt("next");
         this.bodyElement = Optional.ofNullable(
                 frameSegment.containsElement("body")?
                 new BodyElement(frameSegment.getFirstElement("body")) : null);

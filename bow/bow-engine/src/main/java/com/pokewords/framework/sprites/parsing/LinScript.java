@@ -24,7 +24,9 @@ public class LinScript extends Script {
         do {
             if (context.peekToken().equals("<meta>"))
                 throw new ScriptParsingException(
-                        "Meta segment should appear at the beginning of the script.");
+                        String.format(
+                                "(%s) Meta segment should appear at the beginning of the script.",
+                                context.getErrorHeader()));
             parseOneNode(context);
         } while (context.hasNextToken());
     }
@@ -58,16 +60,17 @@ public class LinScript extends Script {
             listNode.parse(context);
             addListNode(listNode);
         } else
-            throw new ScriptParsingException("Script body cannot contain: " + nextToken);
+            throw new ScriptParsingException(
+                    String.format("(%s) Script body cannot contain: %s", context.getErrorHeader(), nextToken));
     }
 
     @Override
-    public String toString(int indent) {
+    public String toString(int contentIndent) {
         StringBuilder resultBuilder = new StringBuilder();
-        String spaces = new String(new char[indent]).replace("\0", " ");
+        String spaces = new String(new char[contentIndent]).replace("\0", " ");
         listNodes.forEach(listNode ->
                 resultBuilder.append(
-                        listNode.toString(indent).replaceAll("([^\n]*\n)", spaces + "$1")));
+                        listNode.toString(contentIndent).replaceAll("([^\n]*\n)", spaces + "$1")));
         segments.sort((o1, o2) -> {
             String leftName = o1.getName();
             String rightName = o2.getName();
@@ -78,7 +81,7 @@ public class LinScript extends Script {
         });
         segments.forEach(segment ->
                 resultBuilder.append(
-                        segment.toString(indent).replaceAll("([^\n]*\n)", spaces + "$1")));
+                        segment.toString(contentIndent).replaceAll("([^\n]*\n)", spaces + "$1")));
         return resultBuilder.toString();
     }
 

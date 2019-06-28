@@ -7,7 +7,6 @@ import java.util.Optional;
  * @author nyngwang
  */
 public abstract class Script implements Node {
-
     public abstract void addListNode(ListNode listNode);
     public abstract List<ListNode> getListNodes();
     public abstract boolean containsListNode(String name);
@@ -26,4 +25,9 @@ public abstract class Script implements Node {
 
     public abstract Segment getFirstSegment(String name);
     public abstract Optional<Segment> getFirstSegmentOptional(String name);
+
+    @Override
+    public String toString() {
+        return toString(4);
+    }
 }
