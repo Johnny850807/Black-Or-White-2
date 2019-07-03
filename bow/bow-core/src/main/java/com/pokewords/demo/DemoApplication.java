@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.pokewords.Demo;
+package com.pokewords.demo;
 
 import basics.PlayerKeyListenerComponent;
 import com.pokewords.framework.engine.asm.AppStateMachine;
@@ -42,7 +42,7 @@ public class DemoApplication extends GameApplication {
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
         gameWindowsConfigurator
-                .name("Basic App Demo")
+                .name("Basic App demo")
                 .atCenter();
     }
 
