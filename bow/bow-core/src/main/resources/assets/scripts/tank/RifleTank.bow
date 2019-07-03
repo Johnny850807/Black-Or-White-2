@@ -14,7 +14,7 @@
 <galleries> 0
     <sequence>
         startPic: 0 endPic: 3
-        path: pics/ai/rifleTank
+        path: assets/pics/ai/rifleTank
     </sequence>
 </galleries>
 
@@ -127,7 +127,7 @@ duration: $walkDuration next: 6 pic: 3 layer: $characterLayer
     classType: basics.WalkEvent
     	walkLeft: 7
     	walkRight: 1
-    	walkUp: 2
+    	walkUp: 3
     	walkDown: 5
     </transitions>
     <body>

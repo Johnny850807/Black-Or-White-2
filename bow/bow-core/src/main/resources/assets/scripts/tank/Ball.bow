@@ -12,7 +12,7 @@
 <galleries> 0
     <sequence>
         startPic: 0 endPic: 1
-            path: pics/ai/ball
+            path: assets/pics/ai/ball
     </sequence>
 </galleries>
 

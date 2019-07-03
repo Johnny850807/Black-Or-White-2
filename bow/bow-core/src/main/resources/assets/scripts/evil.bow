@@ -19,7 +19,7 @@
 <galleries> 0
     <sequence>
         startPic: 0 endPic: 7
-        path: pics/ai/evil
+        path: assets/pics/ai/evil
     </sequence>
 </galleries>
 

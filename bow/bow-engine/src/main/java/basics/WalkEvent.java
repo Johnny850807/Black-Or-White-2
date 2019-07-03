@@ -20,33 +20,12 @@
  * SOFTWARE.
  */
 
-package shawnDemo;
+package com.pokewords.framework.stages.basics;
 
-
-import com.pokewords.framework.engine.GameEngineFacade;
-import com.pokewords.framework.engine.asm.states.EmptyAppState;
-import com.pokewords.framework.engine.gameworlds.AppStateWorld;
-import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
-
-public class MainState extends EmptyAppState {
-
-    enum Sprites {
-        RIFLETANK, SNIPERTANK, BALL, SNOWBALL, SNOWBALEX
-    }
-
-
-    @Override
-    protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
-        return new ContainerAppStateWorld(this);
-    }
-
-    @Override
-    protected void onAppStateCreating(AppStateWorld world) {
-        getGameWindowsConfigurator().gameSize(800, 600);
-        world.spawn(createSprite(Sprites.SNOWBALEX));
-        world.spawn(createSprite(Sprites.SNIPERTANK));
-        world.spawn(createSprite(Sprites.BALL));
-        world.spawn(createSprite(Sprites.RIFLETANK));
-        world.spawn(createSprite(Sprites.SNOWBALL));
+public enum WalkEvent {
+    walkLeft, walkRight,
+    walkUp, walkDown, halt;
+    public static void main(String[] args) {
+        System.out.println(WalkEvent.class.getName());
     }
 }

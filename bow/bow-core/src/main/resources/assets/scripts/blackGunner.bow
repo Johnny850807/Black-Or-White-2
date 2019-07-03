@@ -19,7 +19,7 @@
 <galleries> 0
     <sequence>
         startPic: 0 endPic: 3
-        path: pics/ai/blackGunner
+        path: assets/pics/ai/blackGunner
     </sequence>
 </galleries>
 

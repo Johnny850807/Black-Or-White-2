@@ -79,13 +79,13 @@ public class MainApp extends GameApplication {
 
     @Override
     protected void onAppStatesConfiguration(AppStateMachine asm) {
-        shawnDemo.MainState mainState = asm.createState(MainState.class);
+        MainState mainState = asm.createState(MainState.class);
         asm.setGameInitialState(mainState);
     }
 
 
     public static void main(String[] args) {
-        DemoApplication app = new DemoApplication(new ReleaseIocContainer());
+        MainApp app = new MainApp(new ReleaseIocContainer());
         app.launch();
     }
 }

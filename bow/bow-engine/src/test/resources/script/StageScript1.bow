@@ -1,0 +1,10 @@
+<wave> 0 balls
+    <spawn>
+        name: BALL x: 25 y: 35
+    </spawn>
+
+
+    <spawn>
+        name: BALL x: 105 y: 35
+    </spawn>
+</wave>

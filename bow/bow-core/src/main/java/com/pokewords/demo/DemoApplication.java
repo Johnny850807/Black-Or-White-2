@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package shawnDemo;
+package com.pokewords.demo;
 
 import basics.PlayerKeyListenerComponent;
 import com.pokewords.framework.engine.asm.AppStateMachine;
@@ -42,25 +42,25 @@ public class DemoApplication extends GameApplication {
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
         gameWindowsConfigurator
-                .name("Basic App Demo")
+                .name("Basic App demo")
                 .atCenter();
     }
 
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer
-                .declare(MainState.Sprites.RIFLETANK)
+                .declare(MainState.Sprites.BLACKBOSS)
                 .position(new Point(100, 200))
-                .with("scripts/tank/RifleTank.bow")
+                .with("assets/scripts/blackBoss.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
                 .commit();
 
         spriteInitializer
-                .declare(MainState.Sprites.SNIPERTANK)
+                .declare(MainState.Sprites.BLACKGUNNER)
                 .position(new Point(250, 200))
-                .with("scripts/tank/SniperTank.bow")
+                .with("assets/scripts/blackGunner.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(75, 75)
@@ -68,27 +68,9 @@ public class DemoApplication extends GameApplication {
 
 
         spriteInitializer
-                .declare(MainState.Sprites.BALL)
+                .declare(MainState.Sprites.EVIL)
                 .position(new Point(200, 400))
-                .with("scripts/tank/Ball.bow")
-                .with(RigidBodyComponent.getInstance())
-                .with(new PlayerKeyListenerComponent())
-                .areaSize(70, 70)
-                .commit();
-
-        spriteInitializer
-                .declare(MainState.Sprites.SNOWBALL)
-                .position(new Point(200, 350))
-                .with("scripts/tank/SnowBall.bow")
-                .with(RigidBodyComponent.getInstance())
-                .with(new PlayerKeyListenerComponent())
-                .areaSize(70, 70)
-                .commit();
-
-        spriteInitializer
-                .declare(MainState.Sprites.SNOWBALEX)
-                .position(new Point(200, 100))
-                .with("scripts/tank/SnowBallEx.bow")
+                .with("assets/scripts/evil.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
