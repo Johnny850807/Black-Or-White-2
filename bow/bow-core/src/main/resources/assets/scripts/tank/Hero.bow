@@ -11,7 +11,7 @@
 <galleries> 0
     <sequence>
         startPic: 0 endPic: 3
-        path: pics/ai/hero
+        path: assets/pics/ai/hero
     </sequence>
 </galleries>
 
