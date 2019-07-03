@@ -22,5 +22,70 @@ SOFTWARE.
 
 package NingDemo;
 
-public class MainApp {
+import basics.PlayerKeyListenerComponent;
+import com.pokewords.framework.engine.asm.AppStateMachine;
+import com.pokewords.framework.ioc.IocContainer;
+import com.pokewords.framework.ioc.ReleaseIocContainer;
+import com.pokewords.framework.sprites.components.RigidBodyComponent;
+import com.pokewords.framework.sprites.factories.SpriteInitializer;
+import com.pokewords.framework.views.GameApplication;
+import com.pokewords.framework.views.windows.GameWindowsConfigurator;
+
+import java.awt.*;
+
+public class MainApp extends GameApplication {
+    public MainApp(IocContainer iocContainer) {
+        super(iocContainer);
+    }
+
+    @Override
+    protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
+        gameWindowsConfigurator
+                .name("Basic App Demo")
+                .atCenter();
+    }
+
+    @Override
+    protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
+        spriteInitializer
+                .declare(MainState.Sprites.BLACKBOSS)
+                .position(new Point(100, 200))
+                .with("scripts/tank/RifleTank.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(70, 70)
+                .commit();
+
+        spriteInitializer
+                .declare(MainState.Sprites.BLACKGUNNER)
+                .position(new Point(250, 200))
+                .with("scripts/tank/SniperTank.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(75, 75)
+                .commit();
+
+
+        spriteInitializer
+                .declare(MainState.Sprites.EVIL)
+                .position(new Point(200, 400))
+                .with("scripts/tank/Ball.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(70, 70)
+                .commit();
+
+    }
+
+    @Override
+    protected void onAppStatesConfiguration(AppStateMachine asm) {
+        shawnDemo.MainState mainState = asm.createState(MainState.class);
+        asm.setGameInitialState(mainState);
+    }
+
+
+    public static void main(String[] args) {
+        DemoApplication app = new DemoApplication(new ReleaseIocContainer());
+        app.launch();
+    }
 }

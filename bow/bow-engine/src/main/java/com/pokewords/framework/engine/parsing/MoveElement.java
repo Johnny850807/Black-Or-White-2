@@ -16,8 +16,8 @@ public class MoveElement {
     }
 
     public MoveElement(@NotNull Element element) {
-        this.moveX = element.getKeyValuePairs().getIntOptional("moveX");
-        this.moveY = element.getKeyValuePairs().getIntOptional("moveY");
+        this.moveX = element.getIntOptional("moveX");
+        this.moveY = element.getIntOptional("moveY");
     }
 
     public OptionalInt getMoveX() {

@@ -1,0 +1,16 @@
+
+<meta> 0
+    <parameters>
+        characterLayer: 2
+    </parameters>
+</meta>
+
+@enumSpace [
+        com.pokewords.constants.FsmcEvents
+]
+
+<actions> 0
+    pick: com.pokewords.components.actions.PickComponent
+    shoot: com.pokewords.components.actions.ShootComponent
+    pursue: com.pokewords.components.actions.PursueComponent
+</actions>

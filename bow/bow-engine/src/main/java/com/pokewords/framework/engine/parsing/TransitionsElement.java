@@ -17,7 +17,7 @@ public class TransitionsElement {
     public TransitionsElement(Element element) {
         parseAndValidateEnumType(element);
 
-        Collection<String> keys = element.getKeyValuePairs().getKeys();
+        Collection<String> keys = element.getKeys();
 
         for (String event : keys) {
             if (!event.equals("classType"))
@@ -27,7 +27,7 @@ public class TransitionsElement {
 
     private void parseAndValidateEnumType(Element element) {
         try {
-            this.enumType = Class.forName(element.getKeyValuePairs().getString("classType"));
+            this.enumType = Class.forName(element.getString("classType"));
             if (!enumType.isEnum())
                 throw new IllegalArgumentException(
                         String.format("The classType attribute within Transitions element should be of Enum type. " +

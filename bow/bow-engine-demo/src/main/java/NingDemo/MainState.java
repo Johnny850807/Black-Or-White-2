@@ -22,6 +22,27 @@ SOFTWARE.
 
 package NingDemo;
 
-public class MainState {
+import com.pokewords.framework.engine.GameEngineFacade;
+import com.pokewords.framework.engine.asm.states.EmptyAppState;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
+import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
 
+public class MainState extends EmptyAppState {
+    enum Sprites {
+        BLACKGUNNER, BLACKBOSS, EVIL
+    }
+
+
+    @Override
+    protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
+        return new ContainerAppStateWorld(this);
+    }
+
+    @Override
+    protected void onAppStateCreating(AppStateWorld world) {
+        getGameWindowsConfigurator().gameSize(800, 600);
+        world.spawn(createSprite(Sprites.BLACKGUNNER));
+        world.spawn(createSprite(Sprites.BLACKBOSS));
+        world.spawn(createSprite(Sprites.EVIL));
+    }
 }

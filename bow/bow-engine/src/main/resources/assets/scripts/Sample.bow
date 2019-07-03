@@ -1,6 +1,6 @@
 <meta> 0
     @include [
-        bow-engine/src/main/resources/assets/scripts/loadingText.bow
+        assets/scripts/loadingText.bow
     ]
     <parameters>
         speed: 8

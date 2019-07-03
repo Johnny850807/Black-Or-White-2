@@ -2,6 +2,7 @@ package com.pokewords.framework.sprites.parsing;
 
 
 import com.pokewords.framework.commons.utils.FileUtility;
+import com.pokewords.framework.commons.utils.Resources;
 
 import java.io.IOException;
 
@@ -364,7 +365,7 @@ public interface ScriptSample {
     }
     static void main(String[] args) {
         Script linScript = new LinScript();
-        linScript.parse(Context.fromPath("bow-engine/src/main/resources/assets/scripts/Sample.bow"));
+        linScript.parse(Context.fromFile(Resources.get("assets/scripts/Sample.bow")));
         System.out.println(linScript.toString(4));
     }
 }
