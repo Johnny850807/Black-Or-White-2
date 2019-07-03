@@ -22,7 +22,6 @@
 
 package com.pokewords.demo;
 
-import basics.PlayerKeyListenerComponent;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.ioc.ReleaseIocContainer;
