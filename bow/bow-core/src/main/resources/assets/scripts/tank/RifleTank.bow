@@ -1,6 +1,8 @@
+
+
 <meta> 0
     @include [
-       assets/scripts/base.bow
+       scripts/base.bow
     ]
     <parameters>
         walkDuration: 999
@@ -10,30 +12,30 @@
 </meta>
 
 <galleries> 0
-    path: pics/rifleTank
+    <sequence>
+        startPic: 0 endPic: 3
+        path: pics/ai/rifleTank
+    </sequence>
 </galleries>
-
 
 <frame> 0 haltRight
 duration: $walkDuration next: 0 pic: 0 layer: $characterLayer
     <transitions>
+    classType: basics.WalkEvent
      	walkLeft: 7
-     	walkRight: 0
+     	walkRight: 1
      	walkUp: 3
      	walkDown: 5
     </transitions>
     <body>
-		x: 68 y: 68 w: 90 h: 70
-		injury: $damage
+		x: 62 y: 60 w: 75 h: 60
     </body>
-    <move>
-        moveX: -$speed
-    </move>
 </frame>
 
 <frame> 1 walkRight
 duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
     <transitions>
+    classType: basics.WalkEvent
     	walkLeft: 7
     	walkRight: 1
     	walkUp: 3
@@ -41,11 +43,10 @@ duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
     	halt: 0
     </transitions>
     <body>
-		x: 68 y: 68 w: 90 h: 70
-		injury: $damage
+		x: 62 y: 60 w: 75 h: 60
     </body>
     <move>
-        moveX: -$speed
+        moveX: $speed
     </move>
 </frame>
 
@@ -54,24 +55,22 @@ duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
 <frame> 2 haltUp
 duration: $walkDuration next: 2 pic: 1 layer: $characterLayer
     <transitions>
+    classType: basics.WalkEvent
     	walkLeft: 7
     	walkRight: 1
-    	walkUp: 2
+    	walkUp: 3
     	walkDown: 5
     </transitions>
     <body>
-		x: 69 y: 68 w: 70 h: 90
-		injury: $damage
+		x: 60 y: 66 w: 60 h: 75
     </body>
-    <move>
-        moveX: -$speed
-    </move>
 </frame>
 
 
 <frame> 3 walkUp
 duration: $walkDuration next: 3 pic: 1 layer: $characterLayer
     <transitions>
+    classType: basics.WalkEvent
     	walkLeft: 7
     	walkRight: 1
     	walkUp: 2
@@ -79,36 +78,32 @@ duration: $walkDuration next: 3 pic: 1 layer: $characterLayer
     	halt: 2
     </transitions>
     <body>
-		x: 69 y: 68 w: 70 h: 90
-		injury: $damage
+		x: 60 y: 66 w: 60 h: 75
     </body>
     <move>
-        moveX: -$speed
+        moveY: -$speed
     </move>
 </frame>
-
 
 
 <frame> 4 haltDown
 duration: $walkDuration next: 4 pic: 2 layer: $characterLayer
     <transitions>
+    classType: basics.WalkEvent
     	walkLeft: 7
     	walkRight: 1
-    	walkUp: 2
-    	walkDown: 4
+    	walkUp: 3
+    	walkDown: 5
     </transitions>
     <body>
-		x: 69 y: 68 w: 70 h: 90
-		injury: $damage
+		x: 60 y: 62 w: 60 h: 75
     </body>
-    <move>
-        moveX: -$speed
-    </move>
 </frame>
 
 <frame> 5 walkDown
 duration: $walkDuration next: 5 pic: 2 layer: $characterLayer
     <transitions>
+    classType: basics.WalkEvent
     	walkLeft: 7
     	walkRight: 1
     	walkUp: 2
@@ -116,11 +111,10 @@ duration: $walkDuration next: 5 pic: 2 layer: $characterLayer
     	halt: 4
     </transitions>
     <body>
-		x: 69 y: 68 w: 70 h: 90
-		injury: $damage
+		x: 60 y: 62 w: 60 h: 75
     </body>
     <move>
-        moveX: -$speed
+        moveY: $speed
     </move>
 </frame>
 
@@ -130,6 +124,7 @@ duration: $walkDuration next: 5 pic: 2 layer: $characterLayer
 <frame> 6 haltLeft
 duration: $walkDuration next: 6 pic: 3 layer: $characterLayer
     <transitions>
+    classType: basics.WalkEvent
     	walkLeft: 7
     	walkRight: 1
     	walkUp: 2
@@ -137,17 +132,14 @@ duration: $walkDuration next: 6 pic: 3 layer: $characterLayer
     </transitions>
     <body>
 		x: 69 y: 68 w: 70 h: 90
-		injury: $damage
     </body>
-    <move>
-        moveX: -$speed
-    </move>
 </frame>
 
 
 <frame> 7 walkLeft
 duration: $walkDuration next: 7 pic: 3 layer: $characterLayer
     <transitions>
+    classType: basics.WalkEvent
     	walkLeft: 7
     	walkRight: 1
     	walkUp: 2
@@ -155,8 +147,7 @@ duration: $walkDuration next: 7 pic: 3 layer: $characterLayer
     	halt: 6
     </transitions>
     <body>
-		x: 69 y: 68 w: 70 h: 90
-		injury: $damage
+		x: 61 y: 60 w: 75 h: 60
     </body>
     <move>
         moveX: -$speed
