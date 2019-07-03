@@ -16,6 +16,7 @@ public class FrameSegment {
     private int duration;
     private int next;
     private Optional<BodyElement> bodyElement;
+    private Optional<AreaElement> areaElement;
     private Optional<MoveElement> moveElement;
     private Optional<TransitionsElement> transitionsElement;
     private Optional<SpawnElement> spawnElement;
@@ -30,6 +31,9 @@ public class FrameSegment {
         this.bodyElement = Optional.ofNullable(
                 frameSegment.containsElement("body")?
                 new BodyElement(frameSegment.getFirstElement("body")) : null);
+        this.areaElement = Optional.ofNullable(
+                frameSegment.containsElement("area")?
+                        new AreaElement(frameSegment.getFirstElement("area")) : null);
         this.moveElement = Optional.ofNullable(
                 frameSegment.containsElement("move")?
                 new MoveElement(frameSegment.getFirstElement("move")) : null);
@@ -67,6 +71,9 @@ public class FrameSegment {
         return next;
     }
 
+    public Optional<AreaElement> getAreaElement() {
+        return areaElement;
+    }
 
     public Optional<BodyElement> getBodyElement() {
         return bodyElement;

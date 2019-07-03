@@ -242,6 +242,10 @@ public class Sprite implements Cloneable, AppStateLifeCycleListener {
 		return getPropertiesComponent().getArea();
 	}
 
+	public void setAreaSize(int w, int h) {
+		getPropertiesComponent().setAreaSize(w, h);
+	}
+
 	public void setAreaSize(Dimension size) {
 		getPropertiesComponent().setAreaSize(size);
 	}

@@ -111,12 +111,12 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
             EffectFrame effectFrame = createAndPutImageEffectFrame(frameSegment);
             GameEffect assembledGameEffect = GameEffect.assemble(
                     parseMoveElementGameEffect(frameSegment),
-                    parseBodyElementGameEffect(frameSegment)
+                    parseBodyElementGameEffect(frameSegment),
+                    parseAreaElementGameEffect(frameSegment)
             );
             effectFrame.addEffect(assembledGameEffect);
             return effectFrame;
         }
-
 
         private void setupGalleryMapIfNotExists(Script script) {
             if (gallerySet == null) {
@@ -172,6 +172,20 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
                 return GameEffect.empty();
         }
 
+
+        private GameEffect parseAreaElementGameEffect(FrameSegment frameSegment) {
+            if (frameSegment.getAreaElement().isPresent())
+            {
+                AreaElement areaElement = frameSegment.getAreaElement().get();
+                return (world, sprite) -> {
+                    int w = areaElement.getW().orElse(sprite.getWidth());
+                    int h = areaElement.getH().orElse(sprite.getHeight());
+                    sprite.setAreaSize(w, h);
+                };
+            }
+            else
+                return GameEffect.empty();
+        }
 
         private GameEffect parseMoveElementGameEffect(FrameSegment frameSegment) {
             if (frameSegment.getMoveElement().isPresent())

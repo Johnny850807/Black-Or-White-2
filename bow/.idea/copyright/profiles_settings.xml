@@ -1,5 +1,9 @@
 <component name="CopyrightManager">
+<<<<<<< HEAD
   <settings default="MIT">
+=======
+  <settings>
+>>>>>>> bow-tank-script
     <module2copyright>
       <element module="All" copyright="MIT" />
     </module2copyright>

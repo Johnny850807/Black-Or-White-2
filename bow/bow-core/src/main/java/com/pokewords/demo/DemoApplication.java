@@ -54,7 +54,7 @@ public class DemoApplication extends GameApplication {
                 .with("assets/scripts/tank/RifleTank.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
-                .areaSize(70, 70)
+                .areaSize(90, 70)
                 .commit();
 
         spriteInitializer
