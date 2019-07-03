@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package shawnDemo;
+package com.pokewords.Demo;
 
 
 import com.pokewords.framework.engine.GameEngineFacade;

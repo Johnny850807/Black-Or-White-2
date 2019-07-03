@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package shawnDemo;
+package com.pokewords.Demo;
 
 import basics.PlayerKeyListenerComponent;
 import com.pokewords.framework.engine.asm.AppStateMachine;
@@ -51,7 +51,7 @@ public class DemoApplication extends GameApplication {
         spriteInitializer
                 .declare(MainState.Sprites.RIFLETANK)
                 .position(new Point(100, 200))
-                .with("scripts/tank/RifleTank.bow")
+                .with("assets/scripts/tank/RifleTank.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
@@ -60,7 +60,7 @@ public class DemoApplication extends GameApplication {
         spriteInitializer
                 .declare(MainState.Sprites.SNIPERTANK)
                 .position(new Point(250, 200))
-                .with("scripts/tank/SniperTank.bow")
+                .with("assets/scripts/tank/SniperTank.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(75, 75)
@@ -70,7 +70,7 @@ public class DemoApplication extends GameApplication {
         spriteInitializer
                 .declare(MainState.Sprites.BALL)
                 .position(new Point(200, 400))
-                .with("scripts/tank/Ball.bow")
+                .with("assets/scripts/tank/Ball.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
@@ -79,7 +79,7 @@ public class DemoApplication extends GameApplication {
         spriteInitializer
                 .declare(MainState.Sprites.SNOWBALL)
                 .position(new Point(200, 350))
-                .with("scripts/tank/SnowBall.bow")
+                .with("assets/scripts/tank/SnowBall.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
@@ -88,7 +88,7 @@ public class DemoApplication extends GameApplication {
         spriteInitializer
                 .declare(MainState.Sprites.SNOWBALEX)
                 .position(new Point(200, 100))
-                .with("scripts/tank/SnowBallEx.bow")
+                .with("assets/scripts/tank/SnowBallEx.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
