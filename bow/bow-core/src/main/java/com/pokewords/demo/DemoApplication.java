@@ -93,6 +93,33 @@ public class DemoApplication extends GameApplication {
                 .areaSize(70, 70)
                 .commit();
 
+        // Black script
+        spriteInitializer
+                .declare(MainState.Sprites.BLACKBOSS)
+                .position(new Point(400, 350))
+                .with("assets/scripts/blackBoss.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(53, 82)
+                .commit();
+
+        spriteInitializer
+                .declare(MainState.Sprites.BLACKGUNNER)
+                .position(new Point(500, 400))
+                .with("assets/scripts/blackGunner.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(53, 79)
+                .commit();
+
+        spriteInitializer
+                .declare(MainState.Sprites.EVIL)
+                .position(new Point(400, 440))
+                .with("assets/scripts/evil.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(62, 72)
+                .commit();
     }
 
     @Override

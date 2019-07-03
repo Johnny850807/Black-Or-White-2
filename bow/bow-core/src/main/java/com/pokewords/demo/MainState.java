@@ -30,8 +30,9 @@ import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
 
 public class MainState extends EmptyAppState {
 
-    enum Sprites {
-        RIFLETANK, SNIPERTANK, BALL, SNOWBALL, SNOWBALEX
+    public enum Sprites {
+        RIFLETANK, SNIPERTANK, BALL, SNOWBALL, SNOWBALEX,
+        BLACKBOSS, BLACKGUNNER, EVIL
     }
 
 
@@ -48,5 +49,9 @@ public class MainState extends EmptyAppState {
         world.spawn(createSprite(Sprites.BALL));
         world.spawn(createSprite(Sprites.RIFLETANK));
         world.spawn(createSprite(Sprites.SNOWBALL));
+
+        world.spawn(createSprite(Sprites.BLACKBOSS));
+        world.spawn(createSprite(Sprites.BLACKGUNNER));
+        world.spawn(createSprite(Sprites.EVIL));
     }
 }
