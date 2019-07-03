@@ -26,10 +26,10 @@
 <frame> 0 haltLeft
     duration: $walkDuration next: 0 pic: 4 layer: $characterLayer
     <transitions>
-    	walkLeft: 0
-    	walkRight: 3
+    	walkLeft: 2
+    	walkRight: 14
     	walkUp: 6
-    	walkDown: 9
+    	walkDown: 10
     </transitions>
     <body>
 		x: 15 y: 58 w: 27 h: 13
@@ -40,10 +40,10 @@
 <frame> 1 haltRight
     duration: $walkDuration next: 1 pic: 2 layer: $characterLayer
 	<transitions>
-		walkLeft: 0
-		walkRight: 3
-		walkUp: 12
-		walkDown: 15
+		walkLeft: 2
+		walkRight: 14
+		walkUp: 18
+		walkDown: 22
 	</transitions>
     <body>
         x: 25 y: 58 w: 17 h: 14

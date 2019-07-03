@@ -3,6 +3,7 @@ package com.pokewords.framework.engine.gameworlds;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.RigidBodyComponent;
+import sun.plugin2.main.server.WindowsHelper;
 
 import java.awt.*;
 
@@ -25,10 +26,21 @@ import java.awt.*;
 public class ContainerAppStateWorld extends AppStateWorld {
     public static final Object TYPE_WALL = new Object();
     private int wallThickness;
+    private int windowWidth;
+    private int windowHeight;
+
+    public ContainerAppStateWorld(AppState appState, int windowWidth, int windowHeight) {
+        super(appState);
+        this.wallThickness = 1000;
+        this.windowWidth = windowWidth;
+        this.windowHeight = windowHeight;
+    }
 
     public ContainerAppStateWorld(AppState appState) {
         super(appState);
         this.wallThickness = 1000;
+        this.windowWidth = appState.getWindowSize().width;
+        this.windowHeight =  appState.getWindowSize().height;
     }
 
     public ContainerAppStateWorld(AppState appState, int wallThickness) {
@@ -50,18 +62,17 @@ public class ContainerAppStateWorld extends AppStateWorld {
                             .with(RigidBodyComponent.getInstance())
                             .commit();
 
-        Dimension windowsSize = getGameEngineFacade().getGameWindowDefinition().size;
         topWall = getGameEngineFacade().createSprite(TYPE_WALL);
-        topWall.setArea(0, (-1)*wallThickness, windowsSize.width, wallThickness);
+        topWall.setArea(0, (-1)*wallThickness, windowWidth, wallThickness);
 
         leftWall = getGameEngineFacade().createSprite(TYPE_WALL);
-        leftWall.setArea((-1)*wallThickness, 0, wallThickness, windowsSize.height);
+        leftWall.setArea((-1)*wallThickness, 0, wallThickness, windowHeight);
 
         rightWall = getGameEngineFacade().createSprite(TYPE_WALL);
-        rightWall.setArea(windowsSize.width, 0, wallThickness, windowsSize.height);
+        rightWall.setArea(windowWidth, 0, wallThickness, windowHeight);
 
         bottomWall = getGameEngineFacade().createSprite(TYPE_WALL);
-        bottomWall.setArea(0, windowsSize.height, windowsSize.width, wallThickness);
+        bottomWall.setArea(0, windowHeight, windowWidth, wallThickness);
 
         spawn(topWall);
         spawn(leftWall);

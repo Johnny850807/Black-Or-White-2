@@ -14,7 +14,7 @@ public class MainAppState extends EmptyAppState {
 
     @Override
     protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
-        return new ContainerAppStateWorld(this);
+        return new ContainerAppStateWorld(this, 800, 600);
     }
 
     @Override

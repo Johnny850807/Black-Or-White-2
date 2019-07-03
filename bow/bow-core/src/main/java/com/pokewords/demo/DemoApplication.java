@@ -22,6 +22,7 @@
 
 package com.pokewords.demo;
 
+import com.pokewords.components.PlayerKeyListenerComponent;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.ioc.ReleaseIocContainer;
@@ -48,18 +49,17 @@ public class DemoApplication extends GameApplication {
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
         spriteInitializer
-                .declare(MainState.Sprites.BLACKBOSS)
+                .declare(MainState.Sprites.RIFLETANK)
                 .position(new Point(100, 200))
-                .with("assets/scripts/blackBoss.bow")
+                .with("assets/scripts/tank/RifleTank.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
-                .areaSize(70, 70)
                 .commit();
 
         spriteInitializer
-                .declare(MainState.Sprites.BLACKGUNNER)
+                .declare(MainState.Sprites.SNIPERTANK)
                 .position(new Point(250, 200))
-                .with("assets/scripts/blackGunner.bow")
+                .with("assets/scripts/tank/SniperTank.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(75, 75)
@@ -67,14 +67,59 @@ public class DemoApplication extends GameApplication {
 
 
         spriteInitializer
-                .declare(MainState.Sprites.EVIL)
+                .declare(MainState.Sprites.BALL)
                 .position(new Point(200, 400))
-                .with("assets/scripts/evil.bow")
+                .with("assets/scripts/tank/Ball.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
                 .commit();
 
+        spriteInitializer
+                .declare(MainState.Sprites.SNOWBALL)
+                .position(new Point(200, 350))
+                .with("assets/scripts/tank/SnowBall.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(70, 70)
+                .commit();
+
+        spriteInitializer
+                .declare(MainState.Sprites.SNOWBALEX)
+                .position(new Point(200, 100))
+                .with("assets/scripts/tank/SnowBallEx.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(70, 70)
+                .commit();
+
+        // Black script
+        spriteInitializer
+                .declare(MainState.Sprites.BLACKBOSS)
+                .position(new Point(400, 350))
+                .with("assets/scripts/blackBoss.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(53, 82)
+                .commit();
+
+        spriteInitializer
+                .declare(MainState.Sprites.BLACKGUNNER)
+                .position(new Point(500, 400))
+                .with("assets/scripts/blackGunner.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(53, 79)
+                .commit();
+
+        spriteInitializer
+                .declare(MainState.Sprites.EVIL)
+                .position(new Point(400, 440))
+                .with("assets/scripts/evil.bow")
+                .with(RigidBodyComponent.getInstance())
+                .with(new PlayerKeyListenerComponent())
+                .areaSize(62, 72)
+                .commit();
     }
 
     @Override
