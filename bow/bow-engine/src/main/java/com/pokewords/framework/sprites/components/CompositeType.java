@@ -1,3 +1,4 @@
+
 package com.pokewords.framework.sprites.components;
 
 import com.pokewords.framework.commons.utils.StringUtility;
