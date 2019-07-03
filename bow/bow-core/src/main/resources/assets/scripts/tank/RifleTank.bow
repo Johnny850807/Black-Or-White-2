@@ -14,7 +14,7 @@
 <galleries> 0
     <sequence>
         startPic: 0 endPic: 3
-        path: pics/ai/rifleTank
+        path: assets/pics/ai/rifleTank
     </sequence>
 </galleries>
 

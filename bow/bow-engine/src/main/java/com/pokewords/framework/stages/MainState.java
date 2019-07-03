@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.pokewords.Demo;
+package shawnDemo;
 
 
 import com.pokewords.framework.engine.GameEngineFacade;
@@ -31,7 +31,7 @@ import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
 public class MainState extends EmptyAppState {
 
     enum Sprites {
-        RIFLETANK, SNIPERTANK, BALL, SNOWBALL, SNOWBALEX
+        RIFLETANK, SNIPERTANK, BALL
     }
 
 
@@ -43,10 +43,8 @@ public class MainState extends EmptyAppState {
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
         getGameWindowsConfigurator().gameSize(800, 600);
-        world.spawn(createSprite(Sprites.SNOWBALEX));
+        world.spawn(createSprite(Sprites.RIFLETANK));
         world.spawn(createSprite(Sprites.SNIPERTANK));
         world.spawn(createSprite(Sprites.BALL));
-        world.spawn(createSprite(Sprites.RIFLETANK));
-        world.spawn(createSprite(Sprites.SNOWBALL));
     }
 }
