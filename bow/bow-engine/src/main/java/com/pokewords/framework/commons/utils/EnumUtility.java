@@ -15,10 +15,15 @@ public class EnumUtility {
      */
     public static <T> T evalEnum(Class<T> enumType, String name) {
         return Arrays.stream(enumType.getEnumConstants())
-                .filter(e -> e.toString().toLowerCase().equals(name.toLowerCase()))
+                .filter(e -> e.toString().equals(name))
                 .findFirst()
                 .orElseThrow(()-> new IllegalArgumentException(
                         String.format("The enum %s is not found under the enum class %s.",
                                 name, enumType)));
+    }
+
+    public static boolean enumExists(Class<?> enumType, String name) {
+        return Arrays.stream(enumType.getEnumConstants())
+                .anyMatch(e -> e.toString().equals(name));
     }
 }

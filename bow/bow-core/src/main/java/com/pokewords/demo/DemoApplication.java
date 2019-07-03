@@ -22,7 +22,7 @@
 
 package com.pokewords.demo;
 
-import basics.PlayerKeyListenerComponent;
+import com.pokewords.components.PlayerKeyListenerComponent;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.ioc.ReleaseIocContainer;
@@ -54,7 +54,6 @@ public class DemoApplication extends GameApplication {
                 .with("assets/scripts/tank/RifleTank.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
-                .areaSize(90, 70)
                 .commit();
 
         spriteInitializer

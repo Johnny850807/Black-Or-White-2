@@ -1,8 +1,10 @@
 package com.pokewords.framework.engine.parsing;
 
+import com.pokewords.framework.engine.weaver.GameEngineWeaverNode;
 import com.pokewords.framework.sprites.parsing.Segment;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * @author johnny850807 (waterball)
@@ -21,7 +23,7 @@ public class FrameSegment {
     private Optional<TransitionsElement> transitionsElement;
     private Optional<SpawnElement> spawnElement;
 
-    public FrameSegment(Segment frameSegment) {
+    public FrameSegment(Function<String, Object> enumProvider, Segment frameSegment) {
         this.id = frameSegment.getId();
         this.description = frameSegment.getName();
         this.pic = frameSegment.getInt("pic");
@@ -39,7 +41,8 @@ public class FrameSegment {
                 new MoveElement(frameSegment.getFirstElement("move")) : null);
         this.transitionsElement = Optional.ofNullable(
                 frameSegment.containsElement("transitions") ?
-                        new TransitionsElement(frameSegment.getFirstElement("transitions")) : null
+                        new TransitionsElement(enumProvider,
+                                frameSegment.getFirstElement("transitions")) : null
         );
         this.spawnElement = Optional.ofNullable(
             frameSegment.containsElement("spawn") ?

@@ -1,6 +1,6 @@
 <meta> 0
     @include [
-       scripts/base.bow
+       assets/scripts/base.bow
     ]
     <parameters>
         walkDuration: 999
@@ -19,7 +19,6 @@
 <frame> 0 haltRight
 duration: $walkDuration next: 0 pic: 0 layer: $characterLayer
     <transitions>
-    classType: basics.WalkEvent
         walkLeft: 5
         walkRight: 1
         walkUp: 2
@@ -34,7 +33,6 @@ duration: $walkDuration next: 0 pic: 0 layer: $characterLayer
 <frame> 1 walkRight
 duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
     <transitions>
-    classType: basics.WalkEvent
         walkLeft: 5
         walkRight: 1
         walkUp: 2
@@ -54,7 +52,6 @@ duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
 <frame> 2 walkRightUp
 duration: $walkDuration next: 2 pic: 0 layer: $characterLayer
     <transitions>
-    classType: basics.WalkEvent
         walkLeft: 5
         walkRight: 1
         walkUp: 3
@@ -73,7 +70,6 @@ duration: $walkDuration next: 2 pic: 0 layer: $characterLayer
 <frame> 3 walkRightDown
 duration: $walkDuration next: 3 pic: 0 layer: $characterLayer
     <transitions>
-    classType: basics.WalkEvent
         walkLeft: 5
         walkRight: 1
         walkUp: 2
@@ -92,7 +88,6 @@ duration: $walkDuration next: 3 pic: 0 layer: $characterLayer
 <frame> 4 haltLeft
 duration: $walkDuration next: 4 pic: 1 layer: $characterLayer
     <transitions>
-    classType: basics.WalkEvent
         walkLeft: 5
         walkRight: 1
         walkUp: 6
@@ -108,7 +103,6 @@ duration: $walkDuration next: 4 pic: 1 layer: $characterLayer
 <frame> 5 walkLeft
 duration: $walkDuration next: 5 pic: 1 layer: $characterLayer
     <transitions>
-    classType: basics.WalkEvent
         walkLeft: 5
         walkRight: 1
         walkUp: 6
@@ -128,7 +122,6 @@ duration: $walkDuration next: 5 pic: 1 layer: $characterLayer
 <frame> 6 walkLeftUp
 duration: $walkDuration next: 6 pic: 1 layer: $characterLayer
     <transitions>
-    classType: basics.WalkEvent
         walkLeft: 5
         walkRight: 1
         walkUp: 6
@@ -148,7 +141,6 @@ duration: $walkDuration next: 6 pic: 1 layer: $characterLayer
 <frame> 7 walkLeftDown
 duration: $walkDuration next: 7 pic: 1 layer: $characterLayer
     <transitions>
-    classType: basics.WalkEvent
         walkLeft: 5
         walkRight: 1
         walkUp: 6

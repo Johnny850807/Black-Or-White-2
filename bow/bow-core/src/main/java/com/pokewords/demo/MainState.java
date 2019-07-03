@@ -37,12 +37,12 @@ public class MainState extends EmptyAppState {
 
     @Override
     protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
+        getGameWindowsConfigurator().gameSize(800, 600);
         return new ContainerAppStateWorld(this);
     }
 
     @Override
     protected void onAppStateCreating(AppStateWorld world) {
-        getGameWindowsConfigurator().gameSize(800, 600);
         world.spawn(createSprite(Sprites.SNOWBALEX));
         world.spawn(createSprite(Sprites.SNIPERTANK));
         world.spawn(createSprite(Sprites.BALL));

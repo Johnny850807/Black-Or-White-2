@@ -1,5 +1,7 @@
 package com.pokewords.framework.engine.weaver;
 
+import com.pokewords.framework.commons.utils.ClassUtility;
+import com.pokewords.framework.commons.utils.EnumUtility;
 import com.pokewords.framework.engine.Events;
 import com.pokewords.framework.engine.parsing.*;
 import com.pokewords.framework.ioc.IocContainer;
@@ -8,6 +10,7 @@ import com.pokewords.framework.sprites.components.FrameStateMachineComponent;
 import com.pokewords.framework.sprites.components.frames.*;
 import com.pokewords.framework.sprites.factories.SpriteWeaver;
 import com.pokewords.framework.sprites.parsing.Element;
+import com.pokewords.framework.sprites.parsing.ListNode;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.sprites.parsing.Segment;
 import com.pokewords.framework.views.helpers.galleries.Gallery;
@@ -15,6 +18,7 @@ import com.pokewords.framework.views.helpers.galleries.GalleryFactory;
 
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Read the <frame> Segment and the game-engine domain attributes within the frame.
@@ -31,6 +35,7 @@ import java.util.*;
 public class GameEngineWeaverNode implements SpriteWeaver.Node {
     private IocContainer iocContainer;
     private EffectFrameFactory effectFrameFactory;
+    private List<Class<?>> enumSpaces;
 
     private Sprite sprite;
     private Map<Integer, FrameSegment> frameSegmentMap = Collections.synchronizedMap(new HashMap<>()); // <FrameSegment's Id, frameSegment>
@@ -50,11 +55,25 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
             this.sprite = sprite;
             this.iocContainer = iocContainer;
             List<Segment> frames = script.getSegments("frame");
+            parseEnumSpaces(script);
             frames.forEach(this::parseAndAddFrame);
             setNextTransitions();
             setAllCustomTransitions();
             cleanUpWeaverNode();
         }
+    }
+
+    private void parseEnumSpaces(Script script) {
+        enumSpaces = script.getListNodes("enumSpace").stream()
+                        .flatMap(listNode -> listNode.getList().stream())
+                        .map(ClassUtility::forName)
+                        .collect(Collectors.toList());
+    }
+
+    public Object locateEnumFromEnumSpace(String enumName) {
+        return enumSpaces.stream().filter(enumType -> EnumUtility.enumExists(enumType, enumName))
+                                .map(enumType -> EnumUtility.evalEnum(enumType, enumName))
+                                .findFirst().orElseThrow(()-> new IllegalArgumentException("No enum named " +enumName+ " found."));
     }
 
     private void parseAndAddFrame(Segment frame) {
@@ -97,6 +116,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
     private void cleanUpWeaverNode() {
         this.sprite = null;
         this.iocContainer = null;
+        this.enumSpaces = null;
         this.frameSegmentMap.clear();
     }
 
@@ -107,7 +127,7 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         @Override
         public EffectFrame createFrame(Segment segment) {
             setupGalleryMapIfNotExists((Script) segment.getParent());
-            FrameSegment frameSegment = new FrameSegment(segment);
+            FrameSegment frameSegment = new FrameSegment(GameEngineWeaverNode.this::locateEnumFromEnumSpace, segment);
             EffectFrame effectFrame = createAndPutImageEffectFrame(frameSegment);
             GameEffect assembledGameEffect = GameEffect.assemble(
                     parseMoveElementGameEffect(frameSegment),
