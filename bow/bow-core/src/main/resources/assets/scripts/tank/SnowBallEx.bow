@@ -27,9 +27,12 @@ duration: $walkDuration next: 0 pic: 0 layer: $characterLayer
         walkDown: 3
     </transitions>
     <body>
-        x: 70 y: 54 w: 70 h: 54
+        x: 0 y: 7 w: 70 h: 57
         injury: $damage
     </body>
+    <area>
+        w: 70 h: 64
+    </area>
 </frame>
 
 <frame> 1 walkRight
@@ -42,12 +45,15 @@ duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
         halt: 0
     </transitions>
     <body>
-        x: 70 y: 54 w: 70 h: 54
+        x: 0 y: 7 w: 70 h: 57
         injury: $damage
     </body>
-        <move>
-            moveX: $speed
-        </move>
+    <move>
+         moveX: $speed
+    </move>
+    <area>
+         w: 70 h: 64
+    </area>
 </frame>
 
 
@@ -61,12 +67,15 @@ duration: $walkDuration next: 2 pic: 0 layer: $characterLayer
         halt: 0
     </transitions>
     <body>
-        x: 70 y: 54 w: 70 h: 54
+        x: 0 y: 7 w: 70 h: 57
         injury: $damage
     </body>
-        <move>
-            moveY: -$speed
-        </move>
+    <move>
+        moveY: -$speed
+    </move>
+    <area>
+        w: 70 h: 64
+    </area>
 </frame>
 
 <frame> 3 walkRightDown
@@ -79,12 +88,15 @@ duration: $walkDuration next: 3 pic: 0 layer: $characterLayer
         halt: 0
     </transitions>
     <body>
-        x: 70 y: 54 w: 70 h: 54
+        x: 0 y: 7 w: 70 h: 57
         injury: $damage
     </body>
-        <move>
-            moveY: $speed
-        </move>
+    <move>
+        moveY: $speed
+    </move>
+    <area>
+        w: 70 h: 64
+    </area>
 </frame>
 
 <frame> 4 haltLeft
@@ -96,9 +108,12 @@ duration: $walkDuration next: 4 pic: 1 layer: $characterLayer
         walkDown: 7
     </transitions>
     <body>
-        x: 70 y: 54 w: 70 h: 54
+        x: 5 y: 4 w: 65 h: 60
         injury: $damage
     </body>
+    <area>
+        w: 70 h: 64
+    </area>
 </frame>
 
 
@@ -112,12 +127,15 @@ duration: $walkDuration next: 5 pic: 1 layer: $characterLayer
         halt: 4
     </transitions>
     <body>
-        x: 70 y: 54 w: 70 h: 54
+        x: 5 y: 4 w: 65 h: 60
         injury: $damage
     </body>
-        <move>
-            moveX: -$speed
-        </move>
+    <move>
+         moveX: -$speed
+    </move>
+    <area>
+         w: 70 h: 64
+    </area>
 </frame>
 
 
@@ -131,12 +149,15 @@ duration: $walkDuration next: 6 pic: 1 layer: $characterLayer
         halt: 4
     </transitions>
     <body>
-        x: 70 y: 54 w: 70 h: 54
+        x: 5 y: 4 w: 65 h: 60
         injury: $damage
     </body>
-        <move>
-            moveY: -$speed
-        </move>
+    <move>
+        moveY: -$speed
+    </move>
+    <area>
+        w: 70 h: 64
+    </area>
 </frame>
 
 
@@ -150,10 +171,13 @@ duration: $walkDuration next: 7 pic: 1 layer: $characterLayer
         halt: 4
     </transitions>
     <body>
-        x: 70 y: 54 w: 70 h: 54
+        x: 5 y: 4 w: 65 h: 60
         injury: $damage
     </body>
-        <move>
-            moveY: $speed
-        </move>
+    <move>
+        moveY: $speed
+    </move>
+    <area>
+        w: 70 h: 64
+    </area>
 </frame>
