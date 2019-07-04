@@ -11,7 +11,7 @@
 <galleries> 0
     <sequence>
         startPic: 0 endPic: 3
-        path: assets/pics/ai/hero
+        path: assets/pics/hero
     </sequence>
 </galleries>
 
@@ -24,8 +24,11 @@ duration: $walkDuration next: 0 pic: 0 layer: $characterLayer
      	walkDown: 5
     </transitions>
     <body>
-		x: 62 y: 60 w: 75 h: 60
+		x: 3 y: 4 w: 69 h: 54
     </body>
+    <area>
+        w: 75 h: 60
+    </area>
 </frame>
 
 <frame> 1 walkRight
@@ -38,11 +41,14 @@ duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
     	halt: 0
     </transitions>
     <body>
-		x: 62 y: 60 w: 75 h: 60
+		x: 3 y: 4 w: 69 h: 54
     </body>
     <move>
         moveX: $speed
     </move>
+    <area>
+        w: 75 h: 60
+    </area>
 </frame>
 
 
@@ -56,8 +62,11 @@ duration: $walkDuration next: 2 pic: 1 layer: $characterLayer
     	walkDown: 5
     </transitions>
     <body>
-		x: 60 y: 66 w: 60 h: 75
+		x: 3 y: 2 w: 55 h: 70
     </body>
+    <area>
+        w: 60 h: 75
+    </area>
 </frame>
 
 
@@ -71,11 +80,14 @@ duration: $walkDuration next: 3 pic: 1 layer: $characterLayer
     	halt: 2
     </transitions>
     <body>
-		x: 60 y: 66 w: 60 h: 75
+		x: 3 y: 2 w: 55 h: 70
     </body>
     <move>
         moveY: -$speed
     </move>
+    <area>
+        w: 60 h: 75
+    </area>
 </frame>
 
 
@@ -88,8 +100,11 @@ duration: $walkDuration next: 4 pic: 2 layer: $characterLayer
     	walkDown: 5
     </transitions>
     <body>
-		x: 60 y: 62 w: 60 h: 75
+		x: 2 y: 3 w: 56 h: 68
     </body>
+    <area>
+        w: 60 h: 75
+    </area>
 </frame>
 
 <frame> 5 walkDown
@@ -102,11 +117,14 @@ duration: $walkDuration next: 5 pic: 2 layer: $characterLayer
     	halt: 4
     </transitions>
     <body>
-		x: 60 y: 62 w: 60 h: 75
+		x: 2 y: 3 w: 56 h: 68
     </body>
     <move>
         moveY: $speed
     </move>
+    <area>
+        w: 60 h: 75
+    </area>
 </frame>
 
 
@@ -121,8 +139,11 @@ duration: $walkDuration next: 6 pic: 3 layer: $characterLayer
     	walkDown: 5
     </transitions>
     <body>
-		x: 69 y: 68 w: 70 h: 90
+		x: 3 y: 1 w: 69 h: 55
     </body>
+    <area>
+         w: 75 h: 60
+    </area>
 </frame>
 
 
@@ -136,9 +157,12 @@ duration: $walkDuration next: 7 pic: 3 layer: $characterLayer
     	halt: 6
     </transitions>
     <body>
-		x: 61 y: 60 w: 75 h: 60
+		x: 3 y: 1 w: 69 h: 55
     </body>
     <move>
         moveX: -$speed
     </move>
+    <area>
+        w: 75 h: 60
+    </area>
 </frame>

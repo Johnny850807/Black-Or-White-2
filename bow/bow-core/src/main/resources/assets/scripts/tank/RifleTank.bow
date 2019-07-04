@@ -27,7 +27,7 @@ duration: $walkDuration next: 0 pic: 0 layer: $characterLayer
      	walkDown: 5
     </transitions>
     <body>
-		x: 62 y: 60 w: 75 h: 60
+		x: 0 y: 0 w: 69 h: 69
     </body>
     <area>
         w: 90 h: 70
@@ -44,7 +44,7 @@ duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
     	halt: 0
     </transitions>
     <body>
-		x: 62 y: 60 w: 75 h: 60
+		x: 0 y: 0 w: 69 h: 69
     </body>
     <move>
         moveX: $speed
@@ -65,7 +65,7 @@ duration: $walkDuration next: 2 pic: 1 layer: $characterLayer
     	walkDown: 5
     </transitions>
     <body>
-		x: 60 y: 66 w: 60 h: 75
+		x: 0 y: 22 w: 70 h: 68
     </body>
     <area>
         w: 70 h: 90
@@ -83,7 +83,7 @@ duration: $walkDuration next: 3 pic: 1 layer: $characterLayer
     	halt: 2
     </transitions>
     <body>
-		x: 60 y: 66 w: 60 h: 75
+		x: 0 y: 22 w: 70 h: 68
     </body>
     <move>
         moveY: -$speed
@@ -103,7 +103,7 @@ duration: $walkDuration next: 4 pic: 2 layer: $characterLayer
     	walkDown: 5
     </transitions>
     <body>
-		x: 60 y: 62 w: 60 h: 75
+		x: 0 y: 0 w: 70 h: 68
     </body>
     <area>
         w: 70 h: 90
@@ -120,7 +120,7 @@ duration: $walkDuration next: 5 pic: 2 layer: $characterLayer
     	halt: 4
     </transitions>
     <body>
-		x: 60 y: 62 w: 60 h: 75
+		x: 0 y: 0 w: 70 h: 68
     </body>
     <move>
         moveY: $speed
@@ -140,7 +140,7 @@ duration: $walkDuration next: 6 pic: 3 layer: $characterLayer
     	walkDown: 5
     </transitions>
     <body>
-		x: 69 y: 68 w: 70 h: 90
+		x: 22 y: 0 w: 68 h: 70
     </body>
     <area>
         w: 90 h: 70
@@ -158,7 +158,7 @@ duration: $walkDuration next: 7 pic: 3 layer: $characterLayer
     	halt: 6
     </transitions>
     <body>
-		x: 61 y: 60 w: 75 h: 60
+		x: 22 y: 0 w: 68 h: 70
     </body>
     <move>
         moveX: -$speed
