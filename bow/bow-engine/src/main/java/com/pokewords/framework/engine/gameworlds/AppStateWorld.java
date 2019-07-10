@@ -46,6 +46,16 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
     }
 
     /**
+     * Add sprites into the spawn-list, the sprite will be added in the next game loop.
+     * @param sprites the spawned sprites to be added into the world
+     */
+    public void spawn(Collection<Sprite> sprites) {
+        for (Sprite sprite : sprites) {
+            spawn(sprite);
+        }
+    }
+
+    /**
      * Add a Sprite into the spawn-list, the sprite will be added in the next game loop.
      * @param sprite the spawned sprite to be added into the world
      */

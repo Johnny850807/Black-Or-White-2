@@ -1,6 +1,7 @@
 package com.pokewords.framework.engine;
 
 import com.pokewords.framework.ioc.IocContainer;
+import com.pokewords.framework.sprites.GameBoardSpritesCreator;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.SoundPlayer;
@@ -18,6 +19,7 @@ public class GameEngineFacade implements SoundPlayer {
     private SpriteInitializer spriteInitializer;
     private GameWindowsConfigurator gameWindowsConfigurator;
     private GameEngine gameEngine;
+    private GameBoardSpritesCreator gameBoardSpritesCreator;
 
     public GameEngineFacade(IocContainer iocContainer, GameEngine gameEngine, GameWindowsConfigurator gameWindowsConfigurator) {
         this.iocContainer = iocContainer;
@@ -25,6 +27,7 @@ public class GameEngineFacade implements SoundPlayer {
         this.spriteInitializer = iocContainer.spriteInitializer();
         this.gameEngine = gameEngine;
         this.gameWindowsConfigurator = gameWindowsConfigurator;
+        this.gameBoardSpritesCreator = new GameBoardSpritesCreator(spriteInitializer);
     }
 
 
@@ -110,5 +113,9 @@ public class GameEngineFacade implements SoundPlayer {
 
     public void removeLoopCountdownHook(Runnable hook) {
         gameEngine.getLoopCounter().removeLoopCountdownHook(hook);
+    }
+
+    public GameBoardSpritesCreator.BuildingSession createSpriteBoard(int gridSize) {
+        return gameBoardSpritesCreator.ofGridSize(gridSize);
     }
 }

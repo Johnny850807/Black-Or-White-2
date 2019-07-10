@@ -26,18 +26,29 @@ import com.pokewords.components.PlayerKeyListenerComponent;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.ioc.ReleaseIocContainer;
+import com.pokewords.framework.sprites.components.ImageComponent;
 import com.pokewords.framework.sprites.components.RigidBodyComponent;
+import com.pokewords.framework.sprites.components.frames.ImageFrameFactory;
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 import com.pokewords.framework.views.GameApplication;
 import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 import java.awt.*;
 
+import static com.pokewords.demo.DemoApplication.Sprites.*;
+
 public class DemoApplication extends GameApplication {
 
     public DemoApplication(IocContainer iocContainer) {
         super(iocContainer);
     }
+
+    public enum Sprites {
+        GRASS, TREE, WATER,
+        RIFLETANK, SNIPERTANK, BALL, SNOWBALL, SNOWBALEX,
+        BLACKBOSS, BLACKGUNNER, EVIL
+    }
+
 
     @Override
     protected void onGameWindowsConfiguration(GameWindowsConfigurator gameWindowsConfigurator) {
@@ -48,17 +59,34 @@ public class DemoApplication extends GameApplication {
 
     @Override
     protected void onSpriteDeclaration(SpriteInitializer spriteInitializer) {
+        spriteInitializer.declare(GRASS)
+                        .with(new ImageComponent(
+                                ImageFrameFactory.fromPath(0, "assets/pics/terrain/grass.png")))
+                        .commit();
+
+        spriteInitializer.declare(TREE)
+                .with(new ImageComponent(
+                        ImageFrameFactory.fromPath(0, "assets/pics/terrain/tree.png")))
+                .with(RigidBodyComponent.getInstance())
+                .commit();
+
+        spriteInitializer.declare(WATER)
+                .with(new ImageComponent(
+                        ImageFrameFactory.fromPath(0, "assets/pics/terrain/water.png")))
+                .with(RigidBodyComponent.getInstance())
+                .commit();
+
         spriteInitializer
-                .declare(MainState.Sprites.RIFLETANK)
-                .position(new Point(100, 200))
+                .declare(RIFLETANK)
+                .position(new Point(80, 160))
                 .with("assets/scripts/tank/RifleTank.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .commit();
 
         spriteInitializer
-                .declare(MainState.Sprites.SNIPERTANK)
-                .position(new Point(250, 200))
+                .declare(SNIPERTANK)
+                .position(new Point(240, 160))
                 .with("assets/scripts/tank/SniperTank.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
@@ -67,8 +95,8 @@ public class DemoApplication extends GameApplication {
 
 
         spriteInitializer
-                .declare(MainState.Sprites.BALL)
-                .position(new Point(200, 400))
+                .declare(BALL)
+                .position(new Point(400, 160))
                 .with("assets/scripts/tank/Ball.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
@@ -76,8 +104,8 @@ public class DemoApplication extends GameApplication {
                 .commit();
 
         spriteInitializer
-                .declare(MainState.Sprites.SNOWBALL)
-                .position(new Point(200, 350))
+                .declare(SNOWBALL)
+                .position(new Point(560, 160))
                 .with("assets/scripts/tank/SnowBall.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
@@ -85,8 +113,8 @@ public class DemoApplication extends GameApplication {
                 .commit();
 
         spriteInitializer
-                .declare(MainState.Sprites.SNOWBALEX)
-                .position(new Point(200, 100))
+                .declare(SNOWBALEX)
+                .position(new Point(640, 160))
                 .with("assets/scripts/tank/SnowBallEx.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
@@ -95,8 +123,8 @@ public class DemoApplication extends GameApplication {
 
         // Black script
         spriteInitializer
-                .declare(MainState.Sprites.BLACKBOSS)
-                .position(new Point(400, 350))
+                .declare(BLACKBOSS)
+                .position(new Point(720, 160))
                 .with("assets/scripts/blackBoss.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
@@ -104,8 +132,8 @@ public class DemoApplication extends GameApplication {
                 .commit();
 
         spriteInitializer
-                .declare(MainState.Sprites.BLACKGUNNER)
-                .position(new Point(500, 400))
+                .declare(BLACKGUNNER)
+                .position(new Point(880, 160))
                 .with("assets/scripts/blackGunner.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
@@ -113,8 +141,8 @@ public class DemoApplication extends GameApplication {
                 .commit();
 
         spriteInitializer
-                .declare(MainState.Sprites.EVIL)
-                .position(new Point(400, 440))
+                .declare(EVIL)
+                .position(new Point(480, 160))
                 .with("assets/scripts/evil.bow")
                 .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())

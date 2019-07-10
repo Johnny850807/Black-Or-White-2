@@ -28,30 +28,40 @@ import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
 
+import static com.pokewords.demo.DemoApplication.Sprites.*;
+
 public class MainState extends EmptyAppState {
-
-    public enum Sprites {
-        RIFLETANK, SNIPERTANK, BALL, SNOWBALL, SNOWBALEX,
-        BLACKBOSS, BLACKGUNNER, EVIL
-    }
-
 
     @Override
     protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
-        getGameWindowsConfigurator().gameSize(800, 600);
-        return new ContainerAppStateWorld(this);
+        return new ContainerAppStateWorld(this, 960, 720);
     }
 
     @Override
-    protected void onAppStateCreating(AppStateWorld world) {
-        world.spawn(createSprite(Sprites.SNOWBALEX));
-        world.spawn(createSprite(Sprites.SNIPERTANK));
-        world.spawn(createSprite(Sprites.BALL));
-        world.spawn(createSprite(Sprites.RIFLETANK));
-        world.spawn(createSprite(Sprites.SNOWBALL));
+    protected void onAppStateEntering() {
+        getGameWindowsConfigurator().gameSize(960, 720);
+        getAppStateWorld().spawn(getGameEngineFacade().createSpriteBoard(80)
+                                .symbol('*', TREE)
+                                .symbol('-', GRASS)
+                                .symbol('0', WATER)
+                .board(new String[]{    /*0*/     "**-**--**-**",
+                                        /*1*/     "*---*--*---*",
+                                        /*2*/     "------------",
+                                        /*3*/     "*--0*--*0--*",
+                                        /*4*/     "*--0----0--*",
+                                        /*5*/     "*----**----*",
+                                        /*6*/     "***------***",
+                                        /*7*/     "*----------*",
+                                        /*8*/     "**-******-**"})
+                                .build());
 
-        world.spawn(createSprite(Sprites.BLACKBOSS));
-        world.spawn(createSprite(Sprites.BLACKGUNNER));
-        world.spawn(createSprite(Sprites.EVIL));
+        getAppStateWorld().spawn(createSprite(SNOWBALEX));
+        getAppStateWorld().spawn(createSprite(SNIPERTANK));
+        getAppStateWorld().spawn(createSprite(BALL));
+        getAppStateWorld().spawn(createSprite(RIFLETANK));
+        getAppStateWorld().spawn(createSprite(SNOWBALL));
+        getAppStateWorld().spawn(createSprite(BLACKBOSS));
+        getAppStateWorld().spawn(createSprite(BLACKGUNNER));
+        getAppStateWorld().spawn(createSprite(EVIL));
     }
 }
