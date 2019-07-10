@@ -2,7 +2,6 @@ package com.pokewords.framework.sprites;
 
 import com.pokewords.framework.sprites.factories.SpriteInitializer;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,10 +14,10 @@ import java.util.Map;
  *
  * @author johnny850807 (waterball)
  */
-public class GameBoardSpritesCreator {
+public class BoardSpritesCreator {
     private SpriteInitializer spriteInitializer;
 
-    public GameBoardSpritesCreator(SpriteInitializer spriteInitializer) {
+    public BoardSpritesCreator(SpriteInitializer spriteInitializer) {
         this.spriteInitializer = spriteInitializer;
     }
 
