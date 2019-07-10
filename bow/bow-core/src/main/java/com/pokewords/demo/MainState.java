@@ -55,8 +55,8 @@ public class MainState extends EmptyAppState {
                                         /*8*/     "**-******-**"})
                                 .build());
 
-        getAppStateWorld().spawn(createSprite(SNOWBALEX));
-        getAppStateWorld().spawn(createSprite(SNIPERTANK));
+        getAppStateWorld().spawn(createSprite(SNOWBALL_EX));
+        getAppStateWorld().spawn(createSprite(SNIPER_TANK));
         getAppStateWorld().spawn(createSprite(BALL));
         getAppStateWorld().spawn(createSprite(RIFLETANK));
         getAppStateWorld().spawn(createSprite(SNOWBALL));

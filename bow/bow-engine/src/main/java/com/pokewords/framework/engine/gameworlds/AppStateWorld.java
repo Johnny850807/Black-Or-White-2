@@ -260,10 +260,21 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
 
         Collection<Sprite> rigidCollidedSprites = getSpritesIntersectWithArea(sprite.getBody())
                 .stream().filter(Sprite::isRigidBody)
+                .filter(s -> !isRigidlyIgnored(sprite, s))
                 .collect(Collectors.toList());
 
         rigidCollidedSprites.remove(sprite);
         return rigidCollidedSprites;
+    }
+
+    private boolean isRigidlyIgnored(Sprite sprite1, Sprite sprite2) {
+        RigidBodyComponent rigidBodyComponent1 = sprite1.getComponent(RigidBodyComponent.class);
+        RigidBodyComponent rigidBodyComponent2 = sprite2.getComponent(RigidBodyComponent.class);
+
+        return rigidBodyComponent1.getIgnoredTypes().stream()
+                .anyMatch(sprite2::isType) ||
+                rigidBodyComponent2.getIgnoredTypes().stream()
+                .anyMatch(sprite1::isType);
     }
 
     private void notifySpriteRigidCollisionListener(Sprite collidingSprite, Collection<Sprite> rigidlyCollidedSprites) {

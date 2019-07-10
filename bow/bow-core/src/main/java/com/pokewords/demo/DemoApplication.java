@@ -45,7 +45,8 @@ public class DemoApplication extends GameApplication {
 
     public enum Sprites {
         GRASS, TREE, WATER,
-        RIFLETANK, SNIPERTANK, BALL, SNOWBALL, SNOWBALEX,
+        CHARACTER,
+        RIFLETANK, SNIPER_TANK, BALL, SNOWBALL, SNOWBALL_EX,
         BLACKBOSS, BLACKGUNNER, EVIL
     }
 
@@ -76,75 +77,71 @@ public class DemoApplication extends GameApplication {
                 .with(RigidBodyComponent.getInstance())
                 .commit();
 
+        spriteInitializer.declare(CHARACTER)
+                .with(RigidBodyComponent.withIgnoredTypes(CHARACTER))
+                .commit();
+
         spriteInitializer
-                .declare(RIFLETANK)
+                .declareFromParent(CHARACTER, RIFLETANK)
                 .position(new Point(80, 160))
                 .with("assets/scripts/tank/RifleTank.bow")
-                .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .commit();
 
         spriteInitializer
-                .declare(SNIPERTANK)
+                .declareFromParent(CHARACTER, SNIPER_TANK)
                 .position(new Point(240, 160))
                 .with("assets/scripts/tank/SniperTank.bow")
-                .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(75, 75)
                 .commit();
 
 
         spriteInitializer
-                .declare(BALL)
+                .declareFromParent(CHARACTER, BALL)
                 .position(new Point(400, 160))
                 .with("assets/scripts/tank/Ball.bow")
-                .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
                 .commit();
 
         spriteInitializer
-                .declare(SNOWBALL)
+                .declareFromParent(CHARACTER, SNOWBALL)
                 .position(new Point(560, 160))
                 .with("assets/scripts/tank/SnowBall.bow")
-                .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
                 .commit();
 
         spriteInitializer
-                .declare(SNOWBALEX)
+                .declareFromParent(CHARACTER, SNOWBALL_EX)
                 .position(new Point(640, 160))
                 .with("assets/scripts/tank/SnowBallEx.bow")
-                .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
                 .commit();
 
         // Black script
         spriteInitializer
-                .declare(BLACKBOSS)
+                .declareFromParent(CHARACTER, BLACKBOSS)
                 .position(new Point(720, 160))
                 .with("assets/scripts/blackBoss.bow")
-                .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(53, 82)
                 .commit();
 
         spriteInitializer
-                .declare(BLACKGUNNER)
+                .declareFromParent(CHARACTER, BLACKGUNNER)
                 .position(new Point(880, 160))
                 .with("assets/scripts/blackGunner.bow")
-                .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(53, 79)
                 .commit();
 
         spriteInitializer
-                .declare(EVIL)
+                .declareFromParent(CHARACTER, EVIL)
                 .position(new Point(480, 160))
                 .with("assets/scripts/evil.bow")
-                .with(RigidBodyComponent.getInstance())
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(62, 72)
                 .commit();
