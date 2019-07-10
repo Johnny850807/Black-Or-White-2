@@ -12,5 +12,7 @@ public class ImageFrameFactory {
         return new ImageFrame(layerIndex, imagePath);
     }
 
-
+    public static ImageFrame emptyImageFrame() {
+        return new EmptyImageFrame();
+    }
 }

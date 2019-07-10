@@ -44,7 +44,9 @@ public class ImageFrame extends SerializableFrame {
      */
     protected ImageFrame(int layerIndex, String imagePath) {
         super(layerIndex);
-        this.image = ImageUtility.readImageFromResourcesWithCaching(imagePath);
+        // if the imagePath is empty, then it's a Null-Object of imageFrame, i.e. which'll not be rendered.
+        if (imagePath != null && !imagePath.isEmpty())
+            this.image = ImageUtility.readImageFromResourcesWithCaching(imagePath);
     }
 
     /**
@@ -125,12 +127,6 @@ public class ImageFrame extends SerializableFrame {
             out.writeObject(gallery);
             out.writeInt(pictureNumberInGallery);
         }
-    }
-
-    public static class Meta {
-        private String galleryName;
-        private Bundle properties;
-        private String imagePath;
     }
 
 }
