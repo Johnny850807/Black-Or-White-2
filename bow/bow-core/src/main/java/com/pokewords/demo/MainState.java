@@ -27,10 +27,15 @@ import com.pokewords.framework.engine.GameEngineFacade;
 import com.pokewords.framework.engine.asm.states.EmptyAppState;
 import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.gameworlds.ContainerAppStateWorld;
+import com.pokewords.framework.sprites.Sprite;
 
-import static com.pokewords.demo.DemoApplication.Sprites.*;
+import java.awt.event.KeyEvent;
+
+import static com.pokewords.demo.TestingApplication.Sprites.*;
 
 public class MainState extends EmptyAppState {
+    private Sprite currentSprite;
+    private Sprite[] sprites;
 
     @Override
     protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
@@ -41,27 +46,76 @@ public class MainState extends EmptyAppState {
     protected void onAppStateEntering() {
         getGameWindowsConfigurator().gameSize(960, 720);
         getAppStateWorld().spawn(getGameEngineFacade().createSpriteBoard(80)
-                                .symbol('*', TREE)
-                                .symbol('-', GRASS)
-                                .symbol('0', WATER)
+                .symbol('*', TREE)
+                .symbol('-', GRASS)
+                .symbol('0', WATER)
                 .board(new String[]{    /*0*/     "**-**--**-**",
-                                        /*1*/     "*---*--*---*",
-                                        /*2*/     "------------",
-                                        /*3*/     "*--0*--*0--*",
-                                        /*4*/     "*--0----0--*",
-                                        /*5*/     "*----**----*",
-                                        /*6*/     "***------***",
-                                        /*7*/     "*----------*",
-                                        /*8*/     "**-******-**"})
-                                .build());
+                        /*1*/     "*---*--*---*",
+                        /*2*/     "------------",
+                        /*3*/     "*--0*--*0--*",
+                        /*4*/     "*--0----0--*",
+                        /*5*/     "*----**----*",
+                        /*6*/     "***------***",
+                        /*7*/     "*----------*",
+                        /*8*/     "**-******-**"})
+                .build());
 
-        getAppStateWorld().spawn(createSprite(SNOWBALL_EX));
-        getAppStateWorld().spawn(createSprite(SNIPER_TANK));
-        getAppStateWorld().spawn(createSprite(BALL));
-        getAppStateWorld().spawn(createSprite(RIFLETANK));
-        getAppStateWorld().spawn(createSprite(SNOWBALL));
-        getAppStateWorld().spawn(createSprite(BLACKBOSS));
-        getAppStateWorld().spawn(createSprite(BLACKGUNNER));
-        getAppStateWorld().spawn(createSprite(EVIL));
+        sprites = new Sprite[]{
+                createSprite(SNOWBALL_EX),
+                createSprite(SNIPER_TANK),
+                createSprite(BALL),
+                createSprite(RIFLETANK),
+                createSprite(SNOWBALL),
+                createSprite(BLACKBOSS),
+                createSprite(BLACKGUNNER),
+                createSprite(EVIL)
+        };
+
+        getAppStateWorld().spawn(currentSprite = sprites[0]);
+
+        bindKeyClickedAction(key -> {
+            switch (key)
+            {
+                case KeyEvent.VK_0:
+                    operateSprite(0);
+                    break;
+                case KeyEvent.VK_1:
+                    operateSprite(1);
+                    break;
+                case KeyEvent.VK_2:
+                    operateSprite(2);
+                    break;
+                case KeyEvent.VK_3:
+                    operateSprite(3);
+                    break;
+                case KeyEvent.VK_4:
+                    operateSprite(4);
+                    break;
+                case KeyEvent.VK_5:
+                    operateSprite(5);
+                    break;
+                case KeyEvent.VK_6:
+                    operateSprite(6);
+                    break;
+                case KeyEvent.VK_7:
+                    operateSprite(7);
+                    break;
+                case KeyEvent.VK_8:
+                    operateSprite(8);
+                    break;
+                case KeyEvent.VK_9:
+                    operateSprite(9);
+                    break;
+            }
+        } );
+    }
+
+    private void operateSprite(int index) {
+        try {
+            getAppStateWorld().spawn(currentSprite = sprites[index]);
+            getAppStateWorld().removeSprite(currentSprite);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+            // not perform
+        }
     }
 }

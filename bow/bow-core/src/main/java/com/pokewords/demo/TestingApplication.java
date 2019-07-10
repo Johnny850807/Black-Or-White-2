@@ -35,11 +35,11 @@ import com.pokewords.framework.views.windows.GameWindowsConfigurator;
 
 import java.awt.*;
 
-import static com.pokewords.demo.DemoApplication.Sprites.*;
+import static com.pokewords.demo.TestingApplication.Sprites.*;
 
-public class DemoApplication extends GameApplication {
+public class TestingApplication extends GameApplication {
 
-    public DemoApplication(IocContainer iocContainer) {
+    public TestingApplication(IocContainer iocContainer) {
         super(iocContainer);
     }
 
@@ -155,7 +155,7 @@ public class DemoApplication extends GameApplication {
 
 
     public static void main(String[] args) {
-        DemoApplication app = new DemoApplication(new ReleaseIocContainer());
+        TestingApplication app = new TestingApplication(new ReleaseIocContainer());
         app.launch();
     }
 }
