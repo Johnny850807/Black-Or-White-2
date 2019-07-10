@@ -39,25 +39,26 @@ public class MainState extends EmptyAppState {
 
     @Override
     protected AppStateWorld onCreateAppStateWorld(GameEngineFacade gameEngineFacade) {
-        return new ContainerAppStateWorld(this, 960, 720);
+        return new ContainerAppStateWorld(this, 1104, 828);
     }
 
     @Override
     protected void onAppStateEntering() {
-        getGameWindowsConfigurator().gameSize(960, 720);
-        getAppStateWorld().spawn(getGameEngineFacade().createSpriteBoard(80)
+        getGameWindowsConfigurator().gameSize(1104, 828);
+
+        getAppStateWorld().spawn(getGameEngineFacade().createSpriteBoard(92)
                 .symbol('*', TREE)
                 .symbol('-', GRASS)
                 .symbol('0', WATER)
                 .board(new String[]{    /*0*/     "**-**--**-**",
-                        /*1*/     "*---*--*---*",
-                        /*2*/     "------------",
-                        /*3*/     "*--0*--*0--*",
-                        /*4*/     "*--0----0--*",
-                        /*5*/     "*----**----*",
-                        /*6*/     "***------***",
-                        /*7*/     "*----------*",
-                        /*8*/     "**-******-**"})
+                                        /*1*/     "*---*--*---*",
+                                        /*2*/     "------------",
+                                        /*3*/     "*--0*--*0--*",
+                                        /*4*/     "*--0----0--*",
+                                        /*5*/     "*----**----*",
+                                        /*6*/     "***------***",
+                                        /*7*/     "*----------*",
+                                        /*8*/     "**-******-**"})
                 .build());
 
         sprites = new Sprite[]{

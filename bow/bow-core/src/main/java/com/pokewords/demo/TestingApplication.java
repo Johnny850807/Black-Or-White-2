@@ -83,14 +83,14 @@ public class TestingApplication extends GameApplication {
 
         spriteInitializer
                 .declareFromParent(CHARACTER, RIFLETANK)
-                .position(new Point(80, 160))
+                .position(new Point(80, 184))
                 .with("assets/scripts/tank/RifleTank.bow")
                 .with(new PlayerKeyListenerComponent())
                 .commit();
 
         spriteInitializer
                 .declareFromParent(CHARACTER, SNIPER_TANK)
-                .position(new Point(240, 160))
+                .position(new Point(240, 184))
                 .with("assets/scripts/tank/SniperTank.bow")
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(75, 75)
@@ -99,7 +99,7 @@ public class TestingApplication extends GameApplication {
 
         spriteInitializer
                 .declareFromParent(CHARACTER, BALL)
-                .position(new Point(400, 160))
+                .position(new Point(400, 184))
                 .with("assets/scripts/tank/Ball.bow")
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
@@ -107,7 +107,7 @@ public class TestingApplication extends GameApplication {
 
         spriteInitializer
                 .declareFromParent(CHARACTER, SNOWBALL)
-                .position(new Point(560, 160))
+                .position(new Point(560, 184))
                 .with("assets/scripts/tank/SnowBall.bow")
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
@@ -115,7 +115,7 @@ public class TestingApplication extends GameApplication {
 
         spriteInitializer
                 .declareFromParent(CHARACTER, SNOWBALL_EX)
-                .position(new Point(640, 160))
+                .position(new Point(640, 184))
                 .with("assets/scripts/tank/SnowBallEx.bow")
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
@@ -124,7 +124,7 @@ public class TestingApplication extends GameApplication {
         // Black script
         spriteInitializer
                 .declareFromParent(CHARACTER, BLACKBOSS)
-                .position(new Point(720, 160))
+                .position(new Point(720, 184))
                 .with("assets/scripts/blackBoss.bow")
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(53, 82)
@@ -132,7 +132,7 @@ public class TestingApplication extends GameApplication {
 
         spriteInitializer
                 .declareFromParent(CHARACTER, BLACKGUNNER)
-                .position(new Point(880, 160))
+                .position(new Point(880, 184))
                 .with("assets/scripts/blackGunner.bow")
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(53, 79)
@@ -140,7 +140,7 @@ public class TestingApplication extends GameApplication {
 
         spriteInitializer
                 .declareFromParent(CHARACTER, EVIL)
-                .position(new Point(480, 160))
+                .position(new Point(480, 184))
                 .with("assets/scripts/evil.bow")
                 .with(new PlayerKeyListenerComponent())
                 .areaSize(62, 72)

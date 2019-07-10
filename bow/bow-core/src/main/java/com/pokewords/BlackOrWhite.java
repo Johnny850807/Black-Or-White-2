@@ -94,12 +94,12 @@ public class BlackOrWhite extends GameApplication {
                 .commit();
 
         spriteInitializer.declareFromParent(SpriteTypes.CHARACTER, SpriteTypes.HERO)
-                .with(RigidBodyComponent.getInstance())
-                .commit();
+            .with(RigidBodyComponent.getInstance())
+            .commit();
 
         spriteInitializer.declareFromParent(SpriteTypes.CHARACTER, SpriteTypes.MONSTER)
-                .commit();
-    }
+            .commit();
+}
 
     private void declareBullets(SpriteInitializer spriteInitializer) {
         spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.BULLET).commit();
