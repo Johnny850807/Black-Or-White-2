@@ -51,6 +51,7 @@ public class PropertiesComponent extends CloneableComponent {
         clone.area = (Rectangle) this.area.clone();
         clone.latestPosition = this.area.getLocation();
         clone.positionChangedListeners = new HashSet<>();
+        clone.compositeType = compositeType.clone();
         if (hasBody)
             clone.body = (Rectangle) this.body.clone();
         if (hasCenter)

@@ -5,6 +5,7 @@ import com.pokewords.framework.engine.exceptions.GameEngineException;
 import com.pokewords.framework.engine.exceptions.SpriteDeclarationException;
 import com.pokewords.framework.ioc.ReleaseIocContainer;
 import com.pokewords.framework.sprites.Sprite;
+import com.pokewords.framework.sprites.components.CompositeType;
 import com.pokewords.framework.sprites.components.mocks.MockComponentImp;
 import org.junit.Before;
 import org.junit.Test;
@@ -193,7 +194,18 @@ public class SpriteInitializerTest extends AbstractTest {
         assertTrue(sprite.isType("C"));
         assertEquals("C", sprite.getConcreteType());
 
+
+        spriteInitializer.declareFromParent("A", "D").commit();
+        spriteInitializer.declareFromParent("A", "E").commit();
+        spriteInitializer.declareFromParent("A", "F").commit();
+        spriteInitializer.declareFromParent("A", "G").commit();
+
+        assertEquals(new CompositeType("A", "D"), spriteInitializer.createSprite("D").getType());
+        assertEquals(new CompositeType("A", "E"), spriteInitializer.createSprite("E").getType());
+        assertEquals(new CompositeType("A", "F"), spriteInitializer.createSprite("F").getType());
+        assertEquals(new CompositeType("A", "G"), spriteInitializer.createSprite("G").getType());
     }
+
     private void declareSprite() {
         spriteInitializer.declare(TYPE)
                 .with(mockComponent)

@@ -79,20 +79,19 @@ public class TestingApplication extends GameApplication {
 
         spriteInitializer.declare(CHARACTER)
                 .with(RigidBodyComponent.withIgnoredTypes(CHARACTER))
+                .with(new PlayerKeyListenerComponent())
                 .commit();
 
         spriteInitializer
                 .declareFromParent(CHARACTER, RIFLETANK)
                 .position(new Point(80, 184))
                 .with("assets/scripts/tank/RifleTank.bow")
-                .with(new PlayerKeyListenerComponent())
                 .commit();
 
         spriteInitializer
                 .declareFromParent(CHARACTER, SNIPER_TANK)
                 .position(new Point(240, 184))
                 .with("assets/scripts/tank/SniperTank.bow")
-                .with(new PlayerKeyListenerComponent())
                 .areaSize(75, 75)
                 .commit();
 
@@ -101,7 +100,6 @@ public class TestingApplication extends GameApplication {
                 .declareFromParent(CHARACTER, BALL)
                 .position(new Point(400, 184))
                 .with("assets/scripts/tank/Ball.bow")
-                .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
                 .commit();
 
@@ -109,7 +107,6 @@ public class TestingApplication extends GameApplication {
                 .declareFromParent(CHARACTER, SNOWBALL)
                 .position(new Point(560, 184))
                 .with("assets/scripts/tank/SnowBall.bow")
-                .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
                 .commit();
 
@@ -117,7 +114,6 @@ public class TestingApplication extends GameApplication {
                 .declareFromParent(CHARACTER, SNOWBALL_EX)
                 .position(new Point(640, 184))
                 .with("assets/scripts/tank/SnowBallEx.bow")
-                .with(new PlayerKeyListenerComponent())
                 .areaSize(70, 70)
                 .commit();
 
@@ -126,7 +122,6 @@ public class TestingApplication extends GameApplication {
                 .declareFromParent(CHARACTER, BLACKBOSS)
                 .position(new Point(720, 184))
                 .with("assets/scripts/blackBoss.bow")
-                .with(new PlayerKeyListenerComponent())
                 .areaSize(53, 82)
                 .commit();
 
@@ -134,7 +129,6 @@ public class TestingApplication extends GameApplication {
                 .declareFromParent(CHARACTER, BLACKGUNNER)
                 .position(new Point(880, 184))
                 .with("assets/scripts/blackGunner.bow")
-                .with(new PlayerKeyListenerComponent())
                 .areaSize(53, 79)
                 .commit();
 
@@ -142,7 +136,6 @@ public class TestingApplication extends GameApplication {
                 .declareFromParent(CHARACTER, EVIL)
                 .position(new Point(480, 184))
                 .with("assets/scripts/evil.bow")
-                .with(new PlayerKeyListenerComponent())
                 .areaSize(62, 72)
                 .commit();
     }

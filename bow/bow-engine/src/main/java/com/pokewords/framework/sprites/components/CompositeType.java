@@ -11,7 +11,7 @@ import java.util.Objects;
  * Composite type.
  * @author johnny850807 (waterball)
  */
-public class CompositeType {
+public class CompositeType implements Cloneable {
     private LinkedList<Object> types;
 
     /**
@@ -55,6 +55,18 @@ public class CompositeType {
     @Override
     public int hashCode() {
         return Objects.hash(types);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected CompositeType clone()  {
+        try {
+            CompositeType clone = (CompositeType) super.clone();
+            clone.types = (LinkedList<Object>) this.types.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
