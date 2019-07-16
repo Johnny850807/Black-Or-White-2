@@ -22,7 +22,7 @@ public class DefaultGameEngine implements GameEngine {
     private final Runnable gameLoopingTask;
     private ScheduledExecutorService scheduler;
     private FpsCounter fpsCounter = new FpsCounter();
-    private double timePerFrame = 1 / 60.0;  // 60 fps
+    private double timePerFrame = 1 / 45.0;  // 60 fps
 
     public DefaultGameEngine(IocContainer iocContainer, GameWindowsConfigurator gameWindowsConfigurator) {
         this.inputManager = iocContainer.inputManager();
