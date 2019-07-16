@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
  * @author johnny850807
  */
 public class FrameStateMachineComponent extends CloneableComponent implements Renderable {
-    private long latestUpdateLoop = 0;
     protected Map<Integer, EffectFrame> effectFrameMap = new HashMap<>(); // <Frame's event, Frame>
     protected int currentFrameDuration = 0;
 
@@ -64,7 +63,7 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     private void arrangeNextUpdateCountdownHookIfAvailable() {
         if (getCurrentFrame() != null && isAttachedToWorld())
         {
-            getGameEngineFacade().removeLoopCountdownHook(updateCountdownHook);
+            //getGameEngineFacade().removeLoopCountdownHook(updateCountdownHook);
             getGameEngineFacade().addLoopCountdownHook(currentFrameDuration, updateCountdownHook);
         }
     }
@@ -77,7 +76,6 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
         renderedFrameCollection.add(frame);
     }
 
-
     public void addTransition(EffectFrame from, Object event, EffectFrame to){
         fsm.addTransition(from, event, to);
     }
@@ -89,7 +87,8 @@ public class FrameStateMachineComponent extends CloneableComponent implements Re
     public EffectFrame trigger(Object event){
         EffectFrame nextFrame = fsm.trigger(event);
         currentFrameDuration = nextFrame.getDuration();
-        arrangeNextUpdateCountdownHookIfAvailable();
+        if (event == Events.UPDATE)
+            arrangeNextUpdateCountdownHookIfAvailable();
         return nextFrame;
     }
 

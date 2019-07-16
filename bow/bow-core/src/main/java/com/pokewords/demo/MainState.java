@@ -113,10 +113,9 @@ public class MainState extends EmptyAppState {
 
     private void operateSprite(int index) {
         try {
-            Sprite nextSprite = sprites[index];
-            getAppStateWorld().spawn(nextSprite);
+            getAppStateWorld().spawn(sprites[index]);
             getAppStateWorld().removeSprite(currentSprite);
-            currentSprite = nextSprite;
+            currentSprite = sprites[index];
         } catch (ArrayIndexOutOfBoundsException ignored) {
             // not perform
         }

@@ -18,9 +18,10 @@ public class LoopCounter implements GameLoopingListener {
     @Override
     public void onUpdate(double timePerFrame) {
         loopNumber = (loopNumber +1) % Long.MAX_VALUE;
-
+        System.out.println("Loop: " + loopNumber);
         if (actionMap.containsKey(loopNumber))
         {
+            System.out.println("### Run on " + loopNumber);
             actionMap.get(loopNumber).forEach(Runnable::run);
             actionMap.remove(loopNumber);
         }

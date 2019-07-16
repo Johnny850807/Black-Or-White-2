@@ -3,9 +3,6 @@ package com.pokewords.framework.engine.gameworlds;
 import com.pokewords.framework.engine.asm.AppState;
 import com.pokewords.framework.sprites.Sprite;
 import com.pokewords.framework.sprites.components.RigidBodyComponent;
-import sun.plugin2.main.server.WindowsHelper;
-
-import java.awt.*;
 
 /**
  * A subclass of AppStateWorld which can block the sprites from moving out of the game screen.

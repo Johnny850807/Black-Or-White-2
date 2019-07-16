@@ -159,7 +159,6 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
         }
     }
 
-
     @Override
     public void onUpdate(double timePerFrame) {
         handleReadyToBeSpawnedOrRemovedSprites();
@@ -178,12 +177,12 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
                 .flatMap(s -> s.getComponents().stream())
                 .forEach(c -> c.setGameEngineFacade(getGameEngineFacade()));
         readyToBeSpawnedSprites.forEach(s -> s.addPositionChangedListener(this));
-        readyToBeSpawnedSprites.forEach(s-> s.attachToWorld(this) );
+        readyToBeSpawnedSprites.forEach(s-> s.attachToWorld(this));
         readyToBeSpawnedSprites.clear();
 
         sprites.removeAll(readyToBeRemovedSprites);
         readyToBeRemovedSprites.forEach(s -> s.removePositionChangedListener(this));
-        readyToBeRemovedSprites.forEach(s-> s.detachFromWorld(this) );
+        readyToBeRemovedSprites.forEach(s-> s.detachFromWorld(this));
         readyToBeRemovedSprites.clear();
     }
 
@@ -197,8 +196,6 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
             for (int j = i + 1; j < sprites.size(); j++) {
                 Sprite sprite1 = sprites.get(i);
                 Sprite sprite2 = sprites.get(j);
-
-                assert sprite1 != sprite2;
 
                 if (isCollided(sprite1, sprite2)) {
                     notifyCollisionListeners(sprite1, sprite2);
@@ -277,25 +274,24 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
                 .anyMatch(sprite1::isType);
     }
 
-    private void notifySpriteRigidCollisionListener(Sprite collidingSprite, Collection<Sprite> rigidlyCollidedSprites) {
-        collidingSprite.locateComponents(CollisionListenerComponent.class)
+    private void notifySpriteRigidCollisionListener(Sprite rigidlyCollidingSprite, Collection<Sprite> rigidlyCollidedSprites) {
+        rigidlyCollidingSprite.locateComponents(CollisionListenerComponent.class)
                 .forEach(CollisionListenerComponent::onRigidCollisionEvent);
 
         for (Sprite rigidCollidedSprite : rigidlyCollidedSprites) {
             rigidCollidedSprite.locateComponents(CollisionListenerComponent.class)
                     .forEach(CollisionListenerComponent::onRigidCollisionEvent);
 
-            collidingSprite.locateComponents(CollisionListenerComponent.class)
+            rigidlyCollidingSprite.locateComponents(CollisionListenerComponent.class)
                     .forEach(c -> c.onRigidCollisionWithSprite(rigidCollidedSprite));
 
             rigidCollidedSprite.locateComponents(CollisionListenerComponent.class)
-                    .forEach(c -> c.onRigidCollisionWithSprite(collidingSprite));
+                    .forEach(c -> c.onRigidCollisionWithSprite(rigidlyCollidingSprite));
 
-//            resolveRigidCollisionPositions(collidingSprite, rigidCollidedSprite);
+
+            //resolveRigidCollisionPositions(rigidlyCollidingSprite, rigidCollidedSprite);
         }
     }
-
-/* TODO rigid collision resolving algorithm
 
     private void resolveRigidCollisionPositions(Sprite collidingSprite, Sprite collidedSprite) {
         Rectangle intersection = collidingSprite.getBody().intersection(collidedSprite.getBody());
@@ -313,7 +309,7 @@ public class AppStateWorld implements AppStateLifeCycleListener, PropertiesCompo
             else
                 collidingSprite.moveY(intersection.height);
         }
-    }*/
+    }
 
 
     /**

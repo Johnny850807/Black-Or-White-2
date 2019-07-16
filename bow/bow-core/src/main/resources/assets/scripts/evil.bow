@@ -5,8 +5,8 @@
         assets/scripts/base.bow
     ]
     <parameters>
-        walkDuration: 8
-        speed: 8
+        walkDuration: 12
+        speed: 6
 		damage: 120
     </parameters>
 </meta>

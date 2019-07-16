@@ -1,7 +1,6 @@
 package com.pokewords.framework.commons.utils;
 
 public class ClassUtility {
-
     public static Class<?> forName(String classPath) {
         try {
             return Class.forName(classPath);
