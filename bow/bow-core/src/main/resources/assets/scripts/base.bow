@@ -2,6 +2,7 @@
 <meta> 0
     <parameters>
         characterLayer: 2
+        bulletLayer: 3
     </parameters>
 </meta>
 

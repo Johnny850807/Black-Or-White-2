@@ -22,7 +22,7 @@
 
 package com.pokewords.demo;
 
-import com.pokewords.components.PlayerKeyListenerComponent;
+import com.pokewords.components.MovingKeyListenerComponent;
 import com.pokewords.framework.engine.asm.AppStateMachine;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.ioc.ReleaseIocContainer;
@@ -47,7 +47,7 @@ public class TestingApplication extends GameApplication {
         GRASS, TREE, WATER,
         CHARACTER,
         RIFLETANK, SNIPER_TANK, BALL, SNOWBALL, SNOWBALL_EX,
-        BLACKBOSS, BLACKGUNNER, EVIL
+        BLACKBOSS, BLACKGUNNER, EVIL, HERO
     }
 
 
@@ -79,19 +79,19 @@ public class TestingApplication extends GameApplication {
 
         spriteInitializer.declare(CHARACTER)
                 .with(RigidBodyComponent.withIgnoredTypes(CHARACTER))
-                .with(new PlayerKeyListenerComponent())
+                .with(new MovingKeyListenerComponent())
                 .commit();
 
         spriteInitializer
                 .declareFromParent(CHARACTER, RIFLETANK)
                 .position(new Point(80, 184))
-                .with("assets/scripts/tank/RifleTank.bow")
+                .with("assets/scripts/RifleTank.bow")
                 .commit();
 
         spriteInitializer
                 .declareFromParent(CHARACTER, SNIPER_TANK)
                 .position(new Point(240, 184))
-                .with("assets/scripts/tank/SniperTank.bow")
+                .with("assets/scripts/SniperTank.bow")
                 .areaSize(75, 75)
                 .commit();
 
@@ -99,21 +99,21 @@ public class TestingApplication extends GameApplication {
         spriteInitializer
                 .declareFromParent(CHARACTER, BALL)
                 .position(new Point(400, 184))
-                .with("assets/scripts/tank/Ball.bow")
+                .with("assets/scripts/Ball.bow")
                 .areaSize(70, 70)
                 .commit();
 
         spriteInitializer
                 .declareFromParent(CHARACTER, SNOWBALL)
                 .position(new Point(560, 184))
-                .with("assets/scripts/tank/SnowBall.bow")
+                .with("assets/scripts/SnowBall.bow")
                 .areaSize(70, 70)
                 .commit();
 
         spriteInitializer
                 .declareFromParent(CHARACTER, SNOWBALL_EX)
                 .position(new Point(640, 184))
-                .with("assets/scripts/tank/SnowBallEx.bow")
+                .with("assets/scripts/SnowBallEx.bow")
                 .areaSize(70, 70)
                 .commit();
 
@@ -137,6 +137,12 @@ public class TestingApplication extends GameApplication {
                 .position(new Point(480, 184))
                 .with("assets/scripts/evil.bow")
                 .areaSize(62, 72)
+                .commit();
+
+        spriteInitializer
+                .declareFromParent(CHARACTER, HERO)
+                .position(new Point(184, 736))
+                .with("assets/scripts/Hero.bow")
                 .commit();
     }
 

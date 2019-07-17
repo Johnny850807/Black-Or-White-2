@@ -3,10 +3,7 @@ package com.pokewords;
 import com.pokewords.appstates.GameState;
 import com.pokewords.appstates.MenuAppState;
 import com.pokewords.appstates.MyMultiplayerRoomState;
-import com.pokewords.components.CharacterComponent;
-import com.pokewords.components.MachineGunComponent;
-import com.pokewords.components.PistolComponent;
-import com.pokewords.components.SniperRifleComponent;
+import com.pokewords.components.*;
 import com.pokewords.components.menus.MenuButtonMouseListener;
 import com.pokewords.constants.AsmEvents;
 import com.pokewords.constants.SoundTypes;
@@ -70,7 +67,6 @@ public class BlackOrWhite extends GameApplication {
                 .with(new MenuButtonMouseListener("MultiplayerButton"))
                 .area(400, 436, 97, 65)
                 .commit();
-
     }
 
     private void declareForGameState(SpriteInitializer spriteInitializer) {
@@ -102,7 +98,13 @@ public class BlackOrWhite extends GameApplication {
 }
 
     private void declareBullets(SpriteInitializer spriteInitializer) {
-        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.BULLET).commit();
+        spriteInitializer.declareFromParent(SpriteTypes.ROOT, SpriteTypes.BULLET)
+                .with(new BulletCollisionListenerComponent())
+                .commit();
+
+        spriteInitializer.declareFromParent(SpriteTypes.BULLET, SpriteTypes.BULLET_BLUE_PELLET)
+                .with("assets/scripts/BluePellet.bow")
+                .commit();
     }
 
     private void declarePickables(SpriteInitializer spriteInitializer) {

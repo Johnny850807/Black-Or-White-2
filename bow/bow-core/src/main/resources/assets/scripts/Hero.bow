@@ -4,7 +4,7 @@
     ]
     <parameters>
         walkDuration : 999
-        speed: 4
+        speed: 10
     </parameters>
 </meta>
 
@@ -51,8 +51,6 @@ duration: $walkDuration next: 1 pic: 0 layer: $characterLayer
     </area>
 </frame>
 
-
-
 <frame> 2 haltUp
 duration: $walkDuration next: 2 pic: 1 layer: $characterLayer
     <transitions>
@@ -68,7 +66,6 @@ duration: $walkDuration next: 2 pic: 1 layer: $characterLayer
         w: 60 h: 75
     </area>
 </frame>
-
 
 <frame> 3 walkUp
 duration: $walkDuration next: 3 pic: 1 layer: $characterLayer
@@ -89,7 +86,6 @@ duration: $walkDuration next: 3 pic: 1 layer: $characterLayer
         w: 60 h: 75
     </area>
 </frame>
-
 
 <frame> 4 haltDown
 duration: $walkDuration next: 4 pic: 2 layer: $characterLayer
@@ -127,9 +123,6 @@ duration: $walkDuration next: 5 pic: 2 layer: $characterLayer
     </area>
 </frame>
 
-
-
-
 <frame> 6 haltLeft
 duration: $walkDuration next: 6 pic: 3 layer: $characterLayer
     <transitions>
@@ -145,7 +138,6 @@ duration: $walkDuration next: 6 pic: 3 layer: $characterLayer
          w: 75 h: 60
     </area>
 </frame>
-
 
 <frame> 7 walkLeft
 duration: $walkDuration next: 7 pic: 3 layer: $characterLayer
@@ -166,3 +158,5 @@ duration: $walkDuration next: 7 pic: 3 layer: $characterLayer
         w: 75 h: 60
     </area>
 </frame>
+
+

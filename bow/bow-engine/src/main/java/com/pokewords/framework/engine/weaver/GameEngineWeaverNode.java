@@ -3,6 +3,7 @@ package com.pokewords.framework.engine.weaver;
 import com.pokewords.framework.commons.utils.ClassUtility;
 import com.pokewords.framework.commons.utils.EnumUtility;
 import com.pokewords.framework.engine.Events;
+import com.pokewords.framework.engine.gameworlds.AppStateWorld;
 import com.pokewords.framework.engine.parsing.*;
 import com.pokewords.framework.ioc.IocContainer;
 import com.pokewords.framework.sprites.Sprite;
@@ -13,9 +14,13 @@ import com.pokewords.framework.sprites.parsing.Element;
 import com.pokewords.framework.sprites.parsing.ListNode;
 import com.pokewords.framework.sprites.parsing.Script;
 import com.pokewords.framework.sprites.parsing.Segment;
+import com.pokewords.framework.views.Canvas;
 import com.pokewords.framework.views.helpers.galleries.Gallery;
 import com.pokewords.framework.views.helpers.galleries.GalleryFactory;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -85,9 +90,20 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
         FrameStateMachineComponent fsmc = sprite.getFrameStateMachineComponent();
         for (Integer id : frameSegmentMap.keySet()) {
             EffectFrame from = fsmc.getFrame(id);
-            EffectFrame to = fsmc.getFrame(frameSegmentMap.get(id).getNext());
-            fsmc.addTransition(from, Events.UPDATE, to);
+            int next = frameSegmentMap.get(id).getNext();
+            if (next == -1)  // next=-1 means it's removing itself at the next update
+                fsmc.addTransition(from, Events.UPDATE, parseRemovingItselfEffectFrame());
+            else {
+                EffectFrame to = fsmc.getFrame(next);
+                fsmc.addTransition(from, Events.UPDATE, to);
+            }
         }
+    }
+
+    private EffectFrame parseRemovingItselfEffectFrame() {
+        DefaultEffectFrame effectFrame = new EffectWrappedFrame(EmptyImageFrame.SINGLETON, 0, 0);
+        effectFrame.addEffect(AppStateWorld::removeSprite);
+        return effectFrame;
     }
 
 
@@ -188,10 +204,12 @@ public class GameEngineWeaverNode implements SpriteWeaver.Node {
                     sprite.setCenter(centerX, centerY);
                 };
             }
-            else
-                return GameEffect.empty();
+            else // set no body
+                return (world, sprite) -> {
+                    sprite.setBody(0, 0,0, 0);
+                    sprite.setCenter(0, 0);
+                };
         }
-
 
         private GameEffect parseAreaElementGameEffect(FrameSegment frameSegment) {
             if (frameSegment.getAreaElement().isPresent())

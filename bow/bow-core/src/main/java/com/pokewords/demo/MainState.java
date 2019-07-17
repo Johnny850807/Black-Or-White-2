@@ -62,6 +62,7 @@ public class MainState extends EmptyAppState {
                 .build());
 
         sprites = new Sprite[]{
+                createSprite(HERO),
                 createSprite(SNOWBALL_EX),
                 createSprite(SNIPER_TANK),
                 createSprite(BALL),

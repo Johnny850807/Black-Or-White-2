@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
  * @author johnny850807 (waterball)
  */
 public class EmptyImageFrame extends ImageFrame {
+    public static final EmptyImageFrame SINGLETON = new EmptyImageFrame();
 
     public EmptyImageFrame() {
         super(0, "");
