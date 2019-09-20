@@ -1,7 +1,9 @@
 # Black-Or-White-2
-![Phase](https://img.shields.io/badge/Phase-Designing-yellowgreen.svg) <br/>
+![Phase](https://img.shields.io/badge/Phase-Developing-yellowgreen.svg) <br/>
 The advanced black or white 2D Game, implemented in Java, as a demonstration to OOP practices.
-Thiere is two phases in this project, first create a simple 2D game engine, second use the game engine to create our game.
+Thiere are two phases in this project, first create a simple 2D game engine, second use the game engine to create our game.
+
+The game engine's architecture is still in refactoring, as well as the project is currently suspended.
 
 # Table of contents
 
@@ -17,14 +19,9 @@ FEATURES
 TODO
 ===
 
-- OOA/OOD design (doc)
-- Game Script definition (doc)
 - Game engine implementation
 - AI implementation
-- Game View implementation
 - Unit Test
-- Game Design
-- Game Balance Control
 - TCP connection implementation
 
 
